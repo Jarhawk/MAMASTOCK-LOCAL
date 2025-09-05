@@ -1,0 +1,90 @@
+// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import supabase from '@/lib/supabase';
+import { useState } from 'react';
+import { applyRange } from '@/lib/supa/applyRange';
+
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
+
+export function useFournisseurApiConfig() {
+  const { mama_id } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  async function fetchConfig(fournisseur_id) {
+    if (!mama_id || !fournisseur_id) return null;
+    setLoading(true);
+    const { data, error } = await supabase.
+    from('fournisseurs_api_config').
+    select('*').
+    eq('mama_id', mama_id).
+    eq('fournisseur_id', fournisseur_id).
+    maybeSingle();
+    setLoading(false);
+    if (error) {
+      setError(error);
+      toast.error(error.message || 'Erreur chargement configuration');
+      return null;
+    }
+    return data;
+  }
+
+  async function saveConfig(fournisseur_id, config) {
+    if (!mama_id || !fournisseur_id) return { error: 'missing context' };
+    setLoading(true);
+    const { data, error } = await supabase.
+    from('fournisseurs_api_config').
+    upsert([{ ...config, fournisseur_id, mama_id }], {
+      onConflict: ['fournisseur_id', 'mama_id']
+    }).
+    select().
+    single();
+    setLoading(false);
+    if (error) {
+      setError(error);
+      toast.error(error.message || 'Erreur sauvegarde configuration');
+    }
+    return { data, error };
+  }
+
+  async function deleteConfig(fournisseur_id) {
+    if (!mama_id || !fournisseur_id) return { error: 'missing context' };
+    setLoading(true);
+    const { error } = await supabase.
+    from('fournisseurs_api_config').
+    delete().
+    eq('fournisseur_id', fournisseur_id).
+    eq('mama_id', mama_id);
+    setLoading(false);
+    if (error) {
+      setError(error);
+      toast.error(error.message || 'Erreur suppression configuration');
+    }
+    return { error };
+  }
+
+  async function listConfigs({ fournisseur_id, actif, page = 1, limit = 20 } = {}) {
+    if (!mama_id) return { data: [], count: 0, error: null };
+    setLoading(true);
+    const p = Number(page) || 1;
+    const l = Number(limit) || 20;
+    const start = (p - 1) * l;
+    let query = supabase
+      .from('fournisseurs_api_config')
+      .select('*, fournisseur:fournisseur_id(id, nom)', { count: 'exact' })
+      .eq('mama_id', mama_id)
+      .order('fournisseur_id');
+    if (fournisseur_id) query = query.eq('fournisseur_id', fournisseur_id);
+    if (actif !== undefined && actif !== null) query = query.eq('actif', actif);
+    const { data, count, error } = await applyRange(query, start, l);
+    setLoading(false);
+    if (error) {
+      setError(error);
+      toast.error(error.message || 'Erreur chargement configurations');
+      return { data: [], count: 0, error };
+    }
+    return { data, count, error: null };
+  }
+
+  return { loading, error, fetchConfig, saveConfig, deleteConfig, listConfigs };
+}

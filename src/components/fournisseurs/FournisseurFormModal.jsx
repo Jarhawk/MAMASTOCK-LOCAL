@@ -1,0 +1,94 @@
+// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { useState } from "react";
+import { useFournisseurs } from "@/hooks/useFournisseurs";
+import { Button } from "@/components/ui/button";
+import { toast } from 'sonner';
+import { motion as Motion } from "framer-motion";
+
+export default function FournisseurFormModal({ fournisseur, onClose }) {
+  const { createFournisseur, updateFournisseur } = useFournisseurs();
+  const [form, setForm] = useState({
+    nom: fournisseur?.nom || "",
+    tel: fournisseur?.contact?.tel || "",
+    contact: fournisseur?.contact?.nom || "",
+    email: fournisseur?.contact?.email || "",
+    actif: fournisseur?.actif ?? true,
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = e => setForm(f => ({
+    ...f, [e.target.name]: e.target.value
+  }));
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    if (loading) return;
+    setLoading(true);
+    if (!form.nom) {
+      toast.error("Le nom est obligatoire");
+      setLoading(false);
+      return;
+    }
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      toast.error("Email invalide");
+      setLoading(false);
+      return;
+    }
+    try {
+      let res;
+      if (fournisseur) {
+        res = await updateFournisseur(fournisseur.id, form);
+      } else {
+        res = await createFournisseur(form);
+      }
+      if (res?.error) throw res.error;
+      toast.success("Fournisseur sauvegardé");
+      onClose?.();
+    } catch (err) {
+      toast.error(err?.message || "Erreur enregistrement");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Motion.form
+      initial={{ scale: 0.98, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.98, opacity: 0 }}
+      onSubmit={handleSubmit}
+      className="min-w-[340px] space-y-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-lg p-6 text-white"
+   >
+      <h3 className="text-xl font-bold mb-2">{fournisseur ? "Modifier" : "Ajouter"} un fournisseur</h3>
+      <div>
+        <label htmlFor="nom">Nom</label>
+        <input id="nom" className="form-input w-full" name="nom" value={form.nom} onChange={handleChange} required />
+      </div>
+      <div>
+        <label htmlFor="email">Email</label>
+        <input id="email" className="form-input w-full" name="email" value={form.email} onChange={handleChange} type="email" />
+      </div>
+      <div>
+        <label htmlFor="tel">Téléphone</label>
+        <input id="tel" className="form-input w-full" name="tel" type="tel" value={form.tel} onChange={handleChange} />
+      </div>
+      <div>
+        <label htmlFor="contact">Contact</label>
+        <input id="contact" className="form-input w-full" name="contact" value={form.contact} onChange={handleChange} />
+      </div>
+      <div className="flex items-center gap-2">
+        <input
+          id="actif"
+          type="checkbox"
+          checked={form.actif}
+          onChange={e => setForm(f => ({ ...f, actif: e.target.checked }))}
+        />
+        <label htmlFor="actif">Actif</label>
+      </div>
+      <div className="flex gap-2 justify-end">
+        <Button type="button" variant="outline" onClick={onClose} disabled={loading}>Annuler</Button>
+        <Button type="submit" disabled={loading}>{fournisseur ? "Enregistrer" : "Ajouter"}</Button>
+      </div>
+    </Motion.form>
+  );
+}

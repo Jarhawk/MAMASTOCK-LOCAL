@@ -1,0 +1,53 @@
+// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import SousFamilleForm from '@/forms/SousFamilleForm.jsx';
+
+export default function SousFamilleRow({ sousFamille, onUpdate, onDelete, onToggle }) {
+  const [editing, setEditing] = useState(false);
+
+  if (editing) {
+    return (
+      <tr>
+        <td colSpan={3} className="px-2 py-1">
+          <SousFamilleForm
+            sousFamille={sousFamille}
+            onSave={async (data) => {
+              await onUpdate(sousFamille.id, data);
+              setEditing(false);
+            }}
+            onCancel={() => setEditing(false)}
+          />
+        </td>
+      </tr>
+    );
+  }
+
+  return (
+    <tr>
+      <td className="px-2 py-1 pl-6">{sousFamille.nom}</td>
+      <td className="px-2 py-1 text-center">{sousFamille.actif ? '🟢' : '🔴'}</td>
+      <td className="px-2 py-1">
+        <div className="flex gap-2 justify-center">
+          <Button size="sm" variant="secondary" onClick={() => setEditing(true)}>
+            Modifier
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onToggle(sousFamille)}
+          >
+            {sousFamille.actif ? 'Désactiver' : 'Activer'}
+          </Button>
+          <Button
+            size="sm"
+            className="bg-red-500 hover:bg-red-600 text-white"
+            onClick={() => onDelete(sousFamille.id)}
+          >
+            🗑
+          </Button>
+        </div>
+      </td>
+    </tr>
+  );
+}
