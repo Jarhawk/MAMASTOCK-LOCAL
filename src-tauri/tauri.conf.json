@@ -1,0 +1,35 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "MamaStock",
+  "version": "0.1.0",
+  "identifier": "com.mamastock.app",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devPath": "http://localhost:5173",
+    "distDir": "../dist"
+  },
+  "tauri": {
+    "bundle": {
+      "targets": ["msi", "nsis"],
+      "windows": {
+        "certificateThumbprint": null,
+        "timestampUrl": null
+      }
+    },
+    "windows": [
+      {
+        "title": "MamaStock",
+        "width": 1024,
+        "height": 768
+      }
+    ],
+    "plugins": {
+      "sql": {
+        "default": {
+          "path": "mamastock.db"
+        }
+      }
+    }
+  }
+}

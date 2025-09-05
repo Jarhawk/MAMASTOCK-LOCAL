@@ -72,6 +72,7 @@ const Familles = lazyWithPreload(() => import("@/pages/parametrage/Familles.jsx"
 const SousFamilles = lazyWithPreload(() => import("@/pages/parametrage/SousFamilles.jsx"));
 const Unites = lazyWithPreload(() => import("@/pages/parametrage/Unites.jsx"));
 const Periodes = lazyWithPreload(() => import("@/pages/parametrage/Periodes.jsx"));
+const DataFolder = lazyWithPreload(() => import("@/pages/parametrage/DataFolder.jsx"));
 const Onboarding = lazyWithPreload(() => import("@/pages/public/Onboarding.jsx"));
 const Accueil = lazyWithPreload(() => import("@/pages/Accueil.jsx"));
 const Signup = lazyWithPreload(() => import("@/pages/public/Signup.jsx"));
@@ -186,6 +187,7 @@ export const routePreloadMap = {
   '/parametrage/sous-familles': SousFamilles.preload,
   '/parametrage/unites': Unites.preload,
   '/parametrage/periodes': Periodes.preload,
+  '/parametrage/data': DataFolder.preload,
   '/consentements': Consentements.preload,
   '/supervision': SupervisionGroupe.preload,
   '/supervision/comparateur': ComparateurFiches.preload,
@@ -579,6 +581,10 @@ export default function Router() {
           <Route
             path="/parametrage/periodes"
             element={<Periodes />}
+          />
+          <Route
+            path="/parametrage/data"
+            element={<DataFolder />}
           />
           <Route
             path="/parametrage/access"
