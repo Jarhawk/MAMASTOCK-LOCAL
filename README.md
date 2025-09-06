@@ -17,8 +17,10 @@ Pour partager les données, synchronisez le dossier choisi avec un outil comme *
 Assurez‑vous qu'un seul poste utilise la base à la fois.
 
 ## Backup et restauration
-- `npm run backup` crée une copie horodatée de `mamastock.db` dans le répertoire courant.
-- Pour restaurer, remplacez simplement le fichier `mamastock.db` par la sauvegarde souhaitée.
+- Depuis la page **Outils système**, cliquez sur **Sauvegarder** pour créer une copie horodatée de `mamastock.db` dans `Documents/MamaStock/Backups`.
+- Le bouton **Restaurer** permet de choisir un fichier `.db`, de remplacer la base courante puis de redémarrer automatiquement l'application.
+- **Maintenance** exécute `wal_checkpoint(TRUNCATE)` puis `VACUUM` pour compacter la base.
+- `npm run backup` reste disponible en ligne de commande.
 
 ## Maintenance
 - Vérifiez régulièrement que la synchronisation (Syncthing) est à jour.
