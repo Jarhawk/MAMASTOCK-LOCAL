@@ -1,69 +1,24 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
+import { getDb } from '@/lib/db';
 
-import { useQueryClient } from '@tanstack/react-query';
-import { useAuth } from '@/hooks/useAuth';
-
-function safeQueryClient() {
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useQueryClient();
-  } catch {
-    return {
-      invalidateQueries: () => {},
-      setQueryData: () => {},
-      fetchQuery: async () => {}
-    };
-  }
-}
+// Returns defaults for an invoice line when a product is selected.
+// In the local offline mode we only provide PMP from the produits table.
 
 export function useProduitLineDefaults() {
-  const { mama_id } = useAuth();
-  const queryClient = safeQueryClient();
-
   const fetchDefaults = async ({ produit_id } = {}) => {
-    if (!mama_id || !produit_id) {
+    if (!produit_id) return { unite_id: null, unite: '', pmp: 0 };
+    try {
+      const db = await getDb();
+      const rows = await db.select('SELECT pmp FROM produits WHERE id = ? LIMIT 1', [produit_id]);
+      const pmp = Number(rows[0]?.pmp ?? 0);
+      return { unite_id: null, unite: '', pmp };
+    } catch {
       return { unite_id: null, unite: '', pmp: 0 };
     }
-
-    return queryClient.fetchQuery({
-      queryKey: ['produit-line-defaults', mama_id, produit_id],
-      queryFn: async () => {
-        const [prodRes, pmpRes] = await Promise.all([
-        supabase.
-        from('produits').
-        select('unite_id').
-        eq('id', produit_id).
-        eq('mama_id', mama_id).
-        maybeSingle(),
-        supabase.
-        from('v_pmp').
-        select('pmp').
-        eq('mama_id', mama_id).
-        eq('produit_id', produit_id).
-        maybeSingle()]
-        );
-
-        const unite_id = prodRes.data?.unite_id ?? null;
-
-        const { data: uniteData } = unite_id ?
-        await supabase.
-        from('unites').
-        select('nom').
-        eq('id', unite_id).
-        maybeSingle() :
-        { data: null };
-
-        return {
-          unite_id,
-          unite: uniteData?.nom ?? '',
-          pmp: Number(pmpRes.data?.pmp ?? 0)
-        };
-      }
-    });
   };
 
   return { fetchDefaults };
 }
 
 export default useProduitLineDefaults;
+

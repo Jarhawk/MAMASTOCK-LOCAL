@@ -1,23 +1,19 @@
-import supabase from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 
-import { useAuth } from '@/hooks/useAuth';
 import useDebounce from '@/hooks/useDebounce';
-import { applyIlikeOr } from '@/lib/supa/textSearch';
+import { fournisseurs_list } from '@/lib/db';
 
 /**
  * Autocomplete fournisseurs by nom
  * @param {{ term?: string, limit?: number }} params
  */
 export function useFournisseursAutocomplete({ term = '', limit = 20 } = {}) {
-  const { mama_id } = useAuth();
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const search = useDebounce(term, 250);
 
   useEffect(() => {
-    if (!mama_id) return;
     let aborted = false;
     const s = search.trim();
     if (s === '') {
@@ -29,17 +25,8 @@ export function useFournisseursAutocomplete({ term = '', limit = 20 } = {}) {
       setLoading(true);
       setError(null);
       try {
-        let req = supabase.
-        from('fournisseurs').
-        select('id, nom, ville').
-        eq('mama_id', mama_id).
-        eq('actif', true).
-        order('nom', { ascending: true }).
-        limit(limit);
-        req = applyIlikeOr(req, s);
-        const { data, error } = await req;
-        if (error) throw error;
-        if (!aborted) setOptions(data || []);
+        const { rows } = await fournisseurs_list(s, limit, 1);
+        if (!aborted) setOptions(rows || []);
       } catch (err) {
         console.error(err);
         if (!aborted) {
@@ -54,22 +41,12 @@ export function useFournisseursAutocomplete({ term = '', limit = 20 } = {}) {
     return () => {
       aborted = true;
     };
-  }, [mama_id, search, limit]);
+  }, [search, limit]);
 
   return { options, loading, error };
 }
 
-export async function searchFournisseurs(mamaId, term = '', limit = 20) {
-  if (!mamaId) return [];
-  let req = supabase.
-  from('fournisseurs').
-  select('id, nom, ville').
-  eq('mama_id', mamaId).
-  eq('actif', true).
-  order('nom', { ascending: true }).
-  limit(limit);
-  req = applyIlikeOr(req, term);
-  const { data, error } = await req;
-  if (error) throw error;
-  return data || [];
+export async function searchFournisseurs(term = '', limit = 20, page = 1) {
+  const { rows } = await fournisseurs_list(term, limit, page);
+  return rows || [];
 }

@@ -54,9 +54,32 @@ export async function getDb(): Promise<Database> {
   return dbPromise;
 }
 
-export async function produits_list() {
+export async function produits_list(
+  search = "",
+  actif = true,
+  page = 1,
+  pageSize = 20
+) {
   const db = await getDb();
-  return db.select("SELECT * FROM produits");
+  const term = `%${search.replace(/%/g, "\\%").replace(/_/g, "\\_")}%`;
+  const offset = (page - 1) * pageSize;
+  const where: string[] = [];
+  const params: any[] = [];
+  if (search) {
+    where.push("nom LIKE ?");
+    params.push(term);
+  }
+  const whereClause = where.length ? `WHERE ${where.join(" AND ")}` : "";
+  const rows = await db.select(
+    `SELECT * FROM produits ${whereClause} ORDER BY nom LIMIT ? OFFSET ?`,
+    [...params, pageSize, offset]
+  );
+  const totalRes = await db.select(
+    `SELECT COUNT(*) as count FROM produits ${whereClause}`,
+    params
+  );
+  const total = Number(totalRes[0]?.count ?? 0);
+  return { rows, total };
 }
 
 export async function produits_create(p: { id: string; fournisseur_id?: string; nom: string }) {
@@ -86,9 +109,32 @@ export async function produits_update(
   await db.execute(`UPDATE produits SET ${sets.join(",")} WHERE id = ?`, values);
 }
 
-export async function fournisseurs_list() {
+export async function fournisseurs_list(
+  search = "",
+  limit = 20,
+  page = 1
+) {
   const db = await getDb();
-  return db.select("SELECT * FROM fournisseurs");
+  const term = `%${search.replace(/%/g, "\\%").replace(/_/g, "\\_")}%`;
+  const offset = (page - 1) * limit;
+  const where = search ? "WHERE nom LIKE ?" : "";
+  const params = search ? [term] : [];
+  const rows = await db.select(
+    `SELECT * FROM fournisseurs ${where} ORDER BY nom LIMIT ? OFFSET ?`,
+    [...params, limit, offset]
+  );
+  const totalRes = await db.select(
+    `SELECT COUNT(*) as count FROM fournisseurs ${where}`,
+    params
+  );
+  const total = Number(totalRes[0]?.count ?? 0);
+  return { rows, total };
+}
+
+export async function fournisseur_get(id: string) {
+  const db = await getDb();
+  const rows = await db.select("SELECT * FROM fournisseurs WHERE id = ? LIMIT 1", [id]);
+  return rows[0] || null;
 }
 
 export async function fournisseurs_create(f: { id: string; nom: string }) {
