@@ -13,5 +13,6 @@ jobs:
           node-version: 'lts/*'
       - run: npm ci
       - run: npm run build
+      - run: npm run check:tauri
       - run: npm run db:smoke
 

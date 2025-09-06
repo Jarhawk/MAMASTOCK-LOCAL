@@ -1,0 +1,66 @@
+{
+  "pr_number": "011",
+  "title": "fix: Tauri v2 pluginization",
+  "summary": "migration vers les plugins Tauri v2 et ajout d'un script de vérification",
+  "files": {
+    "added": [
+      "scripts/check-tauri-imports.js",
+      "plugins/plugin-path/package.json",
+      "plugins/plugin-path/index.js",
+      "plugins/plugin-path/index.d.ts",
+      "src-tauri/build.rs",
+      "src-tauri/icons/icon.png",
+      "docs/reports/PR-011_report.md",
+      "docs/reports/PR-011_report.json"
+    ],
+    "modified": [
+      ".github/workflows/verify-local.yml",
+      "docs/STATUS.md",
+      "package.json",
+      "package-lock.json",
+      "src/lib/db.ts",
+      "src/lib/export/exportHelpers.js",
+      "src/lib/lock.ts",
+      "src/pages/parametrage/DataFolder.jsx",
+      "src/pages/parametrage/SystemTools.jsx",
+      "vitest.config.ts",
+      "src-tauri/Cargo.toml",
+      "src-tauri/src/main.rs"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1129 packages"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "built in"
+    },
+    {
+      "name": "npm run db:smoke",
+      "command": "npm run db:smoke",
+      "status": "pass",
+      "stdout": "migration smoke ok"
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "icon ... is not RGBA"
+    },
+    {
+      "name": "npm run check:tauri",
+      "command": "npm run check:tauri",
+      "status": "pass",
+      "stdout": ""
+    }
+  ],
+  "todos": [],
+  "risks": []
+}

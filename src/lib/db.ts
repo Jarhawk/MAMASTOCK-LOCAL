@@ -1,20 +1,20 @@
 import Database from "@tauri-apps/plugin-sql";
-import { appDataDir, documentDir, join, homeDir } from "@tauri-apps/api/path";
+import { appDataDir, documentDir, join, homeDir } from "@tauri-apps/plugin-path";
 import {
-  createDir,
+  mkdir,
   readTextFile,
   writeTextFile,
   exists,
-  readBinaryFile,
-  writeBinaryFile,
-} from "@tauri-apps/api/fs";
+  readFile,
+  writeFile,
+} from "@tauri-apps/plugin-fs";
 
 let dbPromise: Promise<Database> | null = null;
 
 async function configPath(): Promise<string> {
   const base = await appDataDir();
   const dir = await join(base, "MamaStock");
-  await createDir(dir, { recursive: true });
+  await mkdir(dir, { recursive: true });
   return await join(dir, "config.json");
 }
 
@@ -73,12 +73,12 @@ export async function backupDb(): Promise<string> {
   const source = await join(dataDir, "mamastock.db");
   const docs = await documentDir();
   const backupDir = await join(docs, "MamaStock", "Backups");
-  await createDir(backupDir, { recursive: true });
+  await mkdir(backupDir, { recursive: true });
   const now = new Date();
   const stamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}${String(now.getHours()).padStart(2, "0")}${String(now.getMinutes()).padStart(2, "0")}${String(now.getSeconds()).padStart(2, "0")}`;
   const dest = await join(backupDir, `mamastock_${stamp}.db`);
-  const data = await readBinaryFile(source);
-  await writeBinaryFile(dest, data);
+  const data = await readFile(source);
+  await writeFile(dest, data);
   return dest;
 }
 
@@ -86,8 +86,8 @@ export async function restoreDb(file: string) {
   await closeDb();
   const dataDir = await getDataDir();
   const dest = await join(dataDir, "mamastock.db");
-  const data = await readBinaryFile(file);
-  await writeBinaryFile(dest, data);
+  const data = await readFile(file);
+  await writeFile(dest, data);
 }
 
 export async function maintenanceDb() {
@@ -99,7 +99,7 @@ export async function maintenanceDb() {
 export async function getDb(): Promise<Database> {
   if (!dbPromise) {
     const dir = await getDataDir();
-    await createDir(dir, { recursive: true });
+    await mkdir(dir, { recursive: true });
     const dbPath = await join(dir, "mamastock.db");
     const existsDb = await exists(dbPath);
     const db = await Database.load(`sqlite:${dbPath}`);

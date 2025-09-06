@@ -4,17 +4,17 @@ import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
-import { writeBinaryFile, createDir } from '@tauri-apps/api/fs';
-import { join } from '@tauri-apps/api/path';
+import { writeFile, mkdir } from '@tauri-apps/plugin-fs';
+import { join } from '@tauri-apps/plugin-path';
 import { getExportDir } from '@/lib/db';
 
 async function saveBlob(blob, filename) {
   if (typeof window !== 'undefined' && window.__TAURI__) {
     const dir = await getExportDir();
-    await createDir(dir, { recursive: true });
+    await mkdir(dir, { recursive: true });
     const path = await join(dir, filename);
     const buf = await blob.arrayBuffer();
-    await writeBinaryFile(path, new Uint8Array(buf));
+    await writeFile(path, new Uint8Array(buf));
   } else {
     saveAs(blob, filename);
   }
