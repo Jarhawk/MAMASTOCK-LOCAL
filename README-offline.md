@@ -13,6 +13,15 @@ Un fichier `db.lock.json` protège l'accès à la base. Un poste doit être ferm
 ## Synchronisation
 Pour partager les données entre postes, utilisez un outil de synchronisation comme **Syncthing** sur le dossier de données.
 
+## Exports locaux
+
+- Par défaut, les fichiers d'export (CSV, Excel, PDF) sont enregistrés dans
+  le dossier `Documents/MamaStock/Exports`.
+- Ce dossier peut être modifié depuis la page **Paramètres** en renseignant
+  le "Dossier des exports".
+- Des boutons d'export sont disponibles sur les listes Produits, Fournisseurs
+  et Factures pour générer les fichiers.
+
 ## Build
 - `npm ci`
 - `npx tauri dev` pour le mode développement.
