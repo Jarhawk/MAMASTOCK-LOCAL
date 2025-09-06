@@ -1,0 +1,45 @@
+{
+  "pr_number": "010",
+  "title": "feat: exports locaux (CSV/XLSX/PDF)",
+  "summary": "ajout d'exports locaux pour produits, fournisseurs et factures",
+  "files": {
+    "added": [
+      "docs/reports/PR-010_report.md",
+      "docs/reports/PR-010_report.json"
+    ],
+    "modified": [
+      "src/hooks/useExport.js",
+      "src/lib/db.ts",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "build",
+      "command": "npm run build",
+      "status": "fail",
+      "stdout": "[vite]: Rollup failed to resolve import '@tauri-apps/plugin-process'"
+    },
+    {
+      "name": "db:smoke",
+      "command": "npm run db:smoke",
+      "status": "pass",
+      "stdout": "migration smoke ok"
+    },
+    {
+      "name": "unit",
+      "command": "npm test",
+      "status": "pass",
+      "stdout": "Test Files 3 passed"
+    },
+    {
+      "name": "export-script",
+      "command": "node exportHelpers",
+      "status": "fail",
+      "stdout": "Cannot find module '@tauri-apps/api/fs.js'"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}

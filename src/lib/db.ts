@@ -301,3 +301,34 @@ export async function facture_create_with_lignes(
     throw e;
   }
 }
+
+export async function factures_list(start?: string, end?: string) {
+  const db = await getDb();
+  const where: string[] = [];
+  const params: any[] = [];
+  if (start) {
+    where.push("f.date_iso >= ?");
+    params.push(start);
+  }
+  if (end) {
+    where.push("f.date_iso <= ?");
+    params.push(end);
+  }
+  const whereClause = where.length ? `WHERE ${where.join(" AND ")}` : "";
+  const rows = await db.select(
+    `SELECT f.id AS numero, f.date_iso AS date_facture,
+            IFNULL(SUM(fl.quantite * fl.prix_unitaire),0) AS montant
+       FROM factures f
+       LEFT JOIN facture_lignes fl ON fl.facture_id = f.id
+       ${whereClause}
+       GROUP BY f.id, f.date_iso
+       ORDER BY f.date_iso DESC`,
+    params
+  );
+  const totalRes = await db.select(
+    `SELECT COUNT(*) as count FROM factures f ${whereClause}`,
+    params
+  );
+  const total = Number(totalRes[0]?.count ?? 0);
+  return { rows, total };
+}

@@ -1,9 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from 'react';
-
-// useAuth est renommé pour éviter un conflit avec l'alias d'export ci-dessous
-import { useAuth as useAuthHook } from '@/hooks/useAuth';
+import { produits_list, fournisseurs_list, factures_list } from '@/lib/db';
 import {
   exportToPDF,
   exportToExcel,
@@ -21,37 +18,20 @@ import {
 import { toast } from 'sonner';
 
 export default function useExport() {
-  const { mama_id } = useAuthHook();
   const [loading, setLoading] = useState(false);
 
   async function exportData({ type, format, options = {} }) {
-    if (!mama_id) return null;
     setLoading(true);
     try {
       let data = [];
       let columns = [];
       let filenameBase = type;
-      if (type === 'fiches') {
-        const res = await supabase
-          .from('fiches_techniques')
-          .select('*')
-          .eq('mama_id', mama_id);
-        data = res.data || [];
-      } else if (type === 'inventaire') {
-        const res = await supabase
-          .from('inventaires')
-          .select('*, lignes:produits_inventaire!inventaire_id(*)')
-          .eq('mama_id', mama_id);
-        data = res.data || [];
-      } else if (type === 'produits') {
-        const res = await supabase
-          .from('produits')
-          .select('nom, unite:unites!fk_produits_unite(nom), famille:familles!fk_produits_famille(nom)')
-          .eq('mama_id', mama_id);
-        data = (res.data || []).map(p => ({
+      if (type === 'produits') {
+        const { rows } = await produits_list('', true, 1, 1000);
+        data = rows.map(p => ({
           nom: p.nom,
-          unite: p.unite?.nom || '',
-          famille: p.famille?.nom || '',
+          unite: p.unite || '',
+          famille: p.famille || '',
         }));
         columns = [
           { key: 'nom', label: 'Nom' },
@@ -60,27 +40,25 @@ export default function useExport() {
         ];
         filenameBase = 'produits';
       } else if (type === 'fournisseurs') {
-        const res = await supabase
-          .from('fournisseurs')
-          .select('nom, contact_nom, contact_email, contact_tel')
-          .eq('mama_id', mama_id);
-        data = res.data || [];
+        const { rows } = await fournisseurs_list('', 1000, 1);
+        data = rows.map(f => ({
+          nom: f.nom,
+          email: f.email || '',
+          actif: f.actif ? 'Oui' : 'Non',
+        }));
         columns = [
           { key: 'nom', label: 'Nom' },
-          { key: 'contact_tel', label: 'Téléphone' },
-          { key: 'contact_nom', label: 'Contact' },
-          { key: 'contact_email', label: 'Email' },
+          { key: 'email', label: 'Email' },
+          { key: 'actif', label: 'Actif' },
         ];
         filenameBase = 'fournisseurs';
       } else if (type === 'factures') {
-        let query = supabase
-          .from('factures')
-          .select('numero, date_facture, montant')
-          .eq('mama_id', mama_id);
-        if (options.start) query = query.gte('date_facture', options.start);
-        if (options.end) query = query.lte('date_facture', options.end);
-        const res = await query;
-        data = res.data || [];
+        const { rows } = await factures_list(options.start, options.end);
+        data = rows.map(f => ({
+          numero: f.numero,
+          date_facture: f.date_facture,
+          montant: f.montant,
+        }));
         columns = [
           { key: 'numero', label: 'Numéro' },
           { key: 'date_facture', label: 'Date' },
