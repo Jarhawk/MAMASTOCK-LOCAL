@@ -1,6 +1,13 @@
 import Database from "@tauri-apps/plugin-sql";
 import { appDataDir, documentDir, join } from "@tauri-apps/api/path";
-import { createDir, readTextFile, writeTextFile, exists } from "@tauri-apps/api/fs";
+import {
+  createDir,
+  readTextFile,
+  writeTextFile,
+  exists,
+  readBinaryFile,
+  writeBinaryFile,
+} from "@tauri-apps/api/fs";
 
 let dbPromise: Promise<Database> | null = null;
 
@@ -51,6 +58,42 @@ export async function getExportDir(): Promise<string> {
 export async function setExportDir(dir: string) {
   const cfg = await readConfig();
   await writeConfig({ ...cfg, exportDir: dir });
+}
+
+export async function closeDb() {
+  if (dbPromise) {
+    const db = await dbPromise;
+    await db.close();
+    dbPromise = null;
+  }
+}
+
+export async function backupDb(): Promise<string> {
+  const dataDir = await getDataDir();
+  const source = await join(dataDir, "mamastock.db");
+  const docs = await documentDir();
+  const backupDir = await join(docs, "MamaStock", "Backups");
+  await createDir(backupDir, { recursive: true });
+  const now = new Date();
+  const stamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}${String(now.getHours()).padStart(2, "0")}${String(now.getMinutes()).padStart(2, "0")}${String(now.getSeconds()).padStart(2, "0")}`;
+  const dest = await join(backupDir, `mamastock_${stamp}.db`);
+  const data = await readBinaryFile(source);
+  await writeBinaryFile(dest, data);
+  return dest;
+}
+
+export async function restoreDb(file: string) {
+  await closeDb();
+  const dataDir = await getDataDir();
+  const dest = await join(dataDir, "mamastock.db");
+  const data = await readBinaryFile(file);
+  await writeBinaryFile(dest, data);
+}
+
+export async function maintenanceDb() {
+  const db = await getDb();
+  await db.execute("PRAGMA wal_checkpoint(TRUNCATE)");
+  await db.execute("VACUUM");
 }
 
 export async function getDb(): Promise<Database> {
