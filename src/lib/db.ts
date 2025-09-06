@@ -1,5 +1,5 @@
 import Database from "@tauri-apps/plugin-sql";
-import { appDataDir, documentDir, join } from "@tauri-apps/api/path";
+import { appDataDir, documentDir, join, homeDir } from "@tauri-apps/api/path";
 import {
   createDir,
   readTextFile,
@@ -38,7 +38,7 @@ async function writeConfig(data: any) {
 export async function getDataDir(): Promise<string> {
   const cfg = await readConfig();
   if (cfg.dataDir) return cfg.dataDir as string;
-  const base = await appDataDir();
+  const base = await homeDir();
   return await join(base, "MamaStock", "data");
 }
 

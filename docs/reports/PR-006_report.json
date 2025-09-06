@@ -1,0 +1,29 @@
+{
+  "pr_number": "006",
+  "title": "Paramétrage dossier data + verrou distribué",
+  "summary": "set default data directory in user profile and update tests",
+  "files": {
+    "added": [
+      "docs/reports/PR-006_report.md",
+      "docs/reports/PR-006_report.json"
+    ],
+    "modified": [
+      "README.md",
+      "docs/STATUS.md",
+      "src/lib/db.ts",
+      "test/db.test.ts",
+      "test/stubs/tauri-path.ts"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "unit",
+      "command": "npm test",
+      "status": "pass",
+      "stdout": "Test Files 3 passed (3)"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
