@@ -1,0 +1,3129 @@
+{
+  "routes": [
+    {
+      "path": "/",
+      "component": "RootRoute",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "/accueil",
+      "component": "Accueil",
+      "file": "@/pages/Accueil.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/signup",
+      "component": "Signup",
+      "file": "@/pages/public/Signup.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/login",
+      "component": "Login",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "/reset-password",
+      "component": "ResetPassword",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "/update-password",
+      "component": "UpdatePassword",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "/logout",
+      "component": "Logout",
+      "file": "@/pages/auth/Logout.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/onboarding",
+      "component": "Onboarding",
+      "file": "@/pages/public/Onboarding.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/create-mama",
+      "component": "CreateMama",
+      "file": "@/pages/auth/CreateMama.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/pending",
+      "component": "Pending",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "/unauthorized",
+      "component": "Unauthorized",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "/blocked",
+      "component": "Blocked",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "/onboarding-utilisateur",
+      "component": "OnboardingUtilisateur",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "/rgpd",
+      "component": "Rgpd",
+      "file": "@/pages/Rgpd.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/confidentialite",
+      "component": "Confidentialite",
+      "file": "@/pages/legal/Confidentialite.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/mentions-legales",
+      "component": "MentionsLegales",
+      "file": "@/pages/legal/MentionsLegales.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/cgu",
+      "component": "Cgu",
+      "file": "@/pages/legal/Cgu.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/cgv",
+      "component": "Cgv",
+      "file": "@/pages/legal/Cgv.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/contact",
+      "component": "Contact",
+      "file": "@/pages/legal/Contact.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/licence",
+      "component": "Licence",
+      "file": "@/pages/legal/Licence.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/debug/auth",
+      "component": "DebugAuth",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "/debug/rights",
+      "component": "DebugRights",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "/",
+      "component": "Layout",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "dashboard",
+      "component": "Dashboard",
+      "file": "@/pages/Dashboard.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/dashboard/builder",
+      "component": "DashboardBuilder",
+      "file": "@/pages/dashboard/DashboardBuilder.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/fournisseurs",
+      "component": "Fournisseurs",
+      "file": "@/pages/fournisseurs/Fournisseurs.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/fournisseurs/nouveau",
+      "component": "FournisseurCreate",
+      "file": "@/pages/fournisseurs/FournisseurCreate.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/fournisseurs/:id",
+      "component": "FournisseurDetailPage",
+      "file": "@/pages/fournisseurs/FournisseurDetailPage.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/fournisseurs/:id/api",
+      "component": "FournisseurApiSettingsForm",
+      "file": "@/pages/fournisseurs/FournisseurApiSettingsForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/factures",
+      "component": "Factures",
+      "file": "@/pages/factures/Factures.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/factures/new",
+      "component": "FactureForm",
+      "file": "@/pages/factures/FactureForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/factures/:id",
+      "component": "FactureForm",
+      "file": "@/pages/factures/FactureForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/factures/import",
+      "component": "ImportFactures",
+      "file": "@/pages/factures/ImportFactures.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/receptions",
+      "component": "Receptions",
+      "file": "@/pages/receptions/Receptions.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/achats",
+      "component": "Achats",
+      "file": "@/pages/achats/Achats.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/bons-livraison",
+      "component": "BonsLivraison",
+      "file": "@/pages/bons_livraison/BonsLivraison.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/bons-livraison/nouveau",
+      "component": "BLCreate",
+      "file": "@/pages/bons_livraison/BLCreate.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/bons-livraison/:id",
+      "component": "BLDetail",
+      "file": "@/pages/bons_livraison/BLDetail.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/fiches",
+      "component": "Fiches",
+      "file": "@/pages/fiches/Fiches.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/fiches/:id",
+      "component": "FicheDetail",
+      "file": "@/pages/fiches/FicheDetail.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/menus",
+      "component": "Menus",
+      "file": "@/pages/menus/Menus.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/menu",
+      "component": "MenuDuJourPlanning",
+      "file": "@/pages/menu/MenuDuJour.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/menu/:date",
+      "component": "MenuDuJourJour",
+      "file": "@/pages/menu/MenuDuJourJour.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/menu-groupes",
+      "component": "MenuGroupes",
+      "file": "@/pages/menus/MenuGroupes.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/menu-groupes/nouveau",
+      "component": "MenuGroupeForm",
+      "file": "@/pages/menus/MenuGroupeForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/menu-groupes/:id",
+      "component": "MenuGroupeDetail",
+      "file": "@/pages/menus/MenuGroupeDetail.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/carte",
+      "component": "Carte",
+      "file": "@/pages/carte/Carte.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/recettes",
+      "component": "Recettes",
+      "file": "@/pages/recettes/Recettes.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/requisitions",
+      "component": "Requisitions",
+      "file": "@/pages/requisitions/Requisitions.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/requisitions/nouvelle",
+      "component": "RequisitionForm",
+      "file": "@/pages/requisitions/RequisitionForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/requisitions/:id",
+      "component": "RequisitionDetail",
+      "file": "@/pages/requisitions/RequisitionDetail.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/produits",
+      "component": "Produits",
+      "file": "@/pages/produits/Produits.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/produits/nouveau",
+      "component": "ProduitForm",
+      "file": "@/pages/produits/ProduitForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/produits/:id",
+      "component": "ProduitDetail",
+      "file": "@/pages/produits/ProduitDetail.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/inventaire",
+      "component": "Inventaire",
+      "file": "@/pages/inventaire/Inventaire.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/inventaire/zones",
+      "component": "InventaireZones",
+      "file": "@/pages/inventaire/InventaireZones.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/inventaire/new",
+      "component": "InventaireForm",
+      "file": "@/pages/inventaire/InventaireForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/inventaire/:id",
+      "component": "InventaireDetail",
+      "file": "@/pages/inventaire/InventaireDetail.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/transferts",
+      "component": "StockTransferts",
+      "file": "@/pages/stock/Transferts.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/stock/alertes",
+      "component": "StockAlertesRupture",
+      "file": "@/pages/stock/AlertesRupture.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/taches",
+      "component": "Taches",
+      "file": "@/pages/taches/Taches.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/taches/new",
+      "component": "TacheForm",
+      "file": "@/pages/taches/TacheForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/taches/:id",
+      "component": "TacheDetail",
+      "file": "@/pages/taches/TacheDetail.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/taches/alertes",
+      "component": "AlertesTaches",
+      "file": "@/pages/taches/Alertes.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/alertes",
+      "component": "Alertes",
+      "file": "@/pages/Alertes.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/promotions",
+      "component": "Promotions",
+      "file": "@/pages/promotions/Promotions.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/notifications",
+      "component": "NotificationsInbox",
+      "file": "@/pages/notifications/NotificationsInbox.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/notifications/settings",
+      "component": "NotificationSettingsForm",
+      "file": "@/pages/notifications/NotificationSettingsForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/documents",
+      "component": "Documents",
+      "file": "@/pages/documents/Documents.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/catalogue/sync",
+      "component": "CatalogueSyncViewer",
+      "file": "@/pages/catalogue/CatalogueSyncViewer.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/commandes",
+      "component": "Commandes",
+      "file": "@/pages/commandes/Commandes.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/commandes/envoyees",
+      "component": "CommandesEnvoyees",
+      "file": "@/pages/commandes/CommandesEnvoyees.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/commandes/nouvelle",
+      "component": "CommandeForm",
+      "file": "@/pages/commandes/CommandeForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/commandes/:id",
+      "component": "CommandeDetail",
+      "file": "@/pages/commandes/CommandeDetail.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/emails/envoyes",
+      "component": "EmailsEnvoyes",
+      "file": "@/pages/emails/EmailsEnvoyes.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/planning",
+      "component": "Planning",
+      "file": "@/pages/Planning.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/planning/nouveau",
+      "component": "PlanningForm",
+      "file": "@/pages/PlanningForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/planning/:id",
+      "component": "PlanningDetail",
+      "file": "@/pages/PlanningDetail.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/planning/simulation",
+      "component": "SimulationPlanner",
+      "file": "@/pages/planning/SimulationPlanner.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/analyse",
+      "component": "Analyse",
+      "file": "@/pages/analyse/Analyse.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/analyse/cost-centers",
+      "component": "AnalyseCostCenter",
+      "file": "@/pages/analyse/AnalyseCostCenter.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/costing/carte",
+      "component": "CostingCarte",
+      "file": "@/pages/costing/CostingCarte.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/analyse/analytique",
+      "component": "AnalytiqueDashboard",
+      "file": "@/pages/analytique/AnalytiqueDashboard.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/menu-engineering",
+      "component": "MenuEngineering",
+      "file": "@/pages/engineering/MenuEngineering.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/engineering",
+      "component": "EngineeringMenu",
+      "file": "@/pages/EngineeringMenu.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/tableaux-de-bord",
+      "component": "TableauxDeBord",
+      "file": "@/pages/analyse/TableauxDeBord.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/comparatif",
+      "component": "Comparatif",
+      "file": "@/pages/fournisseurs/comparatif/ComparatifPrix.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/surcouts",
+      "component": "Surcouts",
+      "file": "@/pages/surcouts/Surcouts.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/reporting",
+      "component": "Reporting",
+      "file": "@/pages/reporting/Reporting.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/consolidation",
+      "component": "Consolidation",
+      "file": "@/pages/consolidation/Consolidation.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/admin/access-multi-sites",
+      "component": "AccessMultiSites",
+      "file": "@/pages/consolidation/AccessMultiSites.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/utilisateurs",
+      "component": "Utilisateurs",
+      "file": "@/pages/parametrage/Utilisateurs.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/mamas",
+      "component": "Mamas",
+      "file": "@/pages/parametrage/Mamas.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/permissions",
+      "component": "Permissions",
+      "file": "@/pages/parametrage/Permissions.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/api-keys",
+      "component": "APIKeys",
+      "file": "@/pages/parametrage/APIKeys.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/api-fournisseurs",
+      "component": "ApiFournisseurs",
+      "file": "@/pages/fournisseurs/ApiFournisseurs.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/settings",
+      "component": "MamaSettingsForm",
+      "file": "@/pages/parametrage/MamaSettingsForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/zones",
+      "component": "Zones",
+      "file": "@/pages/parametrage/Zones.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/zones/:id",
+      "component": "ZoneForm",
+      "file": "@/pages/parametrage/ZoneForm.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/zones/:id/droits",
+      "component": "ZoneAccess",
+      "file": "@/pages/parametrage/ZoneAccess.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/familles",
+      "component": "Familles",
+      "file": "@/pages/parametrage/Familles.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/sous-familles",
+      "component": "SousFamilles",
+      "file": "@/pages/parametrage/SousFamilles.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/unites",
+      "component": "Unites",
+      "file": "@/pages/parametrage/Unites.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/periodes",
+      "component": "Periodes",
+      "file": "@/pages/parametrage/Periodes.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/system",
+      "component": "SystemTools",
+      "file": "@/pages/parametrage/SystemTools.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/data",
+      "component": "DataFolder",
+      "file": "@/pages/parametrage/DataFolder.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/access",
+      "component": "AccessRights",
+      "file": "@/pages/parametrage/AccessRights.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/consentements",
+      "component": "Consentements",
+      "file": "@/pages/Consentements.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/aide",
+      "component": "AideContextuelle",
+      "file": "@/pages/AideContextuelle.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/feedback",
+      "component": "Feedback",
+      "file": "@/pages/Feedback.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/stats",
+      "component": "Stats",
+      "file": "@/pages/stats/Stats.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/planning-module",
+      "component": "PlanningModule",
+      "file": "@/pages/PlanningModule.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/parametrage/roles",
+      "component": "Roles",
+      "file": "@/pages/parametrage/Roles.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/supervision",
+      "component": "SupervisionGroupe",
+      "file": "@/pages/supervision/SupervisionGroupe.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/supervision/comparateur",
+      "component": "ComparateurFiches",
+      "file": "@/pages/supervision/ComparateurFiches.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/supervision/logs",
+      "component": "SupervisionLogs",
+      "file": "@/pages/supervision/Logs.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/supervision/rapports",
+      "component": "SupervisionRapports",
+      "file": "@/pages/supervision/Rapports.jsx",
+      "lazy": true,
+      "protected": false
+    },
+    {
+      "path": "/debug/access",
+      "component": "AccessExample",
+      "file": "",
+      "lazy": false,
+      "protected": false
+    },
+    {
+      "path": "*",
+      "component": "NotFound",
+      "file": "@/pages/NotFound.jsx",
+      "lazy": true,
+      "protected": false
+    }
+  ],
+  "components": [
+    {
+      "name": "App",
+      "file": "src/App.jsx"
+    },
+    {
+      "name": "Router",
+      "file": "src/router.jsx"
+    },
+    {
+      "name": "CookieConsent",
+      "file": "src/components/CookieConsent.jsx"
+    },
+    {
+      "name": "DeleteAccountButton",
+      "file": "src/components/DeleteAccountButton.jsx"
+    },
+    {
+      "name": "FactureImportModal",
+      "file": "src/components/FactureImportModal.jsx"
+    },
+    {
+      "name": "FactureLigne",
+      "file": "src/components/FactureLigne.jsx"
+    },
+    {
+      "name": "FactureTable",
+      "file": "src/components/FactureTable.jsx"
+    },
+    {
+      "name": "Footer",
+      "file": "src/components/Footer.jsx"
+    },
+    {
+      "name": "ProtectedRoute",
+      "file": "src/components/ProtectedRoute.jsx"
+    },
+    {
+      "name": "ResetAuthButton",
+      "file": "src/components/ResetAuthButton.jsx"
+    },
+    {
+      "name": "Sidebar",
+      "file": "src/components/Sidebar.jsx"
+    },
+    {
+      "name": "ToastRoot",
+      "file": "src/components/ToastRoot.jsx"
+    },
+    {
+      "name": "FamilleForm",
+      "file": "src/forms/FamilleForm.jsx"
+    },
+    {
+      "name": "PeriodeForm",
+      "file": "src/forms/PeriodeForm.jsx"
+    },
+    {
+      "name": "SousFamilleForm",
+      "file": "src/forms/SousFamilleForm.jsx"
+    },
+    {
+      "name": "UniteForm",
+      "file": "src/forms/UniteForm.jsx"
+    },
+    {
+      "name": "ZoneForm",
+      "file": "src/forms/ZoneForm.jsx"
+    },
+    {
+      "name": "AdminLayout",
+      "file": "src/layout/AdminLayout.jsx"
+    },
+    {
+      "name": "Layout",
+      "file": "src/layout/Layout.jsx"
+    },
+    {
+      "name": "LegalLayout",
+      "file": "src/layout/LegalLayout.jsx"
+    },
+    {
+      "name": "Navbar",
+      "file": "src/layout/Navbar.jsx"
+    },
+    {
+      "name": "Sidebar",
+      "file": "src/layout/Sidebar.jsx"
+    },
+    {
+      "name": "ViewerLayout",
+      "file": "src/layout/ViewerLayout.jsx"
+    },
+    {
+      "name": "Accueil",
+      "file": "src/pages/Accueil.jsx"
+    },
+    {
+      "name": "Alertes",
+      "file": "src/pages/Alertes.jsx"
+    },
+    {
+      "name": "BarManager",
+      "file": "src/pages/BarManager.jsx"
+    },
+    {
+      "name": "CartePlats",
+      "file": "src/pages/CartePlats.jsx"
+    },
+    {
+      "name": "Consentements",
+      "file": "src/pages/Consentements.jsx"
+    },
+    {
+      "name": "Dashboard",
+      "file": "src/pages/Dashboard.jsx"
+    },
+    {
+      "name": "EngineeringMenu",
+      "file": "src/pages/EngineeringMenu.jsx"
+    },
+    {
+      "name": "Feedback",
+      "file": "src/pages/Feedback.jsx"
+    },
+    {
+      "name": "HelpCenter",
+      "file": "src/pages/HelpCenter.jsx"
+    },
+    {
+      "name": "Journal",
+      "file": "src/pages/Journal.jsx"
+    },
+    {
+      "name": "NotFound",
+      "file": "src/pages/NotFound.jsx"
+    },
+    {
+      "name": "Onboarding",
+      "file": "src/pages/Onboarding.jsx"
+    },
+    {
+      "name": "Pertes",
+      "file": "src/pages/Pertes.jsx"
+    },
+    {
+      "name": "Planning",
+      "file": "src/pages/Planning.jsx"
+    },
+    {
+      "name": "PlanningDetail",
+      "file": "src/pages/PlanningDetail.jsx"
+    },
+    {
+      "name": "PlanningForm",
+      "file": "src/pages/PlanningForm.jsx"
+    },
+    {
+      "name": "PlanningModule",
+      "file": "src/pages/PlanningModule.jsx"
+    },
+    {
+      "name": "Rgpd",
+      "file": "src/pages/Rgpd.jsx"
+    },
+    {
+      "name": "Stock",
+      "file": "src/pages/Stock.jsx"
+    },
+    {
+      "name": "Utilisateurs",
+      "file": "src/pages/Utilisateurs.jsx"
+    },
+    {
+      "name": "Validations",
+      "file": "src/pages/Validations.jsx"
+    },
+    {
+      "name": "PrivateOutlet",
+      "file": "src/router/PrivateOutlet.jsx"
+    },
+    {
+      "name": "BubblesParticles",
+      "file": "src/components/LiquidBackground/BubblesParticles.jsx"
+    },
+    {
+      "name": "LiquidBackground",
+      "file": "src/components/LiquidBackground/LiquidBackground.jsx"
+    },
+    {
+      "name": "MouseLight",
+      "file": "src/components/LiquidBackground/MouseLight.jsx"
+    },
+    {
+      "name": "TouchLight",
+      "file": "src/components/LiquidBackground/TouchLight.jsx"
+    },
+    {
+      "name": "WavesBackground",
+      "file": "src/components/LiquidBackground/WavesBackground.jsx"
+    },
+    {
+      "name": "GraphMultiZone",
+      "file": "src/components/Reporting/GraphMultiZone.jsx"
+    },
+    {
+      "name": "AchatRow",
+      "file": "src/components/achats/AchatRow.jsx"
+    },
+    {
+      "name": "CostCenterAllocationModal",
+      "file": "src/components/analytics/CostCenterAllocationModal.jsx"
+    },
+    {
+      "name": "BonLivraisonRow",
+      "file": "src/components/bons_livraison/BonLivraisonRow.jsx"
+    },
+    {
+      "name": "DashboardCard",
+      "file": "src/components/dashboard/DashboardCard.jsx"
+    },
+    {
+      "name": "GadgetConfigForm",
+      "file": "src/components/dashboard/GadgetConfigForm.jsx"
+    },
+    {
+      "name": "PeriodFilter",
+      "file": "src/components/dashboard/PeriodFilter.jsx"
+    },
+    {
+      "name": "WidgetRenderer",
+      "file": "src/components/dashboard/WidgetRenderer.jsx"
+    },
+    {
+      "name": "CostingCartePDF",
+      "file": "src/components/costing/CostingCartePDF.jsx"
+    },
+    {
+      "name": "ApiDiagnostic",
+      "file": "src/components/dev/ApiDiagnostic.jsx"
+    },
+    {
+      "name": "DocumentPreview",
+      "file": "src/components/documents/DocumentPreview.jsx"
+    },
+    {
+      "name": "DocumentUpload",
+      "file": "src/components/documents/DocumentUpload.jsx"
+    },
+    {
+      "name": "EngineeringChart",
+      "file": "src/components/engineering/EngineeringChart.jsx"
+    },
+    {
+      "name": "EngineeringFilters",
+      "file": "src/components/engineering/EngineeringFilters.jsx"
+    },
+    {
+      "name": "ImportVentesExcel",
+      "file": "src/components/engineering/ImportVentesExcel.jsx"
+    },
+    {
+      "name": "ExportManager",
+      "file": "src/components/export/ExportManager.jsx"
+    },
+    {
+      "name": "FicheExportView",
+      "file": "src/components/export/FicheExportView.jsx"
+    },
+    {
+      "name": "FactureRow",
+      "file": "src/components/factures/FactureRow.jsx"
+    },
+    {
+      "name": "PriceDelta",
+      "file": "src/components/factures/PriceDelta.jsx"
+    },
+    {
+      "name": "ProduitSearchModal",
+      "file": "src/components/factures/ProduitSearchModal.jsx"
+    },
+    {
+      "name": "SupplierBrowserModal",
+      "file": "src/components/factures/SupplierBrowserModal.jsx"
+    },
+    {
+      "name": "SupplierPicker",
+      "file": "src/components/factures/SupplierPicker.jsx"
+    },
+    {
+      "name": "FicheLigne",
+      "file": "src/components/fiches/FicheLigne.jsx"
+    },
+    {
+      "name": "FicheRentabiliteCard",
+      "file": "src/components/fiches/FicheRentabiliteCard.jsx"
+    },
+    {
+      "name": "FicheRow",
+      "file": "src/components/fiches/FicheRow.jsx"
+    },
+    {
+      "name": "SupplierFilter",
+      "file": "src/components/filters/SupplierFilter.jsx"
+    },
+    {
+      "name": "MoneyInputFR",
+      "file": "src/components/forms/MoneyInputFR.jsx"
+    },
+    {
+      "name": "NumericInput",
+      "file": "src/components/forms/NumericInput.jsx"
+    },
+    {
+      "name": "NumericInputFR",
+      "file": "src/components/forms/NumericInputFR.jsx"
+    },
+    {
+      "name": "ProductPickerModal",
+      "file": "src/components/forms/ProductPickerModal.jsx"
+    },
+    {
+      "name": "FournisseurFormModal",
+      "file": "src/components/fournisseurs/FournisseurFormModal.jsx"
+    },
+    {
+      "name": "FournisseurRow",
+      "file": "src/components/fournisseurs/FournisseurRow.jsx"
+    },
+    {
+      "name": "GadgetAlerteStockFaible",
+      "file": "src/components/gadgets/GadgetAlerteStockFaible.jsx"
+    },
+    {
+      "name": "GadgetBudgetMensuel",
+      "file": "src/components/gadgets/GadgetBudgetMensuel.jsx"
+    },
+    {
+      "name": "GadgetConsoMoyenne",
+      "file": "src/components/gadgets/GadgetConsoMoyenne.jsx"
+    },
+    {
+      "name": "GadgetDerniersAcces",
+      "file": "src/components/gadgets/GadgetDerniersAcces.jsx"
+    },
+    {
+      "name": "GadgetEvolutionAchats",
+      "file": "src/components/gadgets/GadgetEvolutionAchats.jsx"
+    },
+    {
+      "name": "GadgetProduitsUtilises",
+      "file": "src/components/gadgets/GadgetProduitsUtilises.jsx"
+    },
+    {
+      "name": "GadgetTachesUrgentes",
+      "file": "src/components/gadgets/GadgetTachesUrgentes.jsx"
+    },
+    {
+      "name": "GadgetTopFournisseurs",
+      "file": "src/components/gadgets/GadgetTopFournisseurs.jsx"
+    },
+    {
+      "name": "DocumentationPanel",
+      "file": "src/components/help/DocumentationPanel.jsx"
+    },
+    {
+      "name": "FeedbackForm",
+      "file": "src/components/help/FeedbackForm.jsx"
+    },
+    {
+      "name": "GuidedTour",
+      "file": "src/components/help/GuidedTour.jsx"
+    },
+    {
+      "name": "TooltipHelper",
+      "file": "src/components/help/TooltipHelper.jsx"
+    },
+    {
+      "name": "RecommandationsBox",
+      "file": "src/components/ia/RecommandationsBox.jsx"
+    },
+    {
+      "name": "InventaireLigneRow",
+      "file": "src/components/inventaire/InventaireLigneRow.jsx"
+    },
+    {
+      "name": "InventaireDetail",
+      "file": "src/components/inventaires/InventaireDetail.jsx"
+    },
+    {
+      "name": "InventaireForm",
+      "file": "src/components/inventaires/InventaireForm.jsx"
+    },
+    {
+      "name": "Sidebar",
+      "file": "src/components/layout/Sidebar.jsx"
+    },
+    {
+      "name": "MouvementFormModal",
+      "file": "src/components/mouvements/MouvementFormModal.jsx"
+    },
+    {
+      "name": "FamilleRow",
+      "file": "src/components/parametrage/FamilleRow.jsx"
+    },
+    {
+      "name": "ParamAccess",
+      "file": "src/components/parametrage/ParamAccess.jsx"
+    },
+    {
+      "name": "ParamCostCenters",
+      "file": "src/components/parametrage/ParamCostCenters.jsx"
+    },
+    {
+      "name": "ParamFamilles",
+      "file": "src/components/parametrage/ParamFamilles.jsx"
+    },
+    {
+      "name": "ParamMama",
+      "file": "src/components/parametrage/ParamMama.jsx"
+    },
+    {
+      "name": "ParamRoles",
+      "file": "src/components/parametrage/ParamRoles.jsx"
+    },
+    {
+      "name": "ParamSecurity",
+      "file": "src/components/parametrage/ParamSecurity.jsx"
+    },
+    {
+      "name": "ParamUnites",
+      "file": "src/components/parametrage/ParamUnites.jsx"
+    },
+    {
+      "name": "SousFamilleList",
+      "file": "src/components/parametrage/SousFamilleList.jsx"
+    },
+    {
+      "name": "SousFamilleModal",
+      "file": "src/components/parametrage/SousFamilleModal.jsx"
+    },
+    {
+      "name": "SousFamilleRow",
+      "file": "src/components/parametrage/SousFamilleRow.jsx"
+    },
+    {
+      "name": "UniteRow",
+      "file": "src/components/parametrage/UniteRow.jsx"
+    },
+    {
+      "name": "UtilisateurRow",
+      "file": "src/components/parametrage/UtilisateurRow.jsx"
+    },
+    {
+      "name": "ZoneFormProducts",
+      "file": "src/components/parametrage/ZoneFormProducts.jsx"
+    },
+    {
+      "name": "ZoneRow",
+      "file": "src/components/parametrage/ZoneRow.jsx"
+    },
+    {
+      "name": "CommandePDF",
+      "file": "src/components/pdf/CommandePDF.jsx"
+    },
+    {
+      "name": "ModalImportProduits",
+      "file": "src/components/produits/ModalImportProduits.jsx"
+    },
+    {
+      "name": "ProduitDetail",
+      "file": "src/components/produits/ProduitDetail.jsx"
+    },
+    {
+      "name": "ProduitForm",
+      "file": "src/components/produits/ProduitForm.jsx"
+    },
+    {
+      "name": "ProduitFormModal",
+      "file": "src/components/produits/ProduitFormModal.jsx"
+    },
+    {
+      "name": "ProduitRow",
+      "file": "src/components/produits/ProduitRow.jsx"
+    },
+    {
+      "name": "PromotionRow",
+      "file": "src/components/promotions/PromotionRow.jsx"
+    },
+    {
+      "name": "RequisitionRow",
+      "file": "src/components/requisitions/RequisitionRow.jsx"
+    },
+    {
+      "name": "TwoFactorSetup",
+      "file": "src/components/security/TwoFactorSetup.jsx"
+    },
+    {
+      "name": "SimulationDetailsModal",
+      "file": "src/components/simulation/SimulationDetailsModal.jsx"
+    },
+    {
+      "name": "AlertBadge",
+      "file": "src/components/stock/AlertBadge.jsx"
+    },
+    {
+      "name": "StockDetail",
+      "file": "src/components/stock/StockDetail.jsx"
+    },
+    {
+      "name": "TacheForm",
+      "file": "src/components/taches/TacheForm.jsx"
+    },
+    {
+      "name": "TachesKanban",
+      "file": "src/components/taches/TachesKanban.jsx"
+    },
+    {
+      "name": "UtilisateurDetail",
+      "file": "src/components/utilisateurs/UtilisateurDetail.jsx"
+    },
+    {
+      "name": "UtilisateurForm",
+      "file": "src/components/utilisateurs/UtilisateurForm.jsx"
+    },
+    {
+      "name": "UtilisateurRow",
+      "file": "src/components/utilisateurs/UtilisateurRow.jsx"
+    },
+    {
+      "name": "AutoCompleteField",
+      "file": "src/components/ui/AutoCompleteField.jsx"
+    },
+    {
+      "name": "AutoCompleteZoneField",
+      "file": "src/components/ui/AutoCompleteZoneField.jsx"
+    },
+    {
+      "name": "Breadcrumbs",
+      "file": "src/components/ui/Breadcrumbs.jsx"
+    },
+    {
+      "name": "ImportPreviewTable",
+      "file": "src/components/ui/ImportPreviewTable.jsx"
+    },
+    {
+      "name": "InputField",
+      "file": "src/components/ui/InputField.jsx"
+    },
+    {
+      "name": "ListingContainer",
+      "file": "src/components/ui/ListingContainer.jsx"
+    },
+    {
+      "name": "LoadingScreen",
+      "file": "src/components/ui/LoadingScreen.jsx"
+    },
+    {
+      "name": "LoadingSkeleton",
+      "file": "src/components/ui/LoadingSkeleton.jsx"
+    },
+    {
+      "name": "MamaLogo",
+      "file": "src/components/ui/MamaLogo.jsx"
+    },
+    {
+      "name": "ModalGlass",
+      "file": "src/components/ui/ModalGlass.jsx"
+    },
+    {
+      "name": "PageIntro",
+      "file": "src/components/ui/PageIntro.jsx"
+    },
+    {
+      "name": "PageSkeleton",
+      "file": "src/components/ui/PageSkeleton.jsx"
+    },
+    {
+      "name": "PageWrapper",
+      "file": "src/components/ui/PageWrapper.jsx"
+    },
+    {
+      "name": "PaginationFooter",
+      "file": "src/components/ui/PaginationFooter.jsx"
+    },
+    {
+      "name": "PreviewBanner",
+      "file": "src/components/ui/PreviewBanner.jsx"
+    },
+    {
+      "name": "PrimaryButton",
+      "file": "src/components/ui/PrimaryButton.jsx"
+    },
+    {
+      "name": "SecondaryButton",
+      "file": "src/components/ui/SecondaryButton.jsx"
+    },
+    {
+      "name": "StatCard",
+      "file": "src/components/ui/StatCard.jsx"
+    },
+    {
+      "name": "TableContainer",
+      "file": "src/components/ui/TableContainer.jsx"
+    },
+    {
+      "name": "TableHeader",
+      "file": "src/components/ui/TableHeader.jsx"
+    },
+    {
+      "name": "Familles",
+      "file": "src/pages/Parametres/Familles.jsx"
+    },
+    {
+      "name": "AchatDetail",
+      "file": "src/pages/achats/AchatDetail.jsx"
+    },
+    {
+      "name": "AchatForm",
+      "file": "src/pages/achats/AchatForm.jsx"
+    },
+    {
+      "name": "Achats",
+      "file": "src/pages/achats/Achats.jsx"
+    },
+    {
+      "name": "Aide",
+      "file": "src/pages/aide/Aide.jsx"
+    },
+    {
+      "name": "AideForm",
+      "file": "src/pages/aide/AideForm.jsx"
+    },
+    {
+      "name": "Analyse",
+      "file": "src/pages/analyse/Analyse.jsx"
+    },
+    {
+      "name": "AnalyseCostCenter",
+      "file": "src/pages/analyse/AnalyseCostCenter.jsx"
+    },
+    {
+      "name": "MenuEngineering",
+      "file": "src/pages/analyse/MenuEngineering.jsx"
+    },
+    {
+      "name": "TableauxDeBord",
+      "file": "src/pages/analyse/TableauxDeBord.jsx"
+    },
+    {
+      "name": "AnalytiqueDashboard",
+      "file": "src/pages/analytique/AnalytiqueDashboard.jsx"
+    },
+    {
+      "name": "Blocked",
+      "file": "src/pages/auth/Blocked.jsx"
+    },
+    {
+      "name": "CreateMama",
+      "file": "src/pages/auth/CreateMama.jsx"
+    },
+    {
+      "name": "Login",
+      "file": "src/pages/auth/Login.jsx"
+    },
+    {
+      "name": "Logout",
+      "file": "src/pages/auth/Logout.jsx"
+    },
+    {
+      "name": "Pending",
+      "file": "src/pages/auth/Pending.jsx"
+    },
+    {
+      "name": "ResetPassword",
+      "file": "src/pages/auth/ResetPassword.jsx"
+    },
+    {
+      "name": "RoleError",
+      "file": "src/pages/auth/RoleError.jsx"
+    },
+    {
+      "name": "Unauthorized",
+      "file": "src/pages/auth/Unauthorized.jsx"
+    },
+    {
+      "name": "UpdatePassword",
+      "file": "src/pages/auth/UpdatePassword.jsx"
+    },
+    {
+      "name": "BLCreate",
+      "file": "src/pages/bons_livraison/BLCreate.jsx"
+    },
+    {
+      "name": "BLDetail",
+      "file": "src/pages/bons_livraison/BLDetail.jsx"
+    },
+    {
+      "name": "BLForm",
+      "file": "src/pages/bons_livraison/BLForm.jsx"
+    },
+    {
+      "name": "BonsLivraison",
+      "file": "src/pages/bons_livraison/BonsLivraison.jsx"
+    },
+    {
+      "name": "Carte",
+      "file": "src/pages/carte/Carte.jsx"
+    },
+    {
+      "name": "CatalogueSyncViewer",
+      "file": "src/pages/catalogue/CatalogueSyncViewer.jsx"
+    },
+    {
+      "name": "CommandeDetail",
+      "file": "src/pages/commandes/CommandeDetail.jsx"
+    },
+    {
+      "name": "CommandeForm",
+      "file": "src/pages/commandes/CommandeForm.jsx"
+    },
+    {
+      "name": "Commandes",
+      "file": "src/pages/commandes/Commandes.jsx"
+    },
+    {
+      "name": "CommandesEnvoyees",
+      "file": "src/pages/commandes/CommandesEnvoyees.jsx"
+    },
+    {
+      "name": "AccessMultiSites",
+      "file": "src/pages/consolidation/AccessMultiSites.jsx"
+    },
+    {
+      "name": "Consolidation",
+      "file": "src/pages/consolidation/Consolidation.jsx"
+    },
+    {
+      "name": "CostBoissons",
+      "file": "src/pages/costboisson/CostBoisson.jsx"
+    },
+    {
+      "name": "CostingCarte",
+      "file": "src/pages/costing/CostingCarte.jsx"
+    },
+    {
+      "name": "MenuDuJour",
+      "file": "src/pages/cuisine/MenuDuJour.jsx"
+    },
+    {
+      "name": "DashboardBuilder",
+      "file": "src/pages/dashboard/DashboardBuilder.jsx"
+    },
+    {
+      "name": "AccessExample",
+      "file": "src/pages/debug/AccessExample.jsx"
+    },
+    {
+      "name": "AuthDebug",
+      "file": "src/pages/debug/AuthDebug.jsx"
+    },
+    {
+      "name": "Debug",
+      "file": "src/pages/debug/Debug.jsx"
+    },
+    {
+      "name": "DebugAuth",
+      "file": "src/pages/debug/DebugAuth.jsx"
+    },
+    {
+      "name": "DebugRights",
+      "file": "src/pages/debug/DebugRights.jsx"
+    },
+    {
+      "name": "DebugUser",
+      "file": "src/pages/debug/DebugUser.jsx"
+    },
+    {
+      "name": "DocumentForm",
+      "file": "src/pages/documents/DocumentForm.jsx"
+    },
+    {
+      "name": "Documents",
+      "file": "src/pages/documents/Documents.jsx"
+    },
+    {
+      "name": "Ecarts",
+      "file": "src/pages/ecarts/Ecarts.jsx"
+    },
+    {
+      "name": "EmailsEnvoyes",
+      "file": "src/pages/emails/EmailsEnvoyes.jsx"
+    },
+    {
+      "name": "MenuEngineering",
+      "file": "src/pages/engineering/MenuEngineering.jsx"
+    },
+    {
+      "name": "FactureCreate",
+      "file": "src/pages/factures/FactureCreate.jsx"
+    },
+    {
+      "name": "FactureDetail",
+      "file": "src/pages/factures/FactureDetail.jsx"
+    },
+    {
+      "name": "FactureForm",
+      "file": "src/pages/factures/FactureForm.jsx"
+    },
+    {
+      "name": "Factures",
+      "file": "src/pages/factures/Factures.jsx"
+    },
+    {
+      "name": "ImportFactures",
+      "file": "src/pages/factures/ImportFactures.jsx"
+    },
+    {
+      "name": "FicheDetail",
+      "file": "src/pages/fiches/FicheDetail.jsx"
+    },
+    {
+      "name": "FicheForm",
+      "file": "src/pages/fiches/FicheForm.jsx"
+    },
+    {
+      "name": "Fiches",
+      "file": "src/pages/fiches/Fiches.jsx"
+    },
+    {
+      "name": "ApiFournisseurs",
+      "file": "src/pages/fournisseurs/ApiFournisseurs.jsx"
+    },
+    {
+      "name": "FournisseurApiSettingsForm",
+      "file": "src/pages/fournisseurs/FournisseurApiSettingsForm.jsx"
+    },
+    {
+      "name": "FournisseurCreate",
+      "file": "src/pages/fournisseurs/FournisseurCreate.jsx"
+    },
+    {
+      "name": "FournisseurDetail",
+      "file": "src/pages/fournisseurs/FournisseurDetail.jsx"
+    },
+    {
+      "name": "FournisseurDetailPage",
+      "file": "src/pages/fournisseurs/FournisseurDetailPage.jsx"
+    },
+    {
+      "name": "FournisseurForm",
+      "file": "src/pages/fournisseurs/FournisseurForm.jsx"
+    },
+    {
+      "name": "Fournisseurs",
+      "file": "src/pages/fournisseurs/Fournisseurs.jsx"
+    },
+    {
+      "name": "EcartInventaire",
+      "file": "src/pages/inventaire/EcartInventaire.jsx"
+    },
+    {
+      "name": "Inventaire",
+      "file": "src/pages/inventaire/Inventaire.jsx"
+    },
+    {
+      "name": "InventaireDetail",
+      "file": "src/pages/inventaire/InventaireDetail.jsx"
+    },
+    {
+      "name": "InventaireForm",
+      "file": "src/pages/inventaire/InventaireForm.jsx"
+    },
+    {
+      "name": "InventaireZones",
+      "file": "src/pages/inventaire/InventaireZones.jsx"
+    },
+    {
+      "name": "Cgu",
+      "file": "src/pages/legal/Cgu.jsx"
+    },
+    {
+      "name": "Cgv",
+      "file": "src/pages/legal/Cgv.jsx"
+    },
+    {
+      "name": "Confidentialite",
+      "file": "src/pages/legal/Confidentialite.jsx"
+    },
+    {
+      "name": "Contact",
+      "file": "src/pages/legal/Contact.jsx"
+    },
+    {
+      "name": "Licence",
+      "file": "src/pages/legal/Licence.jsx"
+    },
+    {
+      "name": "MentionsLegales",
+      "file": "src/pages/legal/MentionsLegales.jsx"
+    },
+    {
+      "name": "MenuDuJour",
+      "file": "src/pages/menu/MenuDuJour.jsx"
+    },
+    {
+      "name": "MenuDuJourJour",
+      "file": "src/pages/menu/MenuDuJourJour.jsx"
+    },
+    {
+      "name": "MenuDetail",
+      "file": "src/pages/menus/MenuDetail.jsx"
+    },
+    {
+      "name": "MenuDuJour",
+      "file": "src/pages/menus/MenuDuJour.jsx"
+    },
+    {
+      "name": "MenuDuJourDetail",
+      "file": "src/pages/menus/MenuDuJourDetail.jsx"
+    },
+    {
+      "name": "MenuDuJourForm",
+      "file": "src/pages/menus/MenuDuJourForm.jsx"
+    },
+    {
+      "name": "MenuForm",
+      "file": "src/pages/menus/MenuForm.jsx"
+    },
+    {
+      "name": "MenuGroupeDetail",
+      "file": "src/pages/menus/MenuGroupeDetail.jsx"
+    },
+    {
+      "name": "MenuGroupeForm",
+      "file": "src/pages/menus/MenuGroupeForm.jsx"
+    },
+    {
+      "name": "MenuGroupes",
+      "file": "src/pages/menus/MenuGroupes.jsx"
+    },
+    {
+      "name": "MenuPDF",
+      "file": "src/pages/menus/MenuPDF.jsx"
+    },
+    {
+      "name": "Menus",
+      "file": "src/pages/menus/Menus.jsx"
+    },
+    {
+      "name": "MobileAccueil",
+      "file": "src/pages/mobile/MobileAccueil.jsx"
+    },
+    {
+      "name": "MobileInventaire",
+      "file": "src/pages/mobile/MobileInventaire.jsx"
+    },
+    {
+      "name": "MobileRequisition",
+      "file": "src/pages/mobile/MobileRequisition.jsx"
+    },
+    {
+      "name": "NotificationSettingsForm",
+      "file": "src/pages/notifications/NotificationSettingsForm.jsx"
+    },
+    {
+      "name": "NotificationsInbox",
+      "file": "src/pages/notifications/NotificationsInbox.jsx"
+    },
+    {
+      "name": "OnboardingUtilisateur",
+      "file": "src/pages/onboarding/OnboardingUtilisateur.jsx"
+    },
+    {
+      "name": "APIKeys",
+      "file": "src/pages/parametrage/APIKeys.jsx"
+    },
+    {
+      "name": "AccessRights",
+      "file": "src/pages/parametrage/AccessRights.jsx"
+    },
+    {
+      "name": "CentreCoutForm",
+      "file": "src/pages/parametrage/CentreCoutForm.jsx"
+    },
+    {
+      "name": "DataFolder",
+      "file": "src/pages/parametrage/DataFolder.jsx"
+    },
+    {
+      "name": "ExportComptaPage",
+      "file": "src/pages/parametrage/ExportComptaPage.jsx"
+    },
+    {
+      "name": "ExportUserData",
+      "file": "src/pages/parametrage/ExportUserData.jsx"
+    },
+    {
+      "name": "Familles",
+      "file": "src/pages/parametrage/Familles.jsx"
+    },
+    {
+      "name": "InvitationsEnAttente",
+      "file": "src/pages/parametrage/InvitationsEnAttente.jsx"
+    },
+    {
+      "name": "InviteUser",
+      "file": "src/pages/parametrage/InviteUser.jsx"
+    },
+    {
+      "name": "MamaForm",
+      "file": "src/pages/parametrage/MamaForm.jsx"
+    },
+    {
+      "name": "MamaSettingsForm",
+      "file": "src/pages/parametrage/MamaSettingsForm.jsx"
+    },
+    {
+      "name": "Mamas",
+      "file": "src/pages/parametrage/Mamas.jsx"
+    },
+    {
+      "name": "Parametrage",
+      "file": "src/pages/parametrage/Parametrage.jsx"
+    },
+    {
+      "name": "ParametresCommandes",
+      "file": "src/pages/parametrage/ParametresCommandes.jsx"
+    },
+    {
+      "name": "Periodes",
+      "file": "src/pages/parametrage/Periodes.jsx"
+    },
+    {
+      "name": "Permissions",
+      "file": "src/pages/parametrage/Permissions.jsx"
+    },
+    {
+      "name": "PermissionsAdmin",
+      "file": "src/pages/parametrage/PermissionsAdmin.jsx"
+    },
+    {
+      "name": "PermissionsForm",
+      "file": "src/pages/parametrage/PermissionsForm.jsx"
+    },
+    {
+      "name": "RGPDConsentForm",
+      "file": "src/pages/parametrage/RGPDConsentForm.jsx"
+    },
+    {
+      "name": "RoleForm",
+      "file": "src/pages/parametrage/RoleForm.jsx"
+    },
+    {
+      "name": "Roles",
+      "file": "src/pages/parametrage/Roles.jsx"
+    },
+    {
+      "name": "SousFamilles",
+      "file": "src/pages/parametrage/SousFamilles.jsx"
+    },
+    {
+      "name": "SystemTools",
+      "file": "src/pages/parametrage/SystemTools.jsx"
+    },
+    {
+      "name": "TemplateCommandeForm",
+      "file": "src/pages/parametrage/TemplateCommandeForm.jsx"
+    },
+    {
+      "name": "TemplatesCommandes",
+      "file": "src/pages/parametrage/TemplatesCommandes.jsx"
+    },
+    {
+      "name": "Unites",
+      "file": "src/pages/parametrage/Unites.jsx"
+    },
+    {
+      "name": "Utilisateurs",
+      "file": "src/pages/parametrage/Utilisateurs.jsx"
+    },
+    {
+      "name": "ZoneAccess",
+      "file": "src/pages/parametrage/ZoneAccess.jsx"
+    },
+    {
+      "name": "ZoneForm",
+      "file": "src/pages/parametrage/ZoneForm.jsx"
+    },
+    {
+      "name": "Zones",
+      "file": "src/pages/parametrage/Zones.jsx"
+    },
+    {
+      "name": "SimulationPlanner",
+      "file": "src/pages/planning/SimulationPlanner.jsx"
+    },
+    {
+      "name": "ProduitDetailPage",
+      "file": "src/pages/produits/ProduitDetail.jsx"
+    },
+    {
+      "name": "ProduitFormPage",
+      "file": "src/pages/produits/ProduitForm.jsx"
+    },
+    {
+      "name": "Produits",
+      "file": "src/pages/produits/Produits.jsx"
+    },
+    {
+      "name": "PromotionForm",
+      "file": "src/pages/promotions/PromotionForm.jsx"
+    },
+    {
+      "name": "Promotions",
+      "file": "src/pages/promotions/Promotions.jsx"
+    },
+    {
+      "name": "LandingPage",
+      "file": "src/pages/public/LandingPage.jsx"
+    },
+    {
+      "name": "Onboarding",
+      "file": "src/pages/public/Onboarding.jsx"
+    },
+    {
+      "name": "Signup",
+      "file": "src/pages/public/Signup.jsx"
+    },
+    {
+      "name": "Receptions",
+      "file": "src/pages/receptions/Receptions.jsx"
+    },
+    {
+      "name": "Recettes",
+      "file": "src/pages/recettes/Recettes.jsx"
+    },
+    {
+      "name": "GraphCost",
+      "file": "src/pages/reporting/GraphCost.jsx"
+    },
+    {
+      "name": "Reporting",
+      "file": "src/pages/reporting/Reporting.jsx"
+    },
+    {
+      "name": "ReportingPDF",
+      "file": "src/pages/reporting/ReportingPDF.jsx"
+    },
+    {
+      "name": "RequisitionDetail",
+      "file": "src/pages/requisitions/RequisitionDetail.jsx"
+    },
+    {
+      "name": "RequisitionForm",
+      "file": "src/pages/requisitions/RequisitionForm.jsx"
+    },
+    {
+      "name": "Requisitions",
+      "file": "src/pages/requisitions/Requisitions.jsx"
+    },
+    {
+      "name": "SignalementDetail",
+      "file": "src/pages/signalements/SignalementDetail.jsx"
+    },
+    {
+      "name": "SignalementForm",
+      "file": "src/pages/signalements/SignalementForm.jsx"
+    },
+    {
+      "name": "Signalements",
+      "file": "src/pages/signalements/Signalements.jsx"
+    },
+    {
+      "name": "Simulation",
+      "file": "src/pages/simulation/Simulation.jsx"
+    },
+    {
+      "name": "SimulationForm",
+      "file": "src/pages/simulation/SimulationForm.jsx"
+    },
+    {
+      "name": "SimulationMenu",
+      "file": "src/pages/simulation/SimulationMenu.jsx"
+    },
+    {
+      "name": "SimulationResult",
+      "file": "src/pages/simulation/SimulationResult.jsx"
+    },
+    {
+      "name": "Stats",
+      "file": "src/pages/stats/Stats.jsx"
+    },
+    {
+      "name": "StatsAdvanced",
+      "file": "src/pages/stats/StatsAdvanced.jsx"
+    },
+    {
+      "name": "StatsConsolidation",
+      "file": "src/pages/stats/StatsConsolidation.jsx"
+    },
+    {
+      "name": "StatsCostCenters",
+      "file": "src/pages/stats/StatsCostCenters.jsx"
+    },
+    {
+      "name": "StatsCostCentersPivot",
+      "file": "src/pages/stats/StatsCostCentersPivot.jsx"
+    },
+    {
+      "name": "StatsFiches",
+      "file": "src/pages/stats/StatsFiches.jsx"
+    },
+    {
+      "name": "StatsStock",
+      "file": "src/pages/stats/StatsStock.jsx"
+    },
+    {
+      "name": "AlertesRupture",
+      "file": "src/pages/stock/AlertesRupture.jsx"
+    },
+    {
+      "name": "InventairePage",
+      "file": "src/pages/stock/Inventaire.jsx"
+    },
+    {
+      "name": "InventaireFormPage",
+      "file": "src/pages/stock/InventaireForm.jsx"
+    },
+    {
+      "name": "RequisitionsPage",
+      "file": "src/pages/stock/Requisitions.jsx"
+    },
+    {
+      "name": "TransfertForm",
+      "file": "src/pages/stock/TransfertForm.jsx"
+    },
+    {
+      "name": "Transferts",
+      "file": "src/pages/stock/Transferts.jsx"
+    },
+    {
+      "name": "ComparateurFiches",
+      "file": "src/pages/supervision/ComparateurFiches.jsx"
+    },
+    {
+      "name": "GroupeParamForm",
+      "file": "src/pages/supervision/GroupeParamForm.jsx"
+    },
+    {
+      "name": "Logs",
+      "file": "src/pages/supervision/Logs.jsx"
+    },
+    {
+      "name": "Rapports",
+      "file": "src/pages/supervision/Rapports.jsx"
+    },
+    {
+      "name": "SupervisionGroupe",
+      "file": "src/pages/supervision/SupervisionGroupe.jsx"
+    },
+    {
+      "name": "Surcouts",
+      "file": "src/pages/surcouts/Surcouts.jsx"
+    },
+    {
+      "name": "Alertes",
+      "file": "src/pages/taches/Alertes.jsx"
+    },
+    {
+      "name": "TacheDetail",
+      "file": "src/pages/taches/TacheDetail.jsx"
+    },
+    {
+      "name": "TacheForm",
+      "file": "src/pages/taches/TacheForm.jsx"
+    },
+    {
+      "name": "TacheNew",
+      "file": "src/pages/taches/TacheNew.jsx"
+    },
+    {
+      "name": "Taches",
+      "file": "src/pages/taches/Taches.jsx"
+    },
+    {
+      "name": "ComparatifPrix",
+      "file": "src/pages/fournisseurs/comparatif/ComparatifPrix.jsx"
+    },
+    {
+      "name": "PrixFournisseurs",
+      "file": "src/pages/fournisseurs/comparatif/PrixFournisseurs.jsx"
+    }
+  ],
+  "hooks": [
+    {
+      "name": "useHelp",
+      "file": "src/context/HelpProvider.jsx"
+    },
+    {
+      "name": "useMultiMama",
+      "file": "src/context/MultiMamaContext.jsx"
+    },
+    {
+      "name": "useTheme",
+      "file": "src/context/ThemeProvider.jsx"
+    },
+    {
+      "name": "useAuth",
+      "file": "src/contexts/AuthContext.d.ts"
+    },
+    {
+      "name": "useAccess",
+      "file": "src/hooks/useAccess.js"
+    },
+    {
+      "name": "useAchats",
+      "file": "src/hooks/useAchats.js"
+    },
+    {
+      "name": "useAdvancedStats",
+      "file": "src/hooks/useAdvancedStats.js"
+    },
+    {
+      "name": "useAide",
+      "file": "src/hooks/useAide.js"
+    },
+    {
+      "name": "useAlerteStockFaible",
+      "file": "src/hooks/useAlerteStockFaible.js"
+    },
+    {
+      "name": "useAlerts",
+      "file": "src/hooks/useAlerts.js"
+    },
+    {
+      "name": "useAnalyse",
+      "file": "src/hooks/useAnalyse.js"
+    },
+    {
+      "name": "useAnalytique",
+      "file": "src/hooks/useAnalytique.js"
+    },
+    {
+      "name": "useApiKeys",
+      "file": "src/hooks/useApiKeys.js"
+    },
+    {
+      "name": "useAuditLog",
+      "file": "src/hooks/useAuditLog.js"
+    },
+    {
+      "name": "useAuth",
+      "file": "src/hooks/useAuth.ts"
+    },
+    {
+      "name": "useBonsLivraison",
+      "file": "src/hooks/useBonsLivraison.js"
+    },
+    {
+      "name": "useCarte",
+      "file": "src/hooks/useCarte.js"
+    },
+    {
+      "name": "useCommandes",
+      "file": "src/hooks/useCommandes.js"
+    },
+    {
+      "name": "useComparatif",
+      "file": "src/hooks/useComparatif.js"
+    },
+    {
+      "name": "useConsentements",
+      "file": "src/hooks/useConsentements.js"
+    },
+    {
+      "name": "useConsolidatedStats",
+      "file": "src/hooks/useConsolidatedStats.js"
+    },
+    {
+      "name": "useConsolidation",
+      "file": "src/hooks/useConsolidation.js"
+    },
+    {
+      "name": "useCostCenterMonthlyStats",
+      "file": "src/hooks/useCostCenterMonthlyStats.js"
+    },
+    {
+      "name": "useCostCenterStats",
+      "file": "src/hooks/useCostCenterStats.js"
+    },
+    {
+      "name": "useCostCenterSuggestions",
+      "file": "src/hooks/useCostCenterSuggestions.js"
+    },
+    {
+      "name": "useCostCenters",
+      "file": "src/hooks/useCostCenters.js"
+    },
+    {
+      "name": "useCostingCarte",
+      "file": "src/hooks/useCostingCarte.js"
+    },
+    {
+      "name": "useDashboard",
+      "file": "src/hooks/useDashboard.js"
+    },
+    {
+      "name": "useDashboardStats",
+      "file": "src/hooks/useDashboardStats.js"
+    },
+    {
+      "name": "useDashboards",
+      "file": "src/hooks/useDashboards.js"
+    },
+    {
+      "name": "useDebounce",
+      "file": "src/hooks/useDebounce.js"
+    },
+    {
+      "name": "useDocuments",
+      "file": "src/hooks/useDocuments.js"
+    },
+    {
+      "name": "useEcartsInventaire",
+      "file": "src/hooks/useEcartsInventaire.js"
+    },
+    {
+      "name": "useEmailsEnvoyes",
+      "file": "src/hooks/useEmailsEnvoyes.js"
+    },
+    {
+      "name": "useEnrichedProducts",
+      "file": "src/hooks/useEnrichedProducts.js"
+    },
+    {
+      "name": "useExport",
+      "file": "src/hooks/useExport.js"
+    },
+    {
+      "name": "useExportCompta",
+      "file": "src/hooks/useExportCompta.js"
+    },
+    {
+      "name": "useFactureForm",
+      "file": "src/hooks/useFactureForm.js"
+    },
+    {
+      "name": "useFactures",
+      "file": "src/hooks/useFactures.js"
+    },
+    {
+      "name": "useFacturesAutocomplete",
+      "file": "src/hooks/useFacturesAutocomplete.js"
+    },
+    {
+      "name": "useFacturesList",
+      "file": "src/hooks/useFacturesList.js"
+    },
+    {
+      "name": "useFamilles",
+      "file": "src/hooks/useFamilles.js"
+    },
+    {
+      "name": "useFamillesWithSousFamilles",
+      "file": "src/hooks/useFamillesWithSousFamilles.js"
+    },
+    {
+      "name": "useFeedback",
+      "file": "src/hooks/useFeedback.js"
+    },
+    {
+      "name": "useFicheCoutHistory",
+      "file": "src/hooks/useFicheCoutHistory.js"
+    },
+    {
+      "name": "useFiches",
+      "file": "src/hooks/useFiches.js"
+    },
+    {
+      "name": "useFichesAutocomplete",
+      "file": "src/hooks/useFichesAutocomplete.js"
+    },
+    {
+      "name": "useFichesTechniques",
+      "file": "src/hooks/useFichesTechniques.js"
+    },
+    {
+      "name": "useFormErrors",
+      "file": "src/hooks/useFormErrors.js"
+    },
+    {
+      "name": "useFormatters",
+      "file": "src/hooks/useFormatters.js"
+    },
+    {
+      "name": "useFournisseurAPI",
+      "file": "src/hooks/useFournisseurAPI.js"
+    },
+    {
+      "name": "useFournisseurApiConfig",
+      "file": "src/hooks/useFournisseurApiConfig.js"
+    },
+    {
+      "name": "useFournisseurNotes",
+      "file": "src/hooks/useFournisseurNotes.js"
+    },
+    {
+      "name": "useFournisseurStats",
+      "file": "src/hooks/useFournisseurStats.js"
+    },
+    {
+      "name": "useFournisseurs",
+      "file": "src/hooks/useFournisseurs.js"
+    },
+    {
+      "name": "useFournisseursAutocomplete",
+      "file": "src/hooks/useFournisseursAutocomplete.js"
+    },
+    {
+      "name": "useFournisseursBrowse",
+      "file": "src/hooks/useFournisseursBrowse.js"
+    },
+    {
+      "name": "useFournisseursInactifs",
+      "file": "src/hooks/useFournisseursInactifs.js"
+    },
+    {
+      "name": "useFournisseursList",
+      "file": "src/hooks/useFournisseursList.js"
+    },
+    {
+      "name": "useFournisseursRecents",
+      "file": "src/hooks/useFournisseursRecents.js"
+    },
+    {
+      "name": "useGadgets",
+      "file": "src/hooks/useGadgets.js"
+    },
+    {
+      "name": "useGlobalSearch",
+      "file": "src/hooks/useGlobalSearch.js"
+    },
+    {
+      "name": "useGraphiquesMultiZone",
+      "file": "src/hooks/useGraphiquesMultiZone.js"
+    },
+    {
+      "name": "useHelpArticles",
+      "file": "src/hooks/useHelpArticles.js"
+    },
+    {
+      "name": "useInventaireLignes",
+      "file": "src/hooks/useInventaireLignes.js"
+    },
+    {
+      "name": "useInventaireZones",
+      "file": "src/hooks/useInventaireZones.js"
+    },
+    {
+      "name": "useInventaires",
+      "file": "src/hooks/useInventaires.js"
+    },
+    {
+      "name": "useInvoice",
+      "file": "src/hooks/useInvoice.ts"
+    },
+    {
+      "name": "useInvoiceImport",
+      "file": "src/hooks/useInvoiceImport.js"
+    },
+    {
+      "name": "useInvoiceItems",
+      "file": "src/hooks/useInvoiceItems.js"
+    },
+    {
+      "name": "useInvoiceOcr",
+      "file": "src/hooks/useInvoiceOcr.js"
+    },
+    {
+      "name": "useInvoices",
+      "file": "src/hooks/useInvoices.js"
+    },
+    {
+      "name": "useLogs",
+      "file": "src/hooks/useLogs.js"
+    },
+    {
+      "name": "useMama",
+      "file": "src/hooks/useMama.js"
+    },
+    {
+      "name": "useMamaSettings",
+      "file": "src/hooks/useMamaSettings.js"
+    },
+    {
+      "name": "useMamaSwitcher",
+      "file": "src/hooks/useMamaSwitcher.js"
+    },
+    {
+      "name": "useMamas",
+      "file": "src/hooks/useMamas.js"
+    },
+    {
+      "name": "useMenuDuJour",
+      "file": "src/hooks/useMenuDuJour.js"
+    },
+    {
+      "name": "useMenuEngineering",
+      "file": "src/hooks/useMenuEngineering.js"
+    },
+    {
+      "name": "useMenuGroupe",
+      "file": "src/hooks/useMenuGroupe.js"
+    },
+    {
+      "name": "useMenus",
+      "file": "src/hooks/useMenus.js"
+    },
+    {
+      "name": "useMouvementCostCenters",
+      "file": "src/hooks/useMouvementCostCenters.js"
+    },
+    {
+      "name": "useNotifications",
+      "file": "src/hooks/useNotifications.js"
+    },
+    {
+      "name": "useOnboarding",
+      "file": "src/hooks/useOnboarding.js"
+    },
+    {
+      "name": "usePerformanceFiches",
+      "file": "src/hooks/usePerformanceFiches.js"
+    },
+    {
+      "name": "usePeriodes",
+      "file": "src/hooks/usePeriodes.js"
+    },
+    {
+      "name": "usePermissions",
+      "file": "src/hooks/usePermissions.js"
+    },
+    {
+      "name": "usePertes",
+      "file": "src/hooks/usePertes.js"
+    },
+    {
+      "name": "usePlanning",
+      "file": "src/hooks/usePlanning.js"
+    },
+    {
+      "name": "usePriceTrends",
+      "file": "src/hooks/usePriceTrends.js"
+    },
+    {
+      "name": "useProducts",
+      "file": "src/hooks/useProducts.js"
+    },
+    {
+      "name": "useProduitLineDefaults",
+      "file": "src/hooks/useProduitLineDefaults.js"
+    },
+    {
+      "name": "useProduitsAutocomplete",
+      "file": "src/hooks/useProduitsAutocomplete.js"
+    },
+    {
+      "name": "useProduitsFournisseur",
+      "file": "src/hooks/useProduitsFournisseur.js"
+    },
+    {
+      "name": "useProduitsInventaire",
+      "file": "src/hooks/useProduitsInventaire.js"
+    },
+    {
+      "name": "useProduitsSearch",
+      "file": "src/hooks/useProduitsSearch.js"
+    },
+    {
+      "name": "usePromotions",
+      "file": "src/hooks/usePromotions.js"
+    },
+    {
+      "name": "useRGPD",
+      "file": "src/hooks/useRGPD.js"
+    },
+    {
+      "name": "useRecommendations",
+      "file": "src/hooks/useRecommendations.js"
+    },
+    {
+      "name": "useReporting",
+      "file": "src/hooks/useReporting.js"
+    },
+    {
+      "name": "useRequisitions",
+      "file": "src/hooks/useRequisitions.js"
+    },
+    {
+      "name": "useRoles",
+      "file": "src/hooks/useRoles.js"
+    },
+    {
+      "name": "useRuptureAlerts",
+      "file": "src/hooks/useRuptureAlerts.js"
+    },
+    {
+      "name": "useSignalements",
+      "file": "src/hooks/useSignalements.js"
+    },
+    {
+      "name": "useSignalement",
+      "file": "src/hooks/useSignalements.js"
+    },
+    {
+      "name": "useSousFamilles",
+      "file": "src/hooks/useSousFamilles.js"
+    },
+    {
+      "name": "useStats",
+      "file": "src/hooks/useStats.js"
+    },
+    {
+      "name": "useStock",
+      "file": "src/hooks/useStock.js"
+    },
+    {
+      "name": "useStockRequisitionne",
+      "file": "src/hooks/useStockRequisitionne.js"
+    },
+    {
+      "name": "useSwipe",
+      "file": "src/hooks/useSwipe.js"
+    },
+    {
+      "name": "useTacheAssignation",
+      "file": "src/hooks/useTacheAssignation.js"
+    },
+    {
+      "name": "useTaches",
+      "file": "src/hooks/useTaches.js"
+    },
+    {
+      "name": "useTasks",
+      "file": "src/hooks/useTasks.js"
+    },
+    {
+      "name": "useTemplatesCommandes",
+      "file": "src/hooks/useTemplatesCommandes.js"
+    },
+    {
+      "name": "useTopProducts",
+      "file": "src/hooks/useTopProducts.js"
+    },
+    {
+      "name": "useTransferts",
+      "file": "src/hooks/useTransferts.js"
+    },
+    {
+      "name": "useTwoFactorAuth",
+      "file": "src/hooks/useTwoFactorAuth.js"
+    },
+    {
+      "name": "useUnites",
+      "file": "src/hooks/useUnites.js"
+    },
+    {
+      "name": "useUsageStats",
+      "file": "src/hooks/useUsageStats.js"
+    },
+    {
+      "name": "useUtilisateurs",
+      "file": "src/hooks/useUtilisateurs.js"
+    },
+    {
+      "name": "useValidations",
+      "file": "src/hooks/useValidations.js"
+    },
+    {
+      "name": "useZoneProducts",
+      "file": "src/hooks/useZoneProducts.js"
+    },
+    {
+      "name": "useZoneRights",
+      "file": "src/hooks/useZoneRights.js"
+    },
+    {
+      "name": "useZones",
+      "file": "src/hooks/useZones.js"
+    },
+    {
+      "name": "useZonesStock",
+      "file": "src/hooks/useZonesStock.js"
+    },
+    {
+      "name": "useLockBodyScroll",
+      "file": "src/components/ui/SmartDialog.jsx"
+    },
+    {
+      "name": "useFactures",
+      "file": "src/hooks/data/useFactures.js"
+    },
+    {
+      "name": "useFournisseurs",
+      "file": "src/hooks/data/useFournisseurs.js"
+    },
+    {
+      "name": "useAchatsMensuels",
+      "file": "src/hooks/gadgets/useAchatsMensuels.js"
+    },
+    {
+      "name": "useAlerteStockFaible",
+      "file": "src/hooks/gadgets/useAlerteStockFaible.js"
+    },
+    {
+      "name": "useBudgetMensuel",
+      "file": "src/hooks/gadgets/useBudgetMensuel.js"
+    },
+    {
+      "name": "useConsoMoyenne",
+      "file": "src/hooks/gadgets/useConsoMoyenne.js"
+    },
+    {
+      "name": "useDerniersAcces",
+      "file": "src/hooks/gadgets/useDerniersAcces.js"
+    },
+    {
+      "name": "useEvolutionAchats",
+      "file": "src/hooks/gadgets/useEvolutionAchats.js"
+    },
+    {
+      "name": "useProduitsUtilises",
+      "file": "src/hooks/gadgets/useProduitsUtilises.js"
+    },
+    {
+      "name": "useTachesUrgentes",
+      "file": "src/hooks/gadgets/useTachesUrgentes.js"
+    },
+    {
+      "name": "useTopFournisseurs",
+      "file": "src/hooks/gadgets/useTopFournisseurs.js"
+    }
+  ],
+  "contexts": [
+    {
+      "name": "HelpContext",
+      "file": "src/context/HelpProvider.jsx"
+    },
+    {
+      "name": "MultiMamaContext",
+      "file": "src/context/MultiMamaContext.jsx"
+    },
+    {
+      "name": "ThemeContext",
+      "file": "src/context/ThemeProvider.jsx"
+    },
+    {
+      "name": "AuthCtx",
+      "file": "src/contexts/AuthContext.jsx"
+    }
+  ],
+  "dataContracts": [
+    {
+      "entity": "facture",
+      "fields": [
+        "id",
+        "fournisseur_id",
+        "total",
+        "date",
+        "numero",
+        "date_facture",
+        "fournisseur",
+        "total_ttc",
+        "statut",
+        "actif"
+      ]
+    },
+    {
+      "entity": "factures",
+      "fields": [
+        "map",
+        "date_facture"
+      ]
+    },
+    {
+      "entity": "roles",
+      "fields": [
+        "length",
+        "includes",
+        "map",
+        "some",
+        "find"
+      ]
+    },
+    {
+      "entity": "mamas",
+      "fields": [
+        "length",
+        "map",
+        "find",
+        "filter"
+      ]
+    },
+    {
+      "entity": "familles",
+      "fields": [
+        "length",
+        "map",
+        "forEach",
+        "includes",
+        "get",
+        "filter",
+        "xlsx",
+        "find"
+      ]
+    },
+    {
+      "entity": "produit",
+      "fields": [
+        "nom",
+        "famille_id",
+        "sous_famille_id",
+        "unite_id",
+        "fournisseur_id",
+        "zone_stock_id",
+        "stock_min",
+        "tva",
+        "actif",
+        "allergenes",
+        "id",
+        "stock_theorique",
+        "seuil_min",
+        "unite",
+        "unite_nom",
+        "pmp",
+        "zone_stock",
+        "toLowerCase"
+      ]
+    },
+    {
+      "entity": "produits",
+      "fields": [
+        "reduce",
+        "map",
+        "filter",
+        "concat",
+        "js",
+        "nom"
+      ]
+    },
+    {
+      "entity": "fournisseurs",
+      "fields": [
+        "nom",
+        "has",
+        "find",
+        "map",
+        "length"
+      ]
+    },
+    {
+      "entity": "famille",
+      "fields": [
+        "id",
+        "nom",
+        "actif",
+        "sous_familles"
+      ]
+    },
+    {
+      "entity": "commande",
+      "fields": [
+        "fournisseur_id",
+        "reference",
+        "date_livraison_prevue",
+        "lignes",
+        "fournisseur",
+        "id"
+      ]
+    },
+    {
+      "entity": "role",
+      "fields": [
+        "access_rights",
+        "id",
+        "nom",
+        "description",
+        "actif",
+        "mama_id"
+      ]
+    },
+    {
+      "entity": "utilisateurs",
+      "fields": [
+        "xlsx"
+      ]
+    },
+    {
+      "entity": "fournisseur",
+      "fields": [
+        "id",
+        "actif",
+        "nom",
+        "contact"
+      ]
+    },
+    {
+      "entity": "inventaire",
+      "fields": [
+        "lignes",
+        "id",
+        "reference",
+        "date_inventaire",
+        "cloture",
+        "document",
+        "csv",
+        "zone",
+        "toLocaleString"
+      ]
+    },
+    {
+      "entity": "mama",
+      "fields": [
+        "logo",
+        "id"
+      ]
+    },
+    {
+      "entity": "utilisateur",
+      "fields": [
+        "email",
+        "actif",
+        "nom",
+        "role",
+        "mamaNom",
+        "mama_id",
+        "id",
+        "historique",
+        "access_rights"
+      ]
+    },
+    {
+      "entity": "taches",
+      "fields": [
+        "filter",
+        "map",
+        "length"
+      ]
+    },
+    {
+      "entity": "commandes",
+      "fields": [
+        "map"
+      ]
+    },
+    {
+      "entity": "tache",
+      "fields": [
+        "utilisateurs_taches",
+        "titre",
+        "description",
+        "priorite",
+        "date_echeance",
+        "statut"
+      ]
+    }
+  ],
+  "envVars": [
+    "DEV",
+    "PROD",
+    "VITE_SUPABASE_ANON_KEY",
+    "VITE_SUPABASE_URL"
+  ],
+  "problems": [
+    {
+      "type": "supabase",
+      "file": "src/hooks/useAuditLog.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useBonsLivraison.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useConsolidation.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useCostCenters.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useDashboard.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useFamilles.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useFiches.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useFournisseurAPI.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useGlobalSearch.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useInventaires.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useMamas.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useMenuDuJour.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useMenuGroupe.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useMenus.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useNotifications.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/usePeriodes.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/usePermissions.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/usePlanning.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useRGPD.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useReporting.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useRequisitions.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useSousFamilles.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useStats.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useTacheAssignation.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useTaches.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useTwoFactorAuth.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/hooks/useUtilisateurs.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/utils/importExcelProduits.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/api/public/stock.js",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/pages/costboisson/CostBoisson.jsx",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/pages/parametrage/InviteUser.jsx",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/pages/parametrage/Mamas.jsx",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/pages/parametrage/PermissionsAdmin.jsx",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/pages/parametrage/PermissionsForm.jsx",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/pages/parametrage/RGPDConsentForm.jsx",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/pages/stats/StatsFiches.jsx",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/pages/supervision/GroupeParamForm.jsx",
+      "message": "Référence à supabase"
+    },
+    {
+      "type": "supabase",
+      "file": "src/pages/supervision/Rapports.jsx",
+      "message": "Référence à supabase"
+    }
+  ],
+  "todos": [
+    {
+      "file": "src/hooks/useInvoiceOcr.js",
+      "text": "TODO: brancher un vrai moteur OCR plus tard"
+    },
+    {
+      "file": "src/api/public/promotions.js",
+      "text": "TODO: adapter si la table diffère"
+    },
+    {
+      "file": "src/components/inventaires/InventaireForm.jsx",
+      "text": "TODO: recompute mouvements via requisitions"
+    },
+    {
+      "file": "src/components/parametrage/SousFamilleList.jsx",
+      "text": "TODO: implémentation réelle (filtre par mama_id, pagination)"
+    },
+    {
+      "file": "src/pages/signalements/Signalements.jsx",
+      "text": "TODO: brancher aux vues SQL correspondantes + RLS"
+    },
+    {
+      "file": "src/pages/simulation/SimulationForm.jsx",
+      "text": "TODO: implémentation réelle (entrées, calculs)"
+    }
+  ]
+}
