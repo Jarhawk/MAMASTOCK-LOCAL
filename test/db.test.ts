@@ -37,11 +37,11 @@ describe('DAL produits', () => {
     };
     (Sql.load as any).mockResolvedValue(mockDb);
 
-    await dal.produits_create({ id: '1', fournisseur_id: 'f', nom: 'Test' });
+    await dal.produits_create({ nom: 'Test' });
 
     expect(mockDb.execute).toHaveBeenCalledWith(
-      'INSERT INTO produits (id, fournisseur_id, nom) VALUES (?, ?, ?)',
-      ['1', 'f', 'Test']
+      'INSERT INTO produits (nom, unite, famille, actif) VALUES (?,?,?,?)',
+      ['Test', null, null, 1]
     );
   });
 

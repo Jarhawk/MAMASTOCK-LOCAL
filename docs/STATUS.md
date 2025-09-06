@@ -10,6 +10,7 @@ This document tracks the global progress of the project.
 - Migration vers Tauri v2 + purge Supabase/PG
 - Authentification locale (bcrypt) avec page Login et script seed-admin
 - DAL SQLite pour Produits/Fournisseurs/Factures
+- Paramétrage du dossier de données avec verrou distribué et auto‑fermeture
 
 ### En cours
 - TBD

@@ -6,6 +6,7 @@ Cette variante, basée sur **Tauri v2**, embarque une base SQLite locale pour fo
 - Lancez l'application puis ouvrez la page **Paramètres**.
 - Sélectionnez le dossier qui contiendra `mamastock.db` et les fichiers de verrou (`db.lock.json`, `shutdown.request.json`).
 - Ce chemin est enregistré dans `%APPDATA%\\MamaStock\\config.json`. Sauvegardez ce dossier si vous changez de poste.
+- À défaut de configuration, le dossier `%USERPROFILE%\\MamaStock\\data` est utilisé.
 
 ## Règle "un seul poste à la fois"
 Un fichier `db.lock.json` protège l'accès à la base. Fermez l'application (menu **Quitter**) sur un poste avant de l'ouvrir ailleurs.
