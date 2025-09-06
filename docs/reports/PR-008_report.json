@@ -1,0 +1,38 @@
+{
+  "pr_number": "008",
+  "title": "chore: branding (SVG) + génération d’icônes à la build (no binaries)",
+  "summary": "add SVG logo, generate Tauri icons during build without committing binaries",
+  "files": {
+    "added": [
+      "docs/reports/PR-008_report.md",
+      "docs/reports/PR-008_report.json"
+    ],
+    "modified": [
+      "assets/logo.svg",
+      "package.json",
+      "build.ps1",
+      ".github/workflows/build-windows.yml",
+      "src-tauri/tauri.conf.json",
+      ".gitignore",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "icon:gen",
+      "command": "npm run icon:gen",
+      "status": "pass",
+      "stdout": "ICO Creating icon.ico"
+    },
+    {
+      "name": "tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "Rollup failed to resolve import \"@tauri-apps/plugin-process\""
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
+

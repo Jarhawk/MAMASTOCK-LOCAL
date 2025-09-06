@@ -14,6 +14,7 @@ This document tracks the global progress of the project.
 - Workflows CI: vérification des PR (build + db:smoke) et release Windows via tag `v*`
 - Sauvegarde/restauration/maintenance SQLite via interface
 - Exports locaux (CSV/XLSX/PDF) pour produits, fournisseurs et factures
+- Logo vectoriel et génération d'icônes Tauri automatisée à la build
 
 ### En cours
 - TBD
