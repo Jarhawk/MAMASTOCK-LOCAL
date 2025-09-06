@@ -40,6 +40,11 @@ CREATE TABLE IF NOT EXISTS meta (
   value TEXT
 );
 
+CREATE INDEX IF NOT EXISTS idx_produits_fournisseur_id ON produits(fournisseur_id);
+CREATE INDEX IF NOT EXISTS idx_factures_fournisseur_id ON factures(fournisseur_id);
+CREATE INDEX IF NOT EXISTS idx_facture_lignes_facture_id ON facture_lignes(facture_id);
+CREATE INDEX IF NOT EXISTS idx_facture_lignes_produit_id ON facture_lignes(produit_id);
+
 CREATE TRIGGER IF NOT EXISTS trig_facture_insert
 AFTER INSERT ON facture_lignes
 BEGIN
