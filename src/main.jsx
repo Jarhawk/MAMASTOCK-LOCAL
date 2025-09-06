@@ -9,6 +9,9 @@ import "./registerSW.js";
 import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "@/contexts/AuthContext";
 import { toast } from 'sonner';
+import { ensureSingleOwner, monitorShutdownRequests, releaseLock } from "@/lib/lock";
+import { shutdownDbSafely } from "@/lib/shutdown";
+import { getDataDir } from "@/lib/db";
 
 // Avoid noisy output in production by disabling debug logs
 if (!import.meta.env.DEV) {
@@ -34,6 +37,14 @@ if (import.meta?.env?.DEV) {
 // Option sentry/reporting
 // import * as Sentry from "@sentry/react";
 // Sentry.init({ dsn: "https://xxx.ingest.sentry.io/xxx" });
+
+const dir = await getDataDir();
+monitorShutdownRequests(dir);
+await ensureSingleOwner(dir);
+window.addEventListener("beforeunload", () => {
+  shutdownDbSafely();
+  releaseLock(dir);
+});
 
 const root = createRoot(document.getElementById("root"));
 root.render(
