@@ -30,4 +30,4 @@ backup_*.json
 invoices_*.xlsx
 
 # Tauri generated icons
-src-tauri/icons
+src-tauri/icons/
