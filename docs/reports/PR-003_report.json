@@ -1,0 +1,41 @@
+{
+  "pr_number": "003",
+  "title": "Local auth with bcrypt and login page",
+  "summary": "add local login page and admin seeding script",
+  "files": {
+    "added": [
+      "src/pages/Login.jsx",
+      "docs/reports/PR-003_report.md",
+      "docs/reports/PR-003_report.json"
+    ],
+    "modified": [
+      "scripts/seed-admin.js",
+      "src/router.jsx",
+      "src/contexts/AuthContext.jsx",
+      "src/db/users.json",
+      "public/migrations/002_seed.sql",
+      "db/sqlite/002_seed.sql",
+      "docs/front_map.json",
+      "docs/STATUS.md"
+    ],
+    "removed": [
+      "src/pages/auth/Login.jsx"
+    ]
+  },
+  "tests": [
+    {
+      "name": "seed admin",
+      "command": "node scripts/seed-admin.js --db \"tmp/users.test.json\" --email admin@mamastock.local --password \"Admin123!\"",
+      "status": "pass",
+      "stdout": "Admin user created: admin@mamastock.local"
+    },
+    {
+      "name": "dev server startup",
+      "command": "npm run dev",
+      "status": "pass",
+      "stdout": "VITE v7.1.3  ready in 829 ms\n  ➜  Local:   http://localhost:5173/"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
