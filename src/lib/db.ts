@@ -33,10 +33,22 @@ export async function setDataDir(dir: string) {
 
 export async function getDb(): Promise<Database> {
   if (!dbPromise) {
-    const dir = await getDataDir();
-    await createDir(dir, { recursive: true });
-    const dbPath = await join(dir, "mamastock.db");
-    dbPromise = Database.load(`sqlite:${dbPath}`);
+    dbPromise = (async () => {
+      const dir = await getDataDir();
+      await createDir(dir, { recursive: true });
+      const dbPath = await join(dir, "mamastock.db");
+      const isNew = !(await exists(dbPath));
+      const db = await Database.load(`sqlite:${dbPath}`);
+      if (isNew) {
+        try {
+          const sql = await fetch("/migrations/001_init.sql").then((r) => r.text());
+          await db.execute(sql);
+        } catch (e) {
+          console.error("Migration 001 failed", e);
+        }
+      }
+      return db;
+    })();
   }
   return dbPromise;
 }
