@@ -1,14 +1,12 @@
-import supabase from '@/lib/supabase';import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import useDebounce from '@/hooks/useDebounce';
 
-import { useAuth } from '@/hooks/useAuth';
 import { useFournisseursAutocomplete } from '@/hooks/useFournisseursAutocomplete';
-import useFournisseursRecents from '@/hooks/useFournisseursRecents';
 import SupplierBrowserModal from './SupplierBrowserModal';
+import { fournisseur_get } from '@/lib/db';
 
 export default function SupplierPicker({ value, onChange, error }) {
-  const { mama_id } = useAuth();
   const [inputValue, setInputValue] = useState('');
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
@@ -18,9 +16,8 @@ export default function SupplierPicker({ value, onChange, error }) {
 
   const debounced = useDebounce(search, 250);
   const { options: autoOptions = [] } = useFournisseursAutocomplete({ term: debounced });
-  const { data: recents = [] } = useFournisseursRecents();
 
-  const options = search.trim() ? autoOptions : recents;
+  const options = autoOptions;
 
   useEffect(() => {
     setActive(-1);
@@ -33,19 +30,14 @@ export default function SupplierPicker({ value, onChange, error }) {
     }
     let cancelled = false;
     const fetch = async () => {
-      const { data } = await supabase.
-      from('fournisseurs').
-      select('id, nom').
-      eq('mama_id', mama_id).
-      eq('id', value).
-      single();
-      if (!cancelled) setInputValue(data?.nom || '');
+      const f = await fournisseur_get(value);
+      if (!cancelled) setInputValue(f?.nom || '');
     };
     fetch();
     return () => {
       cancelled = true;
     };
-  }, [value, mama_id]);
+  }, [value]);
 
   const handleInput = (e) => {
     const val = e.target.value;

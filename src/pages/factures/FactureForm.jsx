@@ -1,10 +1,8 @@
-import supabase from '@/lib/supabase'; // src/pages/factures/FactureForm.jsx
 import { useMemo, useState, useEffect } from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
-import { useAuth } from '@/hooks/useAuth';
 import FactureLigne from '@/components/FactureLigne';
 import SupplierPicker from '@/components/factures/SupplierPicker';
 import { Button } from '@/components/ui/button';
@@ -18,18 +16,19 @@ import {
   SelectValue } from
 '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { mapUILineToPayload } from '@/features/factures/invoiceMappers';
 import useProduitLineDefaults from '@/hooks/useProduitLineDefaults';
 import { useZonesStock } from '@/hooks/useZonesStock';
 import { formatMoneyFR } from '@/utils/numberFormat';
+import { facture_create_with_lignes } from '@/lib/db';
+import { useQueryClient } from '@tanstack/react-query';
 
 const FN_UPDATE_FACTURE_EXISTS = false;
 
 const today = () => format(new Date(), 'yyyy-MM-dd');
 
 export default function FactureForm({ facture = null, onSaved } = {}) {
-  const { mama_id: mamaId } = useAuth();
   const { fetchDefaults } = useProduitLineDefaults();
+  const queryClient = useQueryClient();
 
   const emptyLigne = () => ({
     id: crypto.randomUUID(),
@@ -153,18 +152,19 @@ export default function FactureForm({ facture = null, onSaved } = {}) {
     if (saving) return;
     setSaving(true);
     try {
-      if (!mamaId) {
-        toast.error('Organisation introuvable.');
-        return;
-      }
       if (!values.fournisseur_id) {
         toast.error('Sélectionnez un fournisseur.');
         setError('fournisseur_id', { type: 'required' });
         return;
       }
-      const payloadLignes = (lignes || []).
-      filter((l) => l.produit_id).
-      map(mapUILineToPayload);
+      const payloadLignes = (lignes || [])
+        .filter((l) => l.produit_id)
+        .map((l) => ({
+          id: l.id || crypto.randomUUID(),
+          produit_id: l.produit_id,
+          quantite: Number(l.quantite || 0),
+          prix: Number(l.pu_ht || 0),
+        }));
       if (payloadLignes.length === 0) {
         toast.error('Ajoutez au moins une ligne produit.');
         (lignes || []).forEach((l, i) => {
@@ -173,49 +173,35 @@ export default function FactureForm({ facture = null, onSaved } = {}) {
         return;
       }
 
-      const p_actif = values.statut === 'Validée' && ecart_ht === 0;
-
       if (formId && !FN_UPDATE_FACTURE_EXISTS) {
-        toast.error(
-          'La modification nécessite fn_update_facture côté serveur'
-        );
+        toast.error('La modification nécessite fn_update_facture côté serveur');
         return;
       }
 
-      const rpcName = formId ? 'fn_update_facture' : 'fn_save_facture';
-      const args = formId ?
-      {
-        p_facture_id: formId,
-        p_mama_id: mamaId,
-        p_fournisseur_id: values.fournisseur_id,
-        p_numero: values.numero || null,
-        p_date: values.date_facture,
-        p_lignes: payloadLignes,
-        p_actif
-      } :
-      {
-        p_mama_id: mamaId,
-        p_fournisseur_id: values.fournisseur_id,
-        p_numero: values.numero || null,
-        p_date: values.date_facture,
-        p_lignes: payloadLignes,
-        p_actif
-      };
+      const total = payloadLignes.reduce(
+        (acc, l) => acc + l.quantite * l.prix,
+        0
+      );
 
-      const { data, error } = await supabase.rpc(rpcName, args);
-
-      if (error) {
-        toast.error(error.message);
-        return;
-      }
+      await facture_create_with_lignes(
+        {
+          id: formId || crypto.randomUUID(),
+          fournisseur_id: values.fournisseur_id,
+          total,
+          date: values.date_facture,
+        },
+        payloadLignes
+      );
 
       toast.success(
         `Facture enregistrée • N° ${values.numero || '—'} • ${values.statut}`
       );
 
+      queryClient.invalidateQueries({ queryKey: ['produits'] });
+      queryClient.invalidateQueries({ queryKey: ['produits-search'] });
+
       onSaved?.();
       if (!formId) reset(emptyForm());
-      return data;
     } catch (e) {
       console.warn(e);
       toast.error(
