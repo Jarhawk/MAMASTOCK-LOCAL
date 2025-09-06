@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 import PageWrapper from '@/components/ui/PageWrapper';
 import GlassCard from '@/components/ui/GlassCard';
@@ -10,6 +10,7 @@ import PreviewBanner from '@/components/ui/PreviewBanner';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [pending, setPending] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -27,27 +28,15 @@ export default function Login() {
       setPending(false);
       return;
     }
-    if (import.meta.env.DEV) console.time('[login] signIn');
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (import.meta.env.DEV) console.timeEnd('[login] signIn');
-    if (error) {
-      console.error('[login] error', error);
-      setErrorMsg(error.message || 'Connexion impossible');
+    try {
+      await login(email, password);
       setPending(false);
-      return;
-    }
-    let tries = 0;
-    let sess = null;
-    while (!sess && tries < 10) {
-      const { data: { session } } = await supabase.auth.getSession();
-      sess = session;
-      if (!sess) await new Promise((r) => setTimeout(r, 200));
-      tries++;
-    }
-    setPending(false);
-    if (sess) {
       if (import.meta.env.DEV) console.debug('[login] navigate to /dashboard');
       navigate('/dashboard', { replace: true });
+    } catch (err) {
+      console.error('[login] error', err);
+      setErrorMsg(err.message || 'Connexion impossible');
+      setPending(false);
     }
   }
 

@@ -5,8 +5,10 @@ import initSqlJs from 'sql.js';
 async function main() {
   const SQL = await initSqlJs({ locateFile: file => `node_modules/sql.js/dist/${file}` });
   const db = new SQL.Database();
-  const migration = readFileSync('public/migrations/001_init.sql', 'utf8');
-  db.exec(migration);
+  const m1 = readFileSync('public/migrations/001_init.sql', 'utf8');
+  db.exec(m1);
+  const m2 = readFileSync('public/migrations/002_local_auth.sql', 'utf8');
+  db.exec(m2);
 
   db.run("INSERT INTO fournisseurs (id, nom) VALUES ('f1','Four');");
   db.run("INSERT INTO produits (id, fournisseur_id, nom) VALUES ('p1','f1','Prod');");
