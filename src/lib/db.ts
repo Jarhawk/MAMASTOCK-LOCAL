@@ -1,6 +1,6 @@
 import Database from "@tauri-apps/plugin-sql";
-import { appDataDir, join } from "@tauri-apps/api/path";
-import { createDir, readTextFile, writeTextFile, exists } from "@tauri-apps/api/fs";
+import { appDataDir, join, documentDir } from "@tauri-apps/api/path";
+import { createDir, readTextFile, writeTextFile, exists, copyFile } from "@tauri-apps/api/fs";
 
 let dbPromise: Promise<Database> | null = null;
 
@@ -39,6 +39,39 @@ export async function getDb(): Promise<Database> {
     dbPromise = Database.load(`sqlite:${dbPath}`);
   }
   return dbPromise;
+}
+
+export async function closeDb() {
+  if (dbPromise) {
+    const db = await dbPromise;
+    await db.close();
+    dbPromise = null;
+  }
+}
+
+export async function backupDb() {
+  const dir = await getDataDir();
+  const dbPath = await join(dir, "mamastock.db");
+  const docs = await documentDir();
+  const backupDir = await join(docs, "MamaStock", "Backups");
+  await createDir(backupDir, { recursive: true });
+  const ts = new Date().toISOString().replace(/[:]/g, "-").replace("T", "_").split(".")[0];
+  const backupPath = await join(backupDir, `mamastock_${ts}.db`);
+  await copyFile(dbPath, backupPath);
+  return backupPath;
+}
+
+export async function restoreDb(src: string) {
+  const dir = await getDataDir();
+  const dbPath = await join(dir, "mamastock.db");
+  await closeDb();
+  await copyFile(src, dbPath);
+}
+
+export async function maintenanceDb() {
+  const db = await getDb();
+  await db.execute("PRAGMA wal_checkpoint(TRUNCATE)");
+  await db.execute("VACUUM");
 }
 
 export async function produits_list() {

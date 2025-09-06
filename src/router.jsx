@@ -73,6 +73,7 @@ const SousFamilles = lazyWithPreload(() => import("@/pages/parametrage/SousFamil
 const Unites = lazyWithPreload(() => import("@/pages/parametrage/Unites.jsx"));
 const Periodes = lazyWithPreload(() => import("@/pages/parametrage/Periodes.jsx"));
 const DataFolder = lazyWithPreload(() => import("@/pages/parametrage/DataFolder.jsx"));
+const SystemTools = lazyWithPreload(() => import("@/pages/parametrage/SystemTools.jsx"));
 const Onboarding = lazyWithPreload(() => import("@/pages/public/Onboarding.jsx"));
 const Accueil = lazyWithPreload(() => import("@/pages/Accueil.jsx"));
 const Signup = lazyWithPreload(() => import("@/pages/public/Signup.jsx"));
@@ -582,10 +583,14 @@ export default function Router() {
             path="/parametrage/periodes"
             element={<Periodes />}
           />
-          <Route
-            path="/parametrage/data"
-            element={<DataFolder />}
-          />
+            <Route
+              path="/parametrage/data"
+              element={<DataFolder />}
+            />
+            <Route
+              path="/parametrage/systeme"
+              element={<SystemTools />}
+            />
           <Route
             path="/parametrage/access"
             element={<AccessRights />}
