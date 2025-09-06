@@ -1,0 +1,38 @@
+{
+  "pr_number": "001",
+  "title": "migrate to Tauri v2 and SQL plugin v2",
+  "summary": "update Tauri configuration and dependencies",
+  "files": {
+    "added": ["docs/reports/PR-001_report.md", "docs/reports/PR-001_report.json"],
+    "modified": ["package.json", "package-lock.json", "src-tauri/tauri.conf.json", "src-tauri/Cargo.toml", "src-tauri/src/main.rs", "docs/STATUS.md"],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1189 packages, and audited 1196 packages"
+    },
+    {
+      "name": "build",
+      "command": "npm run build",
+      "status": "fail",
+      "stdout": "Cannot apply unknown utility class `bg-background`"
+    },
+    {
+      "name": "tauri version",
+      "command": "./node_modules/.bin/tauri --version",
+      "status": "pass",
+      "stdout": "tauri-cli 2.8.4"
+    },
+    {
+      "name": "tauri build",
+      "command": "npm run tauri:build -- --debug --no-bundle",
+      "status": "fail",
+      "stdout": "Cannot apply unknown utility class `bg-background`"
+    }
+  ],
+  "todos": ["Resolve Tailwind build error"],
+  "risks": []
+}

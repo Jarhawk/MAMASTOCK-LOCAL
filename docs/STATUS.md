@@ -8,7 +8,7 @@ This document tracks the global progress of the project.
 - Initial setup
 
 ### En cours
-- None
+- Migration vers Tauri v2 et plugin SQL v2
 
 ### À faire
 - TBD
