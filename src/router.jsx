@@ -5,7 +5,6 @@ import lazyWithPreload from "@/lib/lazyWithPreload";
 import nprogress from 'nprogress';
 import { useLocation } from 'react-router-dom';
 import ErrorBoundary from "@/components/ErrorBoundary";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import PageSkeleton from "@/components/ui/PageSkeleton";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
@@ -21,6 +20,7 @@ import DebugAuth from "@/pages/debug/DebugAuth";
 import AccessExample from "@/pages/debug/AccessExample";
 import DebugRights from "@/pages/debug/DebugRights";
 import PrivateOutlet from "@/router/PrivateOutlet";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const Dashboard = lazyWithPreload(() => import("@/pages/Dashboard.jsx"));
 const Fournisseurs = lazyWithPreload(() => import("@/pages/fournisseurs/Fournisseurs.jsx"));
@@ -203,13 +203,8 @@ export const routePreloadMap = {
 
 function RootRoute() {
   const location = useLocation();
-  const { session, userData, loading } = useAuth();
-
-  if (loading || (session && !userData)) {
-    return <LoadingSpinner message="Chargement..." />;
-  }
-
-  if (!session) {
+  const { user } = useAuth();
+  if (!user) {
     return (
       <Navigate
         to="/login"
@@ -218,9 +213,6 @@ function RootRoute() {
       />
     );
   }
-
-  if (userData?.actif === false) return <Navigate to="/blocked" replace />;
-
   return <Navigate to="/dashboard" replace />;
 }
 
@@ -289,14 +281,10 @@ export default function Router() {
             path="/factures"
             element={<Factures />}
           />
-          <Route
-            path="/factures/new"
-            element={<FactureForm />}
-          />
-          <Route
-            path="/factures/:id"
-            element={<FactureForm />}
-          />
+          <Route element={<ProtectedRoute roles={['admin','manager']} />}>
+            <Route path="/factures/new" element={<FactureForm />} />
+            <Route path="/factures/:id" element={<FactureForm />} />
+          </Route>
           <Route
             path="/factures/import"
             element={<ImportFactures />}

@@ -1,12 +1,11 @@
 declare module '@/contexts/AuthContext' {
   interface AuthContextValue {
-    session?: any
-    userData?: { access_rights?: Record<string, unknown> } | null
-    loading?: boolean
-    hasAccess?: (key?: string | null) => boolean
-    [key: string]: any
+    user: { email: string; role: string } | null
+    login: (email: string, password: string) => Promise<void>
+    logout: () => Promise<void>
+    hasAccess: (module?: string | null, perm?: string | null) => boolean
   }
-  export function useAuth(): AuthContextValue | null
+  export function useAuth(): AuthContextValue
   export const AuthProvider: React.ComponentType<React.PropsWithChildren<unknown>>
   export default AuthProvider
 }

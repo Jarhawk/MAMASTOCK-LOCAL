@@ -1,11 +1,11 @@
 # MamaStock
 ⚠️ Ce logiciel est propriétaire. Toute utilisation, copie ou distribution sans licence commerciale valide est interdite.
 
-L’accès est contrôlé par Supabase Auth + RLS. Aucun mécanisme de licence front n’est nécessaire.
-Pour un contrôle commercial, utiliser les rôles/permissions ou un champ `licence_active` côté DB.
+L’accès est maintenant géré localement via une table `utilisateurs` stockée dans `src/db/users.json`.
+Un script `npm run seed:admin` permet de créer l’utilisateur initial `admin@mamastock.local`.
 
 
-React application using Supabase. The toolchain relies on modern ESM modules and
+React application using local authentication. The toolchain relies on modern ESM modules and
 requires **Node.js 18+** (see `package.json` engines field).
 
 ## Development
