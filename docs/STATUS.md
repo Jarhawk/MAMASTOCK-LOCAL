@@ -12,6 +12,7 @@ This document tracks the global progress of the project.
 - DAL SQLite pour Produits/Fournisseurs/Factures
 - Paramétrage du dossier de données avec verrou distribué et auto‑fermeture
 - Workflows CI: vérification des PR (build + db:smoke) et release Windows via tag `v*`
+- Sauvegarde/restauration/maintenance SQLite via interface
 
 ### En cours
 - TBD

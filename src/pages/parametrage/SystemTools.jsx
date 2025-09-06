@@ -1,26 +1,38 @@
-import { useState } from "react";
 import { open } from "@tauri-apps/api/dialog";
+import { relaunch } from "@tauri-apps/plugin-process";
 import { backupDb, restoreDb, maintenanceDb } from "@/lib/db";
+import { toast } from "sonner";
 
 export default function SystemTools() {
-  const [message, setMessage] = useState("");
-
   const backup = async () => {
-    await backupDb();
-    setMessage("Sauvegarde effectuée.");
+    try {
+      const dest = await backupDb();
+      toast.success(`Sauvegarde effectuée : ${dest}`);
+    } catch (_) {
+      toast.error("Échec de la sauvegarde");
+    }
   };
 
   const restore = async () => {
-    const file = await open({ filters: [{ name: "Base", extensions: ["db"] }] });
-    if (file) {
-      await restoreDb(String(file));
-      setMessage("Base restaurée. Veuillez redémarrer l'application.");
+    try {
+      const file = await open({ filters: [{ name: "Base", extensions: ["db"] }] });
+      if (file && window.confirm("Restaurer cette sauvegarde ? L'application redémarrera.")) {
+        await restoreDb(String(file));
+        toast.success("Base restaurée. Redémarrage…");
+        await relaunch();
+      }
+    } catch (_) {
+      toast.error("Échec de la restauration");
     }
   };
 
   const maintain = async () => {
-    await maintenanceDb();
-    setMessage("Maintenance effectuée.");
+    try {
+      await maintenanceDb();
+      toast.success("Maintenance effectuée");
+    } catch (_) {
+      toast.error("Échec de la maintenance");
+    }
   };
 
   return (
@@ -31,7 +43,6 @@ export default function SystemTools() {
         <button onClick={restore} className="border px-2 py-1">Restaurer</button>
         <button onClick={maintain} className="border px-2 py-1">Maintenance</button>
       </div>
-      {message && <p className="text-sm text-gray-500">{message}</p>}
     </div>
   );
 }

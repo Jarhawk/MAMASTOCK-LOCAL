@@ -1,0 +1,44 @@
+{
+  "pr_number": "009",
+  "title": "feat: backup/restore DB + maintenance",
+  "summary": "ajoute des boutons d'outil système pour sauvegarde, restauration avec redémarrage et maintenance, plus documentation",
+  "files": {
+    "added": [
+      "docs/reports/PR-009_report.md",
+      "docs/reports/PR-009_report.json"
+    ],
+    "modified": [
+      "package.json",
+      "package-lock.json",
+      "src-tauri/Cargo.toml",
+      "src-tauri/Cargo.lock",
+      "src-tauri/src/main.rs",
+      "src/pages/parametrage/SystemTools.jsx",
+      "README.md",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "✓ built in 16.25s"
+    },
+    {
+      "name": "db:smoke",
+      "command": "npm run db:smoke",
+      "status": "pass",
+      "stdout": "migration smoke ok"
+    },
+    {
+      "name": "unit",
+      "command": "npm test",
+      "status": "pass",
+      "stdout": "Test Files 3 passed"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
