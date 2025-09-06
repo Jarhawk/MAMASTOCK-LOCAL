@@ -1,97 +1,68 @@
-import supabase from '@/lib/supabase';import { useEffect, useState, useRef, createContext, useContext, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import { normalizeAccessKey } from '@/lib/access';
+// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
+import bcrypt from 'bcryptjs';
+import { utilisateur_find_by_email } from '@/lib/db';
 
 const AuthCtx = createContext(null);
 export const useAuth = () => useContext(AuthCtx);
 
 function AuthProvider({ children }) {
-  const [session, setSession] = useState(null);
   const [user, setUser] = useState(null);
-  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const rights = useMemo(() => userData?.access_rights ?? {}, [userData?.access_rights]);
-  const initRef = useRef(false);
-  const lastLoadedUserRef = useRef(null);
-  const pollTimerRef = useRef(null);
-  const navigate = useNavigate();
 
-  async function loadProfile(sess) {
-    if (!sess) {setUserData(null);return;}
-    const displayName = sess.user?.user_metadata?.full_name || sess.user?.email || null;
-    await supabase.rpc('bootstrap_my_profile', { p_nom: displayName });
-    const { data, error } = await supabase.rpc('get_my_profile');
-    if (error) {console.error(error);setUserData(null);} else
-    {setUserData(data);}
-  }
-
+  // Load session from localStorage
   useEffect(() => {
-    if (initRef.current) return;
-    initRef.current = true;
-    if (import.meta.env.DEV) console.debug('[auth] init');
-    const init = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session ?? null);
-      setUser(session?.user ?? null);
-      if (session) {
-        setLoading(true);
-        if (import.meta.env.DEV) console.time('[auth] loadProfile');
-        await loadProfile(session);
-        if (import.meta.env.DEV) console.timeEnd('[auth] loadProfile');
-        setLoading(false);
-        navigate('/dashboard');
+    const saved = localStorage.getItem('mamastock.session');
+    if (saved) {
+      try {
+        setUser(JSON.parse(saved));
+      } catch (_) {
+        /* ignore */
       }
-    };
-    init();
-    const { data: sub } = supabase.auth.onAuthStateChange(async (_evt, sess) => {
-      setSession(sess ?? null);
-      setUser(sess?.user ?? null);
-      if (sess) {
-        setLoading(true);
-        if (import.meta.env.DEV) console.time('[auth] loadProfile');
-        await loadProfile(sess);
-        if (import.meta.env.DEV) console.timeEnd('[auth] loadProfile');
-        setLoading(false);
-        navigate('/dashboard');
-      } else {
-        setUserData(null);
-      }
-    });
-    let tries = 0;
-    const tick = async () => {
-      tries++;
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session && !userData) {
-        setSession(session);
-        setUser(session.user);
-        setLoading(true);
-        if (import.meta.env.DEV) console.time('[auth] loadProfile');
-        await loadProfile(session);
-        if (import.meta.env.DEV) console.timeEnd('[auth] loadProfile');
-        setLoading(false);
-        window.clearInterval(pollTimerRef.current);
-        pollTimerRef.current = null;
-      } else if (tries >= 10) {
-        window.clearInterval(pollTimerRef.current);
-        pollTimerRef.current = null;
-      }
-    };
-    pollTimerRef.current = window.setInterval(tick, 500);
-    return () => {sub?.subscription?.unsubscribe?.();if (pollTimerRef.current) window.clearInterval(pollTimerRef.current);};
-  }, [navigate, userData]);
-  const hasAccess = useMemo(() => {
-    return (key) => {
-      const k = normalizeAccessKey(key);
-      if (!k) return true;
-      return !!rights[k];
-    };
-  }, [rights]);
+    }
+  }, []);
 
-  const value = useMemo(
-    () => ({ session, user, userData, loading, hasAccess, ...(userData || {}) }),
-    [session, user, userData, loading, hasAccess]
-  );
+  const login = useCallback(async (email, password) => {
+    setLoading(true);
+    const u = await utilisateur_find_by_email(email);
+    if (!u || !u.actif) {
+      setLoading(false);
+      throw new Error('Identifiants invalides');
+    }
+    const ok = await bcrypt.compare(password, u.mot_de_passe_hash || '');
+    setLoading(false);
+    if (!ok) throw new Error('Identifiants invalides');
+    const sess = { id: u.id, email: u.email, role: u.role };
+    setUser(sess);
+    localStorage.setItem('mamastock.session', JSON.stringify(sess));
+  }, []);
+
+  const logout = useCallback(async () => {
+    setUser(null);
+    localStorage.removeItem('mamastock.session');
+  }, []);
+
+  const hasAccess = useCallback((module, right = 'peut_voir') => {
+    if (!user) return false;
+    if (user.role === 'admin') return true;
+    if (module === 'factures' && right === 'peut_modifier') {
+      return user.role === 'manager';
+    }
+    return true;
+  }, [user]);
+
+  const value = useMemo(() => ({
+    session: user ? { user } : null,
+    user,
+    userData: user,
+    role: user?.role,
+    loading,
+    login,
+    logout,
+    hasAccess,
+    isAuthenticated: !!user,
+  }), [user, loading, login, logout, hasAccess]);
+
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 }
 

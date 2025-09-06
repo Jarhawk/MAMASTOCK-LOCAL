@@ -1,8 +1,9 @@
 # MamaStock
 ⚠️ Ce logiciel est propriétaire. Toute utilisation, copie ou distribution sans licence commerciale valide est interdite.
 
-L’accès est contrôlé par Supabase Auth + RLS. Aucun mécanisme de licence front n’est nécessaire.
-Pour un contrôle commercial, utiliser les rôles/permissions ou un champ `licence_active` côté DB.
+L’accès peut être contrôlé par une authentification locale. Une table `utilisateurs` stocke email, mot de passe haché et rôle (`admin`, `manager`, `user`).
+Un script `npm run seed:admin` crée l’admin par défaut (`admin@mamastock.local`).
+Les rôles gèrent l'accès aux modules ; seuls les admins et managers peuvent créer des factures.
 
 
 React application using Supabase. The toolchain relies on modern ESM modules and

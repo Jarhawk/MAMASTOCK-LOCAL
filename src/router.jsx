@@ -10,6 +10,7 @@ import PageSkeleton from "@/components/ui/PageSkeleton";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
 import Layout from "@/layout/Layout";
+import ProtectedRoute from "@/router/ProtectedRoute";
 import Login from "@/pages/auth/Login";
 import Unauthorized from "@/pages/auth/Unauthorized";
 import Pending from "@/pages/auth/Pending";
@@ -200,7 +201,6 @@ export const routePreloadMap = {
   '/parametrage/roles': Roles.preload,
 };
 
-
 function RootRoute() {
   const location = useLocation();
   const { session, userData, loading } = useAuth();
@@ -291,11 +291,11 @@ export default function Router() {
           />
           <Route
             path="/factures/new"
-            element={<FactureForm />}
+            element={<ProtectedRoute roles={['admin','manager']}><FactureForm /></ProtectedRoute>}
           />
           <Route
             path="/factures/:id"
-            element={<FactureForm />}
+            element={<ProtectedRoute roles={['admin','manager']}><FactureForm /></ProtectedRoute>}
           />
           <Route
             path="/factures/import"

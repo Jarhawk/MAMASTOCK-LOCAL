@@ -106,3 +106,19 @@ export async function facture_create_with_lignes(
     throw e;
   }
 }
+
+export async function utilisateur_find_by_email(email: string) {
+  const db = await getDb();
+  const rows = await db.select(
+    'SELECT id, email, mot_de_passe_hash, role, actif FROM utilisateurs WHERE email = ?',[email]
+  );
+  return rows[0] || null;
+}
+
+export async function utilisateur_create(u: { id: string; email: string; mot_de_passe_hash: string; role: string; actif?: number; nom?: string; prenom?: string; }) {
+  const db = await getDb();
+  await db.execute(
+    'INSERT INTO utilisateurs (id, email, mot_de_passe_hash, role, actif, nom, prenom) VALUES (?,?,?,?,?,?,?)',
+    [u.id, u.email, u.mot_de_passe_hash, u.role, u.actif ?? 1, u.nom ?? null, u.prenom ?? null]
+  );
+}

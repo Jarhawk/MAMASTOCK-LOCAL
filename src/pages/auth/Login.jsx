@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 import PageWrapper from '@/components/ui/PageWrapper';
 import GlassCard from '@/components/ui/GlassCard';
@@ -10,6 +10,7 @@ import PreviewBanner from '@/components/ui/PreviewBanner';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [pending, setPending] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -27,27 +28,14 @@ export default function Login() {
       setPending(false);
       return;
     }
-    if (import.meta.env.DEV) console.time('[login] signIn');
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (import.meta.env.DEV) console.timeEnd('[login] signIn');
-    if (error) {
-      console.error('[login] error', error);
-      setErrorMsg(error.message || 'Connexion impossible');
-      setPending(false);
-      return;
-    }
-    let tries = 0;
-    let sess = null;
-    while (!sess && tries < 10) {
-      const { data: { session } } = await supabase.auth.getSession();
-      sess = session;
-      if (!sess) await new Promise((r) => setTimeout(r, 200));
-      tries++;
-    }
-    setPending(false);
-    if (sess) {
-      if (import.meta.env.DEV) console.debug('[login] navigate to /dashboard');
+    try {
+      await login(email, password);
       navigate('/dashboard', { replace: true });
+    } catch (err) {
+      console.error('[login] error', err);
+      setErrorMsg(err.message || 'Connexion impossible');
+    } finally {
+      setPending(false);
     }
   }
 
@@ -73,7 +61,6 @@ export default function Login() {
               autoComplete="email"
               required
               className="w-full px-4 py-2 font-semibold text-white placeholder-white/50 bg-white/10 backdrop-blur rounded-md shadow-lg border border-white/20 ring-1 ring-white/20 focus:outline-none hover:bg-white/10" />
-
           </div>
           <div>
             <label htmlFor="password" className="block text-xs font-semibold text-white/90 mb-1">
@@ -86,14 +73,12 @@ export default function Login() {
               autoComplete="current-password"
               required
               className="w-full px-4 py-2 font-semibold text-white placeholder-white/50 bg-white/10 backdrop-blur rounded-md shadow-lg border border-white/20 ring-1 ring-white/20 focus:outline-none hover:bg-white/10" />
-
           </div>
           {errorMsg ? <div role="alert" className="text-sm text-red-500">{errorMsg}</div> : null}
           <button
             type="submit"
             disabled={pending}
             className="mt-3 px-4 py-2 rounded-xl text-sm font-semibold bg-primary text-white hover:bg-primary-90 transition-colors disabled:opacity-50">
-
             {pending ? 'Connexion…' : 'Login'}
           </button>
           <div className="text-right mt-2">
@@ -104,6 +89,6 @@ export default function Login() {
         </form>
       </GlassCard>
       <p className="text-xs text-center text-white/40 mt-4">© MamaStock 2025</p>
-    </PageWrapper>);
-
+    </PageWrapper>
+  );
 }
