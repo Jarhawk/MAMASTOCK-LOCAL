@@ -1,0 +1,40 @@
+{
+  "pr_number": "007",
+  "title": "ci: verify PR (build + db:smoke) & Windows release (tag v*)",
+  "summary": "add GitHub workflows for PR verification and Windows release tagging, plus documentation",
+  "files": {
+    "added": [
+      "docs/reports/PR-007_report.md",
+      "docs/reports/PR-007_report.json"
+    ],
+    "modified": [
+      ".github/workflows/build-windows.yml",
+      ".github/workflows/verify-local.yml",
+      "README.md",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "\u2713 built in 15.49s"
+    },
+    {
+      "name": "db:smoke",
+      "command": "npm run db:smoke",
+      "status": "pass",
+      "stdout": "migration smoke ok"
+    },
+    {
+      "name": "unit",
+      "command": "npm test",
+      "status": "pass",
+      "stdout": "Test Files 3 passed"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}

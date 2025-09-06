@@ -38,4 +38,4 @@ Assurez‑vous qu'un seul poste utilise la base à la fois.
 - `npm ci`
 - `npx tauri dev` pour le mode développement.
 - `npx tauri build` pour produire l'exécutable et l'installateur MSI.
-- Créez un tag `v*` et poussez-le pour déclencher la build CI Windows.
+- Créez et poussez un tag `v1.0.0` (exemple) pour générer l'installeur Windows via la CI.
