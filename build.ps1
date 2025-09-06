@@ -26,6 +26,7 @@ try {
     }
 
     npm ci
+    # Generate application icons
     npm run icon:gen
     npm run build
     npx tauri build

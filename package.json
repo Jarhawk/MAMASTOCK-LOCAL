@@ -40,7 +40,7 @@
     "db:apply": "node --enable-source-maps scripts/sqlite-apply.js",
     "db:smoke": "node --enable-source-maps scripts/migration-smoke.js",
     "seed:admin": "node scripts/seed-admin.js",
-    "icon:gen": "tauri icon assets/logo.svg -o src-tauri/icons || node scripts/icon-fallback.js",
+    "icon:gen": "tauri icon assets/logo.svg -o src-tauri/icons",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
     "doctor": "pwsh scripts/doctor.ps1",

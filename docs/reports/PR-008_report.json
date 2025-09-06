@@ -1,0 +1,37 @@
+{
+  "pr_number": "008",
+  "title": "chore: branding (SVG) + génération d’icônes à la build (no binaries)",
+  "summary": "add SVG logo and generate icons during Tauri builds without committing generated binaries",
+  "files": {
+    "added": [
+      "docs/reports/PR-008_report.md",
+      "docs/reports/PR-008_report.json"
+    ],
+    "modified": [
+      ".github/workflows/build-windows.yml",
+      ".github/workflows/verify-local.yml",
+      ".gitignore",
+      "build.ps1",
+      "docs/STATUS.md",
+      "package.json",
+      "src-tauri/tauri.conf.json"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "icon:gen",
+      "command": "npm run icon:gen",
+      "status": "pass",
+      "stdout": "ICO Creating icon.ico"
+    },
+    {
+      "name": "tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "The system library `glib-2.0` required by crate `glib-sys` was not found."
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
