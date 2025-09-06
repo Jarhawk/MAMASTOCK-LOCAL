@@ -12,11 +12,16 @@ async function main() {
   } else {
     db = new SQL.Database();
   }
-  const schema = readFileSync('db/sqlite/001_schema.sql', 'utf8');
-  db.exec(schema);
-  if (existsSync('db/sqlite/002_seed.sql')) {
-    const seed = readFileSync('db/sqlite/002_seed.sql', 'utf8');
-    db.exec(seed);
+  const migrations = [
+    'db/sqlite/001_schema.sql',
+    'db/sqlite/002_seed.sql',
+    'db/sqlite/003_pmp_valeur_stock.sql',
+  ];
+  for (const file of migrations) {
+    if (existsSync(file)) {
+      const sql = readFileSync(file, 'utf8');
+      db.exec(sql);
+    }
   }
   const data = db.export();
   writeFileSync(target, Buffer.from(data));
