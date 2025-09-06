@@ -4,6 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { useGlobalSearch } from "@/hooks/useGlobalSearch";
 import LanguageSelector from "@/components/ui/LanguageSelector";
+import { shutdownDbSafely } from "@/lib/shutdown";
+import { releaseLock } from "@/lib/lock";
+import { getDataDir } from "@/lib/db";
+import { appWindow } from "@tauri-apps/api/window";
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -29,14 +33,21 @@ export default function Navbar() {
     setDark(isDark);
   }, []);
 
-  const handleLogout = useCallback(async () => {
-    const confirmLogout = window.confirm(
-      "Voulez-vous vraiment vous déconnecter ?"
-    );
-    if (!confirmLogout) return;
+    const handleLogout = useCallback(async () => {
+      const confirmLogout = window.confirm(
+        "Voulez-vous vraiment vous déconnecter ?"
+      );
+      if (!confirmLogout) return;
 
-    window.location.href = "/logout";
-  }, []);
+      window.location.href = "/logout";
+    }, []);
+
+    const handleQuit = useCallback(async () => {
+      const dir = await getDataDir();
+      await shutdownDbSafely();
+      await releaseLock(dir);
+      await appWindow.close();
+    }, []);
 
   return (
     <nav className="glass-panel border-b border-white/10 backdrop-blur-xl text-white px-6 py-4 flex items-center justify-between shadow-md text-shadow">
@@ -94,19 +105,25 @@ export default function Navbar() {
             </span>
             {mama_id && (
               <span className="text-xs bg-sky-600 text-white px-3 py-1 rounded-full shadow">
-                {mama_id}
-              </span>
-            )}
-            <button
-              onClick={handleLogout}
-              className="text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded-md transition"
-            >
-              {t('logout')}
-            </button>
-          </>
-        ) : (
-          <span className="text-sm text-mamastock-text italic">Connexion...</span>
-        )}
+                  {mama_id}
+                </span>
+              )}
+              <button
+                onClick={handleQuit}
+                className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-md transition"
+              >
+                Quitter & synchroniser
+              </button>
+              <button
+                onClick={handleLogout}
+                className="text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded-md transition"
+              >
+                {t('logout')}
+              </button>
+            </>
+          ) : (
+            <span className="text-sm text-mamastock-text italic">Connexion...</span>
+          )}
       </div>
     </nav>
   );
