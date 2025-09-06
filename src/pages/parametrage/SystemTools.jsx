@@ -1,4 +1,4 @@
-import { open } from "@tauri-apps/api/dialog";
+import { open } from "@tauri-apps/plugin-dialog";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { backupDb, restoreDb, maintenanceDb } from "@/lib/db";
 import { toast } from "sonner";

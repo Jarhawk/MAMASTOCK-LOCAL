@@ -1,5 +1,5 @@
-import { join } from "@tauri-apps/api/path";
-import { exists, readTextFile, writeTextFile, removeFile } from "@tauri-apps/api/fs";
+import { join } from "@tauri-apps/plugin-path";
+import { exists, readTextFile, writeTextFile, remove } from "@tauri-apps/plugin-fs";
 import { appWindow } from "@tauri-apps/api/window";
 import { v4 as uuidv4 } from "uuid";
 import { shutdownDbSafely } from "./shutdown";
@@ -51,11 +51,11 @@ export async function monitorShutdownRequests(syncDir: string) {
         if (requester !== instanceId) {
           await shutdownDbSafely();
           await releaseLock(syncDir);
-          await removeFile(shutdownPath);
+          await remove(shutdownPath);
           await appWindow.close();
         }
       } catch {
-        await removeFile(shutdownPath);
+        await remove(shutdownPath);
       }
     }
   };
@@ -75,6 +75,6 @@ export async function releaseLock(syncDir: string) {
     heartbeat = null;
   }
   if (await exists(lockPath)) {
-    await removeFile(lockPath);
+    await remove(lockPath);
   }
 }
