@@ -18,7 +18,11 @@ export function AuthProvider({ children }) {
     if (!found) throw new Error('Utilisateur introuvable');
     const ok = await bcrypt.compare(password, found.mot_de_passe_hash);
     if (!ok) throw new Error('Mot de passe incorrect');
-    const sess = { email: found.email, role: found.role };
+    const sess = {
+      email: found.email,
+      role: found.role || 'admin',
+      must_change_password: !!found.must_change_password,
+    };
     setUser(sess);
     localStorage.setItem('session', JSON.stringify(sess));
   };

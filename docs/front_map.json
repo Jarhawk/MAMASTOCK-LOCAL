@@ -1497,7 +1497,7 @@
     },
     {
       "name": "Login",
-      "file": "src/pages/auth/Login.jsx"
+      "file": "src/pages/Login.jsx"
     },
     {
       "name": "Logout",

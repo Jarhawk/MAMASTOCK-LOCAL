@@ -9,7 +9,7 @@ import PageSkeleton from "@/components/ui/PageSkeleton";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
 import Layout from "@/layout/Layout";
-import Login from "@/pages/auth/Login";
+import Login from "@/pages/Login";
 import Unauthorized from "@/pages/auth/Unauthorized";
 import Pending from "@/pages/auth/Pending";
 import Blocked from "@/pages/auth/Blocked";
