@@ -1,27 +1,30 @@
-// Simple smoke test to ensure migration and triggers work
+// Vérifie rapidement le schéma et les triggers
 import { readFileSync } from 'fs';
 import initSqlJs from 'sql.js';
 
 async function main() {
-  const SQL = await initSqlJs({ locateFile: file => `node_modules/sql.js/dist/${file}` });
+  const SQL = await initSqlJs({ locateFile: f => `node_modules/sql.js/dist/${f}` });
   const db = new SQL.Database();
-  const m1 = readFileSync('public/migrations/001_init.sql', 'utf8');
-  db.exec(m1);
-  const m2 = readFileSync('public/migrations/002_local_auth.sql', 'utf8');
-  db.exec(m2);
+  const schema = readFileSync('db/sqlite/001_schema.sql', 'utf8');
+  db.exec(schema);
+  const seed = readFileSync('db/sqlite/002_seed.sql', 'utf8');
+  db.exec(seed);
 
-  db.run("INSERT INTO fournisseurs (id, nom) VALUES ('f1','Four');");
-  db.run("INSERT INTO produits (id, fournisseur_id, nom) VALUES ('p1','f1','Prod');");
-  db.run("INSERT INTO factures (id, fournisseur_id, total, date) VALUES ('fa1','f1',10,'2025-01-01');");
-  db.run("INSERT INTO facture_lignes (id, facture_id, produit_id, quantite, prix) VALUES ('l1','fa1','p1',2,5);");
+  db.run("INSERT INTO fournisseurs (nom) VALUES ('Four');");
+  const fournisseurId = db.exec('SELECT last_insert_rowid()')[0].values[0][0];
+  db.run("INSERT INTO produits (nom) VALUES ('Prod');");
+  const produitId = db.exec('SELECT last_insert_rowid()')[0].values[0][0];
+  db.run(`INSERT INTO factures (fournisseur_id, date_iso) VALUES (${fournisseurId}, '2025-01-01');`);
+  const factureId = db.exec('SELECT last_insert_rowid()')[0].values[0][0];
+  db.run(`INSERT INTO facture_lignes (facture_id, produit_id, quantite, prix_unitaire) VALUES (${factureId}, ${produitId}, 10, 2.5);`);
 
-  const res = db.exec("SELECT stock, pmp FROM produits WHERE id='p1';");
-  if (!res.length) throw new Error('No product');
+  const res = db.exec(`SELECT stock_theorique, pmp FROM produits WHERE id=${produitId};`);
   const [stock, pmp] = res[0].values[0];
-  if (stock !== 2 || pmp !== 5) {
-    throw new Error(`Unexpected values: stock=${stock} pmp=${pmp}`);
+  if (Math.abs(stock - 10) > 0.0001 || Math.abs(pmp - 2.5) > 0.0001) {
+    console.error('Valeurs inattendues', { stock, pmp });
+    process.exit(1);
   }
-  console.log('migration smoke ok');
+  console.log('✅ migration smoke ok');
 }
 
 main().catch(err => {

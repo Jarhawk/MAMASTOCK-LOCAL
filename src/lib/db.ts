@@ -105,7 +105,7 @@ export async function getDb(): Promise<Database> {
     const db = await Database.load(`sqlite:${dbPath}`);
     dbPromise = Promise.resolve(db);
     if (!existsDb) {
-      const res = await fetch("/migrations/001_init.sql");
+      const res = await fetch("/migrations/001_schema.sql");
       const sql = await res.text();
       const statements = sql
         .split(/;\s*\n/)
@@ -113,6 +113,19 @@ export async function getDb(): Promise<Database> {
         .filter(Boolean);
       for (const stmt of statements) {
         await db.execute(stmt);
+      }
+      try {
+        const seedRes = await fetch("/migrations/002_seed.sql");
+        const seed = await seedRes.text();
+        const seedStatements = seed
+          .split(/;\s*\n/)
+          .map((s) => s.trim())
+          .filter(Boolean);
+        for (const stmt of seedStatements) {
+          await db.execute(stmt);
+        }
+      } catch (_) {
+        /* seed optional */
       }
     }
   }
