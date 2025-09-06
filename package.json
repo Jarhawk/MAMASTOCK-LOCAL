@@ -42,7 +42,8 @@
     "seed:admin": "node scripts/seed-admin.js",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
-    "doctor": "pwsh scripts/doctor.ps1"
+    "doctor": "pwsh scripts/doctor.ps1",
+    "front:audit": "node scripts/front-audit.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
