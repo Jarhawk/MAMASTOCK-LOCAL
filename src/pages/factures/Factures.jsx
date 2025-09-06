@@ -16,7 +16,7 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import { Menu } from 'lucide-react';
-import useExport from '@/hooks/useExport';
+import { exportToExcel, exportToCSV, exportToPDF } from '@/lib/export/exportHelpers';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import TableHeader from '@/components/ui/TableHeader';
 import GlassCard from '@/components/ui/GlassCard';
@@ -46,7 +46,7 @@ export default function Factures() {
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const [loading, setLoading] = useState(false);
-  const { exportData, loading: exporting } = useExport();
+  const [exporting, setExporting] = useState(false);
 
   const STATUTS = [
     { label: 'Tous', value: '' },
@@ -60,6 +60,38 @@ export default function Factures() {
     { label: 'Actives', value: 'true' },
     { label: 'Inactives', value: 'false' },
   ];
+
+  async function exportFactures(format) {
+    try {
+      setExporting(true);
+      const data = factures.map((f) => ({
+        numero: f.numero || f.id,
+        fournisseur: f.fournisseur?.nom || f.fournisseur_nom || '',
+        date: f.date_facture || f.date || '',
+        total: f.total || 0,
+      }));
+      const columns = [
+        { key: 'numero', label: 'Numéro' },
+        { key: 'fournisseur', label: 'Fournisseur' },
+        { key: 'date', label: 'Date' },
+        { key: 'total', label: 'Total' },
+      ];
+      const filename =
+        format === 'excel'
+          ? 'factures_mamastock.xlsx'
+          : format === 'csv'
+          ? 'factures_mamastock.csv'
+          : 'factures_mamastock.pdf';
+      if (format === 'excel') await exportToExcel(data, { filename, columns });
+      else if (format === 'csv') await exportToCSV(data, { filename, columns });
+      else await exportToPDF(data, { filename, columns });
+      toast.success('Export effectué');
+    } catch (e) {
+      toast.error(e.message);
+    } finally {
+      setExporting(false);
+    }
+  }
 
   const {
     data: listData,
@@ -174,12 +206,24 @@ export default function Factures() {
                   </Button>
                   <Button
                     variant="outline"
-                    onClick={() =>
-                      exportData({ type: 'factures', format: 'excel' })
-                    }
+                    onClick={() => exportFactures('excel')}
                     disabled={exporting}
                   >
                     Export Excel
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => exportFactures('csv')}
+                    disabled={exporting}
+                  >
+                    Export CSV
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => exportFactures('pdf')}
+                    disabled={exporting}
+                  >
+                    Export PDF
                   </Button>
                   <Button variant="outline" onClick={() => setShowImport(true)}>
                     Importer
@@ -201,12 +245,22 @@ export default function Factures() {
                       Ajouter une facture
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onSelect={() =>
-                        exportData({ type: 'factures', format: 'excel' })
-                      }
+                      onSelect={() => exportFactures('excel')}
                       disabled={exporting}
                     >
                       Export Excel
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => exportFactures('csv')}
+                      disabled={exporting}
+                    >
+                      Export CSV
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => exportFactures('pdf')}
+                      disabled={exporting}
+                    >
+                      Export PDF
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => setShowImport(true)}>
                       Importer

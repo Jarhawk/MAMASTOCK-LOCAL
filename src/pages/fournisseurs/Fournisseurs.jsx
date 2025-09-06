@@ -15,8 +15,6 @@ import PaginationFooter from '@/components/ui/PaginationFooter';
 import TableHeader from '@/components/ui/TableHeader';
 import FournisseurRow from '@/components/fournisseurs/FournisseurRow';
 import { Dialog, DialogContent } from '@/components/ui/SmartDialog';
-import JSPDF from 'jspdf';
-import 'jspdf-autotable';
 import { toast } from 'sonner';
 import {
   ResponsiveContainer,
@@ -40,7 +38,7 @@ export default function Fournisseurs() {
     createFournisseur,
     updateFournisseur,
     toggleFournisseurActive,
-    exportFournisseursToExcel,
+    exportFournisseurs,
   } = useFournisseursActions();
   const { fetchStatsAll } = useFournisseurStats();
   const { getProduitsDuFournisseur, countProduitsDuFournisseur } =
@@ -115,22 +113,6 @@ export default function Fournisseurs() {
     if (fournisseurs.length) fetchCounts();
   }, [fournisseurs]);
 
-  const exportPDF = () => {
-    const doc = new JSPDF();
-    doc.text('Liste Fournisseurs', 10, 12);
-    doc.autoTable({
-      startY: 20,
-      head: [['Nom', 'Téléphone', 'Contact', 'Email']],
-      body: listWithContact.map((f) => [
-        f.nom,
-        f.contact?.tel || '',
-        f.contact?.nom || '',
-        f.contact?.email || '',
-      ]),
-      styles: { fontSize: 9 },
-    });
-    doc.save('fournisseurs.pdf');
-  };
 
   async function handleDiag() {
     const { data, error: diagError } = await supabase
@@ -250,10 +232,13 @@ export default function Fournisseurs() {
                 <PlusCircle className="mr-2" size={18} /> Ajouter fournisseur
               </Button>
             )}
-            <Button className="w-auto" onClick={() => exportFournisseursToExcel(fournisseurs)}>
+            <Button className="w-auto" onClick={() => exportFournisseurs(fournisseurs, 'excel')}>
               Export Excel
             </Button>
-            <Button className="w-auto" onClick={exportPDF}>
+            <Button className="w-auto" onClick={() => exportFournisseurs(fournisseurs, 'csv')}>
+              Export CSV
+            </Button>
+            <Button className="w-auto" onClick={() => exportFournisseurs(fournisseurs, 'pdf')}>
               Export PDF
             </Button>
             <Button className="w-auto" onClick={handleDiag}>

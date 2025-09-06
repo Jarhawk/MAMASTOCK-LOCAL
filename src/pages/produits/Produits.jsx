@@ -15,11 +15,11 @@ import TableHeader from "@/components/ui/TableHeader";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { Plus as PlusIcon, FileDown as FileDownIcon } from "lucide-react";
+import { Plus as PlusIcon } from "lucide-react";
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import ProduitRow from "@/components/produits/ProduitRow";
-import { exportExcelProduits } from "@/utils/excelUtils";
+import { exportToExcel, exportToCSV, exportToPDF } from "@/lib/export/exportHelpers";
 import ModalImportProduits from "@/components/produits/ModalImportProduits";
 
 const PAGE_SIZE = 50;
@@ -73,11 +73,30 @@ export default function Produits() {
     refetch();
   }, [refetch, search, familleFilter, sousFamilleFilter, zoneFilter, actifFilter, page, sortField, sortOrder]);
 
-
-  async function handleExportExcel() {
+  async function handleExport(format) {
     try {
-      await exportExcelProduits(mama_id);
-      toast.success("Export Excel réussi");
+      const data = rows.map((p) => ({
+        nom: p.nom,
+        unite: p.unite_nom,
+        famille: p.famille_nom,
+        stock: p.stock_theorique ?? 0,
+      }));
+      const columns = [
+        { key: 'nom', label: 'Nom' },
+        { key: 'unite', label: 'Unité' },
+        { key: 'famille', label: 'Famille' },
+        { key: 'stock', label: 'Stock' },
+      ];
+      const filename =
+        format === 'excel'
+          ? 'produits_mamastock.xlsx'
+          : format === 'csv'
+          ? 'produits_mamastock.csv'
+          : 'produits_mamastock.pdf';
+      if (format === 'excel') await exportToExcel(data, { filename, columns });
+      else if (format === 'csv') await exportToCSV(data, { filename, columns });
+      else await exportToPDF(data, { filename, columns });
+      toast.success('Export réussi');
     } catch (e) {
       toast.error(e.message);
     }
@@ -237,11 +256,24 @@ export default function Produits() {
           <div className="flex gap-2 flex-wrap">
             <Button
               className="min-w-[140px]"
-              onClick={handleExportExcel}
-              icon={FileDownIcon}
+              onClick={() => handleExport('excel')}
               disabled={rows.length === 0}
             >
-              Exporter vers Excel
+              Exporter Excel
+            </Button>
+            <Button
+              className="min-w-[140px]"
+              onClick={() => handleExport('csv')}
+              disabled={rows.length === 0}
+            >
+              Exporter CSV
+            </Button>
+            <Button
+              className="min-w-[140px]"
+              onClick={() => handleExport('pdf')}
+              disabled={rows.length === 0}
+            >
+              Exporter PDF
             </Button>
             <Button
               className="min-w-[140px]"

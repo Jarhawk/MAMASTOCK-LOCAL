@@ -7,6 +7,9 @@ import GlassCard from "@/components/ui/GlassCard";
 import useMamaSettings from "@/hooks/useMamaSettings";
 import { uploadFile, deleteFile, pathFromUrl } from "@/hooks/useStorage";
 import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
+import { open } from '@tauri-apps/api/dialog';
+import { getExportDir, setExportDir } from '@/lib/export/dir';
 
 export default function MamaSettingsForm() {
   const { mama_id } = useAuth();
@@ -14,6 +17,7 @@ export default function MamaSettingsForm() {
   const [form, setForm] = useState(settings);
   const [logoFile, setLogoFile] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [exportDir, setExportDirState] = useState('');
 
   useEffect(() => {
     fetchMamaSettings();
@@ -22,6 +26,10 @@ export default function MamaSettingsForm() {
   useEffect(() => {
     setForm(settings);
   }, [settings]);
+
+  useEffect(() => {
+    getExportDir().then(setExportDirState);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -48,6 +56,7 @@ export default function MamaSettingsForm() {
         fields.logo_url = url;
       }
       await updateMamaSettings(fields);
+      await setExportDir(exportDir);
       toast.success("Paramètres enregistrés");
     } catch (err) {
       console.error(err);
@@ -96,6 +105,21 @@ export default function MamaSettingsForm() {
           value={form.email_alertes || ""}
           onChange={handleChange}
         />
+      </div>
+      <div>
+        <label className="block text-sm mb-1">Dossier d'export</label>
+        <div className="flex gap-2">
+          <Input className="flex-1" value={exportDir} readOnly />
+          <Button
+            type="button"
+            onClick={async () => {
+              const dir = await open({ directory: true });
+              if (dir) setExportDirState(dir);
+            }}
+          >
+            Choisir
+          </Button>
+        </div>
       </div>
       <div>
         <label className="block text-sm mb-1">Mode sombre</label>

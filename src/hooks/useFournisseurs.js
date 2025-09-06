@@ -4,8 +4,7 @@ import supabase from '@/lib/supabase';
 import { useState, useEffect, useCallback } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import { exportToExcel, exportToCSV, exportToPDF } from '@/lib/export/exportHelpers';
 import { toast } from 'sonner';
 import { safeImportXLSX } from '@/lib/xlsx/safeImportXLSX';
 import { useQueryClient } from '@tanstack/react-query';
@@ -143,20 +142,33 @@ export function useFournisseurs() {
     return { error };
   }
 
-  // Export Excel
-  function exportFournisseursToExcel(fournisseurs = []) {
+  // Export local
+  function exportFournisseurs(fournisseurs = [], format = 'excel') {
     const datas = (fournisseurs || []).map((f) => ({
       id: f.id,
       nom: f.nom,
       tel: f.contact?.tel || '',
       contact: f.contact?.nom || '',
       email: f.contact?.email || '',
-      actif: f.actif
+      actif: f.actif,
     }));
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(datas), 'Fournisseurs');
-    const buf = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    saveAs(new Blob([buf]), 'fournisseurs_mamastock.xlsx');
+    const columns = [
+      { key: 'id', label: 'ID' },
+      { key: 'nom', label: 'Nom' },
+      { key: 'tel', label: 'Téléphone' },
+      { key: 'contact', label: 'Contact' },
+      { key: 'email', label: 'Email' },
+      { key: 'actif', label: 'Actif' },
+    ];
+    const filename =
+      format === 'excel'
+        ? 'fournisseurs_mamastock.xlsx'
+        : format === 'csv'
+        ? 'fournisseurs_mamastock.csv'
+        : 'fournisseurs_mamastock.pdf';
+    if (format === 'excel') return exportToExcel(datas, { filename, columns });
+    if (format === 'csv') return exportToCSV(datas, { filename, columns });
+    if (format === 'pdf') return exportToPDF(datas, { filename, columns });
   }
 
   // Import Excel
@@ -178,7 +190,7 @@ export function useFournisseurs() {
     createFournisseur,
     updateFournisseur,
     toggleFournisseurActive,
-    exportFournisseursToExcel,
+    exportFournisseurs,
     importFournisseursFromExcel
   };
 }

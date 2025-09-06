@@ -2,8 +2,17 @@
 import JSPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
+import { writeTextFile, writeBinaryFile, createDir } from '@tauri-apps/api/fs';
+import { join } from '@tauri-apps/api/path';
+import { getExportDir } from './dir';
+
+async function saveFile(filename, data, binary = false) {
+  const dir = await getExportDir();
+  await createDir(dir, { recursive: true });
+  const path = await join(dir, filename);
+  if (binary) await writeBinaryFile(path, data); else await writeTextFile(path, data);
+}
 
 export function exportToPDF(data = [], config = {}) {
   const {
@@ -25,7 +34,8 @@ export function exportToPDF(data = [], config = {}) {
       : Object.values(item)
   );
   doc.autoTable({ head: headers, body: rows, styles: { fontSize: 9 } });
-  doc.save(filename);
+  const buf = doc.output('arraybuffer');
+  return saveFile(filename, buf, true);
 }
 
 export function exportToExcel(data = [], config = {}) {
@@ -49,7 +59,7 @@ export function exportToExcel(data = [], config = {}) {
   const ws = XLSX.utils.json_to_sheet(arr);
   XLSX.utils.book_append_sheet(wb, ws, sheet);
   const buf = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-  saveAs(new Blob([buf]), filename);
+  return saveFile(filename, buf, true);
 }
 
 export function exportToCSV(data = [], config = {}) {
@@ -71,7 +81,7 @@ export function exportToCSV(data = [], config = {}) {
       : Object.values(item).map(quote).join(delim)
   );
   const csv = [header, ...rows].join('\n');
-  saveAs(new Blob([csv], { type: 'text/csv;charset=utf-8;' }), filename);
+  return saveFile(filename, csv);
 }
 
 export function exportToTSV(data = [], config = {}) {
@@ -88,7 +98,7 @@ export function exportToJSON(data = [], config = {}) {
   const { filename = 'export.json', pretty = true } = config;
   if (!Array.isArray(data)) data = [data];
   const json = JSON.stringify({ data }, null, pretty ? 2 : 0);
-  saveAs(new Blob([json], { type: 'application/json;charset=utf-8;' }), filename);
+  return saveFile(filename, json);
 }
 
 export function exportToXML(data = [], config = {}) {
@@ -105,7 +115,7 @@ export function exportToXML(data = [], config = {}) {
     return `<${row}>${cells}</${row}>`;
   });
   const xml = `<${root}>${rows.join('')}</${root}>`;
-  saveAs(new Blob([xml], { type: 'application/xml;charset=utf-8;' }), filename);
+  return saveFile(filename, xml);
 }
 
 export function exportToHTML(data = [], config = {}) {
@@ -120,7 +130,7 @@ export function exportToHTML(data = [], config = {}) {
     return `<tr>${cells.join('')}</tr>`;
   });
   const html = `<table><thead><tr>${header}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
-  saveAs(new Blob([html], { type: 'text/html;charset=utf-8;' }), filename);
+  return saveFile(filename, html);
 }
 
 export function exportToMarkdown(data = [], config = {}) {
@@ -134,14 +144,14 @@ export function exportToMarkdown(data = [], config = {}) {
     return `|${cells.join('|')}|`;
   });
   const md = [header, divider, ...rows].join('\n');
-  saveAs(new Blob([md], { type: 'text/markdown;charset=utf-8;' }), filename);
+  return saveFile(filename, md);
 }
 
 export function exportToYAML(data = [], config = {}) {
   const { filename = 'export.yaml' } = config;
   if (!Array.isArray(data)) data = [data];
   const yml = dump({ data });
-  saveAs(new Blob([yml], { type: 'text/yaml;charset=utf-8;' }), filename);
+  return saveFile(filename, yml);
 }
 
 export function exportToTXT(data = [], config = {}) {
@@ -156,7 +166,7 @@ export function exportToTXT(data = [], config = {}) {
       .join('\n');
   });
   const txt = lines.join('\n\n');
-  saveAs(new Blob([txt], { type: 'text/plain;charset=utf-8;' }), filename);
+  return saveFile(filename, txt);
 }
 
 export function exportToClipboard(data = [], config = {}) {

@@ -7,6 +7,12 @@ Cette variante embarque une base SQLite locale et Tauri pour fonctionner hors li
 - Sélectionnez le dossier qui contiendra `mamastock.db` et les fichiers de verrou (`db.lock.json`, `shutdown.request.json`).
 - Le chemin est enregistré dans `%APPDATA%\MamaStock\config.json`.
 
+## Exports locaux
+- Des boutons **Export CSV/XLSX/PDF** sont disponibles dans les listes Produits, Fournisseurs et Factures.
+- Les fichiers sont enregistrés par défaut dans `Documents/MamaStock/Exports`.
+- Le dossier peut être modifié dans la page **Paramètres** via le champ *Dossier d'export*.
+- Aucun accès Internet n'est requis pour générer les fichiers.
+
 ## Règle "un seul poste à la fois"
 Un fichier `db.lock.json` protège l'accès à la base. Un poste doit être fermé (menu quitter) avant d'ouvrir l'application sur un autre poste. Un `shutdown.request.json` peut être créé pour demander la libération du verrou.
 
