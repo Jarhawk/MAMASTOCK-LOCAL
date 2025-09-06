@@ -21,6 +21,21 @@ npm run preview
 npm run sanitize:src
 ```
 
+## Release
+
+To publish a Windows installer:
+
+1. Commit your changes.
+2. Create a version tag and push it:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+GitHub Actions will build the Tauri installer and attach it to the release.
+
+
 Run `npm run sanitize:src` to strip BOM, NBSP, and Unicode line separators from source files.
 
 If linting or tests fail because required packages are missing, simply run
