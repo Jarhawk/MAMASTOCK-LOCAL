@@ -9,5 +9,11 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['test/setup.ts'],
   },
-  resolve: { alias: { '@': path.resolve(__dirname, './src') } },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@tauri-apps/api/path': path.resolve(__dirname, './test/stubs/tauri-path.ts'),
+      '@tauri-apps/api/fs': path.resolve(__dirname, './test/stubs/tauri-fs.ts'),
+    }
+  },
 });
