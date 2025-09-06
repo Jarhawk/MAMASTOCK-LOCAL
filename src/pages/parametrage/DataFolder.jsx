@@ -15,12 +15,12 @@ export default function DataFolder() {
 
   const choose = async () => {
     const selected = await open({ directory: true });
-    if (selected) setDir(selected as string);
+    if (selected) setDir(String(selected));
   };
 
   const chooseExport = async () => {
     const selected = await open({ directory: true });
-    if (selected) setExportDirState(selected as string);
+    if (selected) setExportDirState(String(selected));
   };
 
   const save = async () => {
