@@ -26,6 +26,7 @@ try {
     }
 
     npm ci
+    npm run icon:gen
     npm run build
     npx tauri build
 
