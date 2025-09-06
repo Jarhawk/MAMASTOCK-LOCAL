@@ -4,6 +4,7 @@ import { setDataDir, getDataDir } from "@/lib/db";
 
 export default function DataFolder() {
   const [dir, setDir] = useState("");
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     getDataDir().then(setDir);
@@ -15,7 +16,10 @@ export default function DataFolder() {
   };
 
   const save = async () => {
-    if (dir) await setDataDir(dir);
+    if (dir) {
+      await setDataDir(dir);
+      setSaved(true);
+    }
   };
 
   return (
@@ -36,6 +40,11 @@ export default function DataFolder() {
             Enregistrer
           </button>
         </div>
+        {saved && (
+          <p className="text-sm text-gray-500">
+            Redémarrez l'application pour appliquer les modifications.
+          </p>
+        )}
       </div>
     </div>
   );
