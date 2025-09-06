@@ -38,7 +38,9 @@
     "audit": "node scripts/audit-project.mjs",
     "audit:fix": "node scripts/fix-project.mjs",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build"
+    "tauri:build": "tauri build",
+    "db:apply": "node scripts/sqlite-apply.js",
+    "db:smoke": "node scripts/migration-smoke.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
@@ -79,7 +81,8 @@
     "tesseract.js": "^6.0.1",
     "uuid": "^11.1.0",
     "xlsx": "^0.18.5",
-    "zod": "3.23.8"
+    "zod": "3.23.8",
+    "better-sqlite3": "^11.5.0"
   },
   "devDependencies": {
     "@babel/parser": "^7.28.0",
