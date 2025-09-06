@@ -1,0 +1,33 @@
+{
+  "pr_number": "005",
+  "title": "DAL SQLite produits/fournisseurs/factures",
+  "summary": "add SQLite DAL and replace Supabase calls for products, suppliers and invoices",
+  "files": {
+    "added": [
+      "docs/reports/PR-005_report.md",
+      "docs/reports/PR-005_report.json"
+    ],
+    "modified": [
+      "src/lib/db.ts",
+      "src/hooks/useFournisseurStats.js",
+      "src/hooks/useProduitsFournisseur.js",
+      "src/hooks/data/useFournisseurs.js",
+      "src/pages/fournisseurs/FournisseurDetail.jsx",
+      "src/pages/fournisseurs/Fournisseurs.jsx",
+      "src/pages/fournisseurs/comparatif/ComparatifPrix.jsx",
+      "src/pages/factures/FactureDetail.jsx",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "db smoke",
+      "command": "npm run db:smoke",
+      "status": "pass",
+      "stdout": "migration smoke ok insert stock=10 valeur=25 pmp=2.5 update stock=20 valeur=60 pmp=3 delete stock=0 valeur=0 pmp=0"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}

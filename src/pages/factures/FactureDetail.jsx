@@ -1,5 +1,4 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -7,6 +6,7 @@ import FactureForm from './FactureForm.jsx';
 import { mapDbLineToUI } from '@/features/factures/invoiceMappers';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { toast } from 'sonner';
+import { facture_get } from '@/lib/db';
 
 function toLabel(v) {
   if (v == null) return '';
@@ -38,30 +38,21 @@ export default function FactureDetail() {
     let isMounted = true;
     async function load() {
       setLoading(true);
-      const { data, error } = await supabase.
-      from('factures').
-      select(
-        `id, mama_id, fournisseur_id, numero, date_facture, actif, total_ht, total_ttc, tva,
-          lignes:facture_lignes(
-            id, produit_id, quantite, prix_unitaire_ht, montant_ht, tva, zone_id,
-            produit:produits(id, nom, unite, pmp, tva)
-          )`
-      ).
-      eq('id', id).
-      single();
-
-      if (error) {
-        toast.error(error.message || 'Erreur de chargement de la facture');
-      } else if (data && isMounted) {
-        setForm({
-          id: data.id,
-          fournisseur_id: data.fournisseur_id ?? null,
-          date_facture: data.date_facture,
-          numero: data.numero ?? '',
-          statut: data.actif ? 'Validée' : 'Brouillon',
-          total_ht_attendu: Number(data.total_ht ?? 0) || null
-        });
-        setLignes((data.lignes || []).map(mapDbLineToUI));
+      try {
+        const data = await facture_get(Number(id));
+        if (data && isMounted) {
+          setForm({
+            id: data.id,
+            fournisseur_id: data.fournisseur_id ?? null,
+            date_facture: data.date_iso,
+            numero: '',
+            statut: 'Validée',
+            total_ht_attendu: null,
+          });
+          setLignes((data.lignes || []).map(mapDbLineToUI));
+        }
+      } catch (error) {
+        toast.error(error?.message || 'Erreur de chargement de la facture');
       }
 
       if (isMounted) setLoading(false);
