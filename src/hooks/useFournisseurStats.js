@@ -1,31 +1,34 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-// src/hooks/useFournisseurStats.js
-
-
-import { useAuth } from '@/hooks/useAuth';
+import { getDb } from '@/lib/db';
 
 // Stats d’évolution d’achats (tous fournisseurs ou par fournisseur)
 export function useFournisseurStats() {
-  const { mama_id } = useAuth();
-
   // Stats tous fournisseurs (évolution mensuelle)
   async function fetchStatsAll() {
-    if (!mama_id) return [];
-    const { data, error } = await supabase.rpc("stats_achats_fournisseurs", { mama_id_param: mama_id });
-    if (error) return [];
-    return data || [];
+    const db = await getDb();
+    const rows = await db.select(
+      `SELECT substr(f.date_iso,1,7) as mois, IFNULL(SUM(fl.quantite * fl.prix_unitaire),0) as total_achats
+         FROM factures f
+         JOIN facture_lignes fl ON fl.facture_id = f.id
+         GROUP BY mois
+         ORDER BY mois`
+    );
+    return rows;
   }
 
   // Stats pour 1 fournisseur précis (évolution mensuelle)
   async function fetchStatsForFournisseur(fournisseur_id) {
-    if (!mama_id) return [];
-    const { data, error } = await supabase.rpc("stats_achats_fournisseur", {
-      mama_id_param: mama_id,
-      fournisseur_id_param: fournisseur_id
-    });
-    if (error) return [];
-    return data || [];
+    const db = await getDb();
+    const rows = await db.select(
+      `SELECT substr(f.date_iso,1,7) as mois, IFNULL(SUM(fl.quantite * fl.prix_unitaire),0) as total_achats
+         FROM factures f
+         JOIN facture_lignes fl ON fl.facture_id = f.id
+         WHERE f.fournisseur_id = ?
+         GROUP BY mois
+         ORDER BY mois`,
+      [fournisseur_id]
+    );
+    return rows;
   }
 
   return { fetchStatsAll, fetchStatsForFournisseur };

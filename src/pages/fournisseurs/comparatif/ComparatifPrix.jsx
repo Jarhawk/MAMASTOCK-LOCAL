@@ -1,12 +1,11 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-// src/pages/fournisseurs/comparatif/ComparatifPrix.jsx
 import { useEffect, useState } from "react";
 import PrixFournisseurs from "./PrixFournisseurs";
 
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Select } from "@/components/ui/select";
+import { produits_list } from '@/lib/db';
 
 export default function ComparatifPrix() {
   const { mama_id } = useAuth();
@@ -20,14 +19,8 @@ export default function ComparatifPrix() {
       setLoading(true);
       setError(null);
       try {
-        const { data, error } = await supabase.
-        from("produits").
-        select("id, nom").
-        eq("mama_id", mama_id).
-        order("nom", { ascending: true });
-
-        if (error) throw error;
-        setProduits(data || []);
+        const { rows } = await produits_list("", true, 1, 1000);
+        setProduits(rows || []);
       } catch (err) {
         console.error("Erreur chargement produits :", err.message);
         setError(err);

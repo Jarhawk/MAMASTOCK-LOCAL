@@ -134,7 +134,7 @@ export async function getDb(): Promise<Database> {
 
 export async function produits_list(
   search = "",
-  actif = true,
+  actif: boolean | null = true,
   page = 1,
   pageSize = 20
 ) {
@@ -147,9 +147,13 @@ export async function produits_list(
     where.push("nom LIKE ?");
     params.push(term);
   }
+  if (actif !== null) {
+    where.push("actif = ?");
+    params.push(actif ? 1 : 0);
+  }
   const whereClause = where.length ? `WHERE ${where.join(" AND ")}` : "";
   const rows = await db.select(
-    `SELECT * FROM produits ${whereClause} ORDER BY nom LIMIT ? OFFSET ?`,
+    `SELECT id, nom, unite, famille, actif, pmp, stock_theorique, valeur_stock FROM produits ${whereClause} ORDER BY nom LIMIT ? OFFSET ?`,
     [...params, pageSize, offset]
   );
   const totalRes = await db.select(
@@ -160,29 +164,47 @@ export async function produits_list(
   return { rows, total };
 }
 
-export async function produits_create(p: { id: string; fournisseur_id?: string; nom: string }) {
+export async function produit_get(id: number) {
+  const db = await getDb();
+  const rows = await db.select(
+    `SELECT id, nom, unite, famille, actif, pmp, stock_theorique, valeur_stock FROM produits WHERE id = ? LIMIT 1`,
+    [id]
+  );
+  return rows[0] || null;
+}
+
+export async function produits_create(p: { nom: string; unite?: string | null; famille?: string | null; actif?: boolean }) {
   const db = await getDb();
   await db.execute(
-    "INSERT INTO produits (id, fournisseur_id, nom) VALUES (?, ?, ?)",
-    [p.id, p.fournisseur_id, p.nom]
+    `INSERT INTO produits (nom, unite, famille, actif) VALUES (?,?,?,?)`,
+    [p.nom, p.unite ?? null, p.famille ?? null, p.actif === false ? 0 : 1]
   );
 }
 
 export async function produits_update(
-  id: string,
-  fields: { fournisseur_id?: string; nom?: string }
+  id: number,
+  fields: { nom?: string; unite?: string | null; famille?: string | null; actif?: boolean }
 ) {
   const db = await getDb();
   const sets: string[] = [];
   const values: any[] = [];
-  if (fields.fournisseur_id !== undefined) {
-    sets.push("fournisseur_id = ?");
-    values.push(fields.fournisseur_id);
-  }
   if (fields.nom !== undefined) {
     sets.push("nom = ?");
     values.push(fields.nom);
   }
+  if (fields.unite !== undefined) {
+    sets.push("unite = ?");
+    values.push(fields.unite);
+  }
+  if (fields.famille !== undefined) {
+    sets.push("famille = ?");
+    values.push(fields.famille);
+  }
+  if (fields.actif !== undefined) {
+    sets.push("actif = ?");
+    values.push(fields.actif ? 1 : 0);
+  }
+  if (!sets.length) return;
   values.push(id);
   await db.execute(`UPDATE produits SET ${sets.join(",")} WHERE id = ?`, values);
 }
@@ -198,7 +220,7 @@ export async function fournisseurs_list(
   const where = search ? "WHERE nom LIKE ?" : "";
   const params = search ? [term] : [];
   const rows = await db.select(
-    `SELECT * FROM fournisseurs ${where} ORDER BY nom LIMIT ? OFFSET ?`,
+    `SELECT id, nom, email, actif FROM fournisseurs ${where} ORDER BY nom LIMIT ? OFFSET ?`,
     [...params, limit, offset]
   );
   const totalRes = await db.select(
@@ -209,35 +231,71 @@ export async function fournisseurs_list(
   return { rows, total };
 }
 
-export async function fournisseur_get(id: string) {
+export async function fournisseur_get(id: number) {
   const db = await getDb();
-  const rows = await db.select("SELECT * FROM fournisseurs WHERE id = ? LIMIT 1", [id]);
+  const rows = await db.select(`SELECT id, nom, email, actif FROM fournisseurs WHERE id = ? LIMIT 1`, [id]);
   return rows[0] || null;
 }
 
-export async function fournisseurs_create(f: { id: string; nom: string }) {
+export async function fournisseurs_create(f: { nom: string; email?: string | null; actif?: boolean }) {
   const db = await getDb();
-  await db.execute("INSERT INTO fournisseurs (id, nom) VALUES (?, ?)", [f.id, f.nom]);
+  await db.execute(`INSERT INTO fournisseurs (nom, email, actif) VALUES (?,?,?)`, [
+    f.nom,
+    f.email ?? null,
+    f.actif === false ? 0 : 1,
+  ]);
+}
+
+export async function factures_by_fournisseur(fournisseur_id: number) {
+  const db = await getDb();
+  return await db.select(
+    `SELECT f.id, f.date_iso, IFNULL(SUM(fl.quantite * fl.prix_unitaire),0) AS montant_total, COUNT(fl.id) AS nb_produits
+     FROM factures f
+     LEFT JOIN facture_lignes fl ON fl.facture_id = f.id
+     WHERE f.fournisseur_id = ?
+     GROUP BY f.id, f.date_iso
+     ORDER BY f.date_iso DESC`,
+    [fournisseur_id]
+  );
+}
+
+export async function facture_get(id: number) {
+  const db = await getDb();
+  const factures = await db.select(`SELECT id, fournisseur_id, date_iso FROM factures WHERE id = ? LIMIT 1`, [id]);
+  if (!factures.length) return null;
+  const lignes = await db.select(
+    `SELECT fl.id, fl.produit_id, fl.quantite, fl.prix_unitaire AS prix_unitaire_ht,
+            fl.quantite * fl.prix_unitaire AS montant_ht, 0 AS tva, NULL AS zone_id,
+            p.nom AS produit_nom, p.unite, p.pmp
+       FROM facture_lignes fl
+       JOIN produits p ON p.id = fl.produit_id
+       WHERE fl.facture_id = ?`,
+    [id]
+  );
+  return { ...factures[0], lignes };
 }
 
 export async function facture_create_with_lignes(
-  facture: { id: string; fournisseur_id: string; total: number; date: string },
-  lignes: Array<{ id: string; produit_id: string; quantite: number; prix: number }>
+  facture: { fournisseur_id: number; date: string },
+  lignes: Array<{ produit_id: number; quantite: number; prix: number }>
 ) {
   const db = await getDb();
   await db.execute("BEGIN");
   try {
     await db.execute(
-      "INSERT INTO factures (id, fournisseur_id, total, date) VALUES (?,?,?,?)",
-      [facture.id, facture.fournisseur_id, facture.total, facture.date]
+      `INSERT INTO factures (fournisseur_id, date_iso) VALUES (?, ?)`,
+      [facture.fournisseur_id, facture.date]
     );
+    const res = await db.select("SELECT last_insert_rowid() as id");
+    const factureId = Number(res[0].id);
     for (const l of lignes) {
       await db.execute(
-        "INSERT INTO facture_lignes (id, facture_id, produit_id, quantite, prix) VALUES (?,?,?,?,?)",
-        [l.id, facture.id, l.produit_id, l.quantite, l.prix]
+        `INSERT INTO facture_lignes (facture_id, produit_id, quantite, prix_unitaire) VALUES (?,?,?,?)`,
+        [factureId, l.produit_id, l.quantite, l.prix]
       );
     }
     await db.execute("COMMIT");
+    return factureId;
   } catch (e) {
     await db.execute("ROLLBACK");
     throw e;

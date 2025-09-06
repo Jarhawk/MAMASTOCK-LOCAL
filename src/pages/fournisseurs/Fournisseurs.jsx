@@ -31,8 +31,8 @@ import {
 import FournisseurDetail from './FournisseurDetail';
 import FournisseurForm from './FournisseurForm';
 import { PlusCircle, Search } from 'lucide-react';
-import supabase from '@/lib/supabase'; // [diag]
 import { useAuth } from '@/hooks/useAuth';
+import { fournisseurs_list } from '@/lib/db';
 
 export default function Fournisseurs() {
   const {
@@ -62,22 +62,8 @@ export default function Fournisseurs() {
   const [diagMsg, setDiagMsg] = useState(null); // [diag]
   async function handleApiDiag() {
     if (!import.meta.env.DEV) return;
-    const a = await supabase
-      .from('fournisseurs')
-      .select('id,nom')
-      .eq('mama_id', mama_id)
-      .limit(3);
-    console.log('[api] fournisseurs', { data: a.data, error: a.error }); // [compat]
-    const b = await supabase
-      .from('v_alertes_rupture_api')
-      .select('produit_id,nom,stock_actuel,stock_min,manque')
-      .limit(3);
-    console.log('[api] v_alertes_rupture_api', { data: b.data, error: b.error }); // [compat]
-    const c = await supabase
-      .from('mamas')
-      .select('id,logo_url')
-      .eq('id', mama_id);
-    console.log('[api] mamas', { data: c.data, error: c.error }); // [compat]
+    const { rows } = await fournisseurs_list('', 3, 1);
+    console.log('[api] fournisseurs', rows); // [compat]
   }
 
   const filters = useMemo(
@@ -119,19 +105,12 @@ export default function Fournisseurs() {
   };
 
   async function handleDiag() {
-    const { data, error: diagError } = await supabase
-      .from('fournisseurs')
-      .select('*')
-      .eq('mama_id', mama_id)
-      .limit(5);
-    console.log('[diag] fournisseurs', { data, error: diagError }); // [diag]
-    if (diagError) {
-      if (diagError.code === 'PGRST116') setDiagMsg('RLS KO');
-      else if (diagError.status === 401) setDiagMsg('Token invalide');
-      else if (diagError.status === 500) setDiagMsg('Erreur base de données');
-      else setDiagMsg(diagError.message);
-    } else {
-      setDiagMsg('Connexion Supabase OK');
+    try {
+      const { rows } = await fournisseurs_list('', 5, 1);
+      console.log('[diag] fournisseurs', rows); // [diag]
+      setDiagMsg('Connexion SQLite OK');
+    } catch (e) {
+      setDiagMsg('Erreur base de données');
     }
   }
 

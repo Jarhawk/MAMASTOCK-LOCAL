@@ -1,12 +1,11 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 /* eslint-disable react-hooks/exhaustive-deps */
 // src/pages/FournisseurDetail.jsx
 import { useState, useEffect } from 'react';
 import { useFournisseurStats } from '@/hooks/useFournisseurStats';
 import { useProduitsFournisseur } from '@/hooks/useProduitsFournisseur';
-import { useInvoices } from '@/hooks/useInvoices';
 import { useFournisseurs } from '@/hooks/useFournisseurs';
+import { factures_by_fournisseur, fournisseur_get } from '@/lib/db';
 
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
@@ -29,7 +28,6 @@ export default function FournisseurDetail({ id }) {
   const { mama_id } = useAuth();
   const { fetchStatsForFournisseur } = useFournisseurStats();
   const { getProduitsDuFournisseur } = useProduitsFournisseur();
-  const { fetchFacturesByFournisseur } = useInvoices();
   const { updateFournisseur } = useFournisseurs();
   const [stats, setStats] = useState([]);
   const [invoices, setInvoices] = useState([]);
@@ -42,38 +40,12 @@ export default function FournisseurDetail({ id }) {
     if (!id || !mama_id) return;
     setLoading(true);
     Promise.all([
-    fetchStatsForFournisseur(id).then(setStats),
-    fetchFacturesByFournisseur(id).then(async (arr) => {
-      const withCount = await Promise.all(
-        (arr || []).map(async (f) => {
-          const { count } = await supabase.
-          from('facture_lignes').
-          select('id', { count: 'exact', head: true }).
-          eq('facture_id', f.id).
-          eq('mama_id', mama_id);
-          return { ...f, nb_produits: count || 0 };
-        })
-      );
-      setInvoices(withCount);
-    }),
-    supabase.
-    from('fournisseurs').
-    select(
-      'id, nom, actif, created_at, contact:fournisseur_contacts!fournisseur_id(nom,email,tel)'
-    ).
-    eq('id', id).
-    eq('mama_id', mama_id).
-    single().
-    then(({ data }) => {
-      if (data)
-      setFournisseur({
-        ...data,
-        contact: Array.isArray(data.contact) ?
-        data.contact[0] :
-        data.contact
-      });
-    })]
-    ).finally(() => setLoading(false));
+      fetchStatsForFournisseur(id).then(setStats),
+      factures_by_fournisseur(id).then(setInvoices),
+      fournisseur_get(id).then((data) => {
+        if (data) setFournisseur({ ...data });
+      }),
+    ]).finally(() => setLoading(false));
   }, [id, mama_id]);
 
   // Met à jour le top produits lors du changement d'id
