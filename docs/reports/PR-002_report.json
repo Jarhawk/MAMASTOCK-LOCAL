@@ -1,0 +1,31 @@
+{
+  "pr_number": "002",
+  "title": "SQLite migrations valeur_stock and helpers",
+  "summary": "add valeur_stock column with triggers and db scripts",
+  "files": {
+    "added": [
+      "db/sqlite/003_pmp_valeur_stock.sql",
+      "public/migrations/003_pmp_valeur_stock.sql",
+      "docs/reports/PR-002_report.md",
+      "docs/reports/PR-002_report.json"
+    ],
+    "modified": [
+      "scripts/sqlite-apply.js",
+      "scripts/migration-smoke.js",
+      "package.json",
+      "db/sqlite/README_DB.md",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "db smoke",
+      "command": "npm run db:smoke",
+      "status": "pass",
+      "stdout": "migration smoke ok insert stock=10 valeur=25 pmp=2.5 update stock=20 valeur=60 pmp=3 delete stock=0 valeur=0 pmp=0"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
