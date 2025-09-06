@@ -13,7 +13,7 @@ export default function SystemTools() {
   const restore = async () => {
     const file = await open({ filters: [{ name: "Base", extensions: ["db"] }] });
     if (file) {
-      await restoreDb(file as string);
+      await restoreDb(String(file));
       setMessage("Base restaurée. Veuillez redémarrer l'application.");
     }
   };

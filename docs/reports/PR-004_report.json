@@ -1,0 +1,54 @@
+{
+  "pr_number": "004",
+  "title": "purge Supabase/PG + README split",
+  "summary": "remove supabase and pg dependencies, split README for offline vs cloud",
+  "files": {
+    "added": [
+      "README-cloud.md",
+      "docs/reports/PR-004_report.md",
+      "docs/reports/PR-004_report.json"
+    ],
+    "modified": [
+      "README.md",
+      "package.json",
+      "package-lock.json",
+      "docs/STATUS.md",
+      "src/globals.css",
+      "src/lib/supa/client.ts",
+      "src/lib/supa/textSearch.ts",
+      "src/pages/parametrage/DataFolder.jsx",
+      "src/pages/parametrage/SystemTools.jsx",
+      "src/types/supabase.d.ts",
+      "vite.config.ts"
+    ],
+    "removed": [
+      "README-offline.md",
+      "src/api/public/index.js",
+      "src/api/public/produits.js",
+      "src/api/public/promotions.js",
+      "src/api/public/stock.js"
+    ]
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1125 packages, and audited 1132 packages in 20s"
+    },
+    {
+      "name": "build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "built in 24.06s"
+    },
+    {
+      "name": "db smoke",
+      "command": "npm run db:smoke",
+      "status": "pass",
+      "stdout": "migration smoke ok insert stock=10 valeur=25 pmp=2.5 update stock=20 valeur=60 pmp=3 delete stock=0 valeur=0 pmp=0"
+    }
+  ],
+  "todos": ["replace remaining Supabase calls with local DAL"],
+  "risks": []
+}

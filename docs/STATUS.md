@@ -7,9 +7,10 @@ This document tracks the global progress of the project.
 ### Fait
 - Initial setup
 - SQLite migrations (valeur_stock + triggers) et scripts db:apply/db:smoke
+- Migration vers Tauri v2 + purge Supabase/PG
 
 ### En cours
-- Migration vers Tauri v2 et plugin SQL v2
+- TBD
 
 ### À faire
 - TBD
