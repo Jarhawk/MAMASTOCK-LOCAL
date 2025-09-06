@@ -1,35 +1,24 @@
 {
-  "$schema": "https://schema.tauri.app/config/2",
-  "productName": "MamaStock",
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "productName": "MamaStock Local",
+  "identifier": "com.mamastock.local",
   "version": "0.1.0",
-  "identifier": "com.mamastock.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
-    "devPath": "http://localhost:5173",
-    "distDir": "../dist"
+    "devUrl": "http://localhost:5173",
+    "frontendDist": "../dist"
   },
-  "tauri": {
-    "bundle": {
-      "targets": ["msi", "nsis"],
-      "windows": {
-        "certificateThumbprint": null,
-        "timestampUrl": null
-      }
-    },
+  "app": {
+    "withGlobalTauri": true,
     "windows": [
-      {
-        "title": "MamaStock",
-        "width": 1024,
-        "height": 768
-      }
+      { "title": "MamaStock Local", "width": 1200, "height": 800, "resizable": true }
     ],
-    "plugins": {
-      "sql": {
-        "default": {
-          "path": "mamastock.db"
-        }
-      }
-    }
+    "security": { "csp": null }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["msi"],
+    "windows": { "webviewInstallMode": { "type": "embedBootstrapper" } }
   }
 }

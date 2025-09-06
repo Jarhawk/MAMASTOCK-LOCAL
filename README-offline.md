@@ -14,5 +14,16 @@ Un fichier `db.lock.json` protège l'accès à la base. Un poste doit être ferm
 Pour partager les données entre postes, utilisez un outil de synchronisation comme **Syncthing** sur le dossier de données.
 
 ## Build
-- `npx tauri dev` pour le mode développement.
-- `npx tauri build` pour produire l'exécutable et l'installateur MSI.
+
+```bash
+npm ci
+npx tauri dev
+npx tauri build
+```
+
+Pour publier un installateur via CI :
+
+```bash
+git tag vX.Y.Z
+git push origin vX.Y.Z
+```

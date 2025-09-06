@@ -1,13 +1,13 @@
 import Database from "@tauri-apps/plugin-sql";
 import { appDataDir, join } from "@tauri-apps/api/path";
-import { createDir, readTextFile, writeTextFile, exists } from "@tauri-apps/api/fs";
+import { mkdir, readTextFile, writeTextFile, exists } from "@tauri-apps/plugin-fs";
 
 let dbPromise: Promise<Database> | null = null;
 
 async function configPath(): Promise<string> {
   const base = await appDataDir();
   const dir = await join(base, "MamaStock");
-  await createDir(dir, { recursive: true });
+  await mkdir(dir, { recursive: true });
   return await join(dir, "config.json");
 }
 
@@ -34,7 +34,7 @@ export async function setDataDir(dir: string) {
 export async function getDb(): Promise<Database> {
   if (!dbPromise) {
     const dir = await getDataDir();
-    await createDir(dir, { recursive: true });
+    await mkdir(dir, { recursive: true });
     const dbPath = await join(dir, "mamastock.db");
     dbPromise = Database.load(`sqlite:${dbPath}`);
   }
