@@ -17,8 +17,8 @@ jobs:
         with:
           targets: x86_64-pc-windows-msvc
       - run: npm ci
-      - name: Generate icons (if script exists)
-        run: npm run icon:gen --if-present
+      - name: Generate icons
+        run: npm run icon:gen
       - run: npm run build
       - uses: tauri-apps/tauri-action@v0
         with:

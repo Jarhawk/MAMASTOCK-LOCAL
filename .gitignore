@@ -29,5 +29,5 @@ weekly_cost_centers.xlsx
 backup_*.json
 invoices_*.xlsx
 
-# Tauri generated icons
-src-tauri/icons
+# Tauri generated icons (not tracked)
+src-tauri/icons/

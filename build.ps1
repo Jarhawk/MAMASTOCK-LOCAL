@@ -26,8 +26,8 @@ try {
     }
 
     npm ci
-    npm run icon:gen
     npm run build
+    npm run icon:gen
     npx tauri build
 
     $bundlePath = Join-Path $PSScriptRoot 'src-tauri\\target\\release\\bundle'
