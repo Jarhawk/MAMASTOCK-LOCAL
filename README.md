@@ -27,6 +27,18 @@ If linting or tests fail because required packages are missing, simply run
 `npm install` again. This ensures `tesseract.js`, `vitest`, `@eslint/js` and
 `playwright` are available before running the commands above.
 
+## Release
+
+To create a Windows installer:
+
+1. Commit your changes and bump the version if needed.
+2. Tag the commit with a `v*` version:
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+3. GitHub Actions builds MSI and EXE installers with Tauri and attaches them to a release.
+
 During production builds, `console.debug` output is automatically disabled so
 the browser console stays clean. Use the `DEV` mode if you need verbose debug information.
 
