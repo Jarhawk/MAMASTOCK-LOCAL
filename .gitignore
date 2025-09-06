@@ -28,3 +28,6 @@ test-results
 weekly_cost_centers.xlsx
 backup_*.json
 invoices_*.xlsx
+
+# Tauri generated icons
+src-tauri/icons
