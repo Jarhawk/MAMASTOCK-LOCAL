@@ -31,6 +31,7 @@ export default function Sidebar() {
   const canFamilles = canParam("familles");
   const canSousFamilles = canParam("sous_familles");
   const canUnites = canParam("unites");
+  const canData = canParam("settings");
   const hasParamModule =
     enabledModules?.includes?.("parametrage") ||
     rights?.enabledModules?.includes?.("parametrage");
@@ -169,6 +170,16 @@ export default function Sidebar() {
                   }
                 >
                   Unités
+                </NavLink>
+              )}
+              {canData && (
+                <NavLink
+                  to="/parametrage/data"
+                  className={({ isActive }) =>
+                    isActive ? "text-mamastockGold" : ""
+                  }
+                >
+                  Dossier données
                 </NavLink>
               )}
             </div>

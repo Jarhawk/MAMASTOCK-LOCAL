@@ -28,6 +28,7 @@ import {
   Mail,
   MessageCircle,
   Plug,
+  Folder,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -159,6 +160,7 @@ export default function Sidebar() {
         { module: "access", to: "/parametrage/access", label: "Accès", icon: <Shield size={16} /> },
         { module: "apikeys", to: "/parametrage/api-keys", label: "API Keys", icon: <Key size={16} /> },
         { module: "parametrage", to: "/parametrage/api-fournisseurs", label: "API Fournisseurs", icon: <Plug size={16} /> },
+        { module: "settings", to: "/parametrage/data", label: "Dossier données", icon: <Folder size={16} /> },
         { module: "settings", to: "/parametrage/settings", label: "Autres", icon: <Settings size={16} /> },
         { module: "zones_stock", to: "/parametrage/zones", label: "Zones de stock", icon: <Boxes size={16} /> },
         { module: "parametrage", to: "/parametrage/familles", label: "Familles", icon: <Boxes size={16} /> },
