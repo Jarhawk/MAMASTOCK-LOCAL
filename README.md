@@ -39,6 +39,13 @@ To create a Windows installer:
    ```
 3. GitHub Actions builds MSI and EXE installers with Tauri and attaches them to a release.
 
+### One-click build
+
+On Windows 11 you can double-click `build.ps1` to install Node.js LTS, Rustup,
+Visual Studio Build Tools and the WiX Toolset via `winget`, then run `npm ci`,
+`npm run build` and `npx tauri build`. The script logs output to `build.log`
+and prints the path to the generated installer bundle.
+
 During production builds, `console.debug` output is automatically disabled so
 the browser console stays clean. Use the `DEV` mode if you need verbose debug information.
 
