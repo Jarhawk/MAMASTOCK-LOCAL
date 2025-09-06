@@ -4,8 +4,23 @@ import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
+import { writeBinaryFile, createDir } from '@tauri-apps/api/fs';
+import { join } from '@tauri-apps/api/path';
+import { getExportDir } from '@/lib/db';
 
-export function exportToPDF(data = [], config = {}) {
+async function saveBlob(blob, filename) {
+  if (typeof window !== 'undefined' && window.__TAURI__) {
+    const dir = await getExportDir();
+    await createDir(dir, { recursive: true });
+    const path = await join(dir, filename);
+    const buf = await blob.arrayBuffer();
+    await writeBinaryFile(path, new Uint8Array(buf));
+  } else {
+    saveAs(blob, filename);
+  }
+}
+
+export async function exportToPDF(data = [], config = {}) {
   const {
     filename = 'export.pdf',
     columns = [],
@@ -25,10 +40,11 @@ export function exportToPDF(data = [], config = {}) {
       : Object.values(item)
   );
   doc.autoTable({ head: headers, body: rows, styles: { fontSize: 9 } });
-  doc.save(filename);
+  const blob = doc.output('blob');
+  await saveBlob(blob, filename);
 }
 
-export function exportToExcel(data = [], config = {}) {
+export async function exportToExcel(data = [], config = {}) {
   const {
     filename = 'export.xlsx',
     sheet = 'Sheet1',
@@ -49,10 +65,10 @@ export function exportToExcel(data = [], config = {}) {
   const ws = XLSX.utils.json_to_sheet(arr);
   XLSX.utils.book_append_sheet(wb, ws, sheet);
   const buf = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-  saveAs(new Blob([buf]), filename);
+  await saveBlob(new Blob([buf]), filename);
 }
 
-export function exportToCSV(data = [], config = {}) {
+export async function exportToCSV(data = [], config = {}) {
   const {
     filename = 'export.csv',
     columns = [],
@@ -71,7 +87,7 @@ export function exportToCSV(data = [], config = {}) {
       : Object.values(item).map(quote).join(delim)
   );
   const csv = [header, ...rows].join('\n');
-  saveAs(new Blob([csv], { type: 'text/csv;charset=utf-8;' }), filename);
+  await saveBlob(new Blob([csv], { type: 'text/csv;charset=utf-8;' }), filename);
 }
 
 export function exportToTSV(data = [], config = {}) {

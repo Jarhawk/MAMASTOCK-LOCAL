@@ -181,6 +181,24 @@ export default function Factures() {
                   >
                     Export Excel
                   </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      exportData({ type: 'factures', format: 'csv' })
+                    }
+                    disabled={exporting}
+                  >
+                    Export CSV
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      exportData({ type: 'factures', format: 'pdf' })
+                    }
+                    disabled={exporting}
+                  >
+                    Export PDF
+                  </Button>
                   <Button variant="outline" onClick={() => setShowImport(true)}>
                     Importer
                   </Button>
@@ -207,6 +225,22 @@ export default function Factures() {
                       disabled={exporting}
                     >
                       Export Excel
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() =>
+                        exportData({ type: 'factures', format: 'csv' })
+                      }
+                      disabled={exporting}
+                    >
+                      Export CSV
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() =>
+                        exportData({ type: 'factures', format: 'pdf' })
+                      }
+                      disabled={exporting}
+                    >
+                      Export PDF
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => setShowImport(true)}>
                       Importer

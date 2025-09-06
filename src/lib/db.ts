@@ -1,5 +1,5 @@
 import Database from "@tauri-apps/plugin-sql";
-import { appDataDir, join } from "@tauri-apps/api/path";
+import { appDataDir, documentDir, join } from "@tauri-apps/api/path";
 import { createDir, readTextFile, writeTextFile, exists } from "@tauri-apps/api/fs";
 
 let dbPromise: Promise<Database> | null = null;
@@ -11,24 +11,46 @@ async function configPath(): Promise<string> {
   return await join(dir, "config.json");
 }
 
-export async function getDataDir(): Promise<string> {
+async function readConfig(): Promise<any> {
   const cfg = await configPath();
   if (await exists(cfg)) {
     try {
-      const data = JSON.parse(await readTextFile(cfg));
-      if (data.dataDir) return data.dataDir as string;
+      return JSON.parse(await readTextFile(cfg));
     } catch (_) {
       /* ignore */
     }
   }
+  return {};
+}
+
+async function writeConfig(data: any) {
+  const cfg = await configPath();
+  await writeTextFile(cfg, JSON.stringify(data));
+}
+
+export async function getDataDir(): Promise<string> {
+  const cfg = await readConfig();
+  if (cfg.dataDir) return cfg.dataDir as string;
   const base = await appDataDir();
   return await join(base, "MamaStock", "data");
 }
 
 export async function setDataDir(dir: string) {
-  const cfg = await configPath();
-  await writeTextFile(cfg, JSON.stringify({ dataDir: dir }));
+  const cfg = await readConfig();
+  await writeConfig({ ...cfg, dataDir: dir });
   dbPromise = null; // force reload
+}
+
+export async function getExportDir(): Promise<string> {
+  const cfg = await readConfig();
+  if (cfg.exportDir) return cfg.exportDir as string;
+  const base = await documentDir();
+  return await join(base, "MamaStock", "Exports");
+}
+
+export async function setExportDir(dir: string) {
+  const cfg = await readConfig();
+  await writeConfig({ ...cfg, exportDir: dir });
 }
 
 export async function getDb(): Promise<Database> {

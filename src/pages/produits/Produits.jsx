@@ -18,8 +18,8 @@ import { Plus as PlusIcon, FileDown as FileDownIcon } from "lucide-react";
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import ProduitRow from "@/components/produits/ProduitRow";
-import { exportExcelProduits } from "@/utils/excelUtils";
 import ModalImportProduits from "@/components/produits/ModalImportProduits";
+import useExport from '@/hooks/useExport';
 
 const PAGE_SIZE = 50;
 
@@ -28,6 +28,7 @@ export default function Produits() {
     document.title = "Produits";
   }, []);
   const { hasAccess, mama_id } = useAuth();
+  const { exportData, loading: exporting } = useExport();
   const [showForm, setShowForm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
@@ -74,14 +75,9 @@ export default function Produits() {
   }, [refetch, search, familleFilter, sousFamilleFilter, zoneFilter, actifFilter, page, sortField, sortOrder]);
 
 
-  async function handleExportExcel() {
-    try {
-      await exportExcelProduits(mama_id);
-      toast.success("Export Excel réussi");
-    } catch (e) {
-      toast.error(e.message);
-    }
-  }
+  const handleExport = (format) => {
+    exportData({ type: 'produits', format });
+  };
 
   useEffect(() => {
     if (!canView) return;
@@ -236,11 +232,27 @@ export default function Produits() {
           <div className="flex gap-2 flex-wrap">
             <Button
               className="min-w-[140px]"
-              onClick={handleExportExcel}
+              onClick={() => handleExport('excel')}
               icon={FileDownIcon}
-              disabled={rows.length === 0}
+              disabled={rows.length === 0 || exporting}
             >
-              Exporter vers Excel
+              Export Excel
+            </Button>
+            <Button
+              className="min-w-[140px]"
+              onClick={() => handleExport('csv')}
+              icon={FileDownIcon}
+              disabled={rows.length === 0 || exporting}
+            >
+              Export CSV
+            </Button>
+            <Button
+              className="min-w-[140px]"
+              onClick={() => handleExport('pdf')}
+              icon={FileDownIcon}
+              disabled={rows.length === 0 || exporting}
+            >
+              Export PDF
             </Button>
             <Button
               className="min-w-[140px]"

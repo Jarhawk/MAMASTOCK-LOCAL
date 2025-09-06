@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/api/dialog";
-import { setDataDir, getDataDir } from "@/lib/db";
+import { setDataDir, getDataDir, getExportDir, setExportDir } from "@/lib/db";
 
 export default function DataFolder() {
   const [dir, setDir] = useState("");
   const [saved, setSaved] = useState(false);
+  const [exportDir, setExportDirState] = useState("");
+  const [exportSaved, setExportSaved] = useState(false);
 
   useEffect(() => {
     getDataDir().then(setDir);
+    getExportDir().then(setExportDirState);
   }, []);
 
   const choose = async () => {
@@ -15,10 +18,22 @@ export default function DataFolder() {
     if (selected) setDir(selected as string);
   };
 
+  const chooseExport = async () => {
+    const selected = await open({ directory: true });
+    if (selected) setExportDirState(selected as string);
+  };
+
   const save = async () => {
     if (dir) {
       await setDataDir(dir);
       setSaved(true);
+    }
+  };
+
+  const saveExport = async () => {
+    if (exportDir) {
+      await setExportDir(exportDir);
+      setExportSaved(true);
     }
   };
 
@@ -43,6 +58,28 @@ export default function DataFolder() {
         {saved && (
           <p className="text-sm text-gray-500">
             Redémarrez l'application pour appliquer les modifications.
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <label>Dossier des exports</label>
+        <input
+          value={exportDir}
+          onChange={(e) => setExportDirState(e.target.value)}
+          className="border p-1 w-full"
+        />
+        <div className="flex gap-2">
+          <button onClick={chooseExport} className="border px-2 py-1">
+            Choisir...
+          </button>
+          <button onClick={saveExport} className="border px-2 py-1">
+            Enregistrer
+          </button>
+        </div>
+        {exportSaved && (
+          <p className="text-sm text-gray-500">
+            Le dossier d'export a été enregistré.
           </p>
         )}
       </div>

@@ -29,48 +29,80 @@ export default function useExport() {
     setLoading(true);
     try {
       let data = [];
+      let columns = [];
+      let filenameBase = type;
       if (type === 'fiches') {
-        const res = await supabase.
-        from('fiches_techniques').
-        select('*').
-        eq('mama_id', mama_id);
+        const res = await supabase
+          .from('fiches_techniques')
+          .select('*')
+          .eq('mama_id', mama_id);
         data = res.data || [];
       } else if (type === 'inventaire') {
-        const res = await supabase.
-        from('inventaires').
-        select('*, lignes:produits_inventaire!inventaire_id(*)').
-        eq('mama_id', mama_id);
+        const res = await supabase
+          .from('inventaires')
+          .select('*, lignes:produits_inventaire!inventaire_id(*)')
+          .eq('mama_id', mama_id);
         data = res.data || [];
       } else if (type === 'produits') {
-        const res = await supabase.
-        from('produits').
-        select(
-          'id, nom, unite_id, unite:unites!fk_produits_unite(nom), famille_id, sous_famille_id, famille:familles!fk_produits_famille(nom), sous_famille:sous_familles!fk_produits_sous_famille(nom), fournisseur_produits:fournisseur_produits!fournisseur_produits_produit_id_fkey(*, fournisseur:fournisseurs!fk_fournisseur_produits_fournisseur_id(nom))'
-        ).
-        eq('mama_id', mama_id);
+        const res = await supabase
+          .from('produits')
+          .select('nom, unite:unites!fk_produits_unite(nom), famille:familles!fk_produits_famille(nom)')
+          .eq('mama_id', mama_id);
+        data = (res.data || []).map(p => ({
+          nom: p.nom,
+          unite: p.unite?.nom || '',
+          famille: p.famille?.nom || '',
+        }));
+        columns = [
+          { key: 'nom', label: 'Nom' },
+          { key: 'unite', label: 'Unité' },
+          { key: 'famille', label: 'Famille' },
+        ];
+        filenameBase = 'produits';
+      } else if (type === 'fournisseurs') {
+        const res = await supabase
+          .from('fournisseurs')
+          .select('nom, contact_nom, contact_email, contact_tel')
+          .eq('mama_id', mama_id);
         data = res.data || [];
+        columns = [
+          { key: 'nom', label: 'Nom' },
+          { key: 'contact_tel', label: 'Téléphone' },
+          { key: 'contact_nom', label: 'Contact' },
+          { key: 'contact_email', label: 'Email' },
+        ];
+        filenameBase = 'fournisseurs';
       } else if (type === 'factures') {
-        let query = supabase.
-        from('factures').
-        select('*, lignes:facture_lignes!facture_id(*)').
-        eq('mama_id', mama_id);
+        let query = supabase
+          .from('factures')
+          .select('numero, date_facture, montant')
+          .eq('mama_id', mama_id);
         if (options.start) query = query.gte('date_facture', options.start);
         if (options.end) query = query.lte('date_facture', options.end);
         const res = await query;
         data = res.data || [];
+        columns = [
+          { key: 'numero', label: 'Numéro' },
+          { key: 'date_facture', label: 'Date' },
+          { key: 'montant', label: 'Montant' },
+        ];
+        filenameBase = 'factures';
       }
 
-      if (format === 'pdf') exportToPDF(data, options);else
-      if (format === 'excel') exportToExcel(data, options);else
-      if (format === 'csv') exportToCSV(data, options);else
-      if (format === 'tsv') exportToTSV(data, options);else
-      if (format === 'json') exportToJSON(data, options);else
-      if (format === 'xml') exportToXML(data, options);else
-      if (format === 'html') exportToHTML(data, options);else
-      if (format === 'markdown') exportToMarkdown(data, options);else
-      if (format === 'yaml') exportToYAML(data, options);else
-      if (format === 'txt') exportToTXT(data, options);else
-      if (format === 'clipboard') await exportToClipboard(data, options);else
+      const ext = format === 'excel' ? 'xlsx' : format === 'csv' ? 'csv' : format === 'pdf' ? 'pdf' : format;
+      const exportOptions = { ...options, columns, filename: `${filenameBase}.${ext}` };
+
+      if (format === 'pdf') await exportToPDF(data, exportOptions); else
+      if (format === 'excel') await exportToExcel(data, exportOptions); else
+      if (format === 'csv') await exportToCSV(data, exportOptions); else
+      if (format === 'tsv') await exportToTSV(data, exportOptions); else
+      if (format === 'json') await exportToJSON(data, exportOptions); else
+      if (format === 'xml') await exportToXML(data, exportOptions); else
+      if (format === 'html') await exportToHTML(data, exportOptions); else
+      if (format === 'markdown') await exportToMarkdown(data, exportOptions); else
+      if (format === 'yaml') await exportToYAML(data, exportOptions); else
+      if (format === 'txt') await exportToTXT(data, exportOptions); else
+      if (format === 'clipboard') await exportToClipboard(data, exportOptions); else
       if (format === 'print') printView(options.content);
 
       toast.success('Export effectué');
