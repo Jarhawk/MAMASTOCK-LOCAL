@@ -1,4 +1,4 @@
-import { join } from "@tauri-apps/plugin-path";
+import { join } from "@tauri-apps/api/path";
 import { exists, readTextFile, writeTextFile, remove } from "@tauri-apps/plugin-fs";
 import { appWindow } from "@tauri-apps/api/window";
 import { v4 as uuidv4 } from "uuid";

@@ -8,7 +8,6 @@ license = "MIT"
 
 [dependencies]
 tauri = { version = "2", features = ["wry"] }
-tauri-plugin-path = "2"
 tauri-plugin-fs = "2"
 tauri-plugin-dialog = "2"
 tauri-plugin-process = "2"
