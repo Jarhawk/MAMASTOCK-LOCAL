@@ -15,6 +15,16 @@ Start-Transcript -Path $logPath -Append | Out-Null
 try {
     Set-Location -Path $PSScriptRoot
 
+    rustup set default-host x86_64-pc-windows-msvc
+    rustup toolchain install stable-x86_64-pc-windows-msvc
+    rustup default stable-x86_64-pc-windows-msvc
+    rustc -Vv
+    cargo -Vv
+
+    if ($env:PATH -match 'msys|mingw|git\\usr\\bin') {
+        Write-Warning 'MSYS/MinGW detected in PATH. Build may fail.'
+    }
+
     $packages = @(
         'OpenJS.NodeJS.LTS',
         'Rustlang.Rustup',
