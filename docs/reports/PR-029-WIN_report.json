@@ -1,0 +1,40 @@
+{
+  "pr_number": "029-WIN",
+  "title": "chore: stabilize Windows build (cache + longer timeout + detailed logs)",
+  "summary": "Ajout de caches npm/cargo, timeout prolongé et logs détaillés pour stabiliser le build Windows (CI et script local).",
+  "files": {
+    "added": [
+      "docs/reports/PR-029-WIN_report.md",
+      "docs/reports/PR-029-WIN_report.json"
+    ],
+    "modified": [
+      ".github/workflows/build-windows.yml",
+      ".github/workflows/verify-local.yml",
+      "build.ps1",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1134 packages, and audited 1141 packages in 12s"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "\u2713 built in 15.70s"
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "The system library `glib-2.0` required by crate `glib-sys` was not found."
+    }
+  ],
+  "todos": [],
+  "risks": []
+}

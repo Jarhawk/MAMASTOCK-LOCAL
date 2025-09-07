@@ -31,6 +31,7 @@ This document tracks the global progress of the project.
 - Exécution forcée Windows : workflows assertent Windows, build.ps1 bloque WSL/Git Bash et la doc impose PowerShell
 - Configuration ESLint standardisée (React/TS) et script lint mis à jour
 - Finalisation release Windows 1.0.0 : rappel QA, publication via tag `v1.0.0` et vérification de l’artefact MSI
+- Stabilisation du build Windows : caches npm/cargo, timeout allongé et logs détaillés (CI + transcript PowerShell)
 
 ### En cours
 - TBD
