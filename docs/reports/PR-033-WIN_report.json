@@ -1,0 +1,58 @@
+{
+  "pr_number": "033-WIN",
+  "title": "fix: MSI icon sans binaires (SVG source + génération au build)",
+  "summary": "Commit un logo SVG texte et génère les icônes au build sans inclure de binaires.",
+  "files": {
+    "added": [
+      "docs/reports/PR-033-WIN_report.md",
+      "docs/reports/PR-033-WIN_report.json"
+    ],
+    "modified": [
+      "assets/logo.svg",
+      ".gitignore",
+      "package.json",
+      "src-tauri/tauri.conf.json",
+      "build.ps1",
+      ".github/workflows/build-windows.yml",
+      ".github/workflows/verify-local.yml",
+      "README.md",
+      "README-offline.md",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1134 packages, and audited 1141 packages in 13s"
+    },
+    {
+      "name": "web build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "✓ built in 18.35s"
+    },
+    {
+      "name": "generate icons",
+      "command": "npm run icon:gen",
+      "status": "pass",
+      "stdout": "ICO Creating icon.ico"
+    },
+    {
+      "name": "tauri version",
+      "command": "npx tauri --version",
+      "status": "pass",
+      "stdout": "tauri-cli 2.8.4"
+    },
+    {
+      "name": "tauri build",
+      "command": "npx tauri build",
+      "status": "warn",
+      "stdout": "Built application at: /workspace/MAMASTOCK-LOCAL/src-tauri/target/release/mamastock"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}

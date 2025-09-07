@@ -30,4 +30,5 @@ backup_*.json
 invoices_*.xlsx
 
 # Tauri generated icons (not tracked)
-src-tauri/icons/
+/src-tauri/icons/
+/src-tauri/target/

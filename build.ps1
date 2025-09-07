@@ -72,13 +72,10 @@ try {
 
     npm ci
 
-    if (Select-String '"icon:gen"' -Path package.json -Quiet) {
-        npm run icon:gen
-    }
-
     npm run build
     where.exe lib.exe
     if ($LASTEXITCODE -ne 0) { Write-Error "lib.exe introuvable"; exit 1 }
+    if (-not (Test-Path "src-tauri\\icons\\icon.ico")) { npm run icon:gen }
     npx tauri build
 
     $bundlePath = Join-Path $PSScriptRoot 'src-tauri\\target\\release\\bundle'
