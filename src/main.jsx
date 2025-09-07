@@ -1,15 +1,19 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-// === Debug global errors (temp) ===
+// === Debug global errors ===
+import { appendLog } from "@/debug/logger";
 window.addEventListener('error', (e) => {
+  appendLog('[GlobalError] ' + (e?.error?.stack || e?.message));
   console.error('[GlobalError]', e?.error || e?.message || e);
 });
 window.addEventListener('unhandledrejection', (e) => {
+  appendLog('[UnhandledRejection] ' + (e?.reason?.stack || e?.reason));
   console.error('[UnhandledRejection]', e?.reason || e);
 });
 // === /Debug ===
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import ErrorBoundary from "@/debug/ErrorBoundary";
 import "./globals.css";
 import 'nprogress/nprogress.css';
 import "@/i18n/i18n";
@@ -68,7 +72,9 @@ root.render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>
