@@ -4,7 +4,7 @@ Exécuter build et dev dans **PowerShell Windows** (Administrateur), pas WSL/Git
 
 Parcours manuel pour valider une release candidate Windows.
 
-Parcours test : login admin → créer fournisseur/produit/facture (qty=10 prix=2.5) → pmp=2.5 stock=10 → export → backup → restore → verrou bi-postes.
+Parcours test : login admin → créer fournisseur/produit → facture qty=10 prix=2.5 → pmp=2.5 & stock=10 → export → backup → restore → verrou 2 postes.
 
 1. Lancer l'application puis se connecter avec l'administrateur créé via `npm run seed:admin`.
 2. Créer un fournisseur.
@@ -15,6 +15,7 @@ Parcours test : login admin → créer fournisseur/produit/facture (qty=10 prix
    Vérifier ensuite que le produit affiche un stock de 10 et un PMP de 2.5.
 5. Exporter les produits en CSV **et** en XLSX, puis sauvegarder la base de données, la restaurer et vérifier le redémarrage de l'application.
 6. Tester le verrou distribué : une instance A est ouverte, démarrer une instance B → A se ferme et B prend la main.
+7. Publier la release : `git tag v1.0.0` puis `git push origin v1.0.0` (MSI sur GitHub).
 
 ## Astuce build Windows
 

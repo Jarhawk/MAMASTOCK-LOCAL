@@ -1,0 +1,35 @@
+{
+  "pr_number": "030-WIN",
+  "title": "chore: Windows Release 1.0.0 (notes + installer check)",
+  "summary": "Finalisation de la release Windows 1.0.0 : notes de version, rappel QA et script de vérification post-installation.",
+  "files": {
+    "added": [
+      "scripts/postinstall-check.ps1",
+      "docs/reports/PR-030-WIN_report.md",
+      "docs/reports/PR-030-WIN_report.json"
+    ],
+    "modified": [
+      "CHANGELOG.md",
+      "README.md",
+      "docs/QA.md",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "tag test build",
+      "command": "git tag v1.0.0-rc && npm run build && npx tauri build",
+      "status": "fail",
+      "stdout": "The system library `glib-2.0` required by crate `glib-sys` was not found."
+    },
+    {
+      "name": "postinstall check",
+      "command": "pwsh scripts/postinstall-check.ps1",
+      "status": "fail",
+      "stdout": "Cannot bind argument to parameter 'Path' because it is null."
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
