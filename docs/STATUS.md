@@ -27,6 +27,7 @@ This document tracks the global progress of the project.
 - Migration du plugin SQL vers le Builder v2 avec permissions dédiées et build Windows revalidé
 - Sanity finale Windows : extension du script doctor (plugin SQL + capacités) et rappel du guide de publication
 - Enforcement final Windows : workflows CI et release exclusivement Windows, doctor vérifiant Node/npm/Rust/VS Build Tools/WebView2/migrations
+- Vérification MSVC/SDK : build.ps1 et CI installent VS Build Tools + Windows 11 SDK et contrôlent `lib.exe`
 
 ### En cours
 - TBD
