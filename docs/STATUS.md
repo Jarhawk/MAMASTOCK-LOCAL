@@ -33,6 +33,7 @@ This document tracks the global progress of the project.
 - Finalisation release Windows 1.0.0 : rappel QA, publication via tag `v1.0.0` et vérification de l’artefact MSI
 - Stabilisation du build Windows : caches npm/cargo, timeout allongé et logs détaillés (CI + transcript PowerShell)
 - Script postinstall-check : vérification de `config.json`, de `mamastock.db` et du lancement de l'application
+- Hard-forcing MSVC target et purge des variables Linux/MinGW (build.ps1 + CI)
 
 ### En cours
 - TBD

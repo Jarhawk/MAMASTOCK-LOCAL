@@ -1,0 +1,40 @@
+{
+  "pr_number": "031-WIN",
+  "title": "fix: hard-force Windows target (MSVC) & purge Linux env bleed",
+  "summary": "Hard-forces MSVC target and clears Linux/MinGW env vars in build script and CI.",
+  "files": {
+    "added": [
+      "docs/reports/PR-031-WIN_report.md",
+      "docs/reports/PR-031-WIN_report.json"
+    ],
+    "modified": [
+      "build.ps1",
+      ".github/workflows/build-windows.yml",
+      ".github/workflows/verify-local.yml",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1134 packages, and audited 1141 packages in 17s"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "\u2713 built in 20.49s"
+    },
+    {
+      "name": "tauri build (msvc target)",
+      "command": "CARGO_BUILD_TARGET=x86_64-pc-windows-msvc npx tauri build",
+      "status": "fail",
+      "stdout": "error[E0463]: can't find crate for `std` (target x86_64-pc-windows-msvc)"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}

@@ -31,12 +31,16 @@ jobs:
           key: npm-${{ hashFiles('package-lock.json') }}
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - name: MSVC/SDK setup
+      - name: Force MSVC target
         run: |
+          Remove-Item Env:CARGO_BUILD_TARGET -ErrorAction SilentlyContinue
           rustup set default-host x86_64-pc-windows-msvc
           rustup toolchain install stable-x86_64-pc-windows-msvc
           rustup default stable-x86_64-pc-windows-msvc
-          where lib.exe || (echo "lib.exe not found" && exit 1)
+          $env:CARGO_BUILD_TARGET = "x86_64-pc-windows-msvc"
+          rustc -Vv
+          cargo -Vv
+          where lib.exe
       - run: npm ci
       - run: npm run icon:gen --if-present
       - name: Build (Web)

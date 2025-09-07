@@ -22,11 +22,19 @@ Start-Transcript -Path $logFile | Out-Null
 try {
     Set-Location -Path $PSScriptRoot
 
+    # Neutraliser variables Linux/MinGW
+    Remove-Item Env:CARGO_BUILD_TARGET -ErrorAction SilentlyContinue
+    Remove-Item Env:CC -ErrorAction SilentlyContinue
+    Remove-Item Env:AR -ErrorAction SilentlyContinue
+    # Forcer Windows MSVC
     rustup set default-host x86_64-pc-windows-msvc
     rustup toolchain install stable-x86_64-pc-windows-msvc
     rustup default stable-x86_64-pc-windows-msvc
+    $env:CARGO_BUILD_TARGET = "x86_64-pc-windows-msvc"
+    # Sanity
     rustc -Vv
     cargo -Vv
+    Write-Host "CARGO_BUILD_TARGET=$env:CARGO_BUILD_TARGET"
     npx tauri -v
 
     if ($env:PATH -match 'msys|mingw|git\\usr\\bin') {
@@ -69,6 +77,8 @@ try {
     }
 
     npm run build
+    where.exe lib.exe
+    if ($LASTEXITCODE -ne 0) { Write-Error "lib.exe introuvable"; exit 1 }
     npx tauri build
 
     $bundlePath = Join-Path $PSScriptRoot 'src-tauri\\target\\release\\bundle'
