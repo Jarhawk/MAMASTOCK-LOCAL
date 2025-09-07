@@ -1,0 +1,45 @@
+{
+  "pr_number": "022-WIN",
+  "title": "fix: tauri-plugin-sql v2 (Builder) + permissions SQL + retest Windows build",
+  "summary": "Corrige l'initialisation du plugin SQL pour Tauri v2, ajoute les permissions SQL et revalide le build Windows.",
+  "files": {
+    "added": [
+      "src-tauri/capabilities/sql.json",
+      "docs/reports/PR-022-WIN_report.md",
+      "docs/reports/PR-022-WIN_report.json"
+    ],
+    "modified": [
+      "src-tauri/src/main.rs",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1133 packages, and audited 1140 packages in 12s"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "✓ built in 15.42s"
+    },
+    {
+      "name": "npm run db:smoke",
+      "command": "npm run db:smoke",
+      "status": "pass",
+      "stdout": "✅ migration smoke ok { insert: { stock: 10, valeur: 25, pmp: 2.5 }, update: { stock: 20, valeur: 60, pmp: 3 }, delete: { stock: 0, valeur: 0, pmp: 0 } }"
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "The system library `glib-2.0` required by crate `glib-sys` was not found."
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
