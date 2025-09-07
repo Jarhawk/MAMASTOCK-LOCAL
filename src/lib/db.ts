@@ -1,5 +1,5 @@
 import Database from "@tauri-apps/plugin-sql";
-import { appDataDir, documentDir, join, homeDir } from "@tauri-apps/plugin-path";
+import { appDataDir, documentDir, join, homeDir } from "@tauri-apps/api/path";
 import {
   mkdir,
   readTextFile,

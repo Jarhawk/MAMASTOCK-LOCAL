@@ -1,0 +1,54 @@
+{
+  "pr_number": "017",
+  "title": "fix: Path API correcte (v2) + suppression du faux plugin path",
+  "summary": "Remplace les imports @tauri-apps/plugin-path par @tauri-apps/api/path, supprime le crate Rust tauri-plugin-path et met à jour le script d'interdiction des imports pour whitelister ce module.",
+  "files": {
+    "added": [
+      "docs/reports/PR-017_report.md",
+      "docs/reports/PR-017_report.json"
+    ],
+    "modified": [
+      "docs/STATUS.md",
+      "package-lock.json",
+      "package.json",
+      "scripts/check-tauri-imports.js",
+      "src-tauri/Cargo.lock",
+      "src-tauri/Cargo.toml",
+      "src-tauri/src/main.rs",
+      "src/lib/db.ts",
+      "src/lib/export/exportHelpers.js",
+      "src/lib/lock.ts",
+      "vite.config.ts",
+      "vitest.config.ts"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1133 packages"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "\u2713 built in 14.79s"
+    },
+    {
+      "name": "npm run check:tauri",
+      "command": "npm run check:tauri",
+      "status": "pass",
+      "stdout": ""
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "The system library `gio-2.0` required by crate `gio-sys` was not found"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}

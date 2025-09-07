@@ -6,7 +6,7 @@ import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
 import { writeFile, mkdir } from '@tauri-apps/plugin-fs';
 import { save } from '@tauri-apps/plugin-dialog';
-import { documentDir, join } from '@tauri-apps/plugin-path';
+import { documentDir, join } from '@tauri-apps/api/path';
 import { getExportDir } from '@/lib/db';
 
 async function resolveExportPath(filename) {

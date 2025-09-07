@@ -12,7 +12,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@tauri-apps/plugin-path': fileURLToPath(
+      '@tauri-apps/api/path': fileURLToPath(
         new URL('./test/stubs/tauri-path.ts', import.meta.url)
       ),
       '@tauri-apps/plugin-fs': fileURLToPath(

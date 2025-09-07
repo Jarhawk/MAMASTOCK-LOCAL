@@ -8,7 +8,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      "@tauri-apps/plugin-path": "@tauri-apps/api/path",
     },
   },
   server: {
