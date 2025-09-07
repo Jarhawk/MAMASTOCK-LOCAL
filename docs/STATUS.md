@@ -24,6 +24,7 @@ This document tracks the global progress of the project.
 - Préparation de la première release Windows 1.0.0 : changelog initial, guide QA et instructions de publication
 - Forçage du toolchain Rust MSVC et avertissement en cas de présence de MSYS/MinGW
 - Ajout du plugin dialog v2 et mise à jour du script de vérification des imports
+- Migration du plugin SQL vers le Builder v2 avec permissions dédiées et build Windows revalidé
 
 ### En cours
 - TBD
