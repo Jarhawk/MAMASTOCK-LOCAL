@@ -2,6 +2,8 @@
 
 **Système supporté : Windows 11 (x64) uniquement**
 
+**Exécuter build et dev dans PowerShell Windows (Administrateur), pas WSL/Git Bash.**
+
 Cette variante, basée sur **Tauri v2**, embarque une base SQLite locale pour fonctionner hors ligne.
 
 ## Installation

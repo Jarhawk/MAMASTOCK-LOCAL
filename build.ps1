@@ -8,6 +8,11 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 
 $ErrorActionPreference = 'Stop'
 
+if ($env:WSL_DISTRO_NAME -or $env:MSYSTEM -or $env:TERM -match "xterm") {
+    Write-Error "Build Windows: exécuter dans PowerShell Windows, pas WSL/Git Bash"
+    exit 1
+}
+
 # Log everything
 $logPath = Join-Path $PSScriptRoot 'build.log'
 Start-Transcript -Path $logPath -Append | Out-Null
