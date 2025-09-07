@@ -1,0 +1,52 @@
+{
+  "pr_number": "015",
+  "title": "fix: résolution des plugins Tauri v2 (path/fs/dialog/process) + suppression du stub local",
+  "summary": "Alignement des dépendances Tauri v2 côté JS et Rust avec suppression du stub local plugin-path.",
+  "files": {
+    "added": [
+      "docs/reports/PR-015_report.md",
+      "docs/reports/PR-015_report.json"
+    ],
+    "modified": [
+      "package.json",
+      "package-lock.json",
+      "src-tauri/Cargo.toml",
+      "src-tauri/src/main.rs",
+      "vite.config.ts",
+      "docs/STATUS.md"
+    ],
+    "removed": [
+      "plugins/plugin-path/index.d.ts",
+      "plugins/plugin-path/index.js",
+      "plugins/plugin-path/package.json"
+    ]
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1129 packages, and audited 1136 packages in 12s"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "✓ built in 15.44s"
+    },
+    {
+      "name": "npm run check:tauri",
+      "command": "npm run check:tauri",
+      "status": "pass",
+      "stdout": ""
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "no matching package named `tauri-plugin-path` found"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
