@@ -1,0 +1,45 @@
+{
+  "pr_number": "028-WIN",
+  "title": "chore: prepare Windows Release 1.0.0 (tag guide + final check)",
+  "summary": "Guide de publication Windows 1.0.0, rappel QA et vérification du build.",
+  "files": {
+    "added": [
+      "docs/reports/PR-028-WIN_report.md",
+      "docs/reports/PR-028-WIN_report.json"
+    ],
+    "modified": [
+      "README.md",
+      "docs/QA.md",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "git tag v1.0.0-rc",
+      "command": "git tag v1.0.0-rc",
+      "status": "pass",
+      "stdout": ""
+    },
+    {
+      "name": "npm run icon:gen",
+      "command": "npm run icon:gen",
+      "status": "pass",
+      "stdout": "PNG Creating 128x128@2x.png"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "\u2713 built in 21.44s"
+    },
+    {
+      "name": "npm run tauri:build",
+      "command": "npm run tauri:build",
+      "status": "fail",
+      "stdout": "Compiling zerocopy v0.8.27 ... ^C"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
