@@ -20,6 +20,15 @@ import { toast } from 'sonner';
 import { ensureSingleOwner, monitorShutdownRequests, releaseLock } from "@/lib/lock";
 import { shutdownDbSafely } from "@/lib/shutdown";
 import { getDataDir } from "@/lib/db";
+import { getCurrent } from "@tauri-apps/api/window";
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "F12") {
+    try {
+      getCurrent().openDevtools?.();
+    } catch {}
+  }
+});
 
 // Avoid noisy output in production by disabling debug logs
 if (!import.meta.env.DEV) {
