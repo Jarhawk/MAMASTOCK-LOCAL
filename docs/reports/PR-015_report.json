@@ -1,0 +1,53 @@
+{
+  "pr_number": "015",
+  "title": "fix: résolution des plugins Tauri v2 (path/fs/dialog/process) + suppression du stub local",
+  "summary": "Alignement des dépendances Tauri v2 et suppression du stub plugin-path",
+  "files": {
+    "added": [
+      "docs/reports/PR-015_report.md",
+      "docs/reports/PR-015_report.json"
+    ],
+    "modified": [
+      "package.json",
+      "package-lock.json",
+      "vite.config.ts",
+      "src-tauri/Cargo.toml",
+      "src-tauri/Cargo.lock",
+      "src-tauri/src/main.rs",
+      "docs/STATUS.md"
+    ],
+    "removed": [
+      "plugins/plugin-path/index.d.ts",
+      "plugins/plugin-path/index.js",
+      "plugins/plugin-path/package.json"
+    ]
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1129 packages"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "vite v7.1.3 building for production"
+    },
+    {
+      "name": "npm run check:tauri",
+      "command": "npm run check:tauri",
+      "status": "pass",
+      "stdout": ""
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "The system library glib-2.0 required by crate glib-sys was not found"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}

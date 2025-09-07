@@ -60,7 +60,7 @@
     "@tauri-apps/plugin-process": "^2",
     "@tauri-apps/plugin-fs": "^2",
     "@tauri-apps/plugin-dialog": "^2",
-    "@tauri-apps/plugin-path": "file:plugins/plugin-path",
+    "@tauri-apps/plugin-path": "npm:@tauri-apps/api@^2",
     "@tauri-apps/plugin-sql": "^2",
     "bcryptjs": "^2.4.3",
     "date-fns": "3.6.0",
