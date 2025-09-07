@@ -14,8 +14,10 @@ if ($env:WSL_DISTRO_NAME -or $env:MSYSTEM -or $env:TERM -match "xterm") {
 }
 
 # Log everything
-$logPath = Join-Path $PSScriptRoot 'build.log'
-Start-Transcript -Path $logPath -Append | Out-Null
+$logDir = Join-Path $PSScriptRoot 'logs'
+New-Item -ItemType Directory -Path $logDir -Force | Out-Null
+$logFile = Join-Path $logDir ("build-{0}.log" -f (Get-Date -Format 'yyyyMMdd-HHmmss'))
+Start-Transcript -Path $logFile | Out-Null
 
 try {
     Set-Location -Path $PSScriptRoot
@@ -25,6 +27,7 @@ try {
     rustup default stable-x86_64-pc-windows-msvc
     rustc -Vv
     cargo -Vv
+    npx tauri -v
 
     if ($env:PATH -match 'msys|mingw|git\\usr\\bin') {
         Write-Warning 'MSYS/MinGW detected in PATH. Build may fail.'
@@ -70,6 +73,9 @@ try {
 
     $bundlePath = Join-Path $PSScriptRoot 'src-tauri\\target\\release\\bundle'
     Write-Host "Bundle generated in: $bundlePath"
+}
+catch {
+    Write-Error $_
 }
 finally {
     Stop-Transcript | Out-Null

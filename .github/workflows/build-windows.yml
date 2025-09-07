@@ -8,6 +8,11 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    timeout-minutes: 90
+    env:
+      TAURI_CLI_LOG_LEVEL: trace
+      RUST_BACKTRACE: 1
+      CARGO_TERM_COLOR: always
     defaults:
       run:
         shell: pwsh
@@ -20,7 +25,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
       - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
       - name: MSVC/SDK setup
         run: |
           rustup set default-host x86_64-pc-windows-msvc
@@ -29,10 +39,20 @@ jobs:
           where lib.exe || (echo "lib.exe not found" && exit 1)
       - run: npm ci
       - run: npm run icon:gen --if-present
-      - run: npm run build
-      - uses: tauri-apps/tauri-action@v0
+      - name: Build (Web)
+        run: npm run build
+      - name: Tauri Build (verbose)
+        uses: tauri-apps/tauri-action@v0
         with:
           tagName: ${{ github.ref_name }}
           releaseName: MamaStock ${{ github.ref_name }}
           releaseBody: Windows release
           includeDebug: false
+          args: "--verbose"
+      - name: Upload logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: logs
+          if-no-files-found: ignore
