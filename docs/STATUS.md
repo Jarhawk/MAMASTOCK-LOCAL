@@ -29,6 +29,7 @@ This document tracks the global progress of the project.
 - Enforcement final Windows : workflows CI et release exclusivement Windows, doctor vérifiant Node/npm/Rust/VS Build Tools/WebView2/migrations
 - Vérification MSVC/SDK : build.ps1 et CI installent VS Build Tools + Windows 11 SDK et vérifient `lib.exe` pour éviter « lib.exe not found »
 - Exécution forcée Windows : workflows assertent Windows, build.ps1 bloque WSL/Git Bash et la doc impose PowerShell
+- Configuration ESLint standardisée (React/TS) et script lint mis à jour
 
 ### En cours
 - TBD

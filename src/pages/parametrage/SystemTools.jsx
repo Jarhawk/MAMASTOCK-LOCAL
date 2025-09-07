@@ -7,7 +7,7 @@ export default function SystemTools() {
   const backup = async () => {
     try {
       const dest = await backupDb();
-      toast.success(`Sauvegarde effectuée : ${dest}`);
+    toast.success(`Sauvegarde effectuée : ${dest}`);
     } catch (_) {
       toast.error("Échec de la sauvegarde");
     }

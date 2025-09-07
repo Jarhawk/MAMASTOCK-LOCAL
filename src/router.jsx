@@ -1,5 +1,4 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-/* eslint-disable react-refresh/only-export-components */
 import { Suspense, useEffect } from "react";
 import lazyWithPreload from "@/lib/lazyWithPreload";
 import nprogress from 'nprogress';
@@ -637,4 +636,3 @@ export default function Router() {
   );
 }
 
-/* eslint-enable react-refresh/only-export-components */

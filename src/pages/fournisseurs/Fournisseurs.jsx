@@ -46,7 +46,7 @@ export default function Fournisseurs() {
   const { products } = useProducts();
   const { fournisseurs: inactiveByInvoices, fetchInactifs } =
     useFournisseursInactifs();
-  const { hasAccess, mama_id } = useAuth();
+  const { hasAccess } = useAuth();
   const canEdit = hasAccess('fournisseurs', 'peut_modifier');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState(null);
