@@ -1,14 +1,14 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"] ,
+  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
         background: "var(--mamastock-bg)",
-        text: "var(--mamastock-text)"
-      }
-    }
+        text: "var(--mamastock-text)",
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 } satisfies Config;

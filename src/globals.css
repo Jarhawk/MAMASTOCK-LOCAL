@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --mamastock-bg: #0C1C2E;
-  --mamastock-text: #FFFFFF;
-  --mamastock-gold: #F6C343;
+  --mamastock-bg: #0c1c2e;
+  --mamastock-text: #ffffff;
+  --mamastock-gold: #f6c343;
   /* Theme variables overridable via ThemeProvider */
   --primary-color: var(--mamastock-gold);
   --secondary-color: var(--mamastock-bg);
@@ -19,30 +19,30 @@
     color: var(--mamastock-text);
   }
 
-html {
-  /* Ensure consistent text sizing across browsers */
-  -webkit-text-size-adjust: 100%;
-}
+  html {
+    /* Ensure consistent text sizing across browsers */
+    -webkit-text-size-adjust: 100%;
+  }
 
-a {
-  color: #bfa14d;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
+  a {
+    color: #bfa14d;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
 
-/* Smaller loader used in inline buttons */
-.loader-glass {
-  border: 2px solid #fff;
-  border-top: 2px solid #bfa14d;
-  border-radius: 50%;
-  width: 1rem;
-  height: 1rem;
-  margin-right: 8px;
-  animation: spin .9s linear infinite;
-  display: inline-block;
-}
+  /* Smaller loader used in inline buttons */
+  .loader-glass {
+    border: 2px solid #fff;
+    border-top: 2px solid #bfa14d;
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 8px;
+    animation: spin 0.9s linear infinite;
+    display: inline-block;
+  }
 }
 @keyframes spin {
   0% {
@@ -52,4 +52,3 @@ a:hover {
     transform: rotate(360deg);
   }
 }
-
