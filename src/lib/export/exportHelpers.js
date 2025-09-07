@@ -5,14 +5,27 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
 import { writeFile, mkdir } from '@tauri-apps/plugin-fs';
-import { join } from '@tauri-apps/plugin-path';
+import { save } from '@tauri-apps/plugin-dialog';
+import { documentDir, join } from '@tauri-apps/plugin-path';
 import { getExportDir } from '@/lib/db';
 
-async function saveBlob(blob, filename) {
-  if (typeof window !== 'undefined' && window.__TAURI__) {
+async function resolveExportPath(filename) {
+  try {
     const dir = await getExportDir();
     await mkdir(dir, { recursive: true });
-    const path = await join(dir, filename);
+    return await join(dir, filename);
+  } catch {
+    const docs = await documentDir();
+    const dir = await join(docs, 'MamaStock', 'Exports');
+    await mkdir(dir, { recursive: true });
+    return await join(dir, filename);
+  }
+}
+
+async function saveBlob(blob, filename, useDialog = true) {
+  if (typeof window !== 'undefined' && window.__TAURI__) {
+    const defaultPath = await resolveExportPath(filename);
+    const path = useDialog ? (await save({ defaultPath })) || defaultPath : defaultPath;
     const buf = await blob.arrayBuffer();
     await writeFile(path, new Uint8Array(buf));
   } else {
@@ -25,6 +38,7 @@ export async function exportToPDF(data = [], config = {}) {
     filename = 'export.pdf',
     columns = [],
     orientation = 'portrait',
+    useDialog = true,
   } = config;
   const orient = ['portrait', 'landscape'].includes(String(orientation).toLowerCase())
     ? String(orientation).toLowerCase()
@@ -41,7 +55,7 @@ export async function exportToPDF(data = [], config = {}) {
   );
   doc.autoTable({ head: headers, body: rows, styles: { fontSize: 9 } });
   const blob = doc.output('blob');
-  await saveBlob(blob, filename);
+  await saveBlob(blob, filename, useDialog);
 }
 
 export async function exportToExcel(data = [], config = {}) {
@@ -49,6 +63,7 @@ export async function exportToExcel(data = [], config = {}) {
     filename = 'export.xlsx',
     sheet = 'Sheet1',
     columns = [],
+    useDialog = true,
   } = config;
   if (!Array.isArray(data)) data = [data];
   const arr = data.map((item) => {
@@ -65,7 +80,7 @@ export async function exportToExcel(data = [], config = {}) {
   const ws = XLSX.utils.json_to_sheet(arr);
   XLSX.utils.book_append_sheet(wb, ws, sheet);
   const buf = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-  await saveBlob(new Blob([buf]), filename);
+  await saveBlob(new Blob([buf]), filename, useDialog);
 }
 
 export async function exportToCSV(data = [], config = {}) {
@@ -74,6 +89,7 @@ export async function exportToCSV(data = [], config = {}) {
     columns = [],
     delimiter = ',',
     quoteValues = false,
+    useDialog = true,
   } = config;
   const delim = typeof delimiter === 'string' && delimiter.length ? delimiter : ',';
   if (!Array.isArray(data)) data = [data];
@@ -87,7 +103,7 @@ export async function exportToCSV(data = [], config = {}) {
       : Object.values(item).map(quote).join(delim)
   );
   const csv = [header, ...rows].join('\n');
-  await saveBlob(new Blob([csv], { type: 'text/csv;charset=utf-8;' }), filename);
+  await saveBlob(new Blob([csv], { type: 'text/csv;charset=utf-8;' }), filename, useDialog);
 }
 
 export function exportToTSV(data = [], config = {}) {
