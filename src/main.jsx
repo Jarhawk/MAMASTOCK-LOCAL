@@ -9,14 +9,53 @@ window.process = process;
 
 // === Debug global errors ===
 import { appendLog } from "@/debug/logger";
-window.addEventListener('error', (e) => {
-  appendLog('[GlobalError] ' + (e?.error?.stack || e?.message));
-  console.error('[GlobalError]', e?.error || e?.message || e);
-});
-window.addEventListener('unhandledrejection', (e) => {
-  appendLog('[UnhandledRejection] ' + (e?.reason?.stack || e?.reason));
-  console.error('[UnhandledRejection]', e?.reason || e);
-});
+function installGlobalErrorOverlay() {
+  const style = document.createElement('style');
+  style.textContent = `
+    #__debug_overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      color: #fff; font: 14px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      padding: 16px; z-index: 999999; overflow: auto; display: none;
+    }
+    #__debug_overlay pre { white-space: pre-wrap; word-break: break-word; }
+    #__debug_overlay .close { position:absolute; top:8px; right:12px; cursor:pointer; }
+  `;
+  document.head.appendChild(style);
+  const el = document.createElement('div');
+  el.id = '__debug_overlay';
+  el.innerHTML = `<div class="close">✕</div><h3>Runtime error</h3><pre id="__debug_overlay_log"></pre>`;
+  document.body.appendChild(el);
+  el.querySelector('.close')?.addEventListener('click', () => (el.style.display = 'none'));
+
+  function show(type, err) {
+    const pre = document.getElementById('__debug_overlay_log');
+    const msg =
+      (err && (err.stack || err.message || String(err))) ?? String(err);
+    if (pre) {
+      pre.textContent = msg;
+      el.style.display = 'block';
+    }
+    appendLog(`[${type}] ${msg}`);
+    console.error('[Overlay]', err);
+  }
+
+  window.addEventListener('error', (e) =>
+    show('GlobalError', e.error || e.message || e)
+  );
+  window.addEventListener('unhandledrejection', (e) =>
+    show('UnhandledRejection', e.reason || e)
+  );
+  // Raccourci: F10 pour toggle
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'F10') {
+      const visible = el.style.display !== 'none';
+      el.style.display = visible ? 'none' : 'block';
+    }
+  });
+  console.log('[debug] overlay installed');
+}
+
+installGlobalErrorOverlay();
 // === /Debug ===
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
