@@ -14,7 +14,7 @@ This document tracks the global progress of the project.
 - Workflows CI: vérification des PR (build + db:smoke) et release Windows via tag `v*`
 - Sauvegarde/restauration/maintenance SQLite via interface
 - Exports locaux (CSV/XLSX/PDF) pour produits, fournisseurs et factures via plugins fs/dialog/path v2
-- Logo vectoriel et génération d'icônes Tauri automatisée à la build
+- Logo vectoriel et génération d'icônes Tauri automatisée à la build (CI + build.ps1)
 - Pluginisation Tauri v2 (process/fs/dialog/path) et script de vérification des imports
 - Script doctor (Node/Rust/migrations/plugins v2) et guide QA
 
