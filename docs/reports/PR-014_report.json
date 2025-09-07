@@ -1,0 +1,50 @@
+{
+  "pr_number": "014",
+  "title": "chore: branding propre (SVG \u2192 ic\u00f4nes g\u00e9n\u00e9r\u00e9es) + pipeline icon:gen",
+  "summary": "Suppression des ic\u00f4nes binaires et g\u00e9n\u00e9ration des ic\u00f4nes Tauri \u00e0 partir d'un SVG via la commande icon:gen, int\u00e9gr\u00e9e dans la CI et le script de build.",
+  "files": {
+    "added": [
+      "assets/logo.svg",
+      "docs/reports/PR-014_report.md",
+      "docs/reports/PR-014_report.json"
+    ],
+    "modified": [
+      "assets/README.md",
+      "package.json",
+      "build.ps1",
+      ".github/workflows/build-windows.yml",
+      "src-tauri/tauri.conf.json",
+      ".gitignore",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1129 packages, and audited 1137 packages in 21s"
+    },
+    {
+      "name": "npm run icon:gen",
+      "command": "npm run icon:gen",
+      "status": "pass",
+      "stdout": "ICO Creating icon.ico"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "\u2713 built in 24.87s"
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "The system library `gobject-2.0` required by crate `gobject-sys` was not found."
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
