@@ -35,6 +35,8 @@ jobs:
           cargo -Vv
           where lib.exe
       - run: npm ci
+      - name: Generate icons
+        run: npm run icon:gen
       - run: npm run build
       - run: npm run db:smoke
       - run: npm run check:tauri --if-present

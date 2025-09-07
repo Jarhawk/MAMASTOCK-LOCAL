@@ -42,7 +42,8 @@ jobs:
           cargo -Vv
           where lib.exe
       - run: npm ci
-      - run: npm run icon:gen --if-present
+      - name: Generate icons
+        run: npm run icon:gen
       - name: Build (Web)
         run: npm run build
       - name: Tauri Build (verbose)

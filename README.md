@@ -58,6 +58,14 @@ Assurez‑vous qu'un seul poste utilise la base à la fois.
 - `npm run db:apply` applique les migrations SQLite.
 - `npm run db:smoke` vérifie les triggers et la valeur du stock.
 
+## Icônes
+Les icônes binaires (`.ico`/`.png`) ne sont pas versionnées. Elles sont générées à partir de `assets/logo.svg` lors du build :
+
+- en local avec `npm run tauri:build` ;
+- en CI via l'étape **Generate icons**.
+
+L'installateur MSI résultant se trouve dans `src-tauri/target/release/bundle/msi/*.msi`.
+
 ## Build local
 Exécuter `build.ps1` en **PowerShell Administrateur** (jamais depuis Git Bash ou WSL) :
 
@@ -67,7 +75,7 @@ Exécuter `build.ps1` en **PowerShell Administrateur** (jamais depuis Git Bash o
 
 S'assurer que **VS Build Tools (C++ x64)** et le **Windows 11 SDK** sont installés et activés ; `where lib.exe` doit répondre avant `npx tauri build`.
 
-Ce script installe Node.js LTS, Rustup, le toolchain `stable-x86_64-pc-windows-msvc`, les Build Tools C++ de Visual Studio, le Windows 11 SDK et le WiX Toolset via `winget`, puis lance `npm ci`, `npm run icon:gen`, `npm run build` et `npx tauri build`.
+Ce script installe Node.js LTS, Rustup, le toolchain `stable-x86_64-pc-windows-msvc`, les Build Tools C++ de Visual Studio, le Windows 11 SDK et le WiX Toolset via `winget`, puis lance `npm ci`, `npm run build` et `npx tauri build` (qui génère `src-tauri/icons` si nécessaire).
 
 ## QA final
 Avant de publier, vérifier ce parcours :

@@ -34,6 +34,7 @@ This document tracks the global progress of the project.
 - Stabilisation du build Windows : caches npm/cargo, timeout allongé et logs détaillés (CI + transcript PowerShell)
 - Script postinstall-check : valeurs par défaut pour les chemins et vérifications non bloquantes de `config.json` et `mamastock.db`
 - Hard-forcing MSVC target et purge des variables Linux/MinGW (build.ps1 + CI)
+- Icône MSI sans binaires : logo SVG unique et génération d'icônes au build (local `npm run tauri:build`, CI étape "Generate icons")
 
 ### En cours
 - TBD

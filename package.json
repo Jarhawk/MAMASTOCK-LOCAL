@@ -43,7 +43,7 @@
     "seed:admin": "node scripts/seed-admin.js",
     "icon:gen": "tauri icon assets/logo.svg -o src-tauri/icons",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build",
+    "tauri:build": "npm run icon:gen && tauri build",
     "doctor": "pwsh scripts/doctor.ps1",
     "front:audit": "node scripts/front-audit.js",
     "check:tauri": "node scripts/check-tauri-imports.js"
