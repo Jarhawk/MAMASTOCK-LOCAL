@@ -1,0 +1,38 @@
+{
+  "pr_number": "034-WIN",
+  "title": "chore(debug): activer DevTools + handlers d’erreurs globales (temporaire)",
+  "summary": "Active DevTools par défaut et journalise les erreurs globales pour faciliter le debug.",
+  "files": {
+    "added": [
+      "docs/reports/PR-034-WIN_report.md",
+      "docs/reports/PR-034-WIN_report.json"
+    ],
+    "modified": [
+      "src-tauri/tauri.conf.json",
+      "src/main.jsx"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "web build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "\u2713 built in 22.44s"
+    },
+    {
+      "name": "tauri build",
+      "command": "npx tauri build",
+      "status": "warn",
+      "stdout": "The system library `glib-2.0` required by crate `glib-sys` was not found."
+    },
+    {
+      "name": "run app",
+      "command": "./src-tauri/target/release/mamastock",
+      "status": "warn",
+      "stdout": "No such file or directory"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
