@@ -4,6 +4,18 @@ Exécuter build et dev dans **PowerShell Windows** (Administrateur), pas WSL/Git
 
 Parcours manuel pour valider une release candidate Windows.
 
+## Vérification post-installation
+
+```powershell
+pwsh scripts/postinstall-check.ps1
+```
+
+Par défaut, le script utilise `%USERPROFILE%\\MamaStock\\data` pour la base et `%APPDATA%\\MamaStock` pour la configuration. Un chemin personnalisé peut être passé :
+
+```powershell
+pwsh scripts/postinstall-check.ps1 -DataDir "D:\MamaStock\data"
+```
+
 Parcours test : login admin → créer fournisseur/produit → facture qty=10 prix=2.5 → pmp=2.5 & stock=10 → export → backup → restore → verrou 2 postes.
 
 1. Lancer l'application puis se connecter avec l'administrateur créé via `npm run seed:admin`.

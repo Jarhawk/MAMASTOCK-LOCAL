@@ -11,6 +11,19 @@ Cette variante, basée sur **Tauri v2**, embarque une base SQLite locale pour f
 - Télécharger l'installateur **MSI** produit par la CI.
 - L'exécuter.
 
+## Vérification post-installation
+Après l'installation, le script suivant vérifie la présence de la configuration et de la base de données :
+
+```powershell
+pwsh scripts/postinstall-check.ps1
+```
+
+Par défaut, les chemins `%USERPROFILE%\\MamaStock\\data` (données) et `%APPDATA%\\MamaStock` (configuration) sont utilisés. Pour tester un autre dossier de données :
+
+```powershell
+pwsh scripts/postinstall-check.ps1 -DataDir "D:\MamaStock\data"
+```
+
 ## Choisir le dossier des données
 - Lancez l'application puis ouvrez la page **Paramètres**.
 - Sélectionnez le dossier qui contiendra `mamastock.db` et les fichiers de verrou (`db.lock.json`, `shutdown.request.json`).

@@ -1,0 +1,28 @@
+{
+  "pr_number": "032-WIN",
+  "title": "fix: postinstall-check.ps1 (defaults & robust checks)",
+  "summary": "Adds default paths and non-fatal checks for config and database in postinstall script.",
+  "files": {
+    "added": [
+      "docs/reports/PR-032-WIN_report.md",
+      "docs/reports/PR-032-WIN_report.json"
+    ],
+    "modified": [
+      "scripts/postinstall-check.ps1",
+      "README.md",
+      "docs/QA.md",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "postinstall check",
+      "command": "pwsh scripts/postinstall-check.ps1",
+      "status": "pass",
+      "stdout": "Directory \\MamaStock exists.\nWARNING: config.json not found at /MamaStock/config.json.\nWARNING: Database not found at /MamaStock/data/mamastock.db.\nApplication appears to have never been launched. Run it once before rerunning this check."
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
