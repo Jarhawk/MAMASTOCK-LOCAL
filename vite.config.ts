@@ -7,12 +7,23 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      crypto: "crypto-browserify",
+      stream: "stream-browserify",
+      buffer: "buffer",
+      process: "process/browser",
     },
+  },
+  define: {
+    "process.env": {},
+  },
+  optimizeDeps: {
+    include: ["crypto-browserify", "stream-browserify", "buffer", "process"],
   },
   server: {
     port: 5173,
   },
   build: {
+    chunkSizeWarningLimit: 1600,
     rollupOptions: {
       external: [/^@tauri-apps\/api/],
     },

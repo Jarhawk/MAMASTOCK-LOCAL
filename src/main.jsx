@@ -1,4 +1,12 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+// Polyfills Node → navigateur
+import { Buffer } from "buffer";
+import process from "process";
+// @ts-ignore
+window.Buffer = Buffer;
+// @ts-ignore
+window.process = process;
+
 // === Debug global errors ===
 import { appendLog } from "@/debug/logger";
 window.addEventListener('error', (e) => {
@@ -18,7 +26,7 @@ import "./globals.css";
 import 'nprogress/nprogress.css';
 import "@/i18n/i18n";
 import "./registerSW.js";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import AuthProvider from "@/contexts/AuthContext";
 import { toast } from 'sonner';
 import { ensureSingleOwner, monitorShutdownRequests, releaseLock } from "@/lib/lock";
@@ -70,12 +78,12 @@ window.addEventListener("beforeunload", () => {
 const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <AuthProvider>
         <ErrorBoundary>
           <App />
         </ErrorBoundary>
       </AuthProvider>
-    </BrowserRouter>
+    </HashRouter>
   </StrictMode>
 );
