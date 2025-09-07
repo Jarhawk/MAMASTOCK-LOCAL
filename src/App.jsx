@@ -25,8 +25,10 @@ const queryClient = new QueryClient({
 });
 
 export default function App() {
+  console.log('[debug] App mounted');
   useEffect(() => {
     nprogress.configure({ showSpinner: false });
+    console.log('[debug] Frontend OK');
   }, []);
   useEffect(() => {
     const normalize = (e) => {
