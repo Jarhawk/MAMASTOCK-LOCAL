@@ -26,5 +26,3 @@ jobs:
           releaseName: MamaStock ${{ github.ref_name }}
           releaseBody: Windows release
           includeDebug: false
-          includeRelease: true
-          targets: "msi nsis"

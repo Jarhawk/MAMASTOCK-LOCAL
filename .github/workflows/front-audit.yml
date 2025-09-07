@@ -5,12 +5,12 @@ on:
 
 jobs:
   audit:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 'lts/*'
       - run: npm ci
       - run: npm run front:audit
       - uses: actions/upload-artifact@v4

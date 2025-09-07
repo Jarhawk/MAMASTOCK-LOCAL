@@ -1,0 +1,56 @@
+{
+  "pr_number": "018-WIN",
+  "title": "chore: Windows-only hardening (CI + Tauri + Docs + Build)",
+  "summary": "Durcissement de l'application pour Windows 11 uniquement : CI Windows, bundle MSI avec bootstrapper WebView2, script de build PowerShell et documentation dédiée.",
+  "files": {
+    "added": [
+      "README-offline.md",
+      "docs/reports/PR-018-WIN_report.md",
+      "docs/reports/PR-018-WIN_report.json"
+    ],
+    "modified": [
+      ".github/workflows/build-windows.yml",
+      ".github/workflows/front-audit.yml",
+      ".github/workflows/verify-local.yml",
+      "README.md",
+      "build.ps1",
+      "docs/STATUS.md",
+      "src-tauri/tauri.conf.json"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1133 packages, and audited 1140 packages in 17s"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "✓ built in 21.84s"
+    },
+    {
+      "name": "npm run db:smoke",
+      "command": "npm run db:smoke",
+      "status": "pass",
+      "stdout": "migration smoke ok"
+    },
+    {
+      "name": "npm run check:tauri",
+      "command": "npm run check:tauri",
+      "status": "pass",
+      "stdout": ""
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "The system library gio-2.0 required by crate gio-sys was not found"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
