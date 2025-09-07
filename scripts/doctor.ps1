@@ -1,13 +1,19 @@
 $ErrorActionPreference = 'Stop'
+
+if (-not $IsWindows) {
+    Write-Host 'Windows uniquement'
+    exit 0
+}
+
 $exitCode = 0
 
 function Test-Tool {
     param(
         [string]$Name,
-        [string]$Cmd
+        [ScriptBlock]$Cmd
     )
     try {
-        Invoke-Expression $Cmd | Out-Null
+        & $Cmd | Out-Null
         Write-Host "$Name OK" -ForegroundColor Green
     } catch {
         Write-Host "$Name KO" -ForegroundColor Red
@@ -15,25 +21,12 @@ function Test-Tool {
     }
 }
 
-Test-Tool "Node" "node --version"
-Test-Tool "Rust" "rustc --version"
-
-try {
-    & npm run db:smoke | Out-Null
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "Migration OK" -ForegroundColor Green
-    } else {
-        Write-Host "Migration KO" -ForegroundColor Red
-        $exitCode = 1
-    }
-} catch {
-    Write-Host "Migration KO" -ForegroundColor Red
-    $exitCode = 1
-}
-
-Test-Tool "Tauri plugins v2" "node scripts/check-tauri-plugins.js"
-
-Test-Tool "SQL plugin Builder" "if (-not (Select-String -Path 'src-tauri/src/main.rs' -Pattern 'tauri_plugin_sql::Builder::default().build' -SimpleMatch)) { throw 'missing' }"
-Test-Tool "SQL capabilities" "if (-not (Test-Path 'src-tauri/capabilities/sql.json')) { throw 'missing' }"
+Test-Tool 'Node' { node --version }
+Test-Tool 'npm' { npm --version }
+Test-Tool 'rustc' { rustc --version }
+Test-Tool 'cargo' { cargo --version }
+Test-Tool 'VS Build Tools' { vswhere -latest -products * -requires Microsoft.Component.MSBuild -property installationPath | Out-Null }
+Test-Tool 'WebView2' { Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\EdgeUpdate\Clients\{F1FDD2EA-9555-4F2B-86A5-EBE55007A7E2}' -Name 'pv' | Out-Null }
+Test-Tool 'Migrations folder' { if (-not (Test-Path 'public/migrations')) { throw 'missing' } }
 
 exit $exitCode

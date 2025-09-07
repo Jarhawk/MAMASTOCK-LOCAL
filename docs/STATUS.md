@@ -26,6 +26,7 @@ This document tracks the global progress of the project.
 - Ajout du plugin dialog v2 et mise à jour du script de vérification des imports
 - Migration du plugin SQL vers le Builder v2 avec permissions dédiées et build Windows revalidé
 - Sanity finale Windows : extension du script doctor (plugin SQL + capacités) et rappel du guide de publication
+- Enforcement final Windows : workflows CI et release exclusivement Windows, doctor vérifiant Node/npm/Rust/VS Build Tools/WebView2/migrations
 
 ### En cours
 - TBD

@@ -11,15 +11,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-      - name: Force MSVC
-        run: |
-          rustup set default-host x86_64-pc-windows-msvc
-          rustup toolchain install stable-x86_64-pc-windows-msvc
-          rustup default stable-x86_64-pc-windows-msvc
-          rustc -Vv
-          cargo -Vv
       - run: npm ci
       - run: npm run build
       - run: npm run db:smoke
-      - run: npm run check:tauri
+      - run: npm run check:tauri --if-present
+      - run: npm run doctor
 

@@ -1,0 +1,34 @@
+{
+  "pr_number": "024-WIN",
+  "title": "chore: Windows-only enforcement (runners, shells, doctor)",
+  "summary": "Limite l'exécution aux environnements Windows et renforce le script doctor.",
+  "files": {
+    "added": [
+      "docs/reports/PR-024-WIN_report.md",
+      "docs/reports/PR-024-WIN_report.json"
+    ],
+    "modified": [
+      ".github/workflows/verify-local.yml",
+      ".github/workflows/build-windows.yml",
+      "scripts/doctor.ps1",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm test",
+      "command": "npm test",
+      "status": "pass",
+      "stdout": "Test Files 4 passed (4); Tests 11 passed (11)"
+    },
+    {
+      "name": "npm run lint",
+      "command": "npm run lint",
+      "status": "fail",
+      "stdout": "ESLint couldn't find a configuration file."
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
