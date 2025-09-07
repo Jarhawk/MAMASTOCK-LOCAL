@@ -20,6 +20,7 @@ This document tracks the global progress of the project.
 - Résolution des plugins Tauri v2 via npm (path/fs/dialog/process) et suppression du stub local
 - Alias '@' unifié pour Vite/Vitest/TS avec fallback Node et tests d'export stabilisés
 - Passage à `@tauri-apps/api/path` avec suppression du faux plugin path et mise à jour du script d'interdiction d'import
+- Durcissement Windows uniquement : workflows CI Windows, bundle MSI, build.ps1 et documentation dédiés
 
 ### En cours
 - TBD
