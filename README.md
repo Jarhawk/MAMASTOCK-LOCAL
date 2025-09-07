@@ -61,5 +61,5 @@ Ce script installe Node.js LTS, Rustup, le toolchain `stable-x86_64-pc-windows-
 git tag v1.0.0
 git push origin v1.0.0
 ```
-Récupérer l’installateur MSI généré par la CI sur la page **Releases** de GitHub.
+L’installateur MSI apparaît automatiquement dans la page **Releases** de GitHub.
 

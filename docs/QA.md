@@ -4,6 +4,8 @@ Exécuter build et dev dans **PowerShell Windows** (Administrateur), pas WSL/Git
 
 Parcours manuel pour valider une release candidate Windows.
 
+Parcours test : login admin → créer fournisseur/produit/facture (qty=10 prix=2.5) → pmp=2.5 stock=10 → export → backup → restore → verrou bi-postes.
+
 1. Lancer l'application puis se connecter avec l'administrateur créé via `npm run seed:admin`.
 2. Créer un fournisseur.
 3. Créer un produit.
