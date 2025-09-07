@@ -1,18 +1,17 @@
 {
   "pr_number": "025-WIN",
   "title": "fix: enforce MSVC + Windows SDK (lib.exe) in build.ps1 & CI",
-  "summary": "Ajoute l'installation des VS Build Tools et du SDK Windows 11, vérifie lib.exe avant les builds.",
+  "summary": "Durcit build.ps1 et la CI pour vérifier lib.exe via MSVC et le SDK Windows 11.",
   "files": {
-    "added": [
-      "docs/reports/PR-025-WIN_report.md",
-      "docs/reports/PR-025-WIN_report.json"
-    ],
+    "added": [],
     "modified": [
       "build.ps1",
       ".github/workflows/build-windows.yml",
       "README.md",
       "docs/QA.md",
-      "docs/STATUS.md"
+      "docs/STATUS.md",
+      "docs/reports/PR-025-WIN_report.md",
+      "docs/reports/PR-025-WIN_report.json"
     ],
     "removed": []
   },
@@ -21,19 +20,19 @@
       "name": "npm ci",
       "command": "npm ci",
       "status": "pass",
-      "stdout": "added 1133 packages"
+      "stdout": "added 1133 packages, and audited 1140 packages"
     },
     {
       "name": "npm run build",
       "command": "npm run build",
       "status": "pass",
-      "stdout": "\u2713 built in 36.89s"
+      "stdout": "\u2713 built in 21.37s"
     },
     {
       "name": "npx tauri build",
       "command": "npx tauri build",
       "status": "fail",
-      "stdout": "The system library `gobject-2.0` required by crate `gobject-sys` was not found."
+      "stdout": "The system library `glib-2.0` required by crate `glib-sys` was not found."
     }
   ],
   "todos": [],

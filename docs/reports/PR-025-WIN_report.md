@@ -1,7 +1,7 @@
 # PR-025-WIN Report
 
 ## Résumé
-Durcissement MSVC/SDK : build.ps1 et workflow CI vérifient l'installation de VS Build Tools et du Windows 11 SDK pour éviter « lib.exe not found ».
+Durcissement MSVC/SDK : build.ps1 vérifie `lib.exe` via `where.exe` et le workflow CI échoue si l'outil est absent, évitant définitivement « lib.exe not found ».
 
 ## Fichiers ajoutés/modifiés/supprimés
 - build.ps1

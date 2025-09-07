@@ -19,7 +19,7 @@ jobs:
           rustup set default-host x86_64-pc-windows-msvc
           rustup toolchain install stable-x86_64-pc-windows-msvc
           rustup default stable-x86_64-pc-windows-msvc
-          where.exe lib.exe || (echo "lib.exe not found" && exit 1)
+          where lib.exe || (echo "lib.exe not found" && exit 1)
       - run: npm ci
       - run: npm run icon:gen --if-present
       - run: npm run build

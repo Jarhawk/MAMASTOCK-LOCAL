@@ -49,8 +49,9 @@ try {
         --add Microsoft.VisualStudio.Component.Windows11SDK.22621 `
         --add Microsoft.VisualStudio.Component.VC.CMake.Project
 
-    $libPath = (Get-Command lib.exe -ErrorAction SilentlyContinue)?.Source
+    $libPath = (where.exe lib.exe 2>$null | Select-Object -First 1)
     if (-not $libPath) { Write-Error "lib.exe introuvable (VS Build Tools non prêts)"; exit 1 }
+    Write-Host "lib.exe détecté : $libPath"
     & vswhere -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | Write-Host
 
     npm ci
