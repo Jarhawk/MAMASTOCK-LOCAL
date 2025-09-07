@@ -1,0 +1,2 @@
+cargo:rustc-link-search=native=C:\Users\dark_\Desktop\mamastock.com\MAMASTOCK-LOCAL\src-tauri\target\release\build\webview2-com-sys-c9a8acc1b4ea68b9\out\x64
+cargo:rustc-link-lib=advapi32

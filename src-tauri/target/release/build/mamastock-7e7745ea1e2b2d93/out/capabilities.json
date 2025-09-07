@@ -1,0 +1,1 @@
+{"sql-main":{"identifier":"sql-main","description":"Permissions SQL","local":true,"windows":["main"],"permissions":["sql:default","sql:allow-execute"]}}
