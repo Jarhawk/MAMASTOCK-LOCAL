@@ -44,13 +44,15 @@ Assurez‑vous qu'un seul poste utilise la base à la fois.
 - `npm run db:smoke` vérifie les triggers et la valeur du stock.
 
 ## Build local
-Exécuter dans **PowerShell** (**pas Git Bash**) avec le toolchain Rust **MSVC** :
+Exécuter dans **PowerShell Administrateur** (**pas Git Bash / WSL**) :
 
 ```powershell
 ./build.ps1
 ```
 
-Ce script installe Node.js LTS, Rustup, le toolchain `stable-x86_64-pc-windows-msvc`, les Build Tools C++ de Visual Studio et le WiX Toolset via `winget`, puis lance `npm ci`, `npm run icon:gen`, `npm run build` et `npx tauri build`.
+Prérequis : VS Build Tools (C++ x64) et Windows 11 SDK doivent être installés. `where lib.exe` doit répondre.
+
+Ce script installe Node.js LTS, Rustup, le toolchain `stable-x86_64-pc-windows-msvc`, les Build Tools C++ de Visual Studio, le Windows 11 SDK et le WiX Toolset via `winget`, puis lance `npm ci`, `npm run icon:gen`, `npm run build` et `npx tauri build`.
 
 ## Publier une release Windows
 ```powershell

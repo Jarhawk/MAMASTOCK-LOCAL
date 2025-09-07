@@ -14,6 +14,8 @@ Parcours manuel pour valider une release candidate Windows.
 
 ## Astuce build Windows
 
+Build local : exécuter `build.ps1` en **PowerShell Administrateur** (pas Git Bash / WSL). VS Build Tools (C++ x64) et Windows 11 SDK doivent être installés ; `where lib.exe` doit répondre.
+
 Pour compiler sous Windows, forcer l'usage exclusif du toolchain Rust MSVC (`x86_64-pc-windows-msvc`) :
 
 ```powershell

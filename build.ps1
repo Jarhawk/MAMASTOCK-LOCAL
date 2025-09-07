@@ -28,19 +28,30 @@ try {
     $packages = @(
         'OpenJS.NodeJS.LTS',
         'Rustlang.Rustup',
-        'Microsoft.VisualStudio.2022.BuildTools',
         'WixToolset.WixToolset'
     )
 
     foreach ($pkg in $packages) {
         if (-not (winget list --id $pkg | Select-String $pkg)) {
-            if ($pkg -eq 'Microsoft.VisualStudio.2022.BuildTools') {
-                winget install -e --id $pkg --accept-package-agreements --accept-source-agreements --override "--wait --quiet --add Microsoft.VisualStudio.Workload.VCTools"
-            } else {
-                winget install -e --id $pkg --accept-package-agreements --accept-source-agreements
-            }
+            winget install -e --id $pkg --accept-package-agreements --accept-source-agreements
         }
     }
+
+    # VS Build Tools + Windows SDK
+    winget install -e --id Microsoft.VisualStudio.2022.BuildTools --source winget --accept-package-agreements --accept-source-agreements
+    $vsUrl = "https://aka.ms/vs/17/release/vs_BuildTools.exe"
+    $vsExe = "$env:TEMP\\vs_BuildTools.exe"
+    Invoke-WebRequest $vsUrl -OutFile $vsExe
+    & $vsExe --quiet --wait --norestart --nocache `
+        --add Microsoft.VisualStudio.Workload.VCTools `
+        --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+        --add Microsoft.VisualStudio.Component.Windows11SDK.22000 `
+        --add Microsoft.VisualStudio.Component.Windows11SDK.22621 `
+        --add Microsoft.VisualStudio.Component.VC.CMake.Project
+
+    $libPath = (Get-Command lib.exe -ErrorAction SilentlyContinue)?.Source
+    if (-not $libPath) { Write-Error "lib.exe introuvable (VS Build Tools non prêts)"; exit 1 }
+    & vswhere -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | Write-Host
 
     npm ci
 
@@ -51,7 +62,7 @@ try {
     npm run build
     npx tauri build
 
-    $bundlePath = Join-Path $PSScriptRoot 'src-tauri\target\release\bundle'
+    $bundlePath = Join-Path $PSScriptRoot 'src-tauri\\target\\release\\bundle'
     Write-Host "Bundle generated in: $bundlePath"
 }
 finally {
