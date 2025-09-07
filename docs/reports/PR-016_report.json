@@ -1,0 +1,51 @@
+{
+  "pr_number": "016",
+  "title": "chore: unifier l'alias '@' (Vite/Vitest/TS) + stabiliser les tests d'export",
+  "summary": "Alignement de l'alias '@' pour Vite, Vitest et TypeScript avec script Node compatible et conversion des tests d'export.",
+  "files": {
+    "added": [
+      "tsconfig.json",
+      "tsconfig.node.json",
+      "test/exportHelpers.test.ts",
+      "test/alias-node.ts",
+      "docs/reports/PR-016_report.md",
+      "docs/reports/PR-016_report.json"
+    ],
+    "modified": [
+      "vite.config.ts",
+      "vitest.config.ts",
+      "package.json",
+      "package-lock.json",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "\u2713 built in 15.78s"
+    },
+    {
+      "name": "npm test",
+      "command": "npm test",
+      "status": "pass",
+      "stdout": "Test Files  4 passed"
+    },
+    {
+      "name": "npm run node:paths test/alias-node.ts",
+      "command": "npm run node:paths test/alias-node.ts",
+      "status": "pass",
+      "stdout": "foo bar"
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "no matching package named `tauri-plugin-path` found"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}

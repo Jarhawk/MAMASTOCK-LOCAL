@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import path from 'path';
+import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   plugins: [react() as any],
@@ -11,10 +11,17 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@tauri-apps/plugin-path': path.resolve(__dirname, './test/stubs/tauri-path.ts'),
-      '@tauri-apps/plugin-fs': path.resolve(__dirname, './test/stubs/tauri-fs.ts'),
-      '@tauri-apps/plugin-dialog': path.resolve(__dirname, './test/stubs/tauri-dialog.ts'),
-    }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@tauri-apps/plugin-path': fileURLToPath(
+        new URL('./test/stubs/tauri-path.ts', import.meta.url)
+      ),
+      '@tauri-apps/plugin-fs': fileURLToPath(
+        new URL('./test/stubs/tauri-fs.ts', import.meta.url)
+      ),
+      '@tauri-apps/plugin-dialog': fileURLToPath(
+        new URL('./test/stubs/tauri-dialog.ts', import.meta.url)
+      ),
+    },
+    extensions: ['.js', '.ts', '.tsx'],
   },
 });
