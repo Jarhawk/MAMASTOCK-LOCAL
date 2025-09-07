@@ -31,4 +31,6 @@ try {
     $exitCode = 1
 }
 
+Test-Tool "Tauri plugins v2" "node scripts/check-tauri-plugins.js"
+
 exit $exitCode
