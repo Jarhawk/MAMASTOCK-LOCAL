@@ -17,6 +17,7 @@ This document tracks the global progress of the project.
 - Logo vectoriel et génération d'icônes Tauri automatisée à la build (CI + build.ps1)
 - Pluginisation Tauri v2 (process/fs/dialog/path) et script de vérification des imports
 - Script doctor (Node/Rust/migrations/plugins v2) et guide QA
+- Résolution des plugins Tauri v2 via npm (path/fs/dialog/process) et suppression du stub local
 
 ### En cours
 - TBD
