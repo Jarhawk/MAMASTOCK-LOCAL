@@ -8,6 +8,7 @@ import { MultiMamaProvider } from "@/context/MultiMamaContext";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import CookieConsent from "@/components/CookieConsent";
 import ToastRoot from "@/components/ToastRoot";
+import DebugRibbon from "@/components/DebugRibbon";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -65,6 +66,7 @@ export default function App() {
         <MultiMamaProvider>
           <ThemeProvider>
             <ToastRoot />
+            <DebugRibbon />
             <Router />
             <CookieConsent />
           </ThemeProvider>

@@ -33,6 +33,11 @@ Assurez‑vous qu'un seul poste utilise la base à la fois.
 - Nettoyez les exports périmés dans `Documents/MamaStock/Exports`.
 - Conservez une sauvegarde avant toute mise à jour de l'application.
 
+## Diagnostiquer un écran bleu
+- Appuyez sur **F12** ou utilisez le menu/debug pour ouvrir les DevTools.
+- Les erreurs sont aussi enregistrées dans `%APPDATA%\\com.mamastock.local\\logs\\renderer.log`.
+- Ce fichier peut être ouvert via le bouton « Voir le fichier de logs » du ruban debug.
+
 ## Exports locaux
 - Par défaut, les fichiers d'export (CSV, Excel, PDF) sont enregistrés dans `Documents/MamaStock/Exports`.
 - Ce dossier peut être modifié depuis la page **Paramètres** en renseignant le « Dossier des exports ».

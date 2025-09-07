@@ -1,0 +1,36 @@
+{
+  "pr_number": "040-WIN",
+  "title": "fix(debug): ErrorBoundary visible + journalisation des erreurs dans un fichier local",
+  "summary": "Affiche un panneau d'erreur et sauvegarde les logs dans %APPDATA%\\com.mamastock.local\\logs\\renderer.log.",
+  "files": {
+    "added": [
+      "src/debug/logger.ts",
+      "src/debug/ErrorBoundary.jsx",
+      "src/components/DebugRibbon.jsx",
+      "docs/reports/PR-040-WIN_report.md",
+      "docs/reports/PR-040-WIN_report.json"
+    ],
+    "modified": [
+      "src/main.jsx",
+      "src/App.jsx",
+      "README-offline.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "unit tests",
+      "command": "npm test",
+      "status": "fail",
+      "stdout": "Failed to resolve import ... node_modules._OLD/..."
+    },
+    {
+      "name": "web build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "\u2713 built in 18.32s"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
