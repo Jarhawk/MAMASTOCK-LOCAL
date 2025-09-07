@@ -12,3 +12,15 @@ Parcours manuel pour valider une release candidate Windows.
 6. Exporter les produits en CSV **et** en XLSX puis vérifier que les fichiers sont présents.
 7. Sauvegarder la base de données, restaurer cette sauvegarde et vérifier le redémarrage de l'application.
 8. Tester le verrou distribué : une instance A est ouverte, démarrer une instance B → A se ferme et B prend la main.
+
+## Astuce build Windows
+
+Pour compiler sous Windows, forcer l'usage exclusif du toolchain Rust MSVC (`x86_64-pc-windows-msvc`) :
+
+```powershell
+rustup set default-host x86_64-pc-windows-msvc
+rustup toolchain install stable-x86_64-pc-windows-msvc
+rustup default stable-x86_64-pc-windows-msvc
+```
+
+Assurez-vous qu'aucun élément MSYS/MinGW (comme `git\usr\bin`) ne figure dans `PATH`.

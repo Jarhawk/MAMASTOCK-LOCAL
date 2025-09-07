@@ -1,0 +1,42 @@
+{
+  "pr_number": "020-WIN",
+  "title": "fix: Windows toolchain MSVC only (no MSYS) + hardening build.ps1 & CI",
+  "summary": "Force MSVC Rust toolchain, warn on MSYS/MinGW, and document Windows-only build requirements.",
+  "files": {
+    "added": [
+      "docs/reports/PR-020-WIN_report.md",
+      "docs/reports/PR-020-WIN_report.json"
+    ],
+    "modified": [
+      "build.ps1",
+      ".github/workflows/build-windows.yml",
+      ".github/workflows/verify-local.yml",
+      "docs/QA.md",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1133 packages, and audited 1140 packages in 18s"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "✓ built in 21.64s"
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "cannot find function `init` in crate `tauri_plugin_sql`"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
+

@@ -16,6 +16,13 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-pc-windows-msvc
+      - name: Force MSVC
+        run: |
+          rustup set default-host x86_64-pc-windows-msvc
+          rustup toolchain install stable-x86_64-pc-windows-msvc
+          rustup default stable-x86_64-pc-windows-msvc
+          rustc -Vv
+          cargo -Vv
       - run: npm ci
       - name: Generate icons
         run: npm run icon:gen
