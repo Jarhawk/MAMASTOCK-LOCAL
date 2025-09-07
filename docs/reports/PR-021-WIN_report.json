@@ -1,0 +1,45 @@
+{
+  "pr_number": "021-WIN",
+  "title": "fix: add/register @tauri-apps/plugin-dialog (v2) + build OK",
+  "summary": "Interdit l'ancien module @tauri-apps/api/dialog et met à jour la documentation.",
+  "files": {
+    "added": [
+      "docs/reports/PR-021-WIN_report.md",
+      "docs/reports/PR-021-WIN_report.json"
+    ],
+    "modified": [
+      "scripts/check-tauri-imports.js",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm ci",
+      "command": "npm ci",
+      "status": "pass",
+      "stdout": "added 1133 packages, and audited 1140 packages in 13s"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "✓ built in 15.89s"
+    },
+    {
+      "name": "npm run db:smoke",
+      "command": "npm run db:smoke",
+      "status": "pass",
+      "stdout": "✅ migration smoke ok { insert: { stock: 10, valeur: 25, pmp: 2.5 }, update: { stock: 20, valeur: 60, pmp: 3 }, delete: { stock: 0, valeur: 0, pmp: 0 } }"
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "The system library `glib-2.0` required by crate `glib-sys` was not found."
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
+
