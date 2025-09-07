@@ -20,6 +20,15 @@ const whitelist = [
 
 let failed = false;
 
+const dialogApiRes = spawnSync('rg', [...baseArgs, '@tauri-apps/api/dialog']);
+const dialogApiOut = dialogApiRes.stdout.toString().trim();
+if (dialogApiOut) {
+  console.error(
+    `Forbidden import detected for module "@tauri-apps/api/dialog":\n${dialogApiOut}`
+  );
+  failed = true;
+}
+
 const apiRes = spawnSync('rg', [...baseArgs, '@tauri-apps/api/']);
 const apiOut = apiRes.stdout.toString().trim();
 if (apiOut) {

@@ -23,6 +23,7 @@ This document tracks the global progress of the project.
 - Durcissement Windows uniquement : workflows CI Windows, bundle MSI, build.ps1 et documentation dédiés
 - Préparation de la première release Windows 1.0.0 : changelog initial, guide QA et instructions de publication
 - Forçage du toolchain Rust MSVC et avertissement en cas de présence de MSYS/MinGW
+- Ajout du plugin dialog v2 et mise à jour du script de vérification des imports
 
 ### En cours
 - TBD
