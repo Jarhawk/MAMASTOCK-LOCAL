@@ -44,16 +44,18 @@ Assurez‑vous qu'un seul poste utilise la base à la fois.
 - `npm run db:smoke` vérifie les triggers et la valeur du stock.
 
 ## Build local
-Exécuter dans **PowerShell** :
+Exécuter dans **PowerShell** (**pas Git Bash**) avec le toolchain Rust **MSVC** :
 
 ```powershell
 ./build.ps1
 ```
 
-Ce script installe Node.js LTS, Rustup, les Build Tools C++ de Visual Studio et le WiX Toolset via `winget`, puis lance `npm ci`, `npm run icon:gen`, `npm run build` et `npx tauri build`.
+Ce script installe Node.js LTS, Rustup, le toolchain `stable-x86_64-pc-windows-msvc`, les Build Tools C++ de Visual Studio et le WiX Toolset via `winget`, puis lance `npm ci`, `npm run icon:gen`, `npm run build` et `npx tauri build`.
 
 ## Publier une release Windows
-- `git tag v1.0.0`
-- `git push origin v1.0.0`
-- Récupérer l’installateur MSI généré par la CI sur la page **Releases** de GitHub.
+```powershell
+git tag v1.0.0
+git push origin v1.0.0
+```
+Récupérer l’installateur MSI généré par la CI sur la page **Releases** de GitHub.
 

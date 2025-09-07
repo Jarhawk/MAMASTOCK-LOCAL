@@ -33,4 +33,7 @@ try {
 
 Test-Tool "Tauri plugins v2" "node scripts/check-tauri-plugins.js"
 
+Test-Tool "SQL plugin Builder" "if (-not (Select-String -Path 'src-tauri/src/main.rs' -Pattern 'tauri_plugin_sql::Builder::default().build' -SimpleMatch)) { throw 'missing' }"
+Test-Tool "SQL capabilities" "if (-not (Test-Path 'src-tauri/capabilities/sql.json')) { throw 'missing' }"
+
 exit $exitCode

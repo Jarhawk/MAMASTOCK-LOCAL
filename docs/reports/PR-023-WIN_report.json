@@ -1,0 +1,34 @@
+{
+  "pr_number": "023-WIN",
+  "title": "chore: Windows RC sanity + guide release",
+  "summary": "Ajoute des vérifications SQL au script doctor, actualise le guide QA et le README pour la publication Windows.",
+  "files": {
+    "added": [
+      "docs/reports/PR-023-WIN_report.md",
+      "docs/reports/PR-023-WIN_report.json"
+    ],
+    "modified": [
+      "scripts/doctor.ps1",
+      "docs/QA.md",
+      "README.md",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm run doctor",
+      "command": "npm run doctor",
+      "status": "fail",
+      "stdout": "sh: 1: pwsh: not found"
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build --target x86_64-pc-windows-msvc",
+      "status": "fail",
+      "stdout": "error occurred in cc-rs: failed to find tool 'lib.exe'"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
