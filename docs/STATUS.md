@@ -21,6 +21,7 @@ This document tracks the global progress of the project.
 - Alias '@' unifié pour Vite/Vitest/TS avec fallback Node et tests d'export stabilisés
 - Passage à `@tauri-apps/api/path` avec suppression du faux plugin path et mise à jour du script d'interdiction d'import
 - Durcissement Windows uniquement : workflows CI Windows, bundle MSI, build.ps1 et documentation dédiés
+- Préparation de la première release Windows 1.0.0 : changelog initial, guide QA et instructions de publication
 
 ### En cours
 - TBD

@@ -5,8 +5,9 @@
 Cette variante, basée sur **Tauri v2**, embarque une base SQLite locale pour fonctionner hors ligne.
 
 ## Installation
+- Prérequis : Windows 11 x64. Si WebView2 est absent, le bootstrapper l'installera.
 - Télécharger l'installateur **MSI** produit par la CI.
-- L'exécuter : le bootstrapper WebView2 gère automatiquement l'installation du moteur.
+- L'exécuter.
 
 ## Choisir le dossier des données
 - Lancez l'application puis ouvrez la page **Paramètres**.
@@ -51,7 +52,8 @@ Exécuter dans **PowerShell** :
 
 Ce script installe Node.js LTS, Rustup, les Build Tools C++ de Visual Studio et le WiX Toolset via `winget`, puis lance `npm ci`, `npm run icon:gen`, `npm run build` et `npx tauri build`.
 
-## Release
-- Créez et poussez un tag `v1.0.0` (exemple).
-- Récupérez l’installateur MSI généré par la CI dans l’onglet **Actions** ou la page **Releases** de GitHub.
+## Publier une release Windows
+- `git tag v1.0.0`
+- `git push origin v1.0.0`
+- Récupérer l’installateur MSI généré par la CI sur la page **Releases** de GitHub.
 
