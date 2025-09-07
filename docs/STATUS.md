@@ -28,6 +28,7 @@ This document tracks the global progress of the project.
 - Sanity finale Windows : extension du script doctor (plugin SQL + capacités) et rappel du guide de publication
 - Enforcement final Windows : workflows CI et release exclusivement Windows, doctor vérifiant Node/npm/Rust/VS Build Tools/WebView2/migrations
 - Vérification MSVC/SDK : build.ps1 et CI installent VS Build Tools + Windows 11 SDK et vérifient `lib.exe` pour éviter « lib.exe not found »
+- Exécution forcée Windows : workflows assertent Windows, build.ps1 bloque WSL/Git Bash et la doc impose PowerShell
 
 ### En cours
 - TBD

@@ -1,5 +1,7 @@
 # QA
 
+Exécuter build et dev dans **PowerShell Windows** (Administrateur), pas WSL/Git Bash.
+
 Parcours manuel pour valider une release candidate Windows.
 
 1. Lancer l'application puis se connecter avec l'administrateur créé via `npm run seed:admin`.

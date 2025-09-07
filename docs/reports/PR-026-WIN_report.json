@@ -1,0 +1,41 @@
+{
+  "pr_number": "026-WIN",
+  "title": "chore: enforce Windows-only execution everywhere (no Linux/WSL fallback)",
+  "summary": "Blocage Linux/WSL en imposant PowerShell Windows pour build et CI.",
+  "files": {
+    "added": [],
+    "modified": [
+      "build.ps1",
+      ".github/workflows/verify-local.yml",
+      ".github/workflows/build-windows.yml",
+      "README.md",
+      "docs/QA.md",
+      "docs/STATUS.md",
+      "docs/reports/PR-026-WIN_report.md",
+      "docs/reports/PR-026-WIN_report.json"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm test",
+      "command": "npm test",
+      "status": "pass",
+      "stdout": "Test Files 4 passed (4)"
+    },
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "\u2713 built in 14.90s"
+    },
+    {
+      "name": "npx tauri build",
+      "command": "npx tauri build",
+      "status": "fail",
+      "stdout": "The system library `gobject-2.0` required by crate `gobject-sys` was not found."
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
