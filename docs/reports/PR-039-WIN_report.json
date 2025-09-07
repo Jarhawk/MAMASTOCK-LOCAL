@@ -1,0 +1,38 @@
+{
+  "pr_number": "039-WIN",
+  "title": "chore(debug): ajouter F12 et un menu pour ouvrir les DevTools (évite conflit AMD)",
+  "summary": "Ajoute un raccourci F12 et un menu natif pour ouvrir les DevTools sans utiliser Ctrl+Shift+I.",
+  "files": {
+    "added": [
+      "docs/reports/PR-039-WIN_report.md",
+      "docs/reports/PR-039-WIN_report.json"
+    ],
+    "modified": [
+      "src/main.jsx",
+      "src-tauri/src/main.rs"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "web build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "\u2713 built in 17.66s"
+    },
+    {
+      "name": "tauri build",
+      "command": "npx tauri build",
+      "status": "warn",
+      "stdout": "The system library `glib-2.0` required by crate `glib-sys` was not found."
+    },
+    {
+      "name": "run app",
+      "command": "./src-tauri/target/release/mamastock",
+      "status": "warn",
+      "stdout": "No such file or directory"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
