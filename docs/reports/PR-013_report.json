@@ -1,0 +1,35 @@
+{
+  "pr_number": "013",
+  "title": "chore: RC build + QA pack",
+  "summary": "script doctor avec vérification des plugins Tauri v2, guide QA et mise à jour release",
+  "files": {
+    "added": [
+      "scripts/check-tauri-plugins.js",
+      "docs/QA.md",
+      "docs/reports/PR-013_report.md",
+      "docs/reports/PR-013_report.json"
+    ],
+    "modified": [
+      "scripts/doctor.ps1",
+      "README.md",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm run doctor",
+      "command": "npm run doctor",
+      "status": "pass",
+      "stdout": "Node OK\nRust OK\nMigration OK\nTauri plugins v2 OK"
+    },
+    {
+      "name": "npm run tauri:build",
+      "command": "npm run tauri:build",
+      "status": "fail",
+      "stdout": "Rollup failed to resolve import \"@tauri-apps/plugin-path\""
+    }
+  ],
+  "todos": [],
+  "risks": []
+}

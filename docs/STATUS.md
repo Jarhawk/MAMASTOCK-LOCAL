@@ -16,6 +16,7 @@ This document tracks the global progress of the project.
 - Exports locaux (CSV/XLSX/PDF) pour produits, fournisseurs et factures via plugins fs/dialog/path v2
 - Logo vectoriel et génération d'icônes Tauri automatisée à la build
 - Pluginisation Tauri v2 (process/fs/dialog/path) et script de vérification des imports
+- Script doctor (Node/Rust/migrations/plugins v2) et guide QA
 
 ### En cours
 - TBD
