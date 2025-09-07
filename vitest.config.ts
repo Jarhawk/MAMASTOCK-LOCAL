@@ -14,6 +14,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       '@tauri-apps/plugin-path': path.resolve(__dirname, './test/stubs/tauri-path.ts'),
       '@tauri-apps/plugin-fs': path.resolve(__dirname, './test/stubs/tauri-fs.ts'),
+      '@tauri-apps/plugin-dialog': path.resolve(__dirname, './test/stubs/tauri-dialog.ts'),
     }
   },
 });

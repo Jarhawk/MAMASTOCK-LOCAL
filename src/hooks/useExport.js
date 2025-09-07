@@ -68,7 +68,7 @@ export default function useExport() {
       }
 
       const ext = format === 'excel' ? 'xlsx' : format === 'csv' ? 'csv' : format === 'pdf' ? 'pdf' : format;
-      const exportOptions = { ...options, columns, filename: `${filenameBase}.${ext}` };
+      const exportOptions = { ...options, columns, filename: `${filenameBase}.${ext}`, useDialog: true };
 
       if (format === 'pdf') await exportToPDF(data, exportOptions); else
       if (format === 'excel') await exportToExcel(data, exportOptions); else

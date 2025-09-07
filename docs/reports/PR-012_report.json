@@ -1,0 +1,42 @@
+{
+  "pr_number": "012",
+  "title": "fix: exports locaux compatibles Tauri v2 (fs/dialog/path)",
+  "summary": "mise à jour des helpers d'export pour utiliser les plugins fs, dialog et path de Tauri v2",
+  "files": {
+    "added": [
+      "test/stubs/tauri-dialog.ts",
+      "docs/reports/PR-012_report.md",
+      "docs/reports/PR-012_report.json"
+    ],
+    "modified": [
+      "docs/STATUS.md",
+      "src/hooks/useExport.js",
+      "src/lib/export/exportHelpers.js",
+      "test/stubs/tauri-fs.ts",
+      "vitest.config.ts"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "pass",
+      "stdout": "built in"
+    },
+    {
+      "name": "npm test",
+      "command": "npm test",
+      "status": "pass",
+      "stdout": "Test Files  3 passed"
+    },
+    {
+      "name": "node export helpers",
+      "command": "node --input-type=module <script export>",
+      "status": "fail",
+      "stdout": "Cannot find package '@/lib'"
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
