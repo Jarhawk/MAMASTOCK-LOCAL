@@ -1,0 +1,40 @@
+{
+  "pr_number": "019-WIN",
+  "title": "chore: Release Windows 1.0.0 (CHANGELOG + QA + tag guide)",
+  "summary": "Préparation de la première release Windows 1.0.0 : changelog initial, guide QA minimal et guide de publication (tags).",
+  "files": {
+    "added": [
+      "CHANGELOG.md",
+      "docs/reports/PR-019-WIN_report.md",
+      "docs/reports/PR-019-WIN_report.json"
+    ],
+    "modified": [
+      "README.md",
+      "docs/QA.md",
+      "docs/STATUS.md"
+    ],
+    "removed": []
+  },
+  "tests": [
+    {
+      "name": "npm run build",
+      "command": "npm run build",
+      "status": "fail",
+      "stdout": "Rollup failed to resolve import '@tauri-apps/plugin-dialog'"
+    },
+    {
+      "name": "npm run db:smoke",
+      "command": "npm run db:smoke",
+      "status": "pass",
+      "stdout": "migration smoke ok"
+    },
+    {
+      "name": "npm run check:tauri",
+      "command": "npm run check:tauri",
+      "status": "pass",
+      "stdout": ""
+    }
+  ],
+  "todos": [],
+  "risks": []
+}
