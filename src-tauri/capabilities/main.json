@@ -1,8 +1,10 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "main",
-  "description": "MamaStock: core + logging for main window",
-  "windows": ["main"],
+  "description": "Permissions for main window",
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "core:app:default",
     "core:event:default",

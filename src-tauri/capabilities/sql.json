@@ -2,7 +2,9 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "sql-main",
   "description": "Permissions SQL",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "sql:default",
     "sql:allow-execute"
