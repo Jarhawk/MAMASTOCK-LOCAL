@@ -37,8 +37,10 @@ fn main() {
             let h = app.handle();
             Ok(())
         })
-        .run(tauri::generate_context!())
+        .plugin(tauri_plugin_log::Builder::default().build())
+            .run(tauri::generate_context!())
         .expect("erreur au lancement de Tauri");
 }
+
 
 
