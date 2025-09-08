@@ -44,6 +44,8 @@
     "icon:gen": "tauri icon assets/logo.svg -o src-tauri/icons",
     "tauri:dev": "tauri dev",
     "tauri:build": "npm run icon:gen && tauri build",
+    "build:win": "vite build && tauri build --bundles msi",
+    "dev:win": "tauri dev",
     "doctor": "pwsh scripts/doctor.ps1",
     "front:audit": "node scripts/front-audit.js",
     "check:tauri": "node scripts/check-tauri-imports.js"
@@ -102,7 +104,7 @@
     "@eslint/js": "^8.57.0",
     "@playwright/test": "^1.54.1",
     "@tailwindcss/postcss": "^4.1.11",
-    "@tauri-apps/cli": "^2.8.4",
+    "@tauri-apps/cli": "^2",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",

@@ -1,63 +1,51 @@
-name: Build Windows
+name: Build Windows (Tauri)
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [ main ]
+  pull_request:
 
 jobs:
-  build:
+  build-windows:
     runs-on: windows-latest
-    timeout-minutes: 90
-    env:
-      TAURI_CLI_LOG_LEVEL: trace
-      RUST_BACKTRACE: 1
-      CARGO_TERM_COLOR: always
-    defaults:
-      run:
-        shell: pwsh
+
     steps:
-      - name: Assert Windows
-        run: |
-          $isWin = $env:OS -eq "Windows_NT"
-          if (-not $isWin) { Write-Error "Not Windows"; exit 1 }
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
-      - uses: actions/cache@v4
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - name: Force MSVC target
-        run: |
-          Remove-Item Env:CARGO_BUILD_TARGET -ErrorAction SilentlyContinue
-          rustup set default-host x86_64-pc-windows-msvc
-          rustup toolchain install stable-x86_64-pc-windows-msvc
-          rustup default stable-x86_64-pc-windows-msvc
-          $env:CARGO_BUILD_TARGET = "x86_64-pc-windows-msvc"
-          rustc -Vv
-          cargo -Vv
-          where lib.exe
-      - run: npm ci
-      - name: Generate icons
-        run: npm run icon:gen
-      - name: Build (Web)
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Print tauri version
+        run: npx tauri --version
+
+      - name: Build web
         run: npm run build
-      - name: Tauri Build (verbose)
-        uses: tauri-apps/tauri-action@v0
-        with:
-          tagName: ${{ github.ref_name }}
-          releaseName: MamaStock ${{ github.ref_name }}
-          releaseBody: Windows release
-          includeDebug: false
-          args: "--verbose"
-      - name: Upload logs
-        if: ${{ always() }}
+
+      - name: Build Tauri (MSI only)
+        run: npx tauri build --bundles msi
+
+      - name: Upload MSI artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-logs
-          path: logs
-          if-no-files-found: ignore
+          name: mamastock-msi
+          path: src-tauri/target/release/bundle/msi/*.msi
+
