@@ -7,6 +7,16 @@ window.Buffer = Buffer;
 // @ts-ignore
 window.process = process;
 
+import { attachConsole, info as logInfo } from "@tauri-apps/plugin-log";
+
+attachConsole()
+  .then(() => {
+    logInfo("Frontend booted and console attached");
+  })
+  .catch((e) => {
+    console.error("Failed to attach console to tauri-plugin-log", e);
+  });
+
 // === Debug global errors ===
 import { appendLog } from "@/debug/logger";
 function installGlobalErrorOverlay() {

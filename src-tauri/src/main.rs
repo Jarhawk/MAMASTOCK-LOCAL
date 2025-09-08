@@ -4,10 +4,22 @@ use tauri::{
     menu::{Menu, MenuItem, Submenu},
     Manager,
 };
+use log::{info, warn};
+use tauri_plugin_log::{LogTarget, Builder as LogBuilder};
 
 // Entrypoint for the Tauri v2 application
 fn main() {
     tauri::Builder::default()
+        .plugin(
+            LogBuilder::default()
+                .targets([
+                    LogTarget::LogDir,
+                    LogTarget::Stdout,
+                    // LogTarget::Webview,
+                ])
+                .level(log::LevelFilter::Info)
+                .build(),
+        )
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_process::init())
@@ -32,7 +44,9 @@ fn main() {
             }
         })
         .setup(|app| {
+            info!("Tauri app starting…");
             if let Some(w) = app.get_webview_window("main") {
+                info!("Main webview acquired: {:?}", w.label());
                 #[cfg(debug_assertions)]
                 {
                     let _ = w.set_focus();
@@ -42,6 +56,8 @@ fn main() {
                     });
                     println!("[mamastock] main window ready (debug)");
                 }
+            } else {
+                warn!("Main webview not found at setup.");
             }
             Ok(())
         })
