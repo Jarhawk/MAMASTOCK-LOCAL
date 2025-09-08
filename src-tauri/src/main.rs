@@ -5,19 +5,20 @@ use tauri::{
     Manager,
 };
 use log::{info, warn};
-use tauri_plugin_log::{Target, Builder as LogBuilder};
+use tauri_plugin_log::{Builder as LogBuilder, Target, TargetKind};
 
 // Entrypoint for the Tauri v2 application
 fn main() {
     tauri::Builder::default()
         .plugin(
-            LogBuilder::default()
+            LogBuilder::new()
+                // write to the OS log dir + also to stdout and the webview console
                 .targets([
-                    Target::LogDir,
-                    Target::Stdout,
-                    // Target::Webview,
+                    Target::new(TargetKind::LogDir { file_name: None }),
+                    Target::new(TargetKind::Stdout),
+                    Target::new(TargetKind::Webview),
                 ])
-                .level(log::LevelFilter::Info)
+                .level(log::LevelFilter::Info) // set to Debug for more verbosity
                 .build(),
         )
         .plugin(tauri_plugin_fs::init())
@@ -44,21 +45,32 @@ fn main() {
             }
         })
         .setup(|app| {
-            info!("Tauri app starting…");
-            if let Some(_main) = app.get_webview_window("main") {
+            if let Ok(dir) = app.path().app_log_dir() {
+                info!("Log directory: {}", dir.display());
+            } else {
+                info!("No app_log_dir available (using defaults)");
+            }
+
+            if let Some(main) = app.get_webview_window("main") {
+                let _ = main.set_focus();
                 info!("Main webview acquired");
                 #[cfg(debug_assertions)]
                 {
-                    let _ = _main.set_focus();
-                    tauri::async_runtime::spawn(async {
+                    let main_cloned = main.clone();
+                    tauri::async_runtime::spawn(async move {
                         tauri::async_runtime::sleep(std::time::Duration::from_millis(150)).await;
-                        let _ = _main.emit("app:ready", "tauri-main-ready");
+                        let _ = main_cloned.emit("app:ready", "tauri-main-ready");
                     });
                     println!("[mamastock] main window ready (debug)");
                 }
             } else {
                 warn!("Main webview not found at setup.");
             }
+
+            info!(
+                "MamaStock Local started (v{})",
+                app.package_info().version
+            );
             Ok(())
         })
         .run(tauri::generate_context!())
