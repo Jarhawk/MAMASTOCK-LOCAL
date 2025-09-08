@@ -2,13 +2,14 @@
 
 use log::{info, warn};
 use tauri::{
-    menu::{MenuBuilder, MenuItemBuilder, SubmenuBuilder},
     Manager,
+    Listener,
+    menu::{MenuBuilder, SubmenuBuilder, MenuItemBuilder},
 };
 use tauri_plugin_log::{Builder as LogBuilder, Target, TargetKind};
 
 // Entrypoint for the Tauri v2 application
-fn main() {
+fn main() -> tauri::Result<()> {
     tauri::Builder::default()
         .plugin(
             LogBuilder::new()
@@ -25,33 +26,42 @@ fn main() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_sql::Builder::default().build())
-        .menu(|app| {
-            let affichage = SubmenuBuilder::new(app, "Affichage")
-                .item(
-                    &MenuItemBuilder::new("Ouvrir DevTools")
-                        .id("devtools")
-                        .build()?,
+        .setup(|app| {
+            // ===== Menu "Débogage" (Tauri v2 builders) =====
+            let debug_submenu = SubmenuBuilder::new(app, "Débogage")
+                .add_item(
+                    MenuItemBuilder::with_id("open-devtools", "Ouvrir DevTools")
+                        .build(app)?,
                 )
                 .build()?;
-            MenuBuilder::new(app).items(&[&affichage]).build()
-        })
-        .setup(|app| {
-            let handle = app.handle();
-            app.on_menu_event(move |app, event| {
-                if event.id() == "devtools" {
+
+            let app_menu = MenuBuilder::new(app)
+                .add_submenu(debug_submenu)
+                .build()?;
+
+            app.set_menu(app_menu)?;
+
+            // ===== Menu event: clic sur "Ouvrir DevTools" =====
+            app.on_menu_event(|app, e| {
+                if e.id() == "open-devtools" {
                     if let Some(w) = app.get_webview_window("main") {
-                        let _ = w.open_devtools();
-                        let _ = w.set_focus();
+                        #[allow(unused_must_use)]
+                        {
+                            w.open_devtools(); // nécessite la feature `devtools`
+                            w.set_focus();
+                        }
                     }
                 }
             });
 
-            let app_handle = app.handle();
-            app.on_window_event(move |_w, e| if let tauri::WindowEvent::FileDrop(_) = e {});
+            // ===== Event depuis le frontend: "open-devtools" =====
             app.listen("open-devtools", move |_payload| {
-                if let Some(w) = app_handle.get_webview_window("main") {
-                    let _ = w.open_devtools();
-                    let _ = w.set_focus();
+                if let Some(w) = app.get_webview_window("main") {
+                    #[allow(unused_must_use)]
+                    {
+                        w.open_devtools(); // nécessite la feature `devtools`
+                        w.set_focus();
+                    }
                 }
             });
 
@@ -81,5 +91,4 @@ fn main() {
             Ok(())
         })
         .run(tauri::generate_context!())
-        .expect("error while running tauri application");
 }

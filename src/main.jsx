@@ -8,6 +8,7 @@ window.Buffer = Buffer;
 window.process = process;
 
 import { attachConsole, info as logInfo } from "@tauri-apps/plugin-log";
+import { emit } from "@tauri-apps/api/event";
 
 attachConsole()
   .then(() => {
@@ -90,8 +91,16 @@ import { shutdownDbSafely } from "@/lib/shutdown";
 import { getDataDir } from "@/lib/db";
 
 window.addEventListener("keydown", (e) => {
-  if (e.key === "F12") {
-    document.dispatchEvent(new CustomEvent("open-devtools"));
+  const isF12 = e.key === "F12";
+  const isCtrlF12 = e.key === "F12" && (e.ctrlKey || e.metaKey);
+  const isCtrlShiftI = (e.key?.toLowerCase?.() === "i") && e.ctrlKey && e.shiftKey;
+
+  if (isF12 || isCtrlF12 || isCtrlShiftI) {
+    emit("open-devtools").catch((err) =>
+      console.error("Failed to emit open-devtools:", err),
+    );
+    e.preventDefault();
+    e.stopPropagation();
   }
 });
 
