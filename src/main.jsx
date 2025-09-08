@@ -10,6 +10,14 @@ window.process = process;
 import { attachConsole, info as logInfo } from "@tauri-apps/plugin-log";
 import { emit } from "@tauri-apps/api/event";
 
+// Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
+window.addEventListener("keydown", (e) => {
+  if (e.key === "F12") {
+    emit("open-devtools");
+    e.preventDefault();
+  }
+});
+
 attachConsole()
   .then(() => {
     logInfo("Frontend booted and console attached");
@@ -89,20 +97,6 @@ import {
 } from "@/lib/lock";
 import { shutdownDbSafely } from "@/lib/shutdown";
 import { getDataDir } from "@/lib/db";
-
-window.addEventListener("keydown", (e) => {
-  const isF12 = e.key === "F12";
-  const isCtrlF12 = e.key === "F12" && (e.ctrlKey || e.metaKey);
-  const isCtrlShiftI = (e.key?.toLowerCase?.() === "i") && e.ctrlKey && e.shiftKey;
-
-  if (isF12 || isCtrlF12 || isCtrlShiftI) {
-    emit("open-devtools").catch((err) =>
-      console.error("Failed to emit open-devtools:", err),
-    );
-    e.preventDefault();
-    e.stopPropagation();
-  }
-});
 
 // Avoid noisy output in production by disabling debug logs
 if (!import.meta.env.DEV) {

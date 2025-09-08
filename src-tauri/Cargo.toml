@@ -7,7 +7,7 @@ authors = ["MamaStock"]
 license = "MIT"
 
 [dependencies]
-tauri = { version = "2", features = ["wry", "tray-icon", "devtools"] }
+tauri = { version = "2", features = ["wry", "tray-icon"] }
 tauri-plugin-fs = "2"
 tauri-plugin-dialog = "2"
 tauri-plugin-process = "2"
@@ -23,6 +23,7 @@ tauri-build = { version = "2", features = [] }
 [features]
 default = ["custom-protocol"]
 custom-protocol = ["tauri/custom-protocol"]
+devtools = ["tauri/devtools"]
 
 [[bin]]
 name = "mamastock"
