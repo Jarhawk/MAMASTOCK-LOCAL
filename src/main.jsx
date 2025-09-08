@@ -1,6 +1,5 @@
 ﻿import { emit } from '@tauri-apps/api/event';
-
-import '@/debug/logger';
+import { setupLogger, appendLog } from './debug/logger';
 // MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // Polyfills Node â†’ navigateur
 import { Buffer } from "buffer";
@@ -10,7 +9,7 @@ window.Buffer = Buffer;
 // @ts-ignore
 window.process = process;
 
-import { attachConsole, info as logInfo } from "@tauri-apps/plugin-log";
+setupLogger();
 // Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
 if (window.__TAURI__) {
   window.addEventListener('keydown', async (e) => {
@@ -22,16 +21,7 @@ if (window.__TAURI__) {
 
 
 
-attachConsole()
-  .then(() => {
-    logInfo("Frontend booted and console attached");
-  })
-  .catch((e) => {
-    console.error("Failed to attach console to tauri-plugin-log", e);
-  });
-
 // === Debug global errors ===
-import { appendLog } from "@/debug/logger";
 function installGlobalErrorOverlay() {
   const style = document.createElement("style");
   style.textContent = `

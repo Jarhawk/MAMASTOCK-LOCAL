@@ -1,7 +1,6 @@
-﻿#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use tauri::{Manager, Listener};
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use tauri::menu::{MenuBuilder, SubmenuBuilder, MenuItemBuilder};
-use tauri::{AppHandle, Wry};
+use tauri::{AppHandle, Manager, Wry};
 
 fn build_menu(app: &AppHandle<Wry>) -> tauri::Result<()> {
     let open_devtools = MenuItemBuilder::new("Ouvrir DevTools")
@@ -27,6 +26,7 @@ fn on_menu(app: &AppHandle<Wry>, ev: &tauri::menu::MenuEvent) {
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_log::Builder::default().build())
         .plugin(tauri_plugin_devtools::init())
         .plugin(tauri_plugin_shell::init())
         .setup(|app| {
@@ -40,5 +40,4 @@ fn main() {
         .run(tauri::generate_context!())
         .expect("erreur au lancement de Tauri");
 }
-
 
