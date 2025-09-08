@@ -1,17 +1,19 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-
+﻿#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+use tauri_plugin_devtools;
 use tauri::{Listener, Manager};
 
 fn main() -> tauri::Result<()> {
     tauri::Builder::default()
-        // Plugin de logs (écrit côté disque via la config par défaut)
+        .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_devtools::init())
+        // Plugin de logs (Ã©crit cÃ´tÃ© disque via la config par dÃ©faut)
         .plugin(tauri_plugin_log::Builder::default().build())
         .setup(|app| {
-            // Écoute un évènement envoyé depuis le front: emit('open-devtools')
+            // Ã‰coute un Ã©vÃ¨nement envoyÃ© depuis le front: emit('open-devtools')
             let handle = app.handle().clone();
             app.listen("open-devtools", move |_payload| {
                 if let Some(w) = handle.get_webview_window("main") {
-                    // Ouvre DevTools uniquement si la feature 'devtools' est activée côté Rust
+                    // Ouvre DevTools uniquement si la feature 'devtools' est activÃ©e cÃ´tÃ© Rust
                     #[cfg(feature = "devtools")]
                     {
                         let _ = w.open_devtools();
@@ -23,3 +25,6 @@ fn main() -> tauri::Result<()> {
         })
         .run(tauri::generate_context!())
 }
+
+
+

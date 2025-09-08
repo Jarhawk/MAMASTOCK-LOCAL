@@ -1,6 +1,6 @@
-import { getCurrent } from "@tauri-apps/api/window";
+﻿import { getCurrent } from "@tauri-apps/api/window";
 import { appDataDir, join } from "@tauri-apps/api/path";
-import { open } from "@tauri-apps/api/shell";
+import { open } from "@tauri-apps/plugin-shell";
 
 export default function DebugRibbon() {
   const show = import.meta.env.DEV || window.DEBUG;
@@ -33,3 +33,4 @@ export default function DebugRibbon() {
     </div>
   );
 }
+
