@@ -63,8 +63,15 @@ Les icônes binaires (`.ico`/`.png`) ne sont pas versionnées. Elles sont géné
 
 - en local avec `npm run tauri:build` ;
 - en CI via l'étape **Generate icons**.
+ 
+## Build Windows
 
-L'installateur MSI résultant se trouve dans `src-tauri/target/release/bundle/msi/*.msi`.
+```powershell
+npm ci
+npm run build:win
+```
+
+Le MSI est généré dans `src-tauri/target/release/bundle/msi/`.
 
 ## Build local
 Exécuter `build.ps1` en **PowerShell Administrateur** (jamais depuis Git Bash ou WSL) :
