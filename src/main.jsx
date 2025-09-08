@@ -1,6 +1,6 @@
 import { emit } from '@tauri-apps/api/event';
 
-import { initTauriLogger, appendLog } from './debug/logger';
+import { setupLogging, appendLog } from './debug/logger';
 // MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // Polyfills Node â†’ navigateur
 import { Buffer } from "buffer";
@@ -10,7 +10,7 @@ window.Buffer = Buffer;
 // @ts-ignore
 window.process = process;
 
-initTauriLogger().catch(() => {});
+await setupLogging();
 // Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
 if (window.__TAURI__) {
   window.addEventListener('keydown', async (e) => {
