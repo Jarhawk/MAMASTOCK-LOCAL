@@ -20,7 +20,7 @@ attachConsole()
 // === Debug global errors ===
 import { appendLog } from "@/debug/logger";
 function installGlobalErrorOverlay() {
-  const style = document.createElement('style');
+  const style = document.createElement("style");
   style.textContent = `
     #__debug_overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.7);
@@ -31,38 +31,41 @@ function installGlobalErrorOverlay() {
     #__debug_overlay .close { position:absolute; top:8px; right:12px; cursor:pointer; }
   `;
   document.head.appendChild(style);
-  const el = document.createElement('div');
-  el.id = '__debug_overlay';
+  const el = document.createElement("div");
+  el.id = "__debug_overlay";
   el.innerHTML = `<div class="close">✕</div><h3>Runtime error</h3><pre id="__debug_overlay_log"></pre>`;
   document.body.appendChild(el);
-  el.querySelector('.close')?.addEventListener('click', () => (el.style.display = 'none'));
+  el.querySelector(".close")?.addEventListener(
+    "click",
+    () => (el.style.display = "none"),
+  );
 
   function show(type, err) {
-    const pre = document.getElementById('__debug_overlay_log');
+    const pre = document.getElementById("__debug_overlay_log");
     const msg =
       (err && (err.stack || err.message || String(err))) ?? String(err);
     if (pre) {
       pre.textContent = msg;
-      el.style.display = 'block';
+      el.style.display = "block";
     }
     appendLog(`[${type}] ${msg}`);
-    console.error('[Overlay]', err);
+    console.error("[Overlay]", err);
   }
 
-  window.addEventListener('error', (e) =>
-    show('GlobalError', e.error || e.message || e)
+  window.addEventListener("error", (e) =>
+    show("GlobalError", e.error || e.message || e),
   );
-  window.addEventListener('unhandledrejection', (e) =>
-    show('UnhandledRejection', e.reason || e)
+  window.addEventListener("unhandledrejection", (e) =>
+    show("UnhandledRejection", e.reason || e),
   );
   // Raccourci: F10 pour toggle
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'F10') {
-      const visible = el.style.display !== 'none';
-      el.style.display = visible ? 'none' : 'block';
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "F10") {
+      const visible = el.style.display !== "none";
+      el.style.display = visible ? "none" : "block";
     }
   });
-  console.log('[debug] overlay installed');
+  console.log("[debug] overlay installed");
 }
 
 installGlobalErrorOverlay();
@@ -72,22 +75,23 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import ErrorBoundary from "@/debug/ErrorBoundary";
 import "./globals.css";
-import 'nprogress/nprogress.css';
+import "nprogress/nprogress.css";
 import "@/i18n/i18n";
 import "./registerSW.js";
 import { HashRouter } from "react-router-dom";
 import AuthProvider from "@/contexts/AuthContext";
-import { toast } from 'sonner';
-import { ensureSingleOwner, monitorShutdownRequests, releaseLock } from "@/lib/lock";
+import { toast } from "sonner";
+import {
+  ensureSingleOwner,
+  monitorShutdownRequests,
+  releaseLock,
+} from "@/lib/lock";
 import { shutdownDbSafely } from "@/lib/shutdown";
 import { getDataDir } from "@/lib/db";
-import { getCurrent } from "@tauri-apps/api/window";
 
 window.addEventListener("keydown", (e) => {
   if (e.key === "F12") {
-    try {
-      getCurrent().openDevtools?.();
-    } catch {}
+    document.dispatchEvent(new CustomEvent("open-devtools"));
   }
 });
 
@@ -96,14 +100,12 @@ if (!import.meta.env.DEV) {
   console.debug = () => {};
 }
 
-if (import.meta?.env?.DEV && 'serviceWorker' in navigator) {
+if (import.meta?.env?.DEV && "serviceWorker" in navigator) {
   navigator.serviceWorker
     .getRegistrations()
     .then((regs) => regs.forEach((r) => r.unregister()));
   if (window.caches?.keys) {
-    caches
-      .keys()
-      .then((keys) => keys.forEach((k) => caches.delete(k)));
+    caches.keys().then((keys) => keys.forEach((k) => caches.delete(k)));
   }
 }
 
@@ -134,5 +136,5 @@ root.render(
         </ErrorBoundary>
       </AuthProvider>
     </HashRouter>
-  </StrictMode>
+  </StrictMode>,
 );
