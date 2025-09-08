@@ -11,12 +11,15 @@ import { attachConsole, info as logInfo } from "@tauri-apps/plugin-log";
 import { emit } from "@tauri-apps/api/event";
 
 // Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
-window.addEventListener("keydown", (e) => {
-  if (e.key === "F12") {
-    emit("open-devtools");
-    e.preventDefault();
-  }
-});
+if (window.__TAURI__) {
+  window.addEventListener('keydown', async (e) => {
+    if (e.key === 'F12') {
+      await emit('open-devtools');
+    }
+  });
+}
+
+
 
 attachConsole()
   .then(() => {
