@@ -1,5 +1,5 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-// Polyfills Node → navigateur
+﻿// MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+// Polyfills Node â†’ navigateur
 import { Buffer } from "buffer";
 import process from "process";
 // @ts-ignore
@@ -42,7 +42,7 @@ function installGlobalErrorOverlay() {
   document.head.appendChild(style);
   const el = document.createElement("div");
   el.id = "__debug_overlay";
-  el.innerHTML = `<div class="close">✕</div><h3>Runtime error</h3><pre id="__debug_overlay_log"></pre>`;
+  el.innerHTML = `<div class="close">âœ•</div><h3>Runtime error</h3><pre id="__debug_overlay_log"></pre>`;
   document.body.appendChild(el);
   el.querySelector(".close")?.addEventListener(
     "click",
@@ -141,3 +141,15 @@ root.render(
     </HashRouter>
   </StrictMode>,
 );
+
+if (window.__TAURI__) {
+  window.addEventListener('keydown', async (e) => {
+    if (e.key === 'F12') {
+      try {
+        await emit('open-devtools');
+      } catch (err) {
+        console.error('emit(""open-devtools"") failed', err);
+      }
+    }
+  });
+}
