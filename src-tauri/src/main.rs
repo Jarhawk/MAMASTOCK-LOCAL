@@ -1,10 +1,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use log::{info, warn};
 use tauri::{
-    menu::{Menu, MenuItem, Submenu},
+    menu::{MenuBuilder, MenuItemBuilder, SubmenuBuilder},
     Manager,
 };
-use log::{info, warn};
 use tauri_plugin_log::{Builder as LogBuilder, Target, TargetKind};
 
 // Entrypoint for the Tauri v2 application
@@ -26,25 +26,35 @@ fn main() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_sql::Builder::default().build())
         .menu(|app| {
-            let open = MenuItem::with_id(
-                app,
-                "open_devtools",
-                "Ouvrir DevTools (F12)",
-                true,
-                None::<&str>,
-            )?;
-            let help = Submenu::new(app, "Aide", true)?;
-            help.append_items(&[&open])?;
-            Menu::with_items(app, &[&help])
-        })
-        .on_menu_event(|app, event| {
-            if event.id().as_ref() == "open_devtools" {
-                if let Some(w) = app.get_webview_window("main") {
-                    let _ = w.set_focus();
-                }
-            }
+            let affichage = SubmenuBuilder::new(app, "Affichage")
+                .item(
+                    &MenuItemBuilder::new("Ouvrir DevTools")
+                        .id("devtools")
+                        .build()?,
+                )
+                .build()?;
+            MenuBuilder::new(app).items(&[&affichage]).build()
         })
         .setup(|app| {
+            let handle = app.handle();
+            app.on_menu_event(move |app, event| {
+                if event.id() == "devtools" {
+                    if let Some(w) = app.get_webview_window("main") {
+                        let _ = w.open_devtools();
+                        let _ = w.set_focus();
+                    }
+                }
+            });
+
+            let app_handle = app.handle();
+            app.on_window_event(move |_w, e| if let tauri::WindowEvent::FileDrop(_) = e {});
+            app.listen("open-devtools", move |_payload| {
+                if let Some(w) = app_handle.get_webview_window("main") {
+                    let _ = w.open_devtools();
+                    let _ = w.set_focus();
+                }
+            });
+
             if let Ok(dir) = app.path().app_log_dir() {
                 info!("Log directory: {}", dir.display());
             } else {
@@ -67,10 +77,7 @@ fn main() {
                 warn!("Main webview not found at setup.");
             }
 
-            info!(
-                "MamaStock Local started (v{})",
-                app.package_info().version
-            );
+            info!("MamaStock Local started (v{})", app.package_info().version);
             Ok(())
         })
         .run(tauri::generate_context!())
