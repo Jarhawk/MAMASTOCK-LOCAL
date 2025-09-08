@@ -5,7 +5,7 @@ use tauri::{
     Manager,
 };
 use log::{info, warn};
-use tauri_plugin_log::{LogTarget, Builder as LogBuilder};
+use tauri_plugin_log::{Target, Builder as LogBuilder};
 
 // Entrypoint for the Tauri v2 application
 fn main() {
@@ -13,9 +13,9 @@ fn main() {
         .plugin(
             LogBuilder::default()
                 .targets([
-                    LogTarget::LogDir,
-                    LogTarget::Stdout,
-                    // LogTarget::Webview,
+                    Target::LogDir,
+                    Target::Stdout,
+                    // Target::Webview,
                 ])
                 .level(log::LevelFilter::Info)
                 .build(),
@@ -45,14 +45,14 @@ fn main() {
         })
         .setup(|app| {
             info!("Tauri app starting…");
-            if let Some(w) = app.get_webview_window("main") {
-                info!("Main webview acquired: {:?}", w.label());
+            if let Some(_main) = app.get_webview_window("main") {
+                info!("Main webview acquired");
                 #[cfg(debug_assertions)]
                 {
-                    let _ = w.set_focus();
+                    let _ = _main.set_focus();
                     tauri::async_runtime::spawn(async {
                         tauri::async_runtime::sleep(std::time::Duration::from_millis(150)).await;
-                        let _ = w.emit("app:ready", "tauri-main-ready");
+                        let _ = _main.emit("app:ready", "tauri-main-ready");
                     });
                     println!("[mamastock] main window ready (debug)");
                 }
