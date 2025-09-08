@@ -3,26 +3,23 @@
 use tauri::Manager;
 
 fn main() {
-    let mut builder = tauri::Builder::default();
+  tauri::Builder::default()
+    // === Plugins côté Rust ===
+    // FS en DEV + PROD
+    .plugin(tauri_plugin_fs::init())
 
-    #[cfg(debug_assertions)]
-    {
-        // DevTools seulement en développement
-        builder = builder.plugin(tauri_plugin_devtools::init());
-    }
-
+    // Log seulement en release (évite "logger already initialized")
     #[cfg(not(debug_assertions))]
-    {
-        // Logger uniquement en release
-        builder = builder.plugin(tauri_plugin_log::Builder::default().build());
-    }
+    .plugin(tauri_plugin_log::Builder::default().build())
 
-    builder
-        .setup(|_app| {
-            // setup personnalisé si besoin
-            Ok(())
-        })
-        .run(tauri::generate_context!())
-        .expect("erreur au lancement de Tauri");
+    .setup(|app| {
+      // DevTools seulement en DEV
+      #[cfg(debug_assertions)]
+      if let Some(w) = app.get_webview_window("main") {
+        w.open_devtools();
+      }
+      Ok(())
+    })
+    .run(tauri::generate_context!())
+    .expect("erreur au lancement de Tauri");
 }
-

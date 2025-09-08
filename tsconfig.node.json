@@ -10,5 +10,5 @@
     },
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "vitest.config.ts", "scripts", "test", "src"]
+  "include": ["vite.config.js", "vitest.config.ts", "scripts", "test", "src"]
 }
