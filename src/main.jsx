@@ -8,6 +8,7 @@ window.Buffer = Buffer;
 window.process = process;
 
 import { attachConsole, info as logInfo } from "@tauri-apps/plugin-log";
+import { emit } from "@tauri-apps/api/event";
 
 attachConsole()
   .then(() => {
@@ -90,9 +91,7 @@ import { shutdownDbSafely } from "@/lib/shutdown";
 import { getDataDir } from "@/lib/db";
 
 window.addEventListener("keydown", (e) => {
-  if (e.key === "F12") {
-    document.dispatchEvent(new CustomEvent("open-devtools"));
-  }
+  if (e.key === "F12") emit("open-devtools");
 });
 
 // Avoid noisy output in production by disabling debug logs
