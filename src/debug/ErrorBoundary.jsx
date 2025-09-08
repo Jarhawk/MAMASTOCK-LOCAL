@@ -1,5 +1,5 @@
-import { Component } from "react";
-import { getCurrent } from "@tauri-apps/api/window";
+﻿import { Component } from "react";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { appendLog } from "./logger";
 
 export default class ErrorBoundary extends Component {
@@ -19,7 +19,7 @@ export default class ErrorBoundary extends Component {
 
   openDevTools() {
     try {
-      getCurrent().openDevtools();
+      getCurrentWebviewWindow().openDevtools();
     } catch {}
   }
 
@@ -28,7 +28,7 @@ export default class ErrorBoundary extends Component {
       return (
         <div className="flex flex-col items-center gap-4 p-4 text-center">
           <h1 className="text-lg font-bold">Une erreur est survenue</h1>
-          <p>Ouvrez les DevTools pour plus de détails.</p>
+          <p>Ouvrez les DevTools pour plus de dÃ©tails.</p>
           <button
             className="px-3 py-1 border rounded"
             onClick={() => this.openDevTools()}
@@ -41,3 +41,4 @@ export default class ErrorBoundary extends Component {
     return this.props.children;
   }
 }
+

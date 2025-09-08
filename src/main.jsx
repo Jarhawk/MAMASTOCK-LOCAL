@@ -1,4 +1,7 @@
-﻿// MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+﻿import { emit } from '@tauri-apps/api/event';
+
+import '@/debug/logger';
+// MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // Polyfills Node â†’ navigateur
 import { Buffer } from "buffer";
 import process from "process";
@@ -8,8 +11,6 @@ window.Buffer = Buffer;
 window.process = process;
 
 import { attachConsole, info as logInfo } from "@tauri-apps/plugin-log";
-import { emit } from "@tauri-apps/api/event";
-
 // Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
 if (window.__TAURI__) {
   window.addEventListener('keydown', async (e) => {
@@ -156,4 +157,14 @@ if (window.__TAURI__) {
     }
   });
 }
+
+
+if (window.__TAURI__) {
+  window.addEventListener("keydown", async (e) => {
+    if (e.key === "F12") {
+      try { await emit("open_devtools"); } catch (err) { console.error(err); }
+    }
+  });
+}
+
 

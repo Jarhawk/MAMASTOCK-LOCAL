@@ -1,0 +1,32 @@
+[package]
+name = "mamastock"
+version = "0.1.0"
+description = "MamaStock Local"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[[bin]]
+name = "mamastock"
+path = "src/main.rs"
+
+[dependencies]
+tauri = { version = "2", features = ["wry", "tray-icon"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+log = "0.4"
+tauri-plugin-log = { version = "2", features = ["colored"] }
+tauri-plugin-fs = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-process = "2"
+tauri-plugin-sql = { version = "2", features = ["sqlite"] }
+tauri-plugin-shell = "2"
+tauri-plugin-devtools = "2"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[features]
+default = []
+custom-protocol = ["tauri/custom-protocol"]

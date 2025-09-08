@@ -1,0 +1,8 @@
+﻿{
+  "identifier": "main",
+  "description": "Permissions pour la fenêtre principale",
+  "permissions": [
+    "core:default",
+    "log:default"
+  ]
+}

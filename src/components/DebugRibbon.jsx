@@ -1,4 +1,4 @@
-﻿import { getCurrent } from "@tauri-apps/api/window";
+﻿import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { appDataDir, join } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/plugin-shell";
 
@@ -8,7 +8,7 @@ export default function DebugRibbon() {
 
   const openDev = () => {
     try {
-      getCurrent().openDevtools();
+      getCurrentWebviewWindow().openDevtools();
     } catch {}
   };
 
@@ -33,4 +33,5 @@ export default function DebugRibbon() {
     </div>
   );
 }
+
 

@@ -1,6 +1,7 @@
-import { join } from "@tauri-apps/api/path";
+﻿import { join } from "@tauri-apps/api/path";
 import { exists, readTextFile, writeTextFile, remove } from "@tauri-apps/plugin-fs";
-import { appWindow } from "@tauri-apps/api/window";
+import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
+const appWindow = getCurrentWebviewWindow();
 import { v4 as uuidv4 } from "uuid";
 import { shutdownDbSafely } from "./shutdown";
 
@@ -78,3 +79,4 @@ export async function releaseLock(syncDir: string) {
     await remove(lockPath);
   }
 }
+
