@@ -1,13 +1,14 @@
-export async function setupLogger() {
+export async function initTauriLogger() {
   try {
-    const log = await import('@tauri-apps/plugin-log');
-    // En dev: voir les logs dans la console
-    await log.attachConsole();
-    // Optionnel: activer un fichier de log natif
-    // await log.attachLogger();
-    log.info?.('Logger initialisé');
+    const isTauri = ('__TAURI__' in window) || ('__TAURI_INTERNALS__' in window);
+    if (!isTauri) return;          // navigateur pur
+    if (import.meta.env.DEV) return; // en DEV: pas de plugin côté Rust
+
+    const { attachConsole } = await import('@tauri-apps/plugin-log');
+    await attachConsole();
+    console.info('[log] plugin attachConsole OK');
   } catch (e) {
-    console.warn('[log] plugin non dispo – logging désactivé', e);
+    console.warn('[log] plugin non disponible:', e?.message || e);
   }
 }
 
@@ -33,4 +34,4 @@ export async function appendLog(msg, level = 'info') {
   }
 }
 
-export default { setupLogger, appendLog };
+export default { initTauriLogger, appendLog };
