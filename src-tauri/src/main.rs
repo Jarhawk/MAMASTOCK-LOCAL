@@ -1,41 +1,21 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use tauri::menu::{MenuBuilder, SubmenuBuilder, MenuItemBuilder};
-use tauri::{AppHandle, Manager, Wry};
-
-fn build_menu(app: &AppHandle<Wry>) -> tauri::Result<()> {
-    let open_devtools = MenuItemBuilder::new("Ouvrir DevTools")
-        .id("open_devtools")
-        .build(app)?;
-    let debug = SubmenuBuilder::new(app, "Débogage")
-        .item(&open_devtools)
-        .build()?;
-    let menu = MenuBuilder::new(app)
-        .items(&[&debug])
-        .build()?;
-    app.set_menu(menu)?;
-    Ok(())
-}
-
-fn on_menu(app: &AppHandle<Wry>, ev: &tauri::menu::MenuEvent) {
-    if ev.id().as_ref() == "open_devtools" {
-        if let Some(w) = app.get_webview_window("main") {
-
-        }
-    }
-}
+﻿#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    tauri::Builder::default()
-        .plugin(tauri_plugin_log::Builder::default().build())
-        .plugin(tauri_plugin_devtools::init())
-        .plugin(tauri_plugin_shell::init())
-        .setup(|app| {
-            build_menu(&app.handle())?;
-            app.on_menu_event(|app, ev| on_menu(app, &ev));
+    let mut builder = tauri::Builder::default();
 
-            // Event venant du frontend (F12)
-            Ok(())
-        })
+    // En DEV : DevTools uniquement
+    #[cfg(debug_assertions)]
+    {
+        builder = builder.plugin(tauri_plugin_devtools::init());
+    }
+
+    // En RELEASE : plugin-log uniquement
+    #[cfg(not(debug_assertions))]
+    {
+        builder = builder.plugin(tauri_plugin_log::Builder::default().build());
+    }
+
+    builder
         .run(tauri::generate_context!())
-        .expect("erreur au lancement de Tauri");
+        .expect("error while running tauri application");
 }

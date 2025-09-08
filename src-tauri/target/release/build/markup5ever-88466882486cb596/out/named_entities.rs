@@ -1,4 +1,4 @@
-
+﻿
 /// A map of entity names to their codepoints. The second codepoint will
 /// be 0 if the entity contains a single codepoint. Entities have their preceding '&' removed.
 ///
@@ -11842,3 +11842,4 @@ pub static NAMED_ENTITIES: Map<&'static str, (u32, u32)> = ::phf::Map {
         ("Intersection;", (8898, 0)),
     ],
 };
+
