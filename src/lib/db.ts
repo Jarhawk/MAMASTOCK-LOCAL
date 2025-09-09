@@ -1,10 +1,27 @@
-import Database from "@tauri-apps/plugin-sql";
-import { readFile, writeFile, mkdir, exists, BaseDirectory } from "@tauri-apps/plugin-fs";
 import { readConfig, writeConfig } from "@/appFs";
 import { isTauri } from "@/tauriEnv";
+import type Database from "@tauri-apps/plugin-sql";
+
+let DatabaseMod: typeof import("@tauri-apps/plugin-sql").default | null = null;
+let fs: typeof import("@tauri-apps/plugin-fs") | null = null;
+let APP_BASE = 0;
+
+async function ensureFs() {
+  if (!fs) {
+    fs = await import("@tauri-apps/plugin-fs");
+    APP_BASE = fs.BaseDirectory?.AppData ?? 0;
+  }
+  return fs;
+}
+
+async function ensureDatabase() {
+  if (!DatabaseMod) {
+    DatabaseMod = (await import("@tauri-apps/plugin-sql")).default;
+  }
+  return DatabaseMod;
+}
 
 const APP_DIR = "MamaStock";
-const APP_BASE = (BaseDirectory?.AppData ?? 0) as number;
 const DATA_DIR = `${APP_DIR}/data`;
 const EXPORT_DIR = `${APP_DIR}/Exports`;
 const BACKUP_DIR = `${APP_DIR}/Backups`;
@@ -60,7 +77,8 @@ export async function backupDb(): Promise<string> {
   }
   const dataDir = await getDataDir();
   const source = `${dataDir}/mamastock.db`;
-  await mkdir(BACKUP_DIR, { dir: APP_BASE, recursive: true });
+  const fs = await ensureFs();
+  await fs.mkdir(BACKUP_DIR, { dir: APP_BASE, recursive: true });
   const now = new Date();
   const stamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(
     now.getDate()
@@ -68,8 +86,8 @@ export async function backupDb(): Promise<string> {
     now.getMinutes()
   ).padStart(2, "0")}${String(now.getSeconds()).padStart(2, "0")}`;
   const dest = `${BACKUP_DIR}/mamastock_${stamp}.db`;
-  const data = await readFile(source, { dir: APP_BASE });
-  await writeFile(dest, data, { dir: APP_BASE });
+  const data = await fs.readFile(source, { dir: APP_BASE });
+  await fs.writeFile(dest, data, { dir: APP_BASE });
   return dest;
 }
 
@@ -80,8 +98,9 @@ export async function restoreDb(file: string) {
   await closeDb();
   const dataDir = await getDataDir();
   const dest = `${dataDir}/mamastock.db`;
-  const data = await readFile(file, { dir: APP_BASE });
-  await writeFile(dest, data, { dir: APP_BASE });
+  const fs = await ensureFs();
+  const data = await fs.readFile(file, { dir: APP_BASE });
+  await fs.writeFile(dest, data, { dir: APP_BASE });
 }
 
 export async function maintenanceDb() {
@@ -94,12 +113,18 @@ export async function maintenanceDb() {
 }
 
 export async function getDb(): Promise<Database> {
+  if (!isTauri()) {
+    console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    throw new Error('Tauri plugins not available');
+  }
   if (!dbPromise) {
     const dir = await getDataDir();
-    await mkdir(dir, { dir: APP_BASE, recursive: true });
+    const fs = await ensureFs();
+    await fs.mkdir(dir, { dir: APP_BASE, recursive: true });
     const dbPath = `${dir}/mamastock.db`;
-    const existsDb = await exists(dbPath, { dir: APP_BASE });
-    const db = await Database.load(`sqlite:${dbPath}`);
+    const existsDb = await fs.exists(dbPath, { dir: APP_BASE });
+    const DatabaseCtor = await ensureDatabase();
+    const db = await DatabaseCtor.load(`sqlite:${dbPath}`);
     dbPromise = Promise.resolve(db);
     if (!existsDb) {
       const res = await fetch("/migrations/001_schema.sql");

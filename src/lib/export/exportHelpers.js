@@ -4,19 +4,22 @@ import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
-import { writeFile, mkdir, BaseDirectory } from '@tauri-apps/plugin-fs';
-import { save } from '@tauri-apps/plugin-dialog';
 import { getExportDir } from '@/lib/db';
 import { isTauri } from '@/tauriEnv';
 
 async function resolveExportPath(filename) {
   const dir = await getExportDir();
-  await mkdir(dir, { dir: BaseDirectory.AppData, recursive: true });
+  if (isTauri()) {
+    const { mkdir, BaseDirectory } = await import('@tauri-apps/plugin-fs');
+    await mkdir(dir, { dir: BaseDirectory.AppData, recursive: true });
+  }
   return `${dir}/${filename}`;
 }
 
 async function saveBlob(blob, filename, useDialog = true) {
   if (isTauri()) {
+    const { writeFile, BaseDirectory } = await import('@tauri-apps/plugin-fs');
+    const { save } = await import('@tauri-apps/plugin-dialog');
     const defaultPath = await resolveExportPath(filename);
     const path = useDialog ? (await save({ defaultPath })) || defaultPath : defaultPath;
     const buf = await blob.arrayBuffer();

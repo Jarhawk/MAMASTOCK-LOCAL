@@ -7,7 +7,6 @@ import LanguageSelector from "@/components/ui/LanguageSelector";
 import { shutdownDbSafely } from "@/lib/shutdown";
 import { releaseLock } from "@/lib/lock";
 import { getDataDir } from "@/lib/db";
-import { appWindow } from "@tauri-apps/api/window";
 import { isTauri } from "@/tauriEnv";
 
 export default function Navbar() {
@@ -47,6 +46,7 @@ export default function Navbar() {
       if (!isTauri()) {
         return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
       }
+      const { appWindow } = await import("@tauri-apps/api/window");
       const dir = await getDataDir();
       await shutdownDbSafely();
       await releaseLock(dir);

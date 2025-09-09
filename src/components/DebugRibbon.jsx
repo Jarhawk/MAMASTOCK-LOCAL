@@ -1,17 +1,15 @@
-import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
-import { appDataDir, join } from "@tauri-apps/api/path";
-import { open } from "@tauri-apps/plugin-shell";
 import { isTauri } from "@/tauriEnv";
 
 export default function DebugRibbon() {
   const show = import.meta.env.DEV || window.DEBUG;
   if (!show) return null;
 
-  const openDev = () => {
+  const openDev = async () => {
     if (!isTauri()) {
       return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     }
     try {
+      const { getCurrentWebviewWindow } = await import("@tauri-apps/api/webviewWindow");
       getCurrentWebviewWindow().openDevtools();
     } catch {}
   };
@@ -21,6 +19,8 @@ export default function DebugRibbon() {
       return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     }
     try {
+      const { appDataDir, join } = await import("@tauri-apps/api/path");
+      const { open } = await import("@tauri-apps/plugin-shell");
       const dir = await appDataDir();
       const logDir = await join(dir, "logs");
       await open(logDir);
