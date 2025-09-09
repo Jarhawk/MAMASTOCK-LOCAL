@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
-import { log } from "@/lib/log";
+import { log } from "../tauriLog";
 import { isTauri } from "@/lib/isTauri";
 
 export default class ErrorBoundary extends Component {

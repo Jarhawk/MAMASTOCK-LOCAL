@@ -1,6 +1,6 @@
 import { emit } from '@tauri-apps/api/event';
 import { isTauri } from '@/lib/isTauri';
-import { log } from '@/lib/log';
+import { log, initLog } from "./tauriLog";
 // MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // Polyfills Node â†’ navigateur
 import { Buffer } from "buffer";
@@ -26,6 +26,8 @@ if (isTauri) {
 }
 
 
+
+await initLog();
 
 // === Debug global errors ===
 function installGlobalErrorOverlay() {
