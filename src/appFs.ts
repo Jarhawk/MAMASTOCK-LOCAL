@@ -1,11 +1,11 @@
-import { readJsonInApp, writeJsonInApp } from "./fsSafe";
+import { readJsonFile, writeJsonFile } from "/src/tauri/fsStore";
 
 export type Config = Record<string, any>;
 
 export async function readConfig(): Promise<Config | null> {
-  return readJsonInApp<Config>("config.json");
+  return (await readJsonFile("config.json")) as Config | null;
 }
 
 export async function writeConfig(cfg: Config): Promise<void> {
-  await writeJsonInApp(cfg, "config.json");
+  await writeJsonFile("config.json", cfg);
 }
