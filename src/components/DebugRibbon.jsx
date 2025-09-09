@@ -1,14 +1,14 @@
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { appDataDir, join } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/plugin-shell";
-import { isTauri } from "@/lib/isTauri";
+import { isTauri } from "@/isTauri";
 
 export default function DebugRibbon() {
   const show = import.meta.env.DEV || window.DEBUG;
   if (!show) return null;
 
   const openDev = () => {
-    if (!isTauri) {
+    if (!isTauri()) {
       return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     }
     try {
@@ -17,7 +17,7 @@ export default function DebugRibbon() {
   };
 
   const openLogs = async () => {
-    if (!isTauri) {
+    if (!isTauri()) {
       return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     }
     try {

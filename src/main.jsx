@@ -1,5 +1,5 @@
 import { emit } from '@tauri-apps/api/event';
-import { isTauri } from '@/lib/isTauri';
+import { isTauri } from '@/isTauri';
 import { log, initLog } from "./tauriLog";
 // MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // Polyfills Node â†’ navigateur
@@ -11,7 +11,7 @@ window.Buffer = Buffer;
 window.process = process;
 
 // Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
-if (isTauri) {
+if (isTauri()) {
   window.addEventListener('keydown', async (e) => {
     if (e.key === 'F12') {
       try {
@@ -123,7 +123,7 @@ if (import.meta?.env?.DEV) {
 // import * as Sentry from "@sentry/react";
 // Sentry.init({ dsn: "https://xxx.ingest.sentry.io/xxx" });
 
-if (isTauri) {
+if (isTauri()) {
   const dir = await getDataDir();
   monitorShutdownRequests(dir);
   await ensureSingleOwner(dir);

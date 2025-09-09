@@ -3,9 +3,9 @@ import { exists, readTextFile, writeTextFile, remove, BaseDirectory } from "@tau
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
 import { v4 as uuidv4 } from "uuid";
 import { shutdownDbSafely } from "./shutdown";
-import { isTauri } from "@/lib/isTauri";
+import { isTauri } from "@/isTauri";
 
-const appWindow = isTauri ? getCurrentWebviewWindow() : null;
+const appWindow = isTauri() ? getCurrentWebviewWindow() : null;
 
 const TTL = 20_000; // 20s
 const HEARTBEAT = 5_000; // 5s
@@ -18,6 +18,9 @@ async function path(dir: string, file: string) {
 }
 
 export async function ensureSingleOwner(syncDir: string, waitMs = 30_000) {
+  if (!isTauri()) {
+    return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+  }
   const lockPath = await path(syncDir, "db.lock.json");
   const start = Date.now();
   let requested = false;
@@ -46,6 +49,9 @@ export async function ensureSingleOwner(syncDir: string, waitMs = 30_000) {
 }
 
 export async function monitorShutdownRequests(syncDir: string) {
+  if (!isTauri()) {
+    return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+  }
   const shutdownPath = await path(syncDir, "shutdown.request.json");
   const check = async () => {
     if (await exists(shutdownPath, { dir: BaseDirectory.AppData })) {
@@ -67,11 +73,17 @@ export async function monitorShutdownRequests(syncDir: string) {
 }
 
 export async function requestRemoteShutdown(syncDir: string) {
+  if (!isTauri()) {
+    return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+  }
   const shutdownPath = await path(syncDir, "shutdown.request.json");
   await writeTextFile(shutdownPath, JSON.stringify({ ts: Date.now(), requester: instanceId }), { dir: BaseDirectory.AppData });
 }
 
 export async function releaseLock(syncDir: string) {
+  if (!isTauri()) {
+    return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+  }
   const lockPath = await path(syncDir, "db.lock.json");
   if (heartbeat) {
     clearInterval(heartbeat);

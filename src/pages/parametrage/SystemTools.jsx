@@ -2,11 +2,11 @@ import { open } from "@tauri-apps/plugin-dialog";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { backupDb, restoreDb, maintenanceDb } from "@/lib/db";
 import { toast } from "sonner";
-import { isTauri } from "@/lib/isTauri";
+import { isTauri } from "@/isTauri";
 
 export default function SystemTools() {
   const backup = async () => {
-    if (!isTauri) {
+    if (!isTauri()) {
       return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     }
     try {
@@ -18,7 +18,7 @@ export default function SystemTools() {
   };
 
   const restore = async () => {
-    if (!isTauri) {
+    if (!isTauri()) {
       return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     }
     try {
@@ -34,7 +34,7 @@ export default function SystemTools() {
   };
 
   const maintain = async () => {
-    if (!isTauri) {
+    if (!isTauri()) {
       return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     }
     try {

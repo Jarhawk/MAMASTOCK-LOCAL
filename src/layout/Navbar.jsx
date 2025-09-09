@@ -8,7 +8,7 @@ import { shutdownDbSafely } from "@/lib/shutdown";
 import { releaseLock } from "@/lib/lock";
 import { getDataDir } from "@/lib/db";
 import { appWindow } from "@tauri-apps/api/window";
-import { isTauri } from "@/lib/isTauri";
+import { isTauri } from "@/isTauri";
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -44,7 +44,7 @@ export default function Navbar() {
     }, []);
 
     const handleQuit = useCallback(async () => {
-      if (!isTauri) {
+      if (!isTauri()) {
         return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
       }
       const dir = await getDataDir();
@@ -116,8 +116,8 @@ export default function Navbar() {
                 onClick={handleQuit}
                 className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-md transition"
               >
-                Quitter & synchroniser
-              </button>
+        Quitter & synchroniser
+      </button>
               <button
                 onClick={handleLogout}
                 className="text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded-md transition"
