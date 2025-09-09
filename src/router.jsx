@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import ErrorBoundary from "@/components/ErrorBoundary";
 import PageSkeleton from "@/components/ui/PageSkeleton";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import Layout from "@/layout/Layout";
 import Login from "@/pages/Login";
 import Unauthorized from "@/pages/auth/Unauthorized";
