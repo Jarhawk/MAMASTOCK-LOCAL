@@ -1,17 +1,15 @@
 import Database from "@tauri-apps/plugin-sql";
-import { appDataDir, join } from "@tauri-apps/api/path";
 import { exists, mkdir } from "@tauri-apps/plugin-fs";
+import { dirname } from "@tauri-apps/api/path";
+import { dataDbPath } from "@/lib/paths";
 
 const isTauri = !!import.meta.env.TAURI_PLATFORM;
-const APP_DIR = "MamaStock";
-const DB_FILE = "mamastock.db";
-
 async function dbPath() {
   if (!isTauri) throw new Error("Lance l'app via Tauri (npx tauri dev).");
-  const base = await appDataDir();
-  const dir = await join(base, APP_DIR);
+  const path = await dataDbPath();
+  const dir = await dirname(path);
   if (!(await exists(dir))) await mkdir(dir, { recursive: true });
-  return await join(dir, DB_FILE);
+  return path;
 }
 
 let _db: Database | null = null;

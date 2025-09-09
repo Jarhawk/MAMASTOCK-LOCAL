@@ -1,4 +1,5 @@
 import { isTauri } from "./isTauri";
+import { inAppDir } from "@/lib/paths";
 
 type Json = unknown;
 
@@ -11,10 +12,9 @@ export async function readJsonFile(rel: string): Promise<Json | null> {
     const v = localStorage.getItem(lsKey(rel));
     return v ? JSON.parse(v) : null;
   }
-  const { appDataDir, join } = await import("@tauri-apps/api/path");
+  const { join } = await import("@tauri-apps/api/path");
   const fs = await import("@tauri-apps/plugin-fs");
-  const base = await appDataDir();
-  const root = await join(base, "MamaStock", "data");
+  const root = await inAppDir("data");
   const mkdir = (fs as any).createDir ?? (fs as any).mkdir; // support both names
   await mkdir(root, { recursive: true });
   const path = await join(root, rel);
@@ -28,10 +28,9 @@ export async function writeJsonFile(rel: string, data: Json): Promise<string> {
     localStorage.setItem(lsKey(rel), JSON.stringify(data));
     return rel;
   }
-  const { appDataDir, join } = await import("@tauri-apps/api/path");
+  const { join } = await import("@tauri-apps/api/path");
   const fs = await import("@tauri-apps/plugin-fs");
-  const base = await appDataDir();
-  const root = await join(base, "MamaStock", "data");
+  const root = await inAppDir("data");
   const mkdir = (fs as any).createDir ?? (fs as any).mkdir;
   await mkdir(root, { recursive: true });
   const path = await join(root, rel);
@@ -41,10 +40,8 @@ export async function writeJsonFile(rel: string, data: Json): Promise<string> {
 
 export async function ensureDataDir(): Promise<string> {
   if (!isTauri()) return "localStorage://" + BROWSER_NS;
-  const { appDataDir, join } = await import("@tauri-apps/api/path");
   const fs = await import("@tauri-apps/plugin-fs");
-  const base = await appDataDir();
-  const root = await join(base, "MamaStock", "data");
+  const root = await inAppDir("data");
   const mkdir = (fs as any).createDir ?? (fs as any).mkdir;
   await mkdir(root, { recursive: true });
   return root;
