@@ -15,6 +15,6 @@
     "fs:create-app-specific-dirs",
     "fs:allow-appdata-write",
     "fs:allow-appdata-write-recursive",
-    "fs:write-all"
+    "fs:write-all"  // keep only in DEV; you will remove for production
   ]
 }
