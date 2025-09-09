@@ -1,0 +1,2 @@
+-- Données de départ pour l'application locale
+-- (admin user seeded via scripts/seed-admin.js)
