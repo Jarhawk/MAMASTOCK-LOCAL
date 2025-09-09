@@ -7,13 +7,18 @@ import { useAuth } from '@/hooks/useAuth';
 const HelpContext = createContext();
 
 export function HelpProvider({ children }) {
-  const { mama_id, user_id } = useAuth();
+  const auth = useAuth();
+  const mama_id = auth?.mama_id;
+  const user_id = auth?.user_id ?? auth?.user?.id;
+  const authLoading = auth?.loading;
+  const isAuthenticated = auth?.isAuthenticated;
+
   const [tooltips, setTooltips] = useState({});
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const fetchTooltips = useCallback(async () => {
-    if (!mama_id) return {};
+    if (authLoading || !isAuthenticated || !mama_id) return {};
     setLoading(true);
     const { data } = await supabase.
     from('tooltips').
@@ -26,10 +31,10 @@ export function HelpProvider({ children }) {
     });
     setTooltips(map);
     return map;
-  }, [mama_id]);
+  }, [authLoading, isAuthenticated, mama_id]);
 
   const fetchDocs = useCallback(async ({ search = '' } = {}) => {
-    if (!mama_id) return [];
+    if (authLoading || !isAuthenticated || !mama_id) return [];
     setLoading(true);
     let query = supabase.
     from('documentation').
@@ -40,17 +45,17 @@ export function HelpProvider({ children }) {
     setLoading(false);
     setDocs(Array.isArray(data) ? data : []);
     return data || [];
-  }, [mama_id]);
+  }, [authLoading, isAuthenticated, mama_id]);
 
   useEffect(() => {
-    if (mama_id) {
+    if (!authLoading && isAuthenticated && mama_id) {
       fetchTooltips();
       fetchDocs();
     }
-  }, [mama_id, fetchTooltips, fetchDocs]);
+  }, [authLoading, isAuthenticated, mama_id, fetchTooltips, fetchDocs]);
 
   async function markGuideSeen(module) {
-    if (!user_id || !mama_id) return;
+    if (authLoading || !isAuthenticated || !user_id || !mama_id) return;
     await supabase.
     from('guides_seen').
     upsert(
@@ -67,6 +72,14 @@ export function HelpProvider({ children }) {
     fetchDocs,
     markGuideSeen
   };
+
+  if (authLoading) {
+    return <>{children}</>;
+  }
+
+  if (!isAuthenticated || !mama_id) {
+    return <>{children}</>;
+  }
 
   return <HelpContext.Provider value={value}>{children}</HelpContext.Provider>;
 }
