@@ -12,20 +12,17 @@ edition = "2021"
 # path = "src/main.rs"
 
 [dependencies]
-tauri = { version = "2", features = ["wry", "tray-icon"] }
+tauri = { version = "2", features = ["tray-icon"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-tauri-plugin-fs = "2"
-tauri-plugin-log = "2"          # utilisÃƒÂ© seulement en release
-tauri-plugin-dialog = "2"
-tauri-plugin-process = "2"
-tauri-plugin-sql = { version = "2", features = ["sqlite"] }
-tauri-plugin-shell = "2"
-# tauri-plugin-devtools = "2"   # optionnel si tu veux un plugin devtools
-
+tauri-plugin-fs = { version = "2" }
+tauri-plugin-shell = { version = "2" }
+tauri-plugin-dialog = { version = "2" }
+tauri-plugin-process = { version = "2" }
+tauri-plugin-log = { version = "2" }
 tauri-plugin-devtools = { version = "2" }
 [build-dependencies]
-tauri-build = { version = "2", features = [] }
+tauri-build = "2"
 
 [features]
 default = []

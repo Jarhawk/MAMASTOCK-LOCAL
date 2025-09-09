@@ -2,7 +2,7 @@ import { open } from "@tauri-apps/plugin-dialog";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { backupDb, restoreDb, maintenanceDb } from "@/lib/db";
 import { toast } from "sonner";
-import { isTauri } from "@/tauriEnv";
+import { isTauri } from "@/lib/isTauri";
 
 export default function SystemTools() {
   const backup = async () => {

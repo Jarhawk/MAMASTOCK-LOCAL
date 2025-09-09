@@ -1,31 +1,19 @@
 import Database from "@tauri-apps/plugin-sql";
-import {
-  mkdir as createDir,
-  readTextFile,
-  writeTextFile,
-  exists,
-  readFile,
-  writeFile,
-  BaseDirectory,
-} from "@tauri-apps/plugin-fs";
+import { readFile, writeFile, createDir, exists } from "@tauri-apps/plugin-fs";
+import { APP_DIR, APP_BASE, writeAppJson, readAppText } from "@/lib/appFs";
 
-const APP_DIR = "MamaStock";
 const DATA_DIR = `${APP_DIR}/data`;
 const EXPORT_DIR = `${APP_DIR}/Exports`;
 const BACKUP_DIR = `${APP_DIR}/Backups`;
-const CONFIG_FILE = `${APP_DIR}/config.json`;
+const CONFIG_FILE = "config.json";
 
 let dbPromise: Promise<Database> | null = null;
 
-async function ensureAppDir() {
-  await createDir(APP_DIR, { dir: BaseDirectory.AppData, recursive: true });
-}
-
 async function readConfig(): Promise<any> {
-  await ensureAppDir();
-  if (await exists(CONFIG_FILE, { dir: BaseDirectory.AppData })) {
+  const txt = await readAppText(CONFIG_FILE);
+  if (txt) {
     try {
-      return JSON.parse(await readTextFile(CONFIG_FILE, { dir: BaseDirectory.AppData }));
+      return JSON.parse(txt);
     } catch (_) {
       /* ignore */
     }
@@ -34,8 +22,7 @@ async function readConfig(): Promise<any> {
 }
 
 async function writeConfig(data: any) {
-  await ensureAppDir();
-  await writeTextFile(CONFIG_FILE, JSON.stringify(data), { dir: BaseDirectory.AppData });
+  await writeAppJson(CONFIG_FILE, data);
 }
 
 export async function getDataDir(): Promise<string> {
@@ -70,7 +57,7 @@ export async function closeDb() {
 export async function backupDb(): Promise<string> {
   const dataDir = await getDataDir();
   const source = `${dataDir}/mamastock.db`;
-  await createDir(BACKUP_DIR, { dir: BaseDirectory.AppData, recursive: true });
+  await createDir(BACKUP_DIR, { dir: APP_BASE, recursive: true });
   const now = new Date();
   const stamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(
     now.getDate()
@@ -78,8 +65,8 @@ export async function backupDb(): Promise<string> {
     now.getMinutes()
   ).padStart(2, "0")}${String(now.getSeconds()).padStart(2, "0")}`;
   const dest = `${BACKUP_DIR}/mamastock_${stamp}.db`;
-  const data = await readFile(source, { dir: BaseDirectory.AppData });
-  await writeFile(dest, data, { dir: BaseDirectory.AppData });
+  const data = await readFile(source, { dir: APP_BASE });
+  await writeFile(dest, data, { dir: APP_BASE });
   return dest;
 }
 
@@ -87,8 +74,8 @@ export async function restoreDb(file: string) {
   await closeDb();
   const dataDir = await getDataDir();
   const dest = `${dataDir}/mamastock.db`;
-  const data = await readFile(file, { dir: BaseDirectory.AppData });
-  await writeFile(dest, data, { dir: BaseDirectory.AppData });
+  const data = await readFile(file, { dir: APP_BASE });
+  await writeFile(dest, data, { dir: APP_BASE });
 }
 
 export async function maintenanceDb() {
@@ -100,9 +87,9 @@ export async function maintenanceDb() {
 export async function getDb(): Promise<Database> {
   if (!dbPromise) {
     const dir = await getDataDir();
-    await createDir(dir, { dir: BaseDirectory.AppData, recursive: true });
+    await createDir(dir, { dir: APP_BASE, recursive: true });
     const dbPath = `${dir}/mamastock.db`;
-    const existsDb = await exists(dbPath, { dir: BaseDirectory.AppData });
+    const existsDb = await exists(dbPath, { dir: APP_BASE });
     const db = await Database.load(`sqlite:${dbPath}`);
     dbPromise = Promise.resolve(db);
     if (!existsDb) {

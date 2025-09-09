@@ -8,7 +8,7 @@ import { shutdownDbSafely } from "@/lib/shutdown";
 import { releaseLock } from "@/lib/lock";
 import { getDataDir } from "@/lib/db";
 import { appWindow } from "@tauri-apps/api/window";
-import { isTauri } from "@/tauriEnv";
+import { isTauri } from "@/lib/isTauri";
 
 export default function Navbar() {
   const { t } = useTranslation();
