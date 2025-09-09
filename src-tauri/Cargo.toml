@@ -22,7 +22,7 @@ tauri-plugin-process = { version = "2" }
 tauri-plugin-log = { version = "2" }
 tauri-plugin-devtools = { version = "2" }
 [build-dependencies]
-tauri-build = "2"
+tauri-build = { version = "2", features = [] }
 
 [features]
 default = []
