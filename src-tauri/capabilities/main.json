@@ -13,8 +13,9 @@
     "fs:default",
     "fs:allow-mkdir",
     "fs:create-app-specific-dirs",
+    "fs:allow-appdata-read",
+    "fs:allow-appdata-read-recursive",
     "fs:allow-appdata-write",
-    "fs:allow-appdata-write-recursive",
-    "fs:write-all"
+    "fs:allow-appdata-write-recursive"
   ]
 }
