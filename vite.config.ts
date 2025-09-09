@@ -1,13 +1,16 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "node:path";
+import { fileURLToPath, URL } from "node:url";
+
+const cryptoShim = fileURLToPath(new URL("./src/shims/crypto.ts", import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      crypto: path.resolve(__dirname, "src/shims/crypto.ts"),
-      "node:crypto": path.resolve(__dirname, "src/shims/crypto.ts"),
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      crypto: cryptoShim,
+      "node:crypto": cryptoShim,
     },
   },
   define: { global: "globalThis" },
