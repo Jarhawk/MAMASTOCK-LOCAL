@@ -12,18 +12,20 @@ window.process = process;
 // Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
 if (isTauri()) {
   await initLog();
-  const { emit } = await import('@tauri-apps/api/event');
-  window.addEventListener('keydown', async (e) => {
-    if (e.key === 'F12') {
+  const { emit } = await import("@tauri-apps/api/event");
+  window.addEventListener("keydown", async (e) => {
+    if (e.key === "F12") {
       try {
-        await emit('open-devtools');
+        await emit("open-devtools");
       } catch (err) {
         console.error('emit("open-devtools") failed', err);
       }
     }
   });
 } else {
-  console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+  console.debug(
+    "Tauri indisponible (navigateur): ne pas appeler les plugins ici.",
+  );
 }
 
 // === Debug global errors ===
@@ -82,6 +84,8 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import ErrorBoundary from "@/debug/ErrorBoundary";
+import { AuthProvider } from "@/context/AuthContext";
+import { HelpProvider } from "@/context/HelpProvider";
 import "./globals.css";
 import "nprogress/nprogress.css";
 import "@/i18n/i18n";
@@ -120,21 +124,25 @@ if (import.meta?.env?.DEV) {
 if (isTauri()) {
   monitorShutdownRequests();
   await ensureSingleOwner();
-  window.addEventListener('beforeunload', () => {
+  window.addEventListener("beforeunload", () => {
     shutdownDbSafely();
     releaseLock();
   });
 } else {
-  console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+  console.debug(
+    "Tauri indisponible (navigateur): ne pas appeler les plugins ici.",
+  );
 }
 
 const root = createRoot(document.getElementById("root"));
 root.render(
   <ErrorBoundary>
-    <App />
-  </ErrorBoundary>
+    <AuthProvider>
+      <HelpProvider>
+        <App />
+      </HelpProvider>
+    </AuthProvider>
+  </ErrorBoundary>,
 );
 
 // les raccourcis DevTools sont déjà gérés plus haut
-
-
