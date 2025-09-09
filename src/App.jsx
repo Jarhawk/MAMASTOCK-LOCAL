@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/context/ThemeProvider";
 import CookieConsent from "@/components/CookieConsent";
 import ToastRoot from "@/components/ToastRoot";
 import DebugRibbon from "@/components/DebugRibbon";
+import { testRandom } from "/src/shims/selftest";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +27,9 @@ const queryClient = new QueryClient({
 
 export default function App() {
   console.log('[debug] App mounted');
+  useEffect(() => {
+    testRandom().catch(err => console.error("crypto shim selftest failed", err));
+  }, []);
   useEffect(() => {
     nprogress.configure({ showSpinner: false });
     console.log('[debug] Frontend OK');
