@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
-import { facture_create_with_lignes } from "@/lib/db";
+import { facture_create, facture_add_ligne } from "@/lib/db";
 
 export function useFactures() {
   const [loading, setLoading] = useState(false);
@@ -9,7 +9,18 @@ export function useFactures() {
   async function createFacture(facture, lignes) {
     setLoading(true);
     try {
-      await facture_create_with_lignes(facture, lignes);
+      const facture_id = await facture_create({
+        fournisseur_id: facture.fournisseur_id,
+        date_iso: facture.date,
+      });
+      for (const l of lignes) {
+        await facture_add_ligne({
+          facture_id,
+          produit_id: l.produit_id,
+          quantite: l.quantite,
+          prix_unitaire: l.prix,
+        });
+      }
       setError(null);
       setLoading(false);
       return { error: null };
@@ -20,8 +31,20 @@ export function useFactures() {
     }
   }
 
+  async function deleteFacture() {
+    // TODO: implémenter la suppression de facture via le DAL
+    throw new Error('TODO deleteFacture');
+  }
+
+  async function toggleFactureActive() {
+    // TODO: implémenter l'activation/désactivation de facture via le DAL
+    throw new Error('TODO toggleFactureActive');
+  }
+
   return {
     createFacture,
+    deleteFacture,
+    toggleFactureActive,
     loading,
     error,
   };

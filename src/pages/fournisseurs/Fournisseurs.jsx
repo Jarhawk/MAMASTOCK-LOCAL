@@ -63,7 +63,7 @@ export default function Fournisseurs() {
   const [diagMsg, setDiagMsg] = useState(null); // [diag]
   async function handleApiDiag() {
     if (!import.meta.env.DEV) return;
-    const { rows } = await fournisseurs_list('', 3, 1);
+    const rows = await fournisseurs_list();
     console.log('[api] fournisseurs', rows); // [compat]
   }
 
@@ -107,7 +107,7 @@ export default function Fournisseurs() {
 
   async function handleDiag() {
     try {
-      const { rows } = await fournisseurs_list('', 5, 1);
+      const rows = await fournisseurs_list();
       console.log('[diag] fournisseurs', rows); // [diag]
       setDiagMsg('Connexion SQLite OK');
     } catch (e) {
