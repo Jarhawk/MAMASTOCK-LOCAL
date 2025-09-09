@@ -1,9 +1,8 @@
 import { join } from "@tauri-apps/api/path";
-import { exists, readTextFile, writeTextFile, remove } from "@tauri-apps/plugin-fs";
+import { exists, readTextFile, writeTextFile, remove, BaseDirectory } from "@tauri-apps/plugin-fs";
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
 import { v4 as uuidv4 } from "uuid";
 import { shutdownDbSafely } from "./shutdown";
-import { APP_BASE } from "@/lib/appFs";
 import { isTauri } from "@/lib/isTauri";
 
 const appWindow = isTauri ? getCurrentWebviewWindow() : null;
@@ -22,9 +21,9 @@ export async function ensureSingleOwner(syncDir: string, waitMs = 30_000) {
   const lockPath = await path(syncDir, "db.lock.json");
   const start = Date.now();
   let requested = false;
-  while (await exists(lockPath, { dir: APP_BASE })) {
+  while (await exists(lockPath, { dir: BaseDirectory.AppData })) {
     try {
-      const { ts } = JSON.parse(await readTextFile(lockPath, { dir: APP_BASE }));
+      const { ts } = JSON.parse(await readTextFile(lockPath, { dir: BaseDirectory.AppData }));
       if (Date.now() - ts > TTL) {
         break; // stale lock
       }
@@ -40,26 +39,26 @@ export async function ensureSingleOwner(syncDir: string, waitMs = 30_000) {
     }
     await new Promise((r) => setTimeout(r, HEARTBEAT));
   }
-      await writeTextFile(lockPath, JSON.stringify({ ts: Date.now(), id: instanceId }), { dir: APP_BASE });
+  await writeTextFile(lockPath, JSON.stringify({ ts: Date.now(), id: instanceId }), { dir: BaseDirectory.AppData });
   heartbeat = setInterval(async () => {
-    await writeTextFile(lockPath, JSON.stringify({ ts: Date.now(), id: instanceId }), { dir: APP_BASE });
+    await writeTextFile(lockPath, JSON.stringify({ ts: Date.now(), id: instanceId }), { dir: BaseDirectory.AppData });
   }, HEARTBEAT);
 }
 
 export async function monitorShutdownRequests(syncDir: string) {
   const shutdownPath = await path(syncDir, "shutdown.request.json");
   const check = async () => {
-    if (await exists(shutdownPath, { dir: APP_BASE })) {
+    if (await exists(shutdownPath, { dir: BaseDirectory.AppData })) {
       try {
-        const { requester } = JSON.parse(await readTextFile(shutdownPath, { dir: APP_BASE }));
+        const { requester } = JSON.parse(await readTextFile(shutdownPath, { dir: BaseDirectory.AppData }));
         if (requester !== instanceId) {
           await shutdownDbSafely();
           await releaseLock(syncDir);
-          await remove(shutdownPath, { dir: APP_BASE });
+          await remove(shutdownPath, { dir: BaseDirectory.AppData });
           await appWindow.close();
         }
       } catch {
-        await remove(shutdownPath, { dir: APP_BASE });
+        await remove(shutdownPath, { dir: BaseDirectory.AppData });
       }
     }
   };
@@ -69,7 +68,7 @@ export async function monitorShutdownRequests(syncDir: string) {
 
 export async function requestRemoteShutdown(syncDir: string) {
   const shutdownPath = await path(syncDir, "shutdown.request.json");
-  await writeTextFile(shutdownPath, JSON.stringify({ ts: Date.now(), requester: instanceId }), { dir: APP_BASE });
+  await writeTextFile(shutdownPath, JSON.stringify({ ts: Date.now(), requester: instanceId }), { dir: BaseDirectory.AppData });
 }
 
 export async function releaseLock(syncDir: string) {
@@ -78,7 +77,7 @@ export async function releaseLock(syncDir: string) {
     clearInterval(heartbeat);
     heartbeat = null;
   }
-  if (await exists(lockPath, { dir: APP_BASE })) {
-    await remove(lockPath, { dir: APP_BASE });
+  if (await exists(lockPath, { dir: BaseDirectory.AppData })) {
+    await remove(lockPath, { dir: BaseDirectory.AppData });
   }
 }
