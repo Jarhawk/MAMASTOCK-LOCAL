@@ -8,10 +8,15 @@ export type LogApi = {
 
 let api: Partial<LogApi> | null = null;
 
+import { isTauri } from "@/isTauri";
+
 export async function initLog() {
-  if (import.meta.env.PROD) {
-    try { api = (await import("@tauri-apps/plugin-log")) as any; }
-    catch { api = null; }
+  if (isTauri() && import.meta.env.PROD) {
+    try {
+      api = (await import("@tauri-apps/plugin-log")) as any;
+    } catch {
+      api = null;
+    }
   }
 }
 

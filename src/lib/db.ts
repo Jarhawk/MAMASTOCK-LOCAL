@@ -1,9 +1,10 @@
 import Database from "@tauri-apps/plugin-sql";
 import { readFile, writeFile, mkdir, exists, BaseDirectory } from "@tauri-apps/plugin-fs";
 import { ensureAppDir, writeAppText, readAppText } from "@/appFs";
+import { isTauri } from "@/isTauri";
 
 const APP_DIR = "MamaStock";
-const APP_BASE = BaseDirectory.AppData;
+const APP_BASE = (BaseDirectory?.AppData ?? 0) as number;
 const DATA_DIR = `${APP_DIR}/data`;
 const EXPORT_DIR = `${APP_DIR}/Exports`;
 const BACKUP_DIR = `${APP_DIR}/Backups`;
@@ -29,22 +30,36 @@ async function writeConfig(data: any) {
 }
 
 export async function getDataDir(): Promise<string> {
+  if (!isTauri()) {
+    console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    return DATA_DIR;
+  }
   const cfg = await readConfig();
   return cfg.dataDir || DATA_DIR;
 }
 
 export async function setDataDir(dir: string) {
+  if (!isTauri()) {
+    return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+  }
   const cfg = await readConfig();
   await writeConfig({ ...cfg, dataDir: dir });
   dbPromise = null; // force reload
 }
 
 export async function getExportDir(): Promise<string> {
+  if (!isTauri()) {
+    console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    return EXPORT_DIR;
+  }
   const cfg = await readConfig();
   return cfg.exportDir || EXPORT_DIR;
 }
 
 export async function setExportDir(dir: string) {
+  if (!isTauri()) {
+    return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+  }
   const cfg = await readConfig();
   await writeConfig({ ...cfg, exportDir: dir });
 }
@@ -58,6 +73,10 @@ export async function closeDb() {
 }
 
 export async function backupDb(): Promise<string> {
+  if (!isTauri()) {
+    console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    return "";
+  }
   const dataDir = await getDataDir();
   const source = `${dataDir}/mamastock.db`;
   await mkdir(BACKUP_DIR, { dir: APP_BASE, recursive: true });
@@ -74,6 +93,9 @@ export async function backupDb(): Promise<string> {
 }
 
 export async function restoreDb(file: string) {
+  if (!isTauri()) {
+    return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+  }
   await closeDb();
   const dataDir = await getDataDir();
   const dest = `${dataDir}/mamastock.db`;
@@ -82,6 +104,9 @@ export async function restoreDb(file: string) {
 }
 
 export async function maintenanceDb() {
+  if (!isTauri()) {
+    return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+  }
   const db = await getDb();
   await db.execute("PRAGMA wal_checkpoint(TRUNCATE)");
   await db.execute("VACUUM");

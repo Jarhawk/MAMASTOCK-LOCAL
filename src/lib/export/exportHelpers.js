@@ -7,7 +7,7 @@ import { dump } from 'js-yaml';
 import { writeFile, mkdir, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { save } from '@tauri-apps/plugin-dialog';
 import { getExportDir } from '@/lib/db';
-import { isTauri } from '@/lib/isTauri';
+import { isTauri } from '@/isTauri';
 
 async function resolveExportPath(filename) {
   const dir = await getExportDir();
@@ -16,7 +16,7 @@ async function resolveExportPath(filename) {
 }
 
 async function saveBlob(blob, filename, useDialog = true) {
-  if (isTauri) {
+  if (isTauri()) {
     const defaultPath = await resolveExportPath(filename);
     const path = useDialog ? (await save({ defaultPath })) || defaultPath : defaultPath;
     const buf = await blob.arrayBuffer();
