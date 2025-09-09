@@ -17,6 +17,7 @@ import FournisseurRow from '@/components/fournisseurs/FournisseurRow';
 import { Dialog, DialogContent } from '@/components/ui/SmartDialog';
 import { toast } from 'sonner';
 import useExport from '@/hooks/useExport';
+import { isTauri } from '@/tauriEnv';
 import {
   ResponsiveContainer,
   LineChart,
@@ -215,13 +216,13 @@ export default function Fournisseurs() {
                 <PlusCircle className="mr-2" size={18} /> Ajouter fournisseur
               </Button>
             )}
-            <Button className="w-auto" onClick={() => handleExport('excel')} disabled={exporting}>
+            <Button className="w-auto" onClick={() => handleExport('excel')} disabled={exporting || !isTauri()}>
               Export Excel
             </Button>
-            <Button className="w-auto" onClick={() => handleExport('csv')} disabled={exporting}>
+            <Button className="w-auto" onClick={() => handleExport('csv')} disabled={exporting || !isTauri()}>
               Export CSV
             </Button>
-            <Button className="w-auto" onClick={() => handleExport('pdf')} disabled={exporting}>
+            <Button className="w-auto" onClick={() => handleExport('pdf')} disabled={exporting || !isTauri()}>
               Export PDF
             </Button>
             <Button className="w-auto" onClick={handleDiag}>

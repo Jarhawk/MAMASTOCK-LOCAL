@@ -8,7 +8,7 @@ import { shutdownDbSafely } from "@/lib/shutdown";
 import { releaseLock } from "@/lib/lock";
 import { getDataDir } from "@/lib/db";
 import { appWindow } from "@tauri-apps/api/window";
-import { isTauri } from "@/isTauri";
+import { isTauri } from "@/tauriEnv";
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -115,6 +115,7 @@ export default function Navbar() {
               <button
                 onClick={handleQuit}
                 className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-md transition"
+                disabled={!isTauri()}
               >
         Quitter & synchroniser
       </button>

@@ -1,32 +1,57 @@
-import { mkdir, exists, BaseDirectory, readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
-import { isTauri } from "@/isTauri";
+import { isTauri } from "./tauriEnv";
 
-export async function ensureAppDir(sub = "MamaStock") {
-  if (!isTauri()) {
-    return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+let fs: any = null;
+let join: any = null;
+let appDataDir: any = null;
+
+async function ensureImports() {
+  if (!isTauri()) return;
+  if (!fs) {
+    fs = await import("@tauri-apps/plugin-fs");
   }
-  await mkdir(sub, { recursive: true, dir: BaseDirectory.AppData });
+  if (!join || !appDataDir) {
+    const pathApi = await import("@tauri-apps/api/path");
+    join = pathApi.join;
+    appDataDir = pathApi.appDataDir;
+  }
 }
 
-export async function writeAppText(path: string, contents: string) {
-  if (!isTauri()) {
-    return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
-  }
-  await writeTextFile(path, contents, { dir: BaseDirectory.AppData });
+async function tauriConfigPath() {
+  await ensureImports();
+  const base = await appDataDir();
+  const folder = await join(base, "MamaStock");
+  const mkdir = (fs as any).mkdir || (fs as any).createDir; // compat
+  await mkdir(folder, { recursive: true });
+  return await join(folder, "config.json");
 }
 
-export async function readAppText(path: string) {
+const LS_KEY = "MamaStock.config.json";
+
+export type Config = Record<string, any>;
+
+export async function readConfig(): Promise<Config | null> {
   if (!isTauri()) {
-    console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
-    return "";
+    const s = localStorage.getItem(LS_KEY);
+    return s ? JSON.parse(s) : null;
   }
-  return await readTextFile(path, { dir: BaseDirectory.AppData });
+  await ensureImports();
+  try {
+    const file = await tauriConfigPath();
+    const exists = await fs.exists(file);
+    if (!exists) return null;
+    const txt = await fs.readTextFile(file);
+    return JSON.parse(txt);
+  } catch (_) {
+    return null;
+  }
 }
 
-export async function appPathExists(path: string) {
+export async function writeConfig(cfg: Config): Promise<void> {
   if (!isTauri()) {
-    console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
-    return false;
+    localStorage.setItem(LS_KEY, JSON.stringify(cfg));
+    return;
   }
-  return await exists(path, { dir: BaseDirectory.AppData });
+  await ensureImports();
+  const file = await tauriConfigPath();
+  await fs.writeTextFile(file, JSON.stringify(cfg, null, 2));
 }
