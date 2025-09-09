@@ -1,5 +1,5 @@
 import { emit } from '@tauri-apps/api/event';
-import { isTauri } from '@/isTauri';
+import { isTauri } from "./isTauri";
 import { log, initLog } from "./tauriLog";
 // MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // Polyfills Node â†’ navigateur
@@ -12,6 +12,7 @@ window.process = process;
 
 // Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
 if (isTauri()) {
+  await initLog();
   window.addEventListener('keydown', async (e) => {
     if (e.key === 'F12') {
       try {
@@ -24,10 +25,6 @@ if (isTauri()) {
 } else {
   console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
 }
-
-
-
-await initLog();
 
 // === Debug global errors ===
 function installGlobalErrorOverlay() {
