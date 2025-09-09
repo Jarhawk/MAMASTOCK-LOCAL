@@ -4,22 +4,17 @@ import path from "node:path";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
-      crypto: "/src/shims/crypto.ts",
+      crypto: path.resolve(__dirname, "src/shims/crypto.ts"),
+      "node:crypto": path.resolve(__dirname, "src/shims/crypto.ts"),
     },
   },
-  define: {
-    global: "globalThis",
-  },
+  define: { global: "globalThis" },
   optimizeDeps: {
-    // bcryptjs sometimes breaks if pre-bundled with a hard 'crypto' require
-    exclude: ["bcryptjs"],
-    esbuildOptions: {
-      define: { global: "globalThis" },
-    },
+    exclude: ["bcryptjs", "crypto-js"],
+    esbuildOptions: { define: { global: "globalThis" } },
   },
   server: { port: 5173, strictPort: true, host: true },
 });
