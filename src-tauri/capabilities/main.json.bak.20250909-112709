@@ -5,12 +5,16 @@
   "windows": ["main"],
   "permissions": [
     "core:default",
+    "core:event:default",
+    "core:path:default",
+    "core:window:default",
+    "core:resources:default",
     "log:default",
     "fs:default",
     "fs:allow-mkdir",
     "fs:create-app-specific-dirs",
     "fs:allow-appdata-write",
-    "fs:allow-appdata-write-recursive"
+    "fs:allow-appdata-write-recursive",
+    "fs:write-all"
   ]
 }
-
