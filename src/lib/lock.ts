@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { shutdownDbSafely } from "./shutdown";
 import { isTauri } from "@/tauriEnv";
-import { readJsonFile, writeJsonFile, ensureDataDir } from "/src/tauri/fsStore";
+import { locksPath, inAppDir } from "@/lib/paths";
 
 const TTL = 20_000; // 20s
 const HEARTBEAT = 5_000; // 5s
@@ -10,15 +10,69 @@ const BROWSER_NS = "mamastock";
 const instanceId = uuidv4();
 let heartbeat: ReturnType<typeof setInterval> | null = null;
 
-async function removeJson(rel: string) {
+async function readLock() {
   if (!isTauri()) {
-    localStorage.removeItem(`${BROWSER_NS}:${rel.replace(/\\/g, '/')}`);
+    const v = localStorage.getItem(`${BROWSER_NS}:db.lock.json`);
+    return v ? JSON.parse(v) : null;
+  }
+  const fs = await import("@tauri-apps/plugin-fs");
+  const path = await locksPath();
+  if (!(await fs.exists(path))) return null;
+  const txt = await fs.readTextFile(path);
+  return JSON.parse(txt);
+}
+
+async function writeLock(data: any) {
+  if (!isTauri()) {
+    localStorage.setItem(`${BROWSER_NS}:db.lock.json`, JSON.stringify(data));
     return;
   }
   const fs = await import("@tauri-apps/plugin-fs");
-  const { join } = await import("@tauri-apps/api/path");
-  const root = await ensureDataDir();
-  const path = await join(root, rel);
+  await fs.mkdir(await inAppDir("data"), { recursive: true });
+  const path = await locksPath();
+  await fs.writeTextFile(path, JSON.stringify(data));
+}
+
+async function removeLock() {
+  if (!isTauri()) {
+    localStorage.removeItem(`${BROWSER_NS}:db.lock.json`);
+    return;
+  }
+  const fs = await import("@tauri-apps/plugin-fs");
+  const path = await locksPath();
+  if (await fs.exists(path)) await fs.remove(path);
+}
+
+async function readShutdownRequest() {
+  if (!isTauri()) {
+    const v = localStorage.getItem(`${BROWSER_NS}:shutdown.request.json`);
+    return v ? JSON.parse(v) : null;
+  }
+  const fs = await import("@tauri-apps/plugin-fs");
+  const path = await inAppDir("data", "shutdown.request.json");
+  if (!(await fs.exists(path))) return null;
+  const txt = await fs.readTextFile(path);
+  return JSON.parse(txt);
+}
+
+async function writeShutdownRequest(data: any) {
+  if (!isTauri()) {
+    localStorage.setItem(`${BROWSER_NS}:shutdown.request.json`, JSON.stringify(data));
+    return;
+  }
+  const fs = await import("@tauri-apps/plugin-fs");
+  await fs.mkdir(await inAppDir("data"), { recursive: true });
+  const path = await inAppDir("data", "shutdown.request.json");
+  await fs.writeTextFile(path, JSON.stringify(data));
+}
+
+async function removeShutdownRequest() {
+  if (!isTauri()) {
+    localStorage.removeItem(`${BROWSER_NS}:shutdown.request.json`);
+    return;
+  }
+  const fs = await import("@tauri-apps/plugin-fs");
+  const path = await inAppDir("data", "shutdown.request.json");
   if (await fs.exists(path)) await fs.remove(path);
 }
 
@@ -33,7 +87,7 @@ export async function ensureSingleOwner(waitMs = 30_000) {
   while (true) {
     let lock: any = null;
     try {
-      lock = await readJsonFile("db.lock.json");
+      lock = await readLock();
     } catch {
       lock = null;
     }
@@ -55,9 +109,9 @@ export async function ensureSingleOwner(waitMs = 30_000) {
     }
     await new Promise((r) => setTimeout(r, HEARTBEAT));
   }
-  await writeJsonFile("db.lock.json", { ts: Date.now(), id: instanceId });
+  await writeLock({ ts: Date.now(), id: instanceId });
   heartbeat = setInterval(async () => {
-    await writeJsonFile("db.lock.json", { ts: Date.now(), id: instanceId });
+    await writeLock({ ts: Date.now(), id: instanceId });
   }, HEARTBEAT);
 }
 
@@ -69,15 +123,15 @@ export async function monitorShutdownRequests() {
   const appWindow = getCurrentWebviewWindow();
   const check = async () => {
     try {
-      const req: any = await readJsonFile("shutdown.request.json");
+      const req: any = await readShutdownRequest();
       if (req && req.requester !== instanceId) {
         await shutdownDbSafely();
         await releaseLock();
-        await removeJson("shutdown.request.json");
+        await removeShutdownRequest();
         await appWindow.close();
       }
     } catch {
-      await removeJson("shutdown.request.json");
+      await removeShutdownRequest();
     }
   };
   await check();
@@ -88,7 +142,7 @@ export async function requestRemoteShutdown() {
   if (!isTauri()) {
     return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
   }
-  await writeJsonFile("shutdown.request.json", { ts: Date.now(), requester: instanceId });
+  await writeShutdownRequest({ ts: Date.now(), requester: instanceId });
 }
 
 export async function releaseLock() {
@@ -100,9 +154,9 @@ export async function releaseLock() {
     heartbeat = null;
   }
   try {
-    const lock = await readJsonFile("db.lock.json");
+    const lock = await readLock();
     if (lock) {
-      await removeJson("db.lock.json");
+      await removeLock();
     }
   } catch {
     // ignore errors

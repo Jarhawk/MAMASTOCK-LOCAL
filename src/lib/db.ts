@@ -1,15 +1,15 @@
 import { readConfig, writeConfig } from "@/appFs";
 import { isTauri } from "@/tauriEnv";
+import { inAppDir, dataDbPath } from "@/lib/paths";
 import type Database from "@tauri-apps/plugin-sql";
+import { dirname, join } from "@tauri-apps/api/path";
 
 let DatabaseMod: typeof import("@tauri-apps/plugin-sql").default | null = null;
 let fs: typeof import("@tauri-apps/plugin-fs") | null = null;
-let APP_BASE = 0;
 
 async function ensureFs() {
   if (!fs) {
     fs = await import("@tauri-apps/plugin-fs");
-    APP_BASE = fs.BaseDirectory?.AppData ?? 0;
   }
   return fs;
 }
@@ -21,19 +21,15 @@ async function ensureDatabase() {
   return DatabaseMod;
 }
 
-const APP_DIR = "MamaStock";
-const DATA_DIR = `${APP_DIR}/data`;
-const EXPORT_DIR = `${APP_DIR}/Exports`;
-const BACKUP_DIR = `${APP_DIR}/Backups`;
 let dbPromise: Promise<Database> | null = null;
 
 export async function getDataDir(): Promise<string> {
   if (!isTauri()) {
     console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
-    return DATA_DIR;
+    return "";
   }
   const cfg = (await readConfig()) || {};
-  return cfg.dataDir || DATA_DIR;
+  return cfg.dataDir || await inAppDir("data");
 }
 
 export async function setDataDir(dir: string) {
@@ -48,10 +44,10 @@ export async function setDataDir(dir: string) {
 export async function getExportDir(): Promise<string> {
   if (!isTauri()) {
     console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
-    return EXPORT_DIR;
+    return "";
   }
   const cfg = (await readConfig()) || {};
-  return cfg.exportDir || EXPORT_DIR;
+  return cfg.exportDir || await inAppDir("Exports");
 }
 
 export async function setExportDir(dir: string) {
@@ -75,19 +71,19 @@ export async function backupDb(): Promise<string> {
     console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     return "";
   }
-  const dataDir = await getDataDir();
-  const source = `${dataDir}/mamastock.db`;
+  const source = await dataDbPath();
   const fs = await ensureFs();
-  await fs.mkdir(BACKUP_DIR, { dir: APP_BASE, recursive: true });
+  const backupDir = await inAppDir("Backups");
+  await fs.mkdir(backupDir, { recursive: true });
   const now = new Date();
   const stamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(
     now.getDate()
   ).padStart(2, "0")}${String(now.getHours()).padStart(2, "0")}${String(
     now.getMinutes()
   ).padStart(2, "0")}${String(now.getSeconds()).padStart(2, "0")}`;
-  const dest = `${BACKUP_DIR}/mamastock_${stamp}.db`;
-  const data = await fs.readFile(source, { dir: APP_BASE });
-  await fs.writeFile(dest, data, { dir: APP_BASE });
+  const dest = await join(backupDir, `mamastock_${stamp}.db`);
+  const data = await fs.readFile(source);
+  await fs.writeFile(dest, data);
   return dest;
 }
 
@@ -96,11 +92,10 @@ export async function restoreDb(file: string) {
     return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
   }
   await closeDb();
-  const dataDir = await getDataDir();
-  const dest = `${dataDir}/mamastock.db`;
+  const dest = await dataDbPath();
   const fs = await ensureFs();
-  const data = await fs.readFile(file, { dir: APP_BASE });
-  await fs.writeFile(dest, data, { dir: APP_BASE });
+  const data = await fs.readFile(file);
+  await fs.writeFile(dest, data);
 }
 
 export async function maintenanceDb() {
@@ -118,11 +113,11 @@ export async function getDb(): Promise<Database> {
     throw new Error('Tauri plugins not available');
   }
   if (!dbPromise) {
-    const dir = await getDataDir();
+    const dbPath = await dataDbPath();
     const fs = await ensureFs();
-    await fs.mkdir(dir, { dir: APP_BASE, recursive: true });
-    const dbPath = `${dir}/mamastock.db`;
-    const existsDb = await fs.exists(dbPath, { dir: APP_BASE });
+    const dir = await dirname(dbPath);
+    await fs.mkdir(dir, { recursive: true });
+    const existsDb = await fs.exists(dbPath);
     const DatabaseCtor = await ensureDatabase();
     const db = await DatabaseCtor.load(`sqlite:${dbPath}`);
     dbPromise = Promise.resolve(db);
