@@ -86,6 +86,7 @@ import App from "./App";
 import ErrorBoundary from "@/debug/ErrorBoundary";
 import { AuthProvider } from "@/context/AuthContext";
 import { HelpProvider } from "@/context/HelpProvider";
+import { initSchema } from "@/db/index";
 import "./globals.css";
 import "nprogress/nprogress.css";
 import "@/i18n/i18n";
@@ -134,6 +135,7 @@ if (isTauri()) {
   );
 }
 
+await initSchema();
 const root = createRoot(document.getElementById("root"));
 root.render(
   <ErrorBoundary>
