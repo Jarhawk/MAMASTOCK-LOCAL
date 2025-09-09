@@ -9,21 +9,21 @@ import { isTauri } from '@/tauriEnv';
 
 async function resolveExportPath(filename) {
   const dir = await getExportDir();
-  if (isTauri()) {
-    const { mkdir, BaseDirectory } = await import('@tauri-apps/plugin-fs');
-    await mkdir(dir, { dir: BaseDirectory.AppData, recursive: true });
-  }
-  return `${dir}/${filename}`;
+  if (!isTauri()) return filename;
+  const fs = await import('@tauri-apps/plugin-fs');
+  const { join } = await import('@tauri-apps/api/path');
+  await fs.mkdir(dir, { recursive: true });
+  return await join(dir, filename);
 }
 
 async function saveBlob(blob, filename, useDialog = true) {
   if (isTauri()) {
-    const { writeFile, BaseDirectory } = await import('@tauri-apps/plugin-fs');
+    const fs = await import('@tauri-apps/plugin-fs');
     const { save } = await import('@tauri-apps/plugin-dialog');
     const defaultPath = await resolveExportPath(filename);
     const path = useDialog ? (await save({ defaultPath })) || defaultPath : defaultPath;
     const buf = await blob.arrayBuffer();
-    await writeFile(path, new Uint8Array(buf), { dir: BaseDirectory.AppData });
+    await fs.writeFile(path, new Uint8Array(buf));
   } else {
     console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     saveAs(blob, filename);
@@ -199,19 +199,14 @@ export function exportToClipboard(data = [], config = {}) {
       .map(([k, v]) => `${k}: ${v}`)
       .join('\n');
   });
-  const txt = lines.join('\n\n');
-  if (typeof navigator !== 'undefined' && navigator.clipboard) {
-    return navigator.clipboard.writeText(txt);
-  }
-  return Promise.resolve(txt);
+  navigator.clipboard.writeText(lines.join('\n\n'));
 }
-
 export function printView(content) {
-  const w = window.open('', '_blank');
-  if (!w) return;
-  w.document.write(typeof content === 'string' ? content : content.outerHTML);
-  w.document.close();
-  w.focus();
-  w.print();
-  w.close();
+  const win = window.open('', '_blank');
+  if (!win) return;
+  win.document.write(content);
+  win.document.close();
+  win.focus();
+  win.print();
+  win.close();
 }

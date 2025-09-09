@@ -95,7 +95,6 @@ import {
   releaseLock,
 } from "@/lib/lock";
 import { shutdownDbSafely } from "@/lib/shutdown";
-import { getDataDir } from "@/lib/db";
 
 // Avoid noisy output in production by disabling debug logs
 if (!import.meta.env.DEV) {
@@ -121,12 +120,11 @@ if (import.meta?.env?.DEV) {
 // Sentry.init({ dsn: "https://xxx.ingest.sentry.io/xxx" });
 
 if (isTauri()) {
-  const dir = await getDataDir();
-  monitorShutdownRequests(dir);
-  await ensureSingleOwner(dir);
+  monitorShutdownRequests();
+  await ensureSingleOwner();
   window.addEventListener('beforeunload', () => {
     shutdownDbSafely();
-    releaseLock(dir);
+    releaseLock();
   });
 } else {
   console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
