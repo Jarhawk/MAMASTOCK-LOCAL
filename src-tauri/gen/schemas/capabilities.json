@@ -1,1 +1,5 @@
+<<<<<<< Updated upstream
 {"main":{"identifier":"main","description":"Permissions for main window","local":true,"windows":["main"],"permissions":["core:default","fs:default","fs:allow-mkdir","fs:create-app-specific-dirs","fs:allow-appdata-write","fs:allow-appdata-write-recursive"]},"sql-main":{"identifier":"sql-main","description":"Permissions SQL","local":true,"windows":["main"],"permissions":["sql:default","sql:allow-execute"]}}
+=======
+{"main":{"identifier":"main","description":"Permissions for main window","local":true,"windows":["main"],"permissions":["core:default","fs:default","fs:allow-mkdir","fs:write-all","fs:create-app-specific-dirs","fs:allow-appdata-write","fs:allow-appdata-write-recursive"]},"sql-main":{"identifier":"sql-main","description":"Permissions SQL","local":true,"windows":["main"],"permissions":["sql:default","sql:allow-execute"]}}
+>>>>>>> Stashed changes

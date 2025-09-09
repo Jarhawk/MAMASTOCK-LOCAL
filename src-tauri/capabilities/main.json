@@ -1,4 +1,5 @@
 {
+<<<<<<< Updated upstream
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "main",
   "description": "Permissions for main window",
@@ -12,3 +13,21 @@
     "fs:allow-appdata-write-recursive"
   ]
 }
+=======
+    "$schema":  "../gen/schemas/desktop-schema.json",
+    "identifier":  "main",
+    "description":  "Permissions for main window",
+    "windows":  [
+                    "main"
+                ],
+    "permissions":  [
+                        "core:default",
+                        "fs:default",
+                        "fs:allow-mkdir",
+                        "fs:write-all",
+                        "fs:create-app-specific-dirs",
+                        "fs:allow-appdata-write",
+                        "fs:allow-appdata-write-recursive"
+                    ]
+}
+>>>>>>> Stashed changes
