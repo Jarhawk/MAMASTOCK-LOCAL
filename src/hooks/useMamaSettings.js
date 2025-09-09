@@ -2,7 +2,7 @@
 import { supabase } from '@/lib/supabaseClient';
 import { useCallback, useMemo } from "react";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { deduceEnabledModulesFromRights } from '@/lib/access';
 import { run } from '@/lib/supa/fetcher';
 import { logError } from '@/lib/supa/logError';

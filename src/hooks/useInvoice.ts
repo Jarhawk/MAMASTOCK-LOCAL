@@ -1,7 +1,7 @@
 import supabase from '@/lib/supabase';
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 
 type UUID = string;
 
