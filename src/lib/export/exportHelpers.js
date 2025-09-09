@@ -7,7 +7,7 @@ import { dump } from 'js-yaml';
 import { writeFile, mkdir, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { save } from '@tauri-apps/plugin-dialog';
 import { getExportDir } from '@/lib/db';
-import { isTauri } from '@/isTauri';
+import { isTauri } from '@/tauriEnv';
 
 async function resolveExportPath(filename) {
   const dir = await getExportDir();

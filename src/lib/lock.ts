@@ -3,7 +3,7 @@ import { exists, readTextFile, writeTextFile, remove, BaseDirectory } from "@tau
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
 import { v4 as uuidv4 } from "uuid";
 import { shutdownDbSafely } from "./shutdown";
-import { isTauri } from "@/isTauri";
+import { isTauri } from "@/tauriEnv";
 
 const appWindow = isTauri() ? getCurrentWebviewWindow() : null;
 

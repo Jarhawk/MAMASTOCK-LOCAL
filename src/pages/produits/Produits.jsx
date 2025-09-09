@@ -20,6 +20,7 @@ import { useAuth } from '@/hooks/useAuth';
 import ProduitRow from "@/components/produits/ProduitRow";
 import ModalImportProduits from "@/components/produits/ModalImportProduits";
 import useExport from '@/hooks/useExport';
+import { isTauri } from '@/tauriEnv';
 
 const PAGE_SIZE = 50;
 
@@ -234,7 +235,7 @@ export default function Produits() {
               className="min-w-[140px]"
               onClick={() => handleExport('excel')}
               icon={FileDownIcon}
-              disabled={rows.length === 0 || exporting}
+              disabled={rows.length === 0 || exporting || !isTauri()}
             >
               Export Excel
             </Button>
@@ -242,7 +243,7 @@ export default function Produits() {
               className="min-w-[140px]"
               onClick={() => handleExport('csv')}
               icon={FileDownIcon}
-              disabled={rows.length === 0 || exporting}
+              disabled={rows.length === 0 || exporting || !isTauri()}
             >
               Export CSV
             </Button>
@@ -250,7 +251,7 @@ export default function Produits() {
               className="min-w-[140px]"
               onClick={() => handleExport('pdf')}
               icon={FileDownIcon}
-              disabled={rows.length === 0 || exporting}
+              disabled={rows.length === 0 || exporting || !isTauri()}
             >
               Export PDF
             </Button>

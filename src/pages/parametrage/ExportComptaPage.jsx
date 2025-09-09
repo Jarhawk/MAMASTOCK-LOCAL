@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import TableContainer from '@/components/ui/TableContainer';
 import useExportCompta from '@/hooks/useExportCompta';
+import { isTauri } from '@/tauriEnv';
 
 export default function ExportComptaPage() {
   const { generateJournalCsv, exportToERP, loading } = useExportCompta();
@@ -18,7 +19,12 @@ export default function ExportComptaPage() {
     setPreview(rows);
   };
 
-  const handleDownload = () => generateJournalCsv(mois, true);
+  const handleDownload = () => {
+    if (!isTauri()) {
+      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    }
+    return generateJournalCsv(mois, true);
+  };
 
   const handleSend = () => exportToERP(mois, endpoint, token);
 
@@ -51,7 +57,7 @@ export default function ExportComptaPage() {
         <Button onClick={handlePreview} disabled={loading}>
           Aperçu
         </Button>
-        <Button onClick={handleDownload} disabled={loading}>
+        <Button onClick={handleDownload} disabled={loading || !isTauri()}>
           Télécharger
         </Button>
       </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/plugin-dialog";
 import { setDataDir, getDataDir, getExportDir, setExportDir } from "@/lib/db";
-import { isTauri } from "@/isTauri";
+import { isTauri } from "@/tauriEnv";
 
 export default function DataFolder() {
   const [dir, setDir] = useState("");
@@ -65,10 +65,10 @@ export default function DataFolder() {
           className="border p-1 w-full"
         />
         <div className="flex gap-2">
-          <button onClick={choose} className="border px-2 py-1">
+          <button onClick={choose} className="border px-2 py-1" disabled={!isTauri()}>
             Choisir...
           </button>
-          <button onClick={save} className="border px-2 py-1">
+          <button onClick={save} className="border px-2 py-1" disabled={!isTauri()}>
             Enregistrer
           </button>
         </div>
@@ -87,10 +87,10 @@ export default function DataFolder() {
           className="border p-1 w-full"
         />
         <div className="flex gap-2">
-          <button onClick={chooseExport} className="border px-2 py-1">
+          <button onClick={chooseExport} className="border px-2 py-1" disabled={!isTauri()}>
             Choisir...
           </button>
-          <button onClick={saveExport} className="border px-2 py-1">
+          <button onClick={saveExport} className="border px-2 py-1" disabled={!isTauri()}>
             Enregistrer
           </button>
         </div>

@@ -1,5 +1,5 @@
 import { emit } from '@tauri-apps/api/event';
-import { isTauri } from "./isTauri";
+import { isTauri } from "./tauriEnv";
 import { log, initLog } from "./tauriLog";
 // MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // Polyfills Node â†’ navigateur

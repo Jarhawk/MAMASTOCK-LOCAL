@@ -1,40 +1,21 @@
 import Database from "@tauri-apps/plugin-sql";
 import { readFile, writeFile, mkdir, exists, BaseDirectory } from "@tauri-apps/plugin-fs";
-import { ensureAppDir, writeAppText, readAppText } from "@/appFs";
-import { isTauri } from "@/isTauri";
+import { readConfig, writeConfig } from "@/appFs";
+import { isTauri } from "@/tauriEnv";
 
 const APP_DIR = "MamaStock";
 const APP_BASE = (BaseDirectory?.AppData ?? 0) as number;
 const DATA_DIR = `${APP_DIR}/data`;
 const EXPORT_DIR = `${APP_DIR}/Exports`;
 const BACKUP_DIR = `${APP_DIR}/Backups`;
-const CONFIG_FILE = "config.json";
-
 let dbPromise: Promise<Database> | null = null;
-
-async function readConfig(): Promise<any> {
-  const txt = await readAppText(CONFIG_FILE);
-  if (txt) {
-    try {
-      return JSON.parse(txt);
-    } catch (_) {
-      /* ignore */
-    }
-  }
-  return {};
-}
-
-async function writeConfig(data: any) {
-  await ensureAppDir();
-  await writeAppText(CONFIG_FILE, JSON.stringify(data, null, 2));
-}
 
 export async function getDataDir(): Promise<string> {
   if (!isTauri()) {
     console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     return DATA_DIR;
   }
-  const cfg = await readConfig();
+  const cfg = (await readConfig()) || {};
   return cfg.dataDir || DATA_DIR;
 }
 
@@ -42,7 +23,7 @@ export async function setDataDir(dir: string) {
   if (!isTauri()) {
     return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
   }
-  const cfg = await readConfig();
+  const cfg = (await readConfig()) || {};
   await writeConfig({ ...cfg, dataDir: dir });
   dbPromise = null; // force reload
 }
@@ -52,7 +33,7 @@ export async function getExportDir(): Promise<string> {
     console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     return EXPORT_DIR;
   }
-  const cfg = await readConfig();
+  const cfg = (await readConfig()) || {};
   return cfg.exportDir || EXPORT_DIR;
 }
 
@@ -60,7 +41,7 @@ export async function setExportDir(dir: string) {
   if (!isTauri()) {
     return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
   }
-  const cfg = await readConfig();
+  const cfg = (await readConfig()) || {};
   await writeConfig({ ...cfg, exportDir: dir });
 }
 

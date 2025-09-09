@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Menu } from 'lucide-react';
 import useExport from '@/hooks/useExport';
+import { isTauri } from '@/tauriEnv';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import TableHeader from '@/components/ui/TableHeader';
 import GlassCard from '@/components/ui/GlassCard';
@@ -177,7 +178,7 @@ export default function Factures() {
                     onClick={() =>
                       exportData({ type: 'factures', format: 'excel' })
                     }
-                    disabled={exporting}
+                    disabled={exporting || !isTauri()}
                   >
                     Export Excel
                   </Button>
@@ -186,7 +187,7 @@ export default function Factures() {
                     onClick={() =>
                       exportData({ type: 'factures', format: 'csv' })
                     }
-                    disabled={exporting}
+                    disabled={exporting || !isTauri()}
                   >
                     Export CSV
                   </Button>
@@ -195,7 +196,7 @@ export default function Factures() {
                     onClick={() =>
                       exportData({ type: 'factures', format: 'pdf' })
                     }
-                    disabled={exporting}
+                    disabled={exporting || !isTauri()}
                   >
                     Export PDF
                   </Button>
@@ -222,7 +223,7 @@ export default function Factures() {
                       onSelect={() =>
                         exportData({ type: 'factures', format: 'excel' })
                       }
-                      disabled={exporting}
+                      disabled={exporting || !isTauri()}
                     >
                       Export Excel
                     </DropdownMenuItem>
@@ -230,7 +231,7 @@ export default function Factures() {
                       onSelect={() =>
                         exportData({ type: 'factures', format: 'csv' })
                       }
-                      disabled={exporting}
+                      disabled={exporting || !isTauri()}
                     >
                       Export CSV
                     </DropdownMenuItem>
@@ -238,7 +239,7 @@ export default function Factures() {
                       onSelect={() =>
                         exportData({ type: 'factures', format: 'pdf' })
                       }
-                      disabled={exporting}
+                      disabled={exporting || !isTauri()}
                     >
                       Export PDF
                     </DropdownMenuItem>
