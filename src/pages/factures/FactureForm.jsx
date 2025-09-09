@@ -19,7 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import useProduitLineDefaults from '@/hooks/useProduitLineDefaults';
 import { useZonesStock } from '@/hooks/useZonesStock';
 import { formatMoneyFR } from '@/utils/numberFormat';
-import { facture_create_with_lignes } from '@/lib/db';
+import { facture_create, facture_add_ligne } from '@/lib/db';
 import { useQueryClient } from '@tanstack/react-query';
 
 const FN_UPDATE_FACTURE_EXISTS = false;
@@ -178,20 +178,18 @@ export default function FactureForm({ facture = null, onSaved } = {}) {
         return;
       }
 
-      const total = payloadLignes.reduce(
-        (acc, l) => acc + l.quantite * l.prix,
-        0
-      );
-
-      await facture_create_with_lignes(
-        {
-          id: formId || crypto.randomUUID(),
-          fournisseur_id: values.fournisseur_id,
-          total,
-          date: values.date_facture,
-        },
-        payloadLignes
-      );
+      const factureId = await facture_create({
+        fournisseur_id: values.fournisseur_id,
+        date_iso: values.date_facture,
+      });
+      for (const l of payloadLignes) {
+        await facture_add_ligne({
+          facture_id: factureId,
+          produit_id: l.produit_id,
+          quantite: l.quantite,
+          prix_unitaire: l.prix,
+        });
+      }
 
       toast.success(
         `Facture enregistrée • N° ${values.numero || '—'} • ${values.statut}`

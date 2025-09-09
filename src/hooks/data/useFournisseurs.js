@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { normalizeSearchTerm } from '@/lib/supa/textSearch';
 import { fournisseurs_list } from '@/lib/db';
 
-
 export function useFournisseurs(params = {}) {
   const {
     search = '',
@@ -23,8 +22,8 @@ export function useFournisseurs(params = {}) {
     gcTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      const { rows, total } = await fournisseurs_list(term, limit, page);
-      return { data: rows, count: total };
+      const rows = await fournisseurs_list();
+      return { data: rows, count: rows.length };
     },
   });
 }
