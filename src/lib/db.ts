@@ -1,7 +1,9 @@
 import Database from "@tauri-apps/plugin-sql";
-import { readFile, writeFile, createDir, exists } from "@tauri-apps/plugin-fs";
-import { APP_DIR, APP_BASE, writeAppJson, readAppText } from "@/lib/appFs";
+import { readFile, writeFile, mkdir, exists, BaseDirectory } from "@tauri-apps/plugin-fs";
+import { ensureAppDir, writeAppText, readAppText } from "@/appFs";
 
+const APP_DIR = "MamaStock";
+const APP_BASE = BaseDirectory.AppData;
 const DATA_DIR = `${APP_DIR}/data`;
 const EXPORT_DIR = `${APP_DIR}/Exports`;
 const BACKUP_DIR = `${APP_DIR}/Backups`;
@@ -22,7 +24,8 @@ async function readConfig(): Promise<any> {
 }
 
 async function writeConfig(data: any) {
-  await writeAppJson(CONFIG_FILE, data);
+  await ensureAppDir();
+  await writeAppText(CONFIG_FILE, JSON.stringify(data, null, 2));
 }
 
 export async function getDataDir(): Promise<string> {
@@ -57,7 +60,7 @@ export async function closeDb() {
 export async function backupDb(): Promise<string> {
   const dataDir = await getDataDir();
   const source = `${dataDir}/mamastock.db`;
-  await createDir(BACKUP_DIR, { dir: APP_BASE, recursive: true });
+  await mkdir(BACKUP_DIR, { dir: APP_BASE, recursive: true });
   const now = new Date();
   const stamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(
     now.getDate()
@@ -87,7 +90,7 @@ export async function maintenanceDb() {
 export async function getDb(): Promise<Database> {
   if (!dbPromise) {
     const dir = await getDataDir();
-    await createDir(dir, { dir: APP_BASE, recursive: true });
+    await mkdir(dir, { dir: APP_BASE, recursive: true });
     const dbPath = `${dir}/mamastock.db`;
     const existsDb = await exists(dbPath, { dir: APP_BASE });
     const db = await Database.load(`sqlite:${dbPath}`);
