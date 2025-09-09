@@ -10,11 +10,8 @@ let api: Partial<LogApi> | null = null;
 
 export async function initLog() {
   if (import.meta.env.PROD) {
-    try {
-      api = await import("@tauri-apps/plugin-log") as any;
-    } catch (_) {
-      api = null;
-    }
+    try { api = (await import("@tauri-apps/plugin-log")) as any; }
+    catch { api = null; }
   }
 }
 
