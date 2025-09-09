@@ -1,6 +1,6 @@
 import { emit } from '@tauri-apps/api/event';
-import { setupLogging, appendLog } from './debug/logger';
-import { isTauri } from './tauriEnv';
+import { isTauri } from '@/lib/isTauri';
+import { log } from '@/lib/log';
 // MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // Polyfills Node â†’ navigateur
 import { Buffer } from "buffer";
@@ -10,7 +10,6 @@ window.Buffer = Buffer;
 // @ts-ignore
 window.process = process;
 
-await setupLogging();
 // Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
 if (isTauri) {
   window.addEventListener('keydown', async (e) => {
@@ -58,14 +57,7 @@ function installGlobalErrorOverlay() {
       pre.textContent = msg;
       el.style.display = "block";
     }
-    appendLog(`[${type}] ${msg}`).catch((e) => {
-      const msg = String(e?.message || e);
-      if (msg.includes('plugin log not found')) {
-        console.debug('[overlay muted]:', msg);
-      } else {
-        console.error('[overlay appendLog]', e);
-      }
-    });
+    log.error(`[${type}] ${msg}`);
     console.error("[Overlay]", err);
   }
 

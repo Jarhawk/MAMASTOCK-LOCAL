@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/plugin-dialog";
 import { setDataDir, getDataDir, getExportDir, setExportDir } from "@/lib/db";
-import { isTauri } from "@/tauriEnv";
+import { isTauri } from "@/lib/isTauri";
 
 export default function DataFolder() {
   const [dir, setDir] = useState("");

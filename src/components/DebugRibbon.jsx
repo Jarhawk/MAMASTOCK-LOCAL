@@ -1,7 +1,7 @@
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { appDataDir, join } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/plugin-shell";
-import { isTauri } from "@/tauriEnv";
+import { isTauri } from "@/lib/isTauri";
 
 export default function DebugRibbon() {
   const show = import.meta.env.DEV || window.DEBUG;
