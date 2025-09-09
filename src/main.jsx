@@ -86,11 +86,12 @@ import App from "./App";
 import ErrorBoundary from "@/debug/ErrorBoundary";
 import { AuthProvider } from "@/context/AuthContext";
 import { HelpProvider } from "@/context/HelpProvider";
-import { initSchema } from "@/db/index";
+import { applyMigrations } from "@/db/migrate";
 import "./globals.css";
 import "nprogress/nprogress.css";
 import "@/i18n/i18n";
 import "./registerSW.js";
+import "@/debug/devAuth";
 import { toast } from "sonner";
 import {
   ensureSingleOwner,
@@ -135,7 +136,12 @@ if (isTauri()) {
   );
 }
 
-await initSchema();
+try {
+  await applyMigrations();
+  console.info("[boot] migrations ok");
+} catch (e) {
+  console.error("[boot] migrations failed", e);
+}
 const root = createRoot(document.getElementById("root"));
 root.render(
   <ErrorBoundary>
