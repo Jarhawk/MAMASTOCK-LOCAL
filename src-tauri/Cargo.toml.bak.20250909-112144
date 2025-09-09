@@ -6,7 +6,7 @@ edition = "2021"
 
 # Pas de [lib] ici
 
-# [[bin]] facultatif (par dÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©faut src/main.rs est utilisÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©)
+# [[bin]] facultatif (par dÃƒÆ’Ã‚Â©faut src/main.rs est utilisÃƒÆ’Ã‚Â©)
 # [[bin]]
 # name = "mamastock"
 # path = "src/main.rs"
@@ -21,7 +21,6 @@ tauri-plugin-dialog = { version = "2" }
 tauri-plugin-process = { version = "2" }
 tauri-plugin-log = { version = "2" }
 tauri-plugin-devtools = { version = "2" }
-tauri-plugin-sql = { version = "2", features = ["sqlite"] }
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 
@@ -29,4 +28,5 @@ tauri-build = { version = "2", features = [] }
 default = []
 custom-protocol = ["tauri/custom-protocol"]
 
+tauri-plugin-sql = { version = "2", features = ["sqlite"] }
 
