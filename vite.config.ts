@@ -6,7 +6,6 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src"),
       crypto: path.resolve(__dirname, "src/shims/crypto.ts"),
       "node:crypto": path.resolve(__dirname, "src/shims/crypto.ts"),
     },
