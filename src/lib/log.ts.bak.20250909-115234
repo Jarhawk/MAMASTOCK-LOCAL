@@ -7,7 +7,7 @@ let logger: Logger = console;
 async function init() {
   if (isTauri) {
     try {
-      const mod = await import("/src/tauriLog.ts");
+      const mod = await import("@tauri-apps/plugin-log");
       logger = { info: mod.info, error: mod.error };
     } catch {
       logger = console;
