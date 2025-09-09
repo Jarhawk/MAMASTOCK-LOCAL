@@ -1,4 +1,3 @@
-import { emit } from '@tauri-apps/api/event';
 import { isTauri } from "./tauriEnv";
 import { log, initLog } from "./tauriLog";
 // MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
@@ -13,6 +12,7 @@ window.process = process;
 // Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
 if (isTauri()) {
   await initLog();
+  const { emit } = await import('@tauri-apps/api/event');
   window.addEventListener('keydown', async (e) => {
     if (e.key === 'F12') {
       try {

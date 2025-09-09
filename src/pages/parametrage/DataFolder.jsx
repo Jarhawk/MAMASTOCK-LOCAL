@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { open } from "@tauri-apps/plugin-dialog";
 import { setDataDir, getDataDir, getExportDir, setExportDir } from "@/lib/db";
 import { isTauri } from "@/tauriEnv";
 
@@ -22,6 +21,7 @@ export default function DataFolder() {
     if (!isTauri()) {
       return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     }
+    const { open } = await import("@tauri-apps/plugin-dialog");
     const selected = await open({ directory: true });
     if (selected) setDir(String(selected));
   };
@@ -30,6 +30,7 @@ export default function DataFolder() {
     if (!isTauri()) {
       return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     }
+    const { open } = await import("@tauri-apps/plugin-dialog");
     const selected = await open({ directory: true });
     if (selected) setExportDirState(String(selected));
   };

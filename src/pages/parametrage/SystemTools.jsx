@@ -1,5 +1,3 @@
-import { open } from "@tauri-apps/plugin-dialog";
-import { relaunch } from "@tauri-apps/plugin-process";
 import { backupDb, restoreDb, maintenanceDb } from "@/lib/db";
 import { toast } from "sonner";
 import { isTauri } from "@/tauriEnv";
@@ -22,6 +20,8 @@ export default function SystemTools() {
       return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     }
     try {
+      const { open } = await import("@tauri-apps/plugin-dialog");
+      const { relaunch } = await import("@tauri-apps/plugin-process");
       const file = await open({ filters: [{ name: "Base", extensions: ["db"] }] });
       if (file && window.confirm("Restaurer cette sauvegarde ? L'application redémarrera.")) {
         await restoreDb(String(file));

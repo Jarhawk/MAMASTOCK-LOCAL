@@ -1,11 +1,22 @@
-import { join } from "@tauri-apps/api/path";
-import { exists, readTextFile, writeTextFile, remove, BaseDirectory } from "@tauri-apps/plugin-fs";
-import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
 import { v4 as uuidv4 } from "uuid";
 import { shutdownDbSafely } from "./shutdown";
 import { isTauri } from "@/tauriEnv";
+let pathApi: typeof import("@tauri-apps/api/path") | null = null;
+let fs: typeof import("@tauri-apps/plugin-fs") | null = null;
 
-const appWindow = isTauri() ? getCurrentWebviewWindow() : null;
+async function getPathApi() {
+  if (!pathApi) {
+    pathApi = await import("@tauri-apps/api/path");
+  }
+  return pathApi;
+}
+
+async function getFs() {
+  if (!fs) {
+    fs = await import("@tauri-apps/plugin-fs");
+  }
+  return fs;
+}
 
 const TTL = 20_000; // 20s
 const HEARTBEAT = 5_000; // 5s
@@ -14,6 +25,7 @@ const instanceId = uuidv4();
 let heartbeat: ReturnType<typeof setInterval> | null = null;
 
 async function path(dir: string, file: string) {
+  const { join } = await getPathApi();
   return await join(dir, file);
 }
 
@@ -24,6 +36,7 @@ export async function ensureSingleOwner(syncDir: string, waitMs = 30_000) {
   const lockPath = await path(syncDir, "db.lock.json");
   const start = Date.now();
   let requested = false;
+  const { exists, readTextFile, writeTextFile, BaseDirectory } = await getFs();
   while (await exists(lockPath, { dir: BaseDirectory.AppData })) {
     try {
       const { ts } = JSON.parse(await readTextFile(lockPath, { dir: BaseDirectory.AppData }));
@@ -53,6 +66,9 @@ export async function monitorShutdownRequests(syncDir: string) {
     return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
   }
   const shutdownPath = await path(syncDir, "shutdown.request.json");
+  const { exists, readTextFile, remove, BaseDirectory } = await getFs();
+  const { getCurrentWebviewWindow } = await import("@tauri-apps/api/webviewWindow");
+  const appWindow = getCurrentWebviewWindow();
   const check = async () => {
     if (await exists(shutdownPath, { dir: BaseDirectory.AppData })) {
       try {
@@ -77,6 +93,7 @@ export async function requestRemoteShutdown(syncDir: string) {
     return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
   }
   const shutdownPath = await path(syncDir, "shutdown.request.json");
+  const { writeTextFile, BaseDirectory } = await getFs();
   await writeTextFile(shutdownPath, JSON.stringify({ ts: Date.now(), requester: instanceId }), { dir: BaseDirectory.AppData });
 }
 
@@ -89,6 +106,7 @@ export async function releaseLock(syncDir: string) {
     clearInterval(heartbeat);
     heartbeat = null;
   }
+  const { exists, remove, BaseDirectory } = await getFs();
   if (await exists(lockPath, { dir: BaseDirectory.AppData })) {
     await remove(lockPath, { dir: BaseDirectory.AppData });
   }
