@@ -3,7 +3,7 @@
 fn main() {
     let mut builder = tauri::Builder::default();
 
-    // Common plugins
+    // Common plugins (both dev & prod)
     builder = builder
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
@@ -11,13 +11,13 @@ fn main() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_sql::Builder::default().build());
 
-    // Dev only (avoid logger conflicts)
+    // Dev only
     #[cfg(debug_assertions)]
     {
         builder = builder.plugin(tauri_plugin_devtools::init());
     }
 
-    // Prod only (logger)
+    // Prod only
     #[cfg(not(debug_assertions))]
     {
         builder = builder.plugin(tauri_plugin_log::Builder::default().build());
