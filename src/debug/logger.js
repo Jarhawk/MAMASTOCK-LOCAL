@@ -2,7 +2,10 @@ import { isTauri } from '../tauriEnv'
 
 export async function setupLogging() {
   // Pas de plugins si pas dans Tauri
-  if (!isTauri()) return
+  if (!isTauri) {
+    console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.')
+    return
+  }
 
   // On évite le plugin log en dev pour supprimer les collisions d'init
   if (import.meta.env.MODE === 'development') {
@@ -14,8 +17,8 @@ export async function setupLogging() {
     const log = await import('@tauri-apps/plugin-log')
     // await log.attachConsole() // seulement si besoin
     await log.info('logging initialized (release)')
-  } catch (e) {
-    console.warn('[log] plugin log not available:', e)
+  } catch {
+    console.warn('plugin log not available in dev')
   }
 }
 
@@ -31,7 +34,7 @@ export async function appendLog(msg, level = 'info') {
       })()
 
   // Fallback console si pas de plugin ou en dev
-  if (!isTauri() || import.meta.env.MODE === 'development') {
+  if (!isTauri || import.meta.env.MODE === 'development') {
     if (level === 'error') return console.error(text)
     if (level === 'warn') return console.warn(text)
     return console.log(text)
@@ -42,7 +45,7 @@ export async function appendLog(msg, level = 'info') {
     if (level === 'error' && typeof log.error === 'function') return log.error(text)
     if (level === 'warn' && typeof log.warn === 'function') return log.warn(text)
     if (typeof log.info === 'function') return log.info(text)
-  } catch (e) {
-    console.warn('[log] plugin log not available:', e)
+  } catch {
+    console.warn('plugin log not available in dev')
   }
 }
