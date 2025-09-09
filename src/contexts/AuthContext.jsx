@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import bcrypt from 'bcryptjs';
 import users from '@/db/users.json';
-import { randomBytes } from '@/crypto/random';
+import { randomBytes } from '/src/crypto/random';
 
 bcrypt.setRandomFallback(randomBytes);
 
