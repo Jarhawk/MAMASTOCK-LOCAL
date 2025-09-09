@@ -1,6 +1,6 @@
 import { emit } from '@tauri-apps/api/event';
-
 import { setupLogging, appendLog } from './debug/logger';
+import { isTauri } from './tauriEnv';
 // MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // Polyfills Node â†’ navigateur
 import { Buffer } from "buffer";
@@ -12,12 +12,18 @@ window.process = process;
 
 await setupLogging();
 // Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
-if (window.__TAURI__) {
+if (isTauri) {
   window.addEventListener('keydown', async (e) => {
     if (e.key === 'F12') {
-      await emit('open-devtools');
+      try {
+        await emit('open-devtools');
+      } catch (err) {
+        console.error('emit("open-devtools") failed', err);
+      }
     }
   });
+} else {
+  console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
 }
 
 
@@ -123,13 +129,17 @@ if (import.meta?.env?.DEV) {
 // import * as Sentry from "@sentry/react";
 // Sentry.init({ dsn: "https://xxx.ingest.sentry.io/xxx" });
 
-const dir = await getDataDir();
-monitorShutdownRequests(dir);
-await ensureSingleOwner(dir);
-window.addEventListener("beforeunload", () => {
-  shutdownDbSafely();
-  releaseLock(dir);
-});
+if (isTauri) {
+  const dir = await getDataDir();
+  monitorShutdownRequests(dir);
+  await ensureSingleOwner(dir);
+  window.addEventListener('beforeunload', () => {
+    shutdownDbSafely();
+    releaseLock(dir);
+  });
+} else {
+  console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+}
 
 const root = createRoot(document.getElementById("root"));
 root.render(
@@ -144,25 +154,6 @@ root.render(
   </StrictMode>,
 );
 
-if (window.__TAURI__) {
-  window.addEventListener('keydown', async (e) => {
-    if (e.key === 'F12') {
-      try {
-        await emit('open-devtools');
-      } catch (err) {
-        console.error('emit(""open-devtools"") failed', err);
-      }
-    }
-  });
-}
-
-
-if (window.__TAURI__) {
-  window.addEventListener("keydown", async (e) => {
-    if (e.key === "F12") {
-      try { await emit("open_devtools"); } catch (err) { console.error(err); }
-    }
-  });
-}
+// les raccourcis DevTools sont déjà gérés plus haut
 
 

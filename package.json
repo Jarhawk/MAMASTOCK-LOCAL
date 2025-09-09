@@ -7,9 +7,9 @@
     "node": ">=18"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "vite --port 5173 --strictPort --host",
     "tauri:dev": "tauri dev",
+    "build": "vite build",
     "tauri:build": "tauri build --bundles msi"
   },
   "dependencies": {

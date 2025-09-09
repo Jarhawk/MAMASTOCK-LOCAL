@@ -1,6 +1,7 @@
 ﻿import { Component } from "react";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { appendLog } from "./logger";
+import { isTauri } from "@/tauriEnv";
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -18,6 +19,9 @@ export default class ErrorBoundary extends Component {
   }
 
   openDevTools() {
+    if (!isTauri) {
+      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    }
     try {
       getCurrentWebviewWindow().openDevtools();
     } catch {}

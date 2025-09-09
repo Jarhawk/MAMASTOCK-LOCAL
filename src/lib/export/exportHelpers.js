@@ -4,31 +4,25 @@ import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
-import { writeFile, mkdir } from '@tauri-apps/plugin-fs';
+import { writeFile, mkdir as createDir, BaseDirectory } from '@tauri-apps/plugin-fs';
 import { save } from '@tauri-apps/plugin-dialog';
-import { documentDir, join } from '@tauri-apps/api/path';
 import { getExportDir } from '@/lib/db';
+import { isTauri } from '@/tauriEnv';
 
 async function resolveExportPath(filename) {
-  try {
-    const dir = await getExportDir();
-    await mkdir(dir, { recursive: true });
-    return await join(dir, filename);
-  } catch {
-    const docs = await documentDir();
-    const dir = await join(docs, 'MamaStock', 'Exports');
-    await mkdir(dir, { recursive: true });
-    return await join(dir, filename);
-  }
+  const dir = await getExportDir();
+  await createDir(dir, { dir: BaseDirectory.AppData, recursive: true });
+  return `${dir}/${filename}`;
 }
 
 async function saveBlob(blob, filename, useDialog = true) {
-  if (typeof window !== 'undefined' && window.__TAURI__) {
+  if (isTauri) {
     const defaultPath = await resolveExportPath(filename);
     const path = useDialog ? (await save({ defaultPath })) || defaultPath : defaultPath;
     const buf = await blob.arrayBuffer();
-    await writeFile(path, new Uint8Array(buf));
+    await writeFile(path, new Uint8Array(buf), { dir: BaseDirectory.AppData });
   } else {
+    console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     saveAs(blob, filename);
   }
 }

@@ -1,6 +1,9 @@
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import bcrypt from 'bcryptjs';
 import users from '@/db/users.json';
+import { randomBytes } from '@/lib/random';
+
+bcrypt.setRandomFallback((len) => Array.from(randomBytes(len)));
 
 const AuthCtx = createContext(null);
 export const useAuth = () => useContext(AuthCtx);

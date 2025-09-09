@@ -2,18 +2,25 @@ import { open } from "@tauri-apps/plugin-dialog";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { backupDb, restoreDb, maintenanceDb } from "@/lib/db";
 import { toast } from "sonner";
+import { isTauri } from "@/tauriEnv";
 
 export default function SystemTools() {
   const backup = async () => {
+    if (!isTauri) {
+      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    }
     try {
       const dest = await backupDb();
-    toast.success(`Sauvegarde effectuée : ${dest}`);
+      toast.success(`Sauvegarde effectuée : ${dest}`);
     } catch (_) {
       toast.error("Échec de la sauvegarde");
     }
   };
 
   const restore = async () => {
+    if (!isTauri) {
+      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    }
     try {
       const file = await open({ filters: [{ name: "Base", extensions: ["db"] }] });
       if (file && window.confirm("Restaurer cette sauvegarde ? L'application redémarrera.")) {
@@ -27,6 +34,9 @@ export default function SystemTools() {
   };
 
   const maintain = async () => {
+    if (!isTauri) {
+      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    }
     try {
       await maintenanceDb();
       toast.success("Maintenance effectuée");

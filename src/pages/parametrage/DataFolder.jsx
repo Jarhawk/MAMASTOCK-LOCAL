@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/plugin-dialog";
 import { setDataDir, getDataDir, getExportDir, setExportDir } from "@/lib/db";
+import { isTauri } from "@/tauriEnv";
 
 export default function DataFolder() {
   const [dir, setDir] = useState("");
@@ -9,21 +10,34 @@ export default function DataFolder() {
   const [exportSaved, setExportSaved] = useState(false);
 
   useEffect(() => {
-    getDataDir().then(setDir);
-    getExportDir().then(setExportDirState);
+    if (isTauri) {
+      getDataDir().then(setDir);
+      getExportDir().then(setExportDirState);
+    } else {
+      console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    }
   }, []);
 
   const choose = async () => {
+    if (!isTauri) {
+      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    }
     const selected = await open({ directory: true });
     if (selected) setDir(String(selected));
   };
 
   const chooseExport = async () => {
+    if (!isTauri) {
+      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    }
     const selected = await open({ directory: true });
     if (selected) setExportDirState(String(selected));
   };
 
   const save = async () => {
+    if (!isTauri) {
+      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    }
     if (dir) {
       await setDataDir(dir);
       setSaved(true);
@@ -31,6 +45,9 @@ export default function DataFolder() {
   };
 
   const saveExport = async () => {
+    if (!isTauri) {
+      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+    }
     if (exportDir) {
       await setExportDir(exportDir);
       setExportSaved(true);
