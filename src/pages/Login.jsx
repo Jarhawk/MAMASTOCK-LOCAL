@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { loginLocal } from '@/auth/localAccount';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { signIn } = useAuth();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
 
@@ -22,7 +23,8 @@ export default function Login() {
       return;
     }
     try {
-      await login(email, password);
+      const u = await loginLocal(email, password);
+      signIn(u);
       navigate('/dashboard', { replace: true });
     } catch (err) {
       setError(err.message || 'Connexion impossible');
@@ -63,3 +65,4 @@ export default function Login() {
     </div>
   );
 }
+
