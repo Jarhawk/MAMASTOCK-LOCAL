@@ -1,5 +1,7 @@
 export async function testRandom() {
-  const { randomBytes } = (window as any).cryptoShim ?? await import("/src/shims/crypto");
-  const b = randomBytes(16) as Uint8Array;
-  if (!(b && b.length === 16)) throw new Error("randomBytes failed");
+  const shim = (window as any).cryptoShim ?? (await import("/src/shims/crypto"));
+  const uuid = shim.randomUUID();
+  if (!(uuid && typeof uuid === "string")) throw new Error("randomUUID failed");
+  const hash = await shim.sha256Hex("test");
+  if (!(hash && hash.length === 64)) throw new Error("sha256Hex failed");
 }

@@ -12,7 +12,7 @@ Cette variante, basée sur **Tauri v2**, embarque une base SQLite locale pour f
 - L'exécuter.
 
 ## Vérification post-installation
-Après l'installation, le script suivant vérifie la présence de la configuration et de la base de données :
+Après l'installation, le script suivant vérifie Node, npm, Rust (MSVC), WebView2 et la présence/lecture de la configuration et de la base de données :
 
 ```powershell
 pwsh scripts/postinstall-check.ps1
@@ -84,14 +84,14 @@ S'assurer que **VS Build Tools (C++ x64)** et le **Windows 11 SDK** sont instal
 
 Ce script installe Node.js LTS, Rustup, le toolchain `stable-x86_64-pc-windows-msvc`, les Build Tools C++ de Visual Studio, le Windows 11 SDK et le WiX Toolset via `winget`, puis lance `npm ci`, `npm run build` et `npx tauri build` (qui génère `src-tauri/icons` si nécessaire).
 
-## QA final
-Avant de publier, vérifier ce parcours :
+## Parcours test
 
-1. Se connecter avec l’administrateur créé via `npm run seed:admin`.
-2. Créer un fournisseur puis un produit.
-3. Émettre une facture (quantité 10, prix 2.5) et contrôler un PMP de 2.5 avec un stock de 10.
-4. Exporter les données, sauvegarder la base, la restaurer et vérifier le redémarrage.
-5. Démarrer une seconde instance : la première se ferme automatiquement.
+1. `npm run seed:admin` (admin@mamastock.local / Admin123!)
+2. `npm run db:apply` puis `npm run db:smoke`
+3. Lancer Vite + Tauri, se connecter
+4. Créer fournisseur + produit
+5. Créer facture (qty=10, prix=2.5) → vérifier pmp=2.5, stock=10
+6. Export CSV/XLSX, backup + restore DB, relancer app
 
 ## Publier une release Windows
 ```powershell
