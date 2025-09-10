@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/check-node-native.js && vite build",
+    "lint:node": "node scripts/check-node-native.js",
     "preview": "vite preview",
     "db:apply": "node scripts/sqlite-apply.js",
     "db:smoke": "node scripts/migration-smoke.js",
