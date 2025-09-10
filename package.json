@@ -11,7 +11,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "db:apply": "node scripts/sqlite-apply.js",
-    "db:smoke": "node scripts/migration-smoke.js"
+    "db:smoke": "node scripts/migration-smoke.js",
+    "seed:admin": "node scripts/seed-admin.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",

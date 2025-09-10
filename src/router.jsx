@@ -218,6 +218,7 @@ function RootRoute() {
 }
 
 export default function Router() {
+  const { user } = useAuth();
   const location = useLocation();
   useEffect(() => {
     nprogress.start();
@@ -225,6 +226,14 @@ export default function Router() {
       nprogress.done();
     };
   }, [location.pathname]);
+  if (!user) {
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    );
+  }
   return (
     <ErrorBoundary>
       <Suspense fallback={<PageSkeleton />}>
@@ -232,7 +241,6 @@ export default function Router() {
         <Route path="/" element={<RootRoute />} />
         <Route path="/accueil" element={<Accueil />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/update-password" element={<UpdatePassword />} />
         <Route path="/logout" element={<Logout />} />
