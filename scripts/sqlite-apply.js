@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import Database from "better-sqlite3";
 const root = process.cwd();
 const MIGS = [
@@ -7,7 +8,26 @@ const MIGS = [
   "db/sqlite/002_seed.sql",
   "db/sqlite/003_pmp_valeur_stock.sql",
 ];
-const dbFile = path.join(process.env.USERPROFILE, "MamaStock", "data", "mamastock.db");
+function appDataBase() {
+  const p = os.platform();
+  if (p === "win32") return process.env.APPDATA;
+  if (p === "darwin")
+    return path.join(
+      process.env.HOME ?? os.homedir(),
+      "Library",
+      "Application Support",
+    );
+  return path.join(process.env.HOME ?? os.homedir(), ".config");
+}
+
+const base = appDataBase();
+const dbFile = path.join(
+  base,
+  "com.mamastock.local",
+  "MamaStock",
+  "data",
+  "mamastock.db",
+);
 fs.mkdirSync(path.dirname(dbFile), { recursive: true });
 const db = new Database(dbFile);
 db.pragma("journal_mode = WAL");
