@@ -1,67 +1,80 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { loginLocal } from '@/auth/localAccount';
+import React, { useState } from "react";
+import { useAuthAdapter } from "@/auth/authAdapter";
+import { useNavigate } from "react-router-dom";
+import "./login.css";
 
-export default function Login() {
-  const navigate = useNavigate();
-  const { signIn } = useAuth();
-  const [pending, setPending] = useState(false);
-  const [error, setError] = useState('');
+export default function LoginPage() {
+  const nav = useNavigate();
+  const { login, register } = useAuthAdapter();
+  const [email, setEmail] = useState("admin@mamastock.local");
+  const [password, setPassword] = useState("Admin123!");
+  const [error, setError] = useState("");
 
-  async function handleSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
-    if (pending) return;
-    const form = e.currentTarget;
-    const email = form.email?.value?.trim();
-    const password = form.password?.value ?? '';
-    setError('');
-    setPending(true);
-    if (!email || !password) {
-      setError('Veuillez saisir email et mot de passe.');
-      setPending(false);
-      return;
-    }
+    setError("");
     try {
-      const u = await loginLocal(email, password);
-      signIn(u);
-      navigate('/dashboard', { replace: true });
+      const u = await login(email, password);
+      console.info("[login] OK", u);
+      nav("/"); // redirige vers le tableau de bord
     } catch (err) {
-      setError(err.message || 'Connexion impossible');
-    } finally {
-      setPending(false);
+      setError(err instanceof Error ? err.message : String(err));
+    }
+  }
+
+  async function onRegister(e) {
+    e.preventDefault();
+    setError("");
+    try {
+      const u = await register(email, password);
+      console.info("[register] OK", u);
+      nav("/");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     }
   }
 
   return (
-    <div className="p-4 max-w-sm mx-auto">
-      <h1 className="text-xl mb-4">Connexion</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          autoComplete="email"
-          required
-          className="border p-2 rounded"
+    <div className="login-wrapper">
+      <div className="login-card">
+        <img
+          src="/android-chrome-512x512.png"
+          alt="MamaStock"
+          className="login-logo"
+          width={72}
+          height={72}
         />
-        <input
-          type="password"
-          name="password"
-          placeholder="Mot de passe"
-          autoComplete="current-password"
-          required
-          className="border p-2 rounded"
-        />
-        {error && <div className="text-red-500 text-sm">{error}</div>}
-        <button
-          type="submit"
-          disabled={pending}
-          className="bg-primary text-white p-2 rounded disabled:opacity-50"
-        >
-          {pending ? 'Connexion…' : 'Login'}
-        </button>
-      </form>
+        <h1 className="login-title">Connexion</h1>
+
+        {error ? <div className="login-error">{error}</div> : null}
+
+        <form onSubmit={onSubmit} className="login-form">
+          <label className="login-label">Email</label>
+          <input
+            className="login-input"
+            type="email"
+            placeholder="email@exemple.com"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            autoComplete="username"
+            required
+          />
+
+          <label className="login-label">Mot de passe</label>
+          <input
+            className="login-input"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            autoComplete="current-password"
+            required
+          />
+
+          <button type="submit" className="login-btn">Se connecter</button>
+          <button className="login-btn secondary" onClick={onRegister}>Créer un compte local</button>
+        </form>
+      </div>
     </div>
   );
 }
