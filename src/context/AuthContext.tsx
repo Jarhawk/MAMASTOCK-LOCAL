@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { loginSqlite, registerSqlite } from "@/auth/sqliteAuth";
 
 export type User = { id: string; email: string; mama_id: string };
 
@@ -10,6 +11,8 @@ type Ctx = {
   isAuthenticated: boolean;
   signIn: (u: User) => void;
   signOut: () => void;
+  loginWithDb?: (email: string, password: string) => Promise<void>;
+  registerWithDb?: (email: string, password: string) => Promise<void>;
 };
 
 const defaultAuth: Ctx = {
@@ -20,6 +23,8 @@ const defaultAuth: Ctx = {
   isAuthenticated: false,
   signIn: () => {},
   signOut: () => {},
+  loginWithDb: async () => {},
+  registerWithDb: async () => {},
 };
 
 const AuthContext = createContext<Ctx>(defaultAuth);
@@ -47,6 +52,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
       isAuthenticated: !!user,
       signIn: (u: User) => setUser(u),
       signOut: () => setUser(null),
+      loginWithDb: async (email, password) => {
+        const u = await loginSqlite(email, password);
+        setUser(u);
+      },
+      registerWithDb: async (email, password) => {
+        const u = await registerSqlite(email, password);
+        setUser(u);
+      },
     }),
     [user]
   );
