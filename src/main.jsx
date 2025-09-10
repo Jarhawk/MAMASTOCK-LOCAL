@@ -1,156 +1,17 @@
-import { isTauri } from "./tauriEnv";
-import { log, initLog } from "./tauriLog";
-// MamaStock Â© 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-// Polyfills Node â†’ navigateur
-import { Buffer } from "buffer";
-import process from "process";
-// @ts-ignore
-window.Buffer = Buffer;
-// @ts-ignore
-window.process = process;
-
-// Raccourci clavier F12 pour demander au backend d'ouvrir DevTools
-if (isTauri()) {
-  await initLog();
-  const { emit } = await import("@tauri-apps/api/event");
-  window.addEventListener("keydown", async (e) => {
-    if (e.key === "F12") {
-      try {
-        await emit("open-devtools");
-      } catch (err) {
-        console.error('emit("open-devtools") failed', err);
-      }
-    }
-  });
-} else {
-  console.debug(
-    "Tauri indisponible (navigateur): ne pas appeler les plugins ici.",
-  );
-}
-
-// === Debug global errors ===
-function installGlobalErrorOverlay() {
-  const style = document.createElement("style");
-  style.textContent = `
-    #__debug_overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-      color: #fff; font: 14px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      padding: 16px; z-index: 999999; overflow: auto; display: none;
-    }
-    #__debug_overlay pre { white-space: pre-wrap; word-break: break-word; }
-    #__debug_overlay .close { position:absolute; top:8px; right:12px; cursor:pointer; }
-  `;
-  document.head.appendChild(style);
-  const el = document.createElement("div");
-  el.id = "__debug_overlay";
-  el.innerHTML = `<div class="close">âœ•</div><h3>Runtime error</h3><pre id="__debug_overlay_log"></pre>`;
-  document.body.appendChild(el);
-  el.querySelector(".close")?.addEventListener(
-    "click",
-    () => (el.style.display = "none"),
-  );
-
-  function show(type, err) {
-    const pre = document.getElementById("__debug_overlay_log");
-    const msg =
-      (err && (err.stack || err.message || String(err))) ?? String(err);
-    if (pre) {
-      pre.textContent = msg;
-      el.style.display = "block";
-    }
-    log.error(`[${type}] ${msg}`);
-    console.error("[Overlay]", err);
-  }
-
-  window.addEventListener("error", (e) =>
-    show("GlobalError", e.error || e.message || e),
-  );
-  window.addEventListener("unhandledrejection", (e) =>
-    show("UnhandledRejection", e.reason || e),
-  );
-  // Raccourci: F10 pour toggle
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "F10") {
-      const visible = el.style.display !== "none";
-      el.style.display = visible ? "none" : "block";
-    }
-  });
-  console.log("[debug] overlay installed");
-}
-
-installGlobalErrorOverlay();
-// === /Debug ===
 import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import ErrorBoundary from "@/debug/ErrorBoundary";
 import { AuthProvider } from "@/context/AuthContext";
-import { HelpProvider } from "@/context/HelpProvider";
-import { applyMigrations } from "@/db/migrate";
 import "@/debug/devAuth";
 import "./globals.css";
 import "nprogress/nprogress.css";
-import "@/i18n/i18n";
-import "./registerSW.js";
-import { toast } from "sonner";
-import {
-  ensureSingleOwner,
-  monitorShutdownRequests,
-  releaseLock,
-} from "@/lib/lock";
-import { shutdownDbSafely } from "@/lib/shutdown";
+import { BrowserRouter } from "react-router-dom";
 
-// Avoid noisy output in production by disabling debug logs
-if (!import.meta.env.DEV) {
-  console.debug = () => {};
-}
-
-if (import.meta?.env?.DEV && "serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .getRegistrations()
-    .then((regs) => regs.forEach((r) => r.unregister()));
-  if (window.caches?.keys) {
-    caches.keys().then((keys) => keys.forEach((k) => caches.delete(k)));
-  }
-}
-
-if (import.meta?.env?.DEV) {
-  // @ts-ignore
-  window.toast = toast;
-}
-
-// Option sentry/reporting
-// import * as Sentry from "@sentry/react";
-// Sentry.init({ dsn: "https://xxx.ingest.sentry.io/xxx" });
-
-if (isTauri()) {
-  monitorShutdownRequests();
-  await ensureSingleOwner();
-  window.addEventListener("beforeunload", () => {
-    shutdownDbSafely();
-    releaseLock();
-  });
-} else {
-  console.debug(
-    "Tauri indisponible (navigateur): ne pas appeler les plugins ici.",
-  );
-}
-
-try {
-  await applyMigrations();
-  console.info("[boot] migrations ok");
-} catch (e) {
-  console.error("[boot] migrations failed", e);
-}
-const root = createRoot(document.getElementById("root"));
-root.render(
-  <ErrorBoundary>
-    <AuthProvider>
-      <HelpProvider>
-        <App />
-      </HelpProvider>
-    </AuthProvider>
-  </ErrorBoundary>,
+createRoot(document.getElementById("root")).render(
+  <AuthProvider>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </AuthProvider>
 );
 
-// les raccourcis DevTools sont déjà gérés plus haut
