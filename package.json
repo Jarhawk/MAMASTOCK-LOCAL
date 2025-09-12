@@ -14,7 +14,8 @@
     "db:align": "node scripts/move-db-once.js",
     "db:apply": "node scripts/sqlite-apply.js",
     "db:smoke": "node scripts/migration-smoke.js",
-    "seed:admin": "node scripts/seed-admin.js"
+    "seed:admin": "node scripts/seed-admin.js",
+    "db:inspect": "node scripts/sqlite-inspect.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
