@@ -272,7 +272,7 @@
 - HelpContext (src/context/HelpProvider.jsx)
 - MultiMamaContext (src/context/MultiMamaContext.jsx)
 - ThemeContext (src/context/ThemeProvider.jsx)
-- AuthCtx (src/contexts/AuthContext.jsx)
+- AuthCtx (src/context/AuthContext.tsx)
 
 ## Variables d'environnement
 - DEV
