@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { steps, Step } from "@/onboarding/steps";
 
 export default function Onboarding() {
@@ -14,7 +14,7 @@ export default function Onboarding() {
 
   useEffect(() => { refresh(); }, []);
 
-  const allDone = useMemo(() => Object.values(status).every(Boolean), [status]);
+  const allDone = Object.values(status).every(Boolean);
 
   async function run(st: Step) {
     setBusy(true);
