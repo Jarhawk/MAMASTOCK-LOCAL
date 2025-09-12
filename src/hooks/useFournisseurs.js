@@ -1,6 +1,9 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useCallback, useEffect, useState } from "react";
-import { fournisseurs_list, fournisseurs_create } from "@/lib/db";
+import {
+  listFournisseurs,
+  createFournisseur as dalCreateFournisseur,
+} from "@/lib/dal/fournisseurs";
 
 export function useFournisseurs() {
   const [fournisseurs, setFournisseurs] = useState([]);
@@ -10,7 +13,7 @@ export function useFournisseurs() {
   const fetchFournisseurs = useCallback(async () => {
     setLoading(true);
     try {
-      const rows = await fournisseurs_list();
+      const rows = await listFournisseurs();
       setFournisseurs(Array.isArray(rows) ? rows : []);
       setError(null);
     } catch (e) {
@@ -25,7 +28,7 @@ export function useFournisseurs() {
 
   const createFournisseur = useCallback(
     async (f) => {
-      await fournisseurs_create(f);
+      await dalCreateFournisseur(f);
       await fetchFournisseurs();
       return { error: null };
     },
