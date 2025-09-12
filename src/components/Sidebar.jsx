@@ -186,7 +186,7 @@ export default function Sidebar() {
           </details>
         )}
 
-        <Link to="/onboarding">Onboarding</Link>
+        <a href="#/onboarding">Onboarding</a>
         <Link to="/aide">Aide</Link>
         {has("feedback") && <Link to="/feedback">Feedback</Link>}
         {import.meta.env.DEV && (
