@@ -1,67 +1,54 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-
+import { query } from '@/local/db';
 import { useAuth } from '@/hooks/useAuth';
 
 export function useAnalytique() {
   const { mama_id } = useAuth();
 
-  const applyPeriode = (query, periode = {}) => {
-    if (periode.debut) query = query.gte("date", periode.debut);
-    if (periode.fin) query = query.lte("date", periode.fin);
-    return query;
-  };
+  function applyPeriode(sqlParts, params, periode = {}) {
+    if (periode.debut) {
+      sqlParts.push('date >= ?');
+      params.push(periode.debut);
+    }
+    if (periode.fin) {
+      sqlParts.push('date <= ?');
+      params.push(periode.fin);
+    }
+  }
 
   async function getVentilationProduits(periode = {}, centre_id = null) {
     if (!mama_id) return [];
-    let query = supabase.
-    from("v_analytique_stock").
-    select(
-      "famille, activite, cost_center_id, cost_center_nom, sum:quantite, sumv:valeur"
-    ).
-    eq("mama_id", mama_id).
-    group("famille, activite, cost_center_id, cost_center_nom");
-    if (centre_id) query = query.eq("cost_center_id", centre_id);
-    query = applyPeriode(query, periode);
-    const { data, error } = await query;
-    if (error) {
-      console.error("getVentilationProduits", error);
-      return [];
+    const where = ['mama_id = ?'];
+    const params = [mama_id];
+    if (centre_id) {
+      where.push('cost_center_id = ?');
+      params.push(centre_id);
     }
-    return data || [];
+    applyPeriode(where, params, periode);
+    const sql = `SELECT famille, activite, cost_center_id, cost_center_nom, SUM(quantite) as sum, SUM(valeur) as sumv FROM v_analytique_stock WHERE ${where.join(' AND ')} GROUP BY famille, activite, cost_center_id, cost_center_nom`;
+    return await query(sql, params);
   }
 
   async function getEcartsParFamille(periode = {}) {
     if (!mama_id) return [];
-    let query = supabase.
-    from("v_analytique_stock").
-    select("famille, sumv:valeur").
-    eq("mama_id", mama_id).
-    group("famille");
-    query = applyPeriode(query, periode);
-    const { data, error } = await query;
-    if (error) {
-      console.error("getEcartsParFamille", error);
-      return [];
-    }
-    return data || [];
+    const where = ['mama_id = ?'];
+    const params = [mama_id];
+    applyPeriode(where, params, periode);
+    const sql = `SELECT famille, SUM(valeur) as sumv FROM v_analytique_stock WHERE ${where.join(' AND ')} GROUP BY famille`;
+    return await query(sql, params);
   }
 
   async function getConsommationParActivite(periode = {}, centre_id = null) {
     if (!mama_id) return [];
-    let query = supabase.
-    from("v_analytique_stock").
-    select("activite, sumv:valeur").
-    eq("mama_id", mama_id).
-    group("activite");
-    if (centre_id) query = query.eq("cost_center_id", centre_id);
-    query = applyPeriode(query, periode);
-    const { data, error } = await query;
-    if (error) {
-      console.error("getConsommationParActivite", error);
-      return [];
+    const where = ['mama_id = ?'];
+    const params = [mama_id];
+    if (centre_id) {
+      where.push('cost_center_id = ?');
+      params.push(centre_id);
     }
-    return data || [];
+    applyPeriode(where, params, periode);
+    const sql = `SELECT activite, SUM(valeur) as sumv FROM v_analytique_stock WHERE ${where.join(' AND ')} GROUP BY activite`;
+    return await query(sql, params);
   }
 
   return { getVentilationProduits, getEcartsParFamille, getConsommationParActivite };

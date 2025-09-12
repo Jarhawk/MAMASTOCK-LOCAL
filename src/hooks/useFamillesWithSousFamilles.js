@@ -1,8 +1,16 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState, useCallback } from 'react';
-
 import { useAuth } from '@/hooks/useAuth';
+import {
+  familles_list,
+  familles_insert,
+  familles_update,
+  familles_delete,
+  sous_familles_list,
+  sous_familles_insert,
+  sous_familles_update,
+  sous_familles_delete,
+} from '@/lib/db';
 
 export function useFamillesWithSousFamilles() {
   const { mama_id } = useAuth();
@@ -14,88 +22,87 @@ export function useFamillesWithSousFamilles() {
     if (!mama_id) return [];
     setLoading(true);
     setError(null);
-    const [famRes, sousRes] = await Promise.all([
-    supabase.
-    from('familles').
-    select('id, nom, actif').
-    eq('mama_id', mama_id).
-    order('nom', { ascending: true }),
-    supabase.
-    from('sous_familles').
-    select('id, nom, actif, famille_id').
-    eq('mama_id', mama_id)]
-    );
-    if (famRes.error || sousRes.error) {
-      setError(famRes.error || sousRes.error);
-      setFamilles([]);
-    } else {
-      const grouped = (famRes.data || []).map((f) => ({
+    try {
+      const [famRes, sousRes] = await Promise.all([
+        familles_list(mama_id),
+        sous_familles_list(mama_id),
+      ]);
+      const grouped = famRes.map((f) => ({
         ...f,
-        sous_familles: (sousRes.data || []).filter((sf) => sf.famille_id === f.id)
+        sous_familles: sousRes.filter((sf) => sf.famille_id === f.id),
       }));
       setFamilles(grouped);
+    } catch (e) {
+      setError(e);
+      setFamilles([]);
     }
     setLoading(false);
   }, [mama_id]);
 
   async function addFamille(values) {
     if (!mama_id) return { error: 'Aucun mama_id' };
-    const { error } = await supabase.
-    from('familles').
-    insert([{ ...values, mama_id }]);
-    if (!error) await fetchAll();
-    return { error };
+    try {
+      await familles_insert({ ...values, mama_id });
+      await fetchAll();
+      return { error: null };
+    } catch (error) {
+      return { error };
+    }
   }
 
   async function updateFamille(id, values) {
     if (!mama_id) return { error: 'Aucun mama_id' };
-    const { error } = await supabase.
-    from('familles').
-    update(values).
-    match({ id, mama_id });
-    if (!error) await fetchAll();
-    return { error };
+    try {
+      await familles_update(id, mama_id, values);
+      await fetchAll();
+      return { error: null };
+    } catch (error) {
+      return { error };
+    }
   }
 
   async function deleteFamille(id) {
     if (!mama_id) return { error: 'Aucun mama_id' };
-    const { error } = await supabase.
-    from('familles').
-    delete().
-    eq('id', id).
-    eq('mama_id', mama_id);
-    if (!error) await fetchAll();
-    return { error };
+    try {
+      await familles_delete(id, mama_id);
+      await fetchAll();
+      return { error: null };
+    } catch (error) {
+      return { error };
+    }
   }
 
   async function addSousFamille(famille_id, values) {
     if (!mama_id) return { error: 'Aucun mama_id' };
-    const { error } = await supabase.
-    from('sous_familles').
-    insert([{ ...values, famille_id, mama_id }]);
-    if (!error) await fetchAll();
-    return { error };
+    try {
+      await sous_familles_insert({ ...values, famille_id, mama_id });
+      await fetchAll();
+      return { error: null };
+    } catch (error) {
+      return { error };
+    }
   }
 
   async function updateSousFamille(id, values) {
     if (!mama_id) return { error: 'Aucun mama_id' };
-    const { error } = await supabase.
-    from('sous_familles').
-    update(values).
-    match({ id, mama_id });
-    if (!error) await fetchAll();
-    return { error };
+    try {
+      await sous_familles_update(id, mama_id, values);
+      await fetchAll();
+      return { error: null };
+    } catch (error) {
+      return { error };
+    }
   }
 
   async function deleteSousFamille(id) {
     if (!mama_id) return { error: 'Aucun mama_id' };
-    const { error } = await supabase.
-    from('sous_familles').
-    delete().
-    eq('id', id).
-    eq('mama_id', mama_id);
-    if (!error) await fetchAll();
-    return { error };
+    try {
+      await sous_familles_delete(id, mama_id);
+      await fetchAll();
+      return { error: null };
+    } catch (error) {
+      return { error };
+    }
   }
 
   async function toggleFamille(famille) {

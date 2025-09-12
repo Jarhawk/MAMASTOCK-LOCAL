@@ -3,21 +3,21 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { useTaches } from "@/hooks/useTaches";
+import { useTasks } from "@/hooks/useTasks";
 
 export default function TacheDetail() {
   const { id } = useParams();
-  const { fetchTache, updateTache } = useTaches();
+  const { fetchTaskById, updateTask } = useTasks();
   const [tache, setTache] = useState(null);
 
   useEffect(() => {
-    fetchTache(id).then(setTache);
-  }, [id, fetchTache]);
+    fetchTaskById(id).then(setTache);
+  }, [id, fetchTaskById]);
 
   if (!tache) return <LoadingSpinner message="Chargement..." />;
 
   const handleDone = async () => {
-    await updateTache(id, {
+    await updateTask(id, {
       ...tache,
       assignes: (tache.utilisateurs_taches || []).map(a => a.utilisateur_id),
       statut: "terminee",

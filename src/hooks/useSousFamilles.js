@@ -1,8 +1,12 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useCallback, useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
+import {
+  sous_familles_list,
+  sous_familles_insert,
+  sous_familles_update,
+} from "@/lib/db";
 
 export function useSousFamilles() {
   const { mama_id } = useAuth();
@@ -14,41 +18,43 @@ export function useSousFamilles() {
     async ({ search = '', actif, familleId } = {}) => {
       setLoading(true);
       setError(null);
-      let q = supabase.from('sous_familles').select('*').eq('mama_id', mama_id);
-      if (typeof actif === 'boolean') q = q.eq('actif', actif);
-      if (familleId) q = q.eq('famille_id', familleId);
-      if (search) q = q.ilike('nom', `%${search}%`);
-      const { data, error: queryError } = await q;
-      if (queryError) setError(queryError);
-      setSousFamilles(data || []);
-      setLoading(false);
-      return { data: data || [], error: queryError };
+      try {
+        const data = await sous_familles_list(mama_id, {
+          search,
+          actif,
+          famille_id: familleId,
+        });
+        setSousFamilles(data || []);
+        setLoading(false);
+        return { data: data || [], error: null };
+      } catch (e) {
+        setError(e);
+        setLoading(false);
+        return { data: [], error: e };
+      }
     },
     [mama_id]
   );
 
   const create = useCallback(
     async ({ nom, famille_id }) => {
-      const { data } = await supabase.
-      from('sous_familles').
-      insert([{ nom, famille_id, mama_id, actif: true }]).
-      select().
-      single();
-      setSousFamilles((prev) => [data, ...prev]);
-      return data;
+      const row = await sous_familles_insert({
+        nom,
+        famille_id,
+        mama_id,
+        actif: true,
+      });
+      setSousFamilles((prev) => [row, ...prev]);
+      return row;
     },
     [mama_id]
   );
 
   const toggleActif = useCallback(
     async (id, value) => {
-      await supabase.
-      from('sous_familles').
-      update({ actif: value }).
-      eq('id', id).
-      eq('mama_id', mama_id);
+      await sous_familles_update(id, mama_id, { actif: value ? 1 : 0 });
       setSousFamilles((prev) =>
-      prev.map((s) => s.id === id ? { ...s, actif: value } : s)
+        prev.map((s) => (s.id === id ? { ...s, actif: value } : s))
       );
     },
     [mama_id]
@@ -68,14 +74,7 @@ export function useSousFamilles() {
 
 export async function fetchSousFamilles({ mamaId }) {
   try {
-    let q = supabase.
-    from('sous_familles').
-    select('id, nom, famille_id, mama_id, deleted_at').
-    eq('mama_id', mamaId).
-    order('nom', { ascending: true });
-    const { data, error } = await q;
-    if (error) throw error;
-    return (data ?? []).filter((r) => !r.deleted_at);
+    return await sous_familles_list(mamaId);
   } catch (e) {
     console.warn('[sous_familles] fallback []', e);
     return [];

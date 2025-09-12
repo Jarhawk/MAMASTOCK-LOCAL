@@ -1,5 +1,4 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +8,8 @@ import GlassCard from "@/components/ui/GlassCard";
 import PageWrapper from "@/components/ui/PageWrapper";
 import { Input } from "@/components/ui/input";
 import PrimaryButton from "@/components/ui/PrimaryButton";
+import { updatePasswordLocal } from "@/auth/localAccount";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function UpdatePassword() {
   const [password, setPassword] = useState("");
@@ -16,6 +17,7 @@ export default function UpdatePassword() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { email } = useAuth();
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -24,14 +26,14 @@ export default function UpdatePassword() {
       return;
     }
     setError("");
-    const { error } = await supabase.auth.updateUser({ password });
-    if (error) {
-      setError("Erreur lors de la mise à jour du mot de passe.");
-      toast.error("Échec de la mise à jour");
-    } else {
+    try {
+      await updatePasswordLocal(email ?? "", password);
       toast.success("Mot de passe modifié");
       setMessage("Mot de passe mis à jour, vous pouvez vous connecter.");
       setTimeout(() => navigate("/login"), 1500);
+    } catch {
+      setError("Erreur lors de la mise à jour du mot de passe.");
+      toast.error("Échec de la mise à jour");
     }
   };
 

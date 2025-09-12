@@ -35,7 +35,7 @@ export default function MenuForm({ menu, fiches = [], onClose }) {
     setFicheInput("");
   };
 
-  // Upload PDF/image vers Supabase Storage
+  // Upload PDF/image vers le stockage local
   const handleUpload = async () => {
     if (!file) return toast.error("Sélectionnez un fichier");
     try {

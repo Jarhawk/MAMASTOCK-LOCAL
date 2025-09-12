@@ -1,130 +1,80 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-import { useState } from "react";
-import { applyRange } from '@/lib/supa/applyRange';
+import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
+import {
+  inventaire_lignes_list,
+  inventaire_ligne_add,
+  inventaire_ligne_update,
+  inventaire_ligne_delete,
+} from '@/lib/db';
 
 export function useInventaireLignes() {
   const { mama_id } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function checkInventaire(inventaire_id) {
-    const { data } = await supabase.
-    from("inventaires").
-    select("id").
-    eq("id", inventaire_id).
-    eq("mama_id", mama_id).
-    maybeSingle();
-    return !!data;
-  }
-
-  async function fetchLignes({
-    inventaireId,
-    page = 1,
-    limit = 30,
-    search = "",
-    sort = "created_at",
-    ascending = false,
-    includeArchives = false
-  } = {}) {
-    if (!mama_id || !inventaireId) return [];
+  async function fetchLignes({ inventaireId } = {}) {
+    if (!mama_id || !inventaireId) return { data: [], count: 0 };
     setLoading(true);
     setError(null);
-    let query = supabase.
-    from("produits_inventaire").
-    select("*", { count: "exact" }).
-    eq("mama_id", mama_id).
-    eq("inventaire_id", inventaireId).
-    order(sort, { ascending });
-    if (!includeArchives) query = query.eq("actif", true);
-    if (search) {
-      query = query.eq("produit_id", search);
+    try {
+      const data = await inventaire_lignes_list(inventaireId, mama_id);
+      setLoading(false);
+      return { data: data || [], count: (data || []).length };
+    } catch (err) {
+      setLoading(false);
+      setError(err);
+      return { data: [], count: 0 };
     }
-    const from = (page - 1) * limit;
-    const { data, error, count } = await applyRange(query, from, limit);
-    setLoading(false);
-    if (error) {
-      setError(error);
-      return [];
-    }
-    return { data: data || [], count: count || 0 };
   }
 
   async function createLigne({ inventaire_id, produit_id, quantite_reelle }) {
     if (!mama_id || !inventaire_id || !produit_id) {
-      throw new Error("missing reference");
-    }
-    if (!(await checkInventaire(inventaire_id))) {
-      console.warn("inventaire_id invalid or not owned", inventaire_id);
-      throw new Error("invalid reference");
+      throw new Error('missing reference');
     }
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("produits_inventaire").
-    insert([{ inventaire_id, produit_id, quantite_reelle, mama_id }]).
-    select().
-    single();
-    setLoading(false);
-    if (error) {
-      setError(error);
+    try {
+      const id = await inventaire_ligne_add({ inventaire_id, produit_id, quantite_reelle, mama_id });
+      setLoading(false);
+      return { id, inventaire_id, produit_id, quantite_reelle };
+    } catch (err) {
+      setLoading(false);
+      setError(err);
       return null;
     }
-    return data;
   }
 
   async function updateLigne(id, values) {
     if (!mama_id || !id) return null;
-    if (values?.inventaire_id && !(await checkInventaire(values.inventaire_id))) {
-      console.warn("inventaire_id invalid or not owned", values.inventaire_id);
-      throw new Error("invalid reference");
-    }
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("produits_inventaire").
-    update(values).
-    eq("id", id).
-    eq("mama_id", mama_id).
-    select().
-    single();
-    setLoading(false);
-    if (error) {
-      setError(error);
+    try {
+      const row = await inventaire_ligne_update(id, mama_id, values);
+      setLoading(false);
+      return row;
+    } catch (err) {
+      setLoading(false);
+      setError(err);
       return null;
     }
-    return data;
   }
 
   async function deleteLigne(id) {
     if (!mama_id || !id) return;
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("produits_inventaire").
-    update({ actif: false }).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) setError(error);
-  }
-
-  async function getLigne(id) {
-    if (!mama_id || !id) return null;
-    const { data, error } = await supabase.
-    from("produits_inventaire").
-    select("*").
-    eq("id", id).
-    eq("mama_id", mama_id).
-    single();
-    if (error) {
-      setError(error);
-      return null;
+    try {
+      await inventaire_ligne_delete(id, mama_id);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
     }
-    return data;
   }
 
-  return { fetchLignes, createLigne, updateLigne, deleteLigne, getLigne, loading, error };
+  return { fetchLignes, createLigne, updateLigne, deleteLigne, loading, error };
 }
+
+export default useInventaireLignes;

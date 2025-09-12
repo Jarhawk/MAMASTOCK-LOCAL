@@ -1,8 +1,12 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
-
 import { useAuth } from '@/hooks/useAuth';
+import {
+  achats_list,
+  achat_get,
+  achat_insert,
+  achat_update,
+} from "@/local/achats";
 
 export function useAchats() {
   const { mama_id } = useAuth();
@@ -15,78 +19,74 @@ export function useAchats() {
     if (!mama_id) return [];
     setLoading(true);
     setError(null);
-    let q = supabase.
-    from("achats").
-    select(
-      "*, fournisseur:fournisseur_id(id, nom), produit:produit_id(id, nom)",
-      { count: "exact" }
-    ).
-    eq("mama_id", mama_id).
-    order("date_achat", { ascending: false }).
-    range((page - 1) * pageSize, page * pageSize - 1);
-    if (fournisseur) q = q.eq("fournisseur_id", fournisseur);
-    if (produit) q = q.eq("produit_id", produit);
-    if (actif !== null) q = q.eq("actif", actif);
-    if (debut) q = q.gte("date_achat", debut);
-    if (fin) q = q.lte("date_achat", fin);
-    const { data, error, count } = await q;
-    if (!error) {
+    try {
+      const { data, count } = await achats_list({
+        mama_id,
+        fournisseur,
+        produit,
+        debut,
+        fin,
+        actif,
+        offset: (page - 1) * pageSize,
+        limit: pageSize,
+      });
       setAchats(Array.isArray(data) ? data : []);
-      setTotal(count || 0);
+      setTotal(typeof count === "number" ? count : 0);
+      return data || [];
+    } catch (e) {
+      setError(e);
+      return [];
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-    if (error) setError(error);
-    return data || [];
   }
 
   async function fetchAchatById(id) {
     if (!id || !mama_id) return null;
-    const { data, error } = await supabase.
-    from("achats").
-    select("*, fournisseur:fournisseur_id(id, nom), produit:produit_id(id, nom)").
-    eq("id", id).
-    eq("mama_id", mama_id).
-    single();
-    if (error) {setError(error);return null;}
-    return data;
+    try {
+      return await achat_get(mama_id, id);
+    } catch (e) {
+      setError(e);
+      return null;
+    }
   }
 
   async function createAchat(achat) {
     if (!mama_id) return { error: "no mama_id" };
-    const { data, error } = await supabase.
-    from("achats").
-    insert([{ ...achat, mama_id }]).
-    select().
-    single();
-    if (error) {setError(error);return { error };}
-    setAchats((a) => [data, ...a]);
-    return { data };
+    try {
+      const id = await achat_insert({ ...achat, mama_id });
+      const full = await achat_get(mama_id, id);
+      setAchats((a) => [full, ...a]);
+      return { data: full };
+    } catch (e) {
+      setError(e);
+      return { error: e };
+    }
   }
 
   async function updateAchat(id, fields) {
     if (!mama_id) return { error: "no mama_id" };
-    const { data, error } = await supabase.
-    from("achats").
-    update(fields).
-    eq("id", id).
-    eq("mama_id", mama_id).
-    select().
-    single();
-    if (error) {setError(error);return { error };}
-    setAchats((a) => a.map((ac) => ac.id === id ? data : ac));
-    return { data };
+    try {
+      await achat_update(id, fields);
+      const full = await achat_get(mama_id, id);
+      setAchats((a) => a.map((ac) => (ac.id === id ? full : ac)));
+      return { data: full };
+    } catch (e) {
+      setError(e);
+      return { error: e };
+    }
   }
 
   async function deleteAchat(id) {
     if (!mama_id) return { error: "no mama_id" };
-    const { error } = await supabase.
-    from("achats").
-    update({ actif: false }).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    if (error) {setError(error);return { error };}
-    setAchats((a) => a.map((ac) => ac.id === id ? { ...ac, actif: false } : ac));
-    return { success: true };
+    try {
+      await achat_update(id, { actif: false });
+      setAchats((a) => a.map((ac) => (ac.id === id ? { ...ac, actif: false } : ac)));
+      return { success: true };
+    } catch (e) {
+      setError(e);
+      return { error: e };
+    }
   }
 
   return { achats, total, loading, error, getAchats, fetchAchatById, createAchat, updateAchat, deleteAchat };

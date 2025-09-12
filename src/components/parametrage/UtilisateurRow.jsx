@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
 import { toast } from 'sonner';
+import { updatePasswordLocal } from '@/auth/localAccount';
 
 
 export default function UtilisateurRow({
@@ -22,15 +22,14 @@ export default function UtilisateurRow({
 
   const resetPassword = async () => {
     if (!utilisateur.email || loading) return;
+    const pwd = prompt(`Nouveau mot de passe pour ${utilisateur.email}`);
+    if (!pwd) return;
     setLoading(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(utilisateur.email, {
-        redirectTo: `${window.location.origin}/update-password`
-      });
-      if (error) throw error;
-      toast.success("Lien de réinitialisation envoyé à " + utilisateur.email);
-    } catch {
-      toast.error("Erreur lors de l'envoi du lien");
+      await updatePasswordLocal(utilisateur.email, pwd);
+      toast.success("Mot de passe mis à jour");
+    } catch (err) {
+      toast.error(err.message || "Erreur lors de la mise à jour");
     } finally {
       setLoading(false);
     }

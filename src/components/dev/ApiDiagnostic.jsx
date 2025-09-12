@@ -1,5 +1,4 @@
-import { supabase } from '@/lib/supabaseClient';
-import { run } from '@/lib/supa/fetcher';
+import { query } from '@/local/db';
 
 export default function ApiDiagnostic({ mamaId }) {
   const test = async () => {
@@ -7,39 +6,29 @@ export default function ApiDiagnostic({ mamaId }) {
 
     console.log('[diag] mamas/logo_url');
     console.log(
-      await run(
-        supabase
-          .from('mamas')
-          .select('logo_url')
-          .eq('id', mamaId)
-          .maybeSingle()
-      )
+      await query('SELECT logo_url FROM mamas WHERE id = ?', [mamaId])
     );
 
     console.log('[diag] fournisseurs');
     console.log(
-      await run(
-        supabase
-          .from('fournisseurs')
-          .select('id,nom')
-          .eq('mama_id', mamaId)
-          .limit(3)
+      await query(
+        'SELECT id, nom FROM fournisseurs WHERE mama_id = ? ORDER BY id LIMIT 3',
+        [mamaId]
       )
     );
 
     console.log('[diag] ruptures');
     console.log(
-      await run(
-        supabase
-          .from('v_alertes_rupture_api')
-          .select('produit_id,nom,stock_actuel,stock_min,manque')
-          .limit(3)
+      await query(
+        'SELECT produit_id, nom, stock_actuel, stock_min, manque FROM v_alertes_rupture_api LIMIT 3'
       )
     );
   };
+
   return (
     <button onClick={test} style={{ padding: 8, borderRadius: 8 }}>
       Diagnostic API
     </button>
   );
 }
+

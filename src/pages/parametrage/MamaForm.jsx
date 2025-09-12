@@ -1,5 +1,4 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
@@ -10,8 +9,8 @@ import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
 
-export default function MamaForm({ mama, onClose, onSaved }) {
-  const { mama_id: myMama, role, loading: authLoading } = useAuth();
+export default function MamaForm({ mama, mamas = [], addMama, updateMama, onClose, onSaved }) {
+  const { loading: authLoading } = useAuth();
   const [values, setValues] = useState({
     nom: mama?.nom || "",
     ville: mama?.ville || "",
@@ -29,19 +28,11 @@ export default function MamaForm({ mama, onClose, onSaved }) {
     if (saving) return;
     setSaving(true);
 
-    if (role !== "superadmin" && mama?.id !== myMama) {
-      toast.error("Action non autorisée");
-      setSaving(false);
-      return;
-    }
-
     // Vérification anti-doublon (en création uniquement)
     if (!mama?.id) {
-      const { data: exists } = await supabase.
-      from("mamas").
-      select("id").
-      eq("nom", values.nom).
-      maybeSingle();
+      const exists = mamas.some(
+        (m) => m.nom?.toLowerCase() === values.nom.toLowerCase()
+      );
       if (exists) {
         toast.error("Un établissement avec ce nom existe déjà !");
         setSaving(false);
@@ -50,33 +41,15 @@ export default function MamaForm({ mama, onClose, onSaved }) {
     }
 
     try {
-      let error = null;
-      let saved = null;
-      if (mama?.id) {
-        let query = supabase.
-        from("mamas").
-        update(values).
-        eq("id", mama.id);
-        if (role !== "superadmin") query = query.eq("id", myMama);
-        const res = await query.select().single();
-        error = res.error;
-        saved = res.data;
-      } else {
-        const res = await supabase.
-        from("mamas").
-        insert([{ ...values }]).
-        select().
-        single();
-        error = res.error;
-        saved = res.data;
+      const res = mama?.id
+        ? await updateMama?.(mama.id, values)
+        : await addMama?.(values);
+      if (res?.error) {
+        throw new Error(res.error);
       }
-      if (!error && saved) {
-        toast.success("Établissement enregistré !");
-        onSaved?.(saved);
-        onClose?.();
-      } else {
-        throw error;
-      }
+      toast.success("Établissement enregistré !");
+      onSaved?.();
+      onClose?.();
     } catch (err) {
       toast.error(err?.message || "Erreur à l'enregistrement !");
     } finally {

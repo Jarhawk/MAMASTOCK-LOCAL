@@ -1,8 +1,8 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-import { useState } from "react";
+import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
+import { zones_stock_list, inventaires_list } from '@/lib/db';
 
 export function useGraphiquesMultiZone() {
   const { mama_id } = useAuth();
@@ -10,49 +10,26 @@ export function useGraphiquesMultiZone() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Exemple : récupère les évolutions par zone pour graphiques
   async function fetchGraphiquesMultiZone() {
+    if (!mama_id) return [];
     setLoading(true);
     setError(null);
     try {
-      let { data: zones, error } = await supabase.
-      from("zones_stock").
-      select("id,nom,type,parent_id,position,actif,created_at").
-      eq("mama_id", mama_id).
-      order("position", { ascending: true }).
-      order("nom", { ascending: true });
-
-      if (error) {
-        console.info('[zones_stock] fetch failed; fallback list (no order)', { code: error.code, message: error.message });
-        const alt = await supabase.
-        from('zones_stock').
-        select('id,nom,type,parent_id,position,actif,created_at').
-        eq('mama_id', mama_id);
-        zones = alt.data ?? [];
-      }
-
-      let allData = [];
-      for (const zone of zones || []) {
-        const { data: inventaires, error: errorInv } = await supabase.
-        from("inventaires").
-        select("date").
-        eq("mama_id", mama_id).
-        eq("zone", zone.nom).
-        order("date_inventaire", { ascending: true });
-
-        if (errorInv) throw errorInv;
-
-        allData.push({
-          zone: zone.nom,
-          points: (inventaires || []).map((inv) => ({
-            date: inv.date_inventaire
-          }))
-        });
-      }
+      const zones = await zones_stock_list(mama_id, true);
+      const inventaires = await inventaires_list(mama_id);
+      const allData = zones.map((z) => ({
+        zone: z.nom,
+        points: inventaires
+          .filter((i) => i.zone_id === z.id)
+          .sort((a, b) => a.date_inventaire.localeCompare(b.date_inventaire))
+          .map((i) => ({ date: i.date_inventaire })),
+      }));
       setData(allData);
+      return allData;
     } catch (err) {
-      setError(err.message || "Erreur chargement graphiques multi-zone.");
+      setError(err);
       setData([]);
+      return [];
     } finally {
       setLoading(false);
     }
@@ -60,3 +37,5 @@ export function useGraphiquesMultiZone() {
 
   return { data, loading, error, fetchGraphiquesMultiZone };
 }
+
+export default useGraphiquesMultiZone;

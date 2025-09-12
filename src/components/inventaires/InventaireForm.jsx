@@ -78,7 +78,7 @@ export default function InventaireForm({ inventaire, onClose }) {
     return { stock_debut, entrees, sorties, stock_fin, conso_theorique };
   };
 
-  // Upload document vers Supabase Storage
+  // Upload document vers le stockage local
   const handleUpload = async () => {
     if (!file) return toast.error('Sélectionnez un fichier');
     try {

@@ -32,7 +32,7 @@ export default function MenuDuJourForm({ menu, fiches = [], onClose }) {
     );
   };
 
-  // Upload PDF/image vers Supabase Storage
+  // Upload PDF/image vers le stockage local
   const handleUpload = async () => {
     if (!file) return toast.error("Sélectionnez un fichier");
     try {

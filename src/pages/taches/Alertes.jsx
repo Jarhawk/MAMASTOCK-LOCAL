@@ -1,30 +1,16 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAlerts } from "@/hooks/useAlerts";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import TableContainer from "@/components/ui/TableContainer";
 
 export default function Alertes() {
-  const { mama_id, loading: authLoading } = useAuth();
-  const [alertes, setAlertes] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { rules: alertes, loading, fetchRules } = useAlerts();
 
   useEffect(() => {
-    async function fetchAlertes() {
-      if (!mama_id || authLoading) return;
-      setLoading(true);
-      const { data } = await supabase.
-      from("alertes").
-      select("*").
-      eq("mama_id", mama_id).
-      order("created_at", { ascending: false });
-      setAlertes(Array.isArray(data) ? data : []);
-      setLoading(false);
-    }
-    fetchAlertes();
-  }, [mama_id, authLoading]);
+    fetchRules();
+  }, [fetchRules]);
 
   return (
     <div className="p-6 text-sm">
@@ -40,21 +26,25 @@ export default function Alertes() {
             </tr>
           </thead>
           <tbody>
-            {alertes.map((a) =>
-            <tr key={a.id} className="">
+            {alertes.map((a) => (
+              <tr key={a.id} className="">
                 <td className="border px-2 py-1">{a.titre}</td>
                 <td className="border px-2 py-1">{a.type}</td>
-                <td className="border px-2 py-1">{new Date(a.created_at).toLocaleDateString()}</td>
+                <td className="border px-2 py-1">
+                  {new Date(a.created_at).toLocaleDateString()}
+                </td>
+              </tr>
+            ))}
+            {alertes.length === 0 && !loading && (
+              <tr>
+                <td colSpan="3" className="py-4 text-center text-gray-500">
+                  Aucune alerte
+                </td>
               </tr>
             )}
-            {alertes.length === 0 && !loading &&
-            <tr>
-                <td colSpan="3" className="py-4 text-center text-gray-500">Aucune alerte</td>
-              </tr>
-            }
           </tbody>
         </table>
       </TableContainer>
-    </div>);
-
+    </div>
+  );
 }

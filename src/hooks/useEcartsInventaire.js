@@ -1,8 +1,8 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
+import { ecarts_inventaire_list } from '@/lib/db';
 
 export function useEcartsInventaire() {
   const { mama_id } = useAuth();
@@ -10,26 +10,25 @@ export function useEcartsInventaire() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchEcarts = useCallback(async (filters = {}) => {
-    if (!mama_id) return [];
-    setLoading(true);
-    setError(null);
-    let query = supabase.
-    from("v_ecarts_inventaire").
-    select("*").
-    eq("mama_id", mama_id);
-    if (filters.date_start) query = query.gte("date", filters.date_start);
-    if (filters.date_end) query = query.lte("date", filters.date_end);
-    const { data, error } = await query;
-    setLoading(false);
-    if (error) {
-      setError(error);
-      setData([]);
-      return [];
-    }
-    setData(Array.isArray(data) ? data : []);
-    return data || [];
-  }, [mama_id]);
+  const fetchEcarts = useCallback(
+    async (filters = {}) => {
+      if (!mama_id) return [];
+      setLoading(true);
+      setError(null);
+      try {
+        const rows = await ecarts_inventaire_list(mama_id, filters);
+        setData(Array.isArray(rows) ? rows : []);
+        return rows || [];
+      } catch (err) {
+        setError(err);
+        setData([]);
+        return [];
+      } finally {
+        setLoading(false);
+      }
+    },
+    [mama_id]
+  );
 
   return { data, loading, error, fetchEcarts };
 }

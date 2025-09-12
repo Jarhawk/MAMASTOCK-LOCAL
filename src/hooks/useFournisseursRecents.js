@@ -1,7 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useEffect, useState } from 'react';
-
+import { fournisseurs_recents } from '@/lib/db';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function useFournisseursRecents(limit = 10) {
@@ -17,14 +16,8 @@ export default function useFournisseursRecents(limit = 10) {
       setLoading(true);
       setError(null);
       try {
-        const { data, error } = await supabase.
-        from('fournisseurs_recents').
-        select('id, nom, ville').
-        eq('mama_id', mama_id).
-        order('dernier_achat', { ascending: false }).
-        limit(limit);
-        if (error) throw error;
-        if (!aborted) setData(data || []);
+        const rows = await fournisseurs_recents(limit);
+        if (!aborted) setData(Array.isArray(rows) ? rows : []);
       } catch (err) {
         console.error(err);
         if (!aborted) {

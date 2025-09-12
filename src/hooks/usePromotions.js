@@ -1,9 +1,12 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
-import { applyRange } from '@/lib/supa/applyRange';
-
 import { useAuth } from '@/hooks/useAuth';
+import {
+  promotions_list,
+  promotions_add,
+  promotions_update,
+  promotions_delete,
+} from "@/local/promotions";
 
 export function usePromotions() {
   const { mama_id } = useAuth();
@@ -16,62 +19,65 @@ export function usePromotions() {
     if (!mama_id) return [];
     setLoading(true);
     setError(null);
-    let query = supabase.
-    from("promotions").
-    select("*", { count: "exact" }).
-    eq("mama_id", mama_id).
-    order("date_debut", { ascending: false });
-    if (typeof query.range === "function") {
-      query = applyRange(query, (page - 1) * limit, limit);
+    try {
+      const { data, total } = await promotions_list({
+        mama_id,
+        search,
+        actif,
+        page,
+        limit,
+      });
+      setPromotions(data);
+      setTotal(total);
+      return data;
+    } catch (e) {
+      setError(e.message || e);
+      return [];
+    } finally {
+      setLoading(false);
     }
-    if (search) query = query.ilike("nom", `%${search}%`);
-    if (typeof actif === "boolean") query = query.eq("actif", actif);
-    const { data, error, count } = await query;
-    setPromotions(Array.isArray(data) ? data : []);
-    setTotal(count || 0);
-    setLoading(false);
-    if (error) setError(error.message || error);
-    return data || [];
   }
 
   async function addPromotion(values) {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("promotions").
-    insert([{ ...values, mama_id }]);
-    setLoading(false);
-    if (error) setError(error.message || error);
-    await fetchPromotions();
+    try {
+      await promotions_add({ ...values, mama_id });
+      await fetchPromotions();
+    } catch (e) {
+      setError(e.message || e);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function updatePromotion(id, values) {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("promotions").
-    update(values).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) setError(error.message || error);
-    await fetchPromotions();
+    try {
+      await promotions_update(id, values);
+      await fetchPromotions();
+    } catch (e) {
+      setError(e.message || e);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function deletePromotion(id) {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("promotions").
-    update({ actif: false }).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) setError(error.message || error);
-    await fetchPromotions();
+    try {
+      await promotions_delete(id);
+      await fetchPromotions();
+    } catch (e) {
+      setError(e.message || e);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return {

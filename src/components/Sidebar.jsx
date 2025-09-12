@@ -7,7 +7,7 @@ import logo from "@/assets/logo-mamastock.png";
 import { normalizeAccessKey } from "@/lib/access";
 
 export default function Sidebar() {
-  const { loading: authLoading, hasAccess, userData } = useAuth();
+  const { loading: authLoading, hasAccess, userData, roles } = useAuth();
   const { pathname } = useLocation();
   const { loading: settingsLoading, enabledModules } = useMamaSettings();
   const rights = useMemo(() => userData?.access_rights ?? {}, [userData?.access_rights]);
@@ -24,7 +24,7 @@ export default function Sidebar() {
     return hasAccess(k) && isEnabled;
   };
   const canAnalyse = has("analyse");
-  const isAdmin = ["admin", "super-admin"].includes(userData?.role);
+  const isAdmin = roles.includes("siege") || roles.includes("admin");
 
   const canParam = (key) =>
     Object.prototype.hasOwnProperty.call(rights, key) ? has(key) : true;

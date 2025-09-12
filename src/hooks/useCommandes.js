@@ -1,12 +1,17 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState, useCallback } from "react";
-import { applyRange } from '@/lib/supa/applyRange';
 
 import { useAuth } from '@/hooks/useAuth';
+import {
+  commandes_list,
+  commande_get,
+  commande_insert,
+  commande_update,
+  commande_delete,
+} from '@/local/commandes';
 
 export function useCommandes() {
-  const { mama_id, user_id } = useAuth();
+  const { mama_id, id: user_id } = useAuth();
   const [data, setData] = useState([]);
   const [current, setCurrent] = useState(null);
   const [count, setCount] = useState(0);
@@ -18,38 +23,28 @@ export function useCommandes() {
       if (!mama_id) return { data: [], count: 0 };
       setLoading(true);
       setError(null);
-      let query = supabase
-        .from("commandes")
-        .select(
-          "id, date_commande, statut, fournisseur_id, mama_id, created_at, fournisseur:fournisseurs!commandes_fournisseur_id_fkey(id, nom, email), lignes:commande_lignes(id, total_ligne)",
-          { count: "exact" }
-        )
-        .eq("mama_id", mama_id)
-        .order("date_commande", { ascending: false });
-      if (fournisseur) query = query.eq("fournisseur_id", fournisseur);
-      if (statut) query = query.eq("statut", statut);
-      if (debut) query = query.gte("date_commande", debut);
-      if (fin) query = query.lte("date_commande", fin);
-      const { data, count, error } = await applyRange(
-        query,
-        (page - 1) * limit,
-        limit
-      );
-      setLoading(false);
-      if (error) {
-        console.error("❌ fetchCommandes", error.message);
-        setError(error);
+      try {
+        const { data, count } = await commandes_list({
+          mama_id,
+          fournisseur,
+          statut,
+          debut,
+          fin,
+          offset: (page - 1) * limit,
+          limit,
+        });
+        setData(data);
+        setCount(count);
+        return { data, count };
+      } catch (e) {
+        console.error("❌ fetchCommandes", e);
+        setError(e);
         setData([]);
         setCount(0);
         return { data: [], count: 0 };
+      } finally {
+        setLoading(false);
       }
-      const rows = (data || []).map((c) => ({
-        ...c,
-        total: (c.lignes || []).reduce((s, l) => s + Number(l.total_ligne || 0), 0)
-      }));
-      setData(rows);
-      setCount(count || 0);
-      return { data: rows, count: count || 0 };
     },
     [mama_id]
   );
@@ -59,23 +54,18 @@ export function useCommandes() {
       if (!id || !mama_id) return { data: null, error: null };
       setLoading(true);
       setError(null);
-      const { data, error } = await supabase
-        .from("commandes")
-        .select(
-          "id, date_commande, statut, fournisseur_id, mama_id, created_at, fournisseur:fournisseurs!commandes_fournisseur_id_fkey(id, nom, email), lignes:commande_lignes(id, commande_id, produit_id, quantite, prix_unitaire, tva, total_ligne, produit:produit_id(id, nom))"
-        )
-        .eq("id", id)
-        .eq("mama_id", mama_id)
-        .single();
-      setLoading(false);
-      if (error) {
-        console.error("❌ fetchCommandeById", error.message);
-        setError(error);
+      try {
+        const data = await commande_get(mama_id, id);
+        setCurrent(data);
+        return { data, error: null };
+      } catch (e) {
+        console.error("❌ fetchCommandeById", e);
+        setError(e);
         setCurrent(null);
-        return { data: null, error };
+        return { data: null, error: e };
+      } finally {
+        setLoading(false);
       }
-      setCurrent(data);
-      return { data, error: null };
     },
     [mama_id]
   );
@@ -84,49 +74,34 @@ export function useCommandes() {
     if (!mama_id) return { error: "mama_id manquant" };
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("commandes").
-    insert([{ ...rest, mama_id, created_by: user_id }]).
-    select().
-    single();
-    setLoading(false);
-    if (error) {
-      console.error("❌ createCommande", error.message);
-      setError(error);
-      return { error };
+    try {
+      const id = await commande_insert({ ...rest, mama_id, created_by: user_id, lignes });
+      const data = await commande_get(mama_id, id);
+      return { data };
+    } catch (e) {
+      console.error("❌ createCommande", e);
+      setError(e);
+      return { error: e };
+    } finally {
+      setLoading(false);
     }
-    if (lignes.length) {
-      const toInsert = lignes.map((l) => ({
-        ...l,
-        commande_id: data.id,
-        mama_id
-      }));
-      const { error: lineErr } = await supabase.
-      from("commande_lignes").
-      insert(toInsert);
-      if (lineErr) console.error("❌ commande lignes", lineErr.message);
-    }
-    return { data };
   }
 
   async function updateCommande(id, fields) {
     if (!mama_id) return { error: "mama_id manquant" };
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("commandes").
-    update(fields).
-    eq("id", id).
-    eq("mama_id", mama_id).
-    select().
-    single();
-    setLoading(false);
-    if (error) {
-      console.error("❌ updateCommande", error.message);
-      setError(error);
-      return { error };
+    try {
+      await commande_update(id, fields);
+      const data = await commande_get(mama_id, id);
+      return { data };
+    } catch (e) {
+      console.error("❌ updateCommande", e);
+      setError(e);
+      return { error: e };
+    } finally {
+      setLoading(false);
     }
-    return { data };
   }
 
   async function validateCommande(id) {
@@ -141,18 +116,16 @@ export function useCommandes() {
     if (!mama_id) return { error: "mama_id manquant" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("commandes").
-    delete().
-    eq("id", id).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) {
-      console.error("❌ deleteCommande", error.message);
-      setError(error);
-      return { error };
+    try {
+      await commande_delete(id);
+      return { data: true };
+    } catch (e) {
+      console.error("❌ deleteCommande", e);
+      setError(e);
+      return { error: e };
+    } finally {
+      setLoading(false);
     }
-    return { data: true };
   }
 
   return {

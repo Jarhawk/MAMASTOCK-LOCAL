@@ -1,20 +1,13 @@
-import supabase from '@/lib/supabase';
+import { menuGroupes_list, menuGroupes_addLigne } from "@/local/menuGroupes";
 
 export default function useMenuGroupe() {
   async function fetchMenusGroupes({ q } = {}) {
-    let qy = supabase.from('menu_groupes').select('*');
-    if (q) qy = qy.ilike('nom', `%${q}%`);
-    const { data } = await qy;
-    return data || [];
+    return await menuGroupes_list({ q });
   }
 
   async function addLigne(menuGroupeId, ligne) {
-    return supabase
-      .from('menu_groupes_lignes')
-      .insert([{ ...ligne, menu_groupe_id: menuGroupeId }]);
+    await menuGroupes_addLigne(menuGroupeId, ligne);
   }
 
   return { fetchMenusGroupes, addLigne };
 }
-
-export { useMenuGroupe as useAuth };

@@ -1,9 +1,9 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useEffect, useState } from "react";
 
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { readConfig } from "@/appFs";
 
 export default function AccessMultiSites() {
   const [rows, setRows] = useState([]);
@@ -11,11 +11,9 @@ export default function AccessMultiSites() {
 
   useEffect(() => {
     setLoading(true);
-    supabase.
-    from("user_mama_access").
-    select("*").
-    then(({ data }) => {
-      setRows(Array.isArray(data) ? data : []);
+    readConfig().then((cfg) => {
+      const list = (cfg && cfg.user_mama_access) || [];
+      setRows(list);
       setLoading(false);
     });
   }, []);

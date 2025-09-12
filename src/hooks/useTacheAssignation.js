@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState, useCallback } from "react";
+import { tache_assign_users, tache_unassign_user } from "@/lib/db";
 
 
 export function useTacheAssignation() {
@@ -10,30 +10,29 @@ export function useTacheAssignation() {
   const assignUsers = useCallback(async (tacheId, userIds = []) => {
     setLoading(true);
     setError(null);
-    const rows = userIds.map((uid) => ({ tache_id: tacheId, utilisateur_id: uid }));
-    const { error } = await supabase.from("utilisateurs_taches").insert(rows);
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
-      return { error };
+    try {
+      await tache_assign_users(tacheId, userIds);
+      return {};
+    } catch (e) {
+      setError(e.message || String(e));
+      return { error: e };
+    } finally {
+      setLoading(false);
     }
-    return {};
   }, []);
 
   const unassignUser = useCallback(async (tacheId, userId) => {
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("utilisateurs_taches").
-    delete().
-    eq("tache_id", tacheId).
-    eq("utilisateur_id", userId);
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
-      return { error };
+    try {
+      await tache_unassign_user(tacheId, userId);
+      return {};
+    } catch (e) {
+      setError(e.message || String(e));
+      return { error: e };
+    } finally {
+      setLoading(false);
     }
-    return {};
   }, []);
 
   return { assignUsers, unassignUser, loading, error };

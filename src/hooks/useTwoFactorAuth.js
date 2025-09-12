@@ -1,8 +1,8 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
-
 import { authenticator } from "otplib";
+import { useAuth } from "@/hooks/useAuth";
+import { getTwoFactor, setTwoFactor } from "@/local/twoFactor";
 
 export function useTwoFactorAuth() {
   const [secret, setSecret] = useState(null);
@@ -10,19 +10,18 @@ export function useTwoFactorAuth() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const { id } = useAuth();
+
   async function refresh() {
+    if (!id) return;
     setLoading(true);
     setError(null);
-    const { data: { user } } = await supabase.auth.getUser();
-    const { data, error } = await supabase.
-    from("auth_double_facteur").
-    select("enabled, secret").
-    eq("id", user.id).
-    single();
-    if (error) setError(error);else
-    {
-      setEnabled(data.enabled);
-      setSecret(data.secret);
+    try {
+      const { enabled, secret } = await getTwoFactor(id);
+      setEnabled(enabled);
+      setSecret(secret);
+    } catch (e) {
+      setError(e);
     }
     setLoading(false);
   }
@@ -35,27 +34,27 @@ export function useTwoFactorAuth() {
   }
 
   async function finalizeSetup() {
-    if (!secret) return;
+    if (!secret || !id) return;
     setLoading(true);
     setError(null);
-    const { data: { user } } = await supabase.auth.getUser();
-    const { error } = await supabase.from('auth_double_facteur').upsert({ id: user.id, secret, enabled: true });
-    if (error) setError(error);else
-    setEnabled(true);
+    try {
+      await setTwoFactor(id, { secret, enabled: true });
+      setEnabled(true);
+    } catch (e) {
+      setError(e);
+    }
     setLoading(false);
   }
 
   async function disable() {
+    if (!id) return;
     setLoading(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    const { error } = await supabase.
-    from("auth_double_facteur").
-    update({ enabled: false, secret: null }).
-    eq("id", user.id);
-    if (error) setError(error);else
-    {
+    try {
+      await setTwoFactor(id, { enabled: false, secret: null });
       setSecret(null);
       setEnabled(false);
+    } catch (e) {
+      setError(e);
     }
     setLoading(false);
   }

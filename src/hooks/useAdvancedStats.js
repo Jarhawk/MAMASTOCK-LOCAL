@@ -1,7 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
-
+import { getDb } from "@/lib/db";
 
 export function useAdvancedStats() {
   const [data, setData] = useState([]);
@@ -10,18 +9,26 @@ export function useAdvancedStats() {
 
   async function fetchStats({ start, end } = {}) {
     setLoading(true);
-    const { data, error } = await supabase.rpc("advanced_stats", {
-      start_date: start || null,
-      end_date: end || null
-    });
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
+    try {
+      const db = await getDb();
+      const params = [];
+      let sql = "SELECT mois, montant FROM v_advanced_stats";
+      if (start || end) {
+        sql += " WHERE 1=1";
+        if (start) { sql += " AND mois >= ?"; params.push(start); }
+        if (end) { sql += " AND mois <= ?"; params.push(end); }
+      }
+      const rows = await db.select(sql, params);
+      setData(rows);
+      setError(null);
+      return rows;
+    } catch (err) {
+      setError(err);
       setData([]);
       return [];
+    } finally {
+      setLoading(false);
     }
-    setData(Array.isArray(data) ? data : []);
-    return data || [];
   }
 
   return { data, loading, error, fetchStats };

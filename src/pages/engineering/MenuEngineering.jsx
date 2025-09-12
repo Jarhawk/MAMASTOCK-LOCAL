@@ -61,7 +61,7 @@ export default function MenuEngineering() {
   }
 
   if (authLoading) return <LoadingSpinner message="Chargement..." />
-  if (!mama_id || !roles.some(r => ['admin', 'manager'].includes(r))) return null
+  if (!mama_id || !roles.some(r => ['chef_site', 'superviseur', 'siege', 'admin', 'manager'].includes(r))) return null
 
   return (
     <div className="p-6 space-y-4">

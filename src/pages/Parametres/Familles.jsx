@@ -1,5 +1,4 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import ListingContainer from '@/components/ui/ListingContainer';
@@ -23,7 +22,9 @@ export default function Familles() {
     addSousFamille,
     updateSousFamille,
     toggleFamille,
-    toggleSousFamille
+    toggleSousFamille,
+    deleteFamille,
+    deleteSousFamille,
   } = useFamillesWithSousFamilles();
   const { mama_id, hasAccess, loading: authLoading } = useAuth();
   const canEdit = hasAccess('parametrage', 'peut_modifier');
@@ -52,18 +53,9 @@ export default function Familles() {
 
   const handleDelete = async (id) => {
     setActionLoading(true);
-    const { error } = await supabase
-      .from('familles')
-      .delete()
-      .eq('id', id)
-      .eq('mama_id', mama_id);
-    if (error) {
-      console.error('Erreur suppression :', error);
-      toast.error('Suppression échouée.');
-    } else {
-      toast.success('Élément supprimé !');
-      fetchAll();
-    }
+    const { error } = await deleteFamille(id);
+    if (error) toast.error('Suppression échouée.');
+    else toast.success('Élément supprimé !');
     setActionLoading(false);
   };
 
@@ -87,18 +79,9 @@ export default function Familles() {
   };
 
   const handleDeleteSous = async (id) => {
-    const { error } = await supabase
-      .from('sous_familles')
-      .delete()
-      .eq('id', id)
-      .eq('mama_id', mama_id);
-    if (error) {
-      console.error('Erreur suppression :', error);
-      toast.error('Suppression échouée.');
-    } else {
-      toast.success('Élément supprimé !');
-      fetchAll();
-    }
+    const { error } = await deleteSousFamille(id);
+    if (error) toast.error('Suppression échouée.');
+    else toast.success('Élément supprimé !');
   };
 
   const handleToggleSous = async (sf) => {

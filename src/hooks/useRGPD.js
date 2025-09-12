@@ -1,24 +1,20 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-
 import { useAuth } from '@/hooks/useAuth';
+import { getUserLocal, deleteUserLocal } from '@/auth/localAccount';
 
 export function useRGPD() {
-  const { user_id, role } = useAuth();
+  const { id, role } = useAuth();
 
-  async function getUserDataExport(userId = user_id) {
+  async function getUserDataExport(userId = id) {
     if (!userId) return null;
-    const { data: profil } = await supabase.
-    from("utilisateurs").
-    select("id,created_at").
-    eq("auth_id", userId).
-    single();
+    const profil = await getUserLocal(userId);
     return { profil, logs: [] };
   }
 
   async function purgeUserData(userId) {
-    if (role !== "superadmin") return { error: "not allowed" };
-    return await supabase.from("utilisateurs").delete().eq("auth_id", userId);
+    if (role !== 'superadmin') return { error: 'not allowed' };
+    await deleteUserLocal(userId);
+    return { success: true };
   }
 
   return { getUserDataExport, purgeUserData };

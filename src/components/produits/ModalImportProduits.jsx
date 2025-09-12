@@ -1,4 +1,4 @@
-import supabase from '@/lib/supabase';import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,8 +9,9 @@ import ImportPreviewTable from "@/components/ui/ImportPreviewTable";
 import {
   parseProduitsFile,
   validateProduitRow,
-  downloadProduitsTemplate } from
-"@/utils/excelUtils";
+  downloadProduitsTemplate,
+  insertProduits,
+} from '@/utils/excelUtils';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
@@ -96,18 +97,12 @@ export default function ModalImportProduits({ open, onClose, onSuccess }) {
     });
     if (!produits_valides.length) return;
     setImporting(true);
-    const { error } = await supabase.
-    from("produits").
-    insert(produits_valides);
-    if (error) {
-      console.error(error);
-      toast.error("Erreur d'insertion");
-    } else {
-      toast(
-        `${produits_valides.length} produits insérés · ${rows.length - produits_valides.length} ignorés`
-      );
-      onSuccess?.();
-    }
+    const results = await insertProduits(produits_valides);
+    const inserted = results.filter((r) => !r.insertError).length;
+    toast(
+      `${inserted} produits insérés · ${rows.length - inserted} ignorés`
+    );
+    onSuccess?.();
     setImporting(false);
   }
 

@@ -1,9 +1,27 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
 import { useAuditLog } from "@/hooks/useAuditLog";
+import { readText, saveText, existsFile } from "@/local/files";
+import { readCostCenters } from "@/local/costCenters";
+
+const FILE_PATH = "config/cost_center_allocations.json";
+
+async function readAllocations() {
+  if (!(await existsFile(FILE_PATH))) return [];
+  try {
+    const txt = await readText(FILE_PATH);
+    const arr = JSON.parse(txt);
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+
+async function writeAllocations(list) {
+  await saveText(FILE_PATH, JSON.stringify(list, null, 2));
+}
 
 export function useMouvementCostCenters() {
   const { mama_id } = useAuth();
@@ -16,47 +34,50 @@ export function useMouvementCostCenters() {
     if (!mouvement_id) return [];
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("mouvements_centres_cout").
-    select("id, mouvement_id, cost_center_id, quantite, valeur, centres_de_cout:cost_center_id(nom)").
-    eq("mouvement_id", mouvement_id).
-    eq("mama_id", mama_id).
-    order("created_at");
-    setLoading(false);
-    if (error) {
-      setError(error);
+    try {
+      const all = await readAllocations();
+      const rows = all.filter((a) => a.mouvement_id === mouvement_id && a.mama_id === mama_id);
+      const centres = await readCostCenters();
+      const nameMap = new Map(centres.map((c) => [c.id, c.nom]));
+      const enriched = rows.map((r) => ({
+        ...r,
+        centres_de_cout: { nom: nameMap.get(r.cost_center_id) || "" },
+      }));
+      setAllocations(enriched);
+      return enriched;
+    } catch (err) {
+      setError(err?.message || String(err));
       setAllocations([]);
       return [];
+    } finally {
+      setLoading(false);
     }
-    setAllocations(Array.isArray(data) ? data : []);
-    return data || [];
   }
 
   async function saveAllocations(mouvement_id, rows) {
     if (!mouvement_id) return;
     setLoading(true);
     setError(null);
-    await supabase.
-    from("mouvements_centres_cout").
-    delete().
-    eq("mouvement_id", mouvement_id).
-    eq("mama_id", mama_id);
-    const prepared = (rows || []).map((r) => ({
-      mouvement_id,
-      cost_center_id: r.cost_center_id,
-      quantite: Number(r.quantite) || 0,
-      valeur: r.valeur ? Number(r.valeur) : null,
-      mama_id
-    }));
-    if (prepared.length > 0) {
-      const { error } = await supabase.
-      from("mouvements_centres_cout").
-      insert(prepared);
-      if (error) setError(error);
+    try {
+      const all = await readAllocations();
+      const filtered = all.filter((a) => !(a.mouvement_id === mouvement_id && a.mama_id === mama_id));
+      const prepared = (rows || []).map((r) => ({
+        id: crypto.randomUUID(),
+        mouvement_id,
+        cost_center_id: r.cost_center_id,
+        quantite: Number(r.quantite) || 0,
+        valeur: r.valeur ? Number(r.valeur) : null,
+        mama_id,
+      }));
+      const next = [...filtered, ...prepared];
+      await writeAllocations(next);
+      await log("Ventilation mouvement", { mouvement_id, rows: prepared });
+      await fetchAllocations(mouvement_id);
+    } catch (err) {
+      setError(err?.message || String(err));
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-    await fetchAllocations(mouvement_id);
-    await log("Ventilation mouvement", { mouvement_id, rows: prepared });
   }
 
   return { allocations, loading, error, fetchAllocations, saveAllocations };

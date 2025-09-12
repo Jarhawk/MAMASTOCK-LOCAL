@@ -1,68 +1,118 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { loginSqlite, registerSqlite } from "@/auth/sqliteAuth";
+/// <reference types="vite/client" />
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { readConfig, writeConfig } from "@/appFs";
+import { normalizeAccessKey } from "@/lib/access";
+import { can } from "@/utils/permissions";
+import { DEFAULT_ROLES } from "@/constants/roles";
 
-export type User = { id: string; email: string; mama_id: string };
+export type User = { id: string; email: string; mama_id: string; role: string } | null;
 
 type Ctx = {
   id: string | null;
   email: string | null;
   mama_id: string | null;
-  user: User | null;
-  isAuthenticated: boolean;
-  signIn: (u: User) => void;
+  role: string | null;
+  roles: string[];
+  user: User;
+  userData: any;
+  loading: boolean;
+  signIn: (u: NonNullable<User>) => Promise<void> | void;
   signOut: () => void;
-  loginWithDb?: (email: string, password: string) => Promise<void>;
-  registerWithDb?: (email: string, password: string) => Promise<void>;
+  hasAccess: (k: string, action?: string) => boolean;
 };
 
-const defaultAuth: Ctx = {
+const defaultCtx: Ctx = {
   id: null,
   email: null,
   mama_id: null,
+  role: null,
+  roles: [],
   user: null,
-  isAuthenticated: false,
+  userData: null,
+  loading: true,
   signIn: () => {},
   signOut: () => {},
-  loginWithDb: async () => {},
-  registerWithDb: async () => {},
+  hasAccess: () => false,
 };
 
-const AuthContext = createContext<Ctx>(defaultAuth);
+const AuthContext = createContext<Ctx>(defaultCtx);
 
-interface AuthProviderProps {
-  children: React.ReactNode;
-}
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User>(null);
+  const [userData, setUserData] = useState<any>(null);
+  const [roles, setRoles] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const useFake = import.meta?.env?.VITE_FAKE_AUTH === "1";
-    if (useFake) {
-      setUser({ id: "dev-user", email: "dev@example.com", mama_id: "local-dev" });
+  const loadUser = useCallback(async (u: NonNullable<User>) => {
+    const cfg = (await readConfig()) || {};
+    if (!cfg.roles || !Array.isArray(cfg.roles) || cfg.roles.length === 0) {
+      cfg.roles = DEFAULT_ROLES;
+      await writeConfig(cfg);
     }
+    const roleDef = (cfg.roles || []).find((r: any) => r.id === u.role);
+    const access_rights = roleDef?.access_rights || {};
+    const aliases: string[] = [u.role];
+    if (u.role === "chef_site") aliases.push("manager");
+    if (u.role === "siege") aliases.push("admin");
+    setUser(u);
+    setUserData({ ...u, access_rights });
+    setRoles(aliases);
+    try { localStorage.setItem("auth.user", JSON.stringify(u)); } catch {}
   }, []);
 
-  const value = useMemo<Ctx>(
-    () => ({
-      id: user?.id ?? null,
-      email: user?.email ?? null,
-      mama_id: user?.mama_id ?? null,
-      user,
-      isAuthenticated: !!user,
-      signIn: (u: User) => setUser(u),
-      signOut: () => setUser(null),
-      loginWithDb: async (email, password) => {
-        const u = await loginSqlite(email, password);
-        setUser(u);
-      },
-      registerWithDb: async (email, password) => {
-        const u = await registerSqlite(email, password);
-        setUser(u);
-      },
-    }),
-    [user]
+  useEffect(() => {
+    (async () => {
+      try {
+        const raw = localStorage.getItem("auth.user");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          await loadUser(parsed);
+        }
+      } catch {}
+      setLoading(false);
+    })();
+  }, [loadUser]);
+
+  const signIn = useCallback(async (u: NonNullable<User>) => {
+    await loadUser(u);
+    setLoading(false);
+  }, [loadUser]);
+
+  const signOut = useCallback(() => {
+    setUser(null);
+    setUserData(null);
+    setRoles([]);
+    try { localStorage.removeItem("auth.user"); } catch {}
+  }, []);
+
+  const hasAccess = useCallback(
+    (key: string, action = "lecture") => {
+      const k = normalizeAccessKey(key);
+      return can(userData?.access_rights || {}, k, action, userData?.role);
+    },
+    [userData]
   );
+
+  const value = useMemo<Ctx>(() => ({
+    id: user?.id ?? null,
+    email: user?.email ?? null,
+    mama_id: user?.mama_id ?? null,
+    role: userData?.role ?? null,
+    roles,
+    user,
+    userData,
+    loading,
+    signIn,
+    signOut,
+    hasAccess,
+  }), [user, userData, roles, loading, signIn, signOut, hasAccess]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -70,4 +120,3 @@ export function AuthProvider({ children }: AuthProviderProps) {
 export function useAuth() {
   return useContext(AuthContext);
 }
-

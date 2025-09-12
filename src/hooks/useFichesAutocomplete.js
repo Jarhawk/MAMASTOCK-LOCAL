@@ -1,7 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState, useCallback } from "react";
-
+import { fiches_autocomplete } from '@/lib/db';
 import { useAuth } from '@/hooks/useAuth';
 
 export function useFichesAutocomplete() {
@@ -14,22 +13,17 @@ export function useFichesAutocomplete() {
     if (!mama_id) return [];
     setLoading(true);
     setError(null);
-    let q = supabase.
-    from("fiches_techniques").
-    select("id, nom, cout_par_portion, actif").
-    eq("mama_id", mama_id).
-    eq("actif", true);
-    if (query) q = q.ilike("nom", `%${query}%`);
-    if (excludeId) q = q.neq("id", excludeId);
-    q = q.order("nom", { ascending: true }).limit(10);
-    const { data, error } = await q;
-    setLoading(false);
-    if (error) {
+    try {
+      const rows = await fiches_autocomplete({ query, excludeId });
+      setResults(Array.isArray(rows) ? rows : []);
+      return rows || [];
+    } catch (error) {
       setError(error);
+      setResults([]);
       return [];
+    } finally {
+      setLoading(false);
     }
-    setResults(Array.isArray(data) ? data : []);
-    return data || [];
   }, [mama_id]);
 
   return { results, loading, error, searchFiches };

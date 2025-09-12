@@ -1,6 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-
+import { stats_cost_centers_list } from '@/lib/db';
 import { useAuth } from '@/hooks/useAuth';
 
 export function useCostCenterStats() {
@@ -8,16 +7,12 @@ export function useCostCenterStats() {
 
   async function fetchStats({ debut = null, fin = null } = {}) {
     if (!mama_id) return [];
-    const { data, error } = await supabase.rpc("stats_cost_centers", {
-      mama_id_param: mama_id,
-      debut_param: debut,
-      fin_param: fin
-    });
-    if (error) {
+    try {
+      return await stats_cost_centers_list(mama_id, { debut, fin });
+    } catch (error) {
       console.error('Erreur stats_cost_centers:', error);
       return [];
     }
-    return data || [];
   }
 
   return { fetchStats };

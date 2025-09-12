@@ -1,27 +1,19 @@
-import { useQuery } from '@tanstack/react-query'
-import { supabase } from '@/lib/supa/client'
+import { useQuery } from '@tanstack/react-query';
+import { unites_list } from '@/lib/db';
 
 export async function fetchUnites(mamaId) {
-  const { data, error } = await supabase
-    .from('unites')
-    .select('id, nom, mama_id, actif')
-    .eq('mama_id', mamaId)
-    .order('nom', { ascending: true })
-  if (error) {
-    console.warn('[fetchUnites] fallback []', error)
-    return []
-  }
-  return data ?? []
+  return await unites_list(mamaId);
 }
 
 export function useUnites(mamaId) {
   return useQuery({
     queryKey: ['unites', mamaId],
-    queryFn: () => fetchUnites(mamaId),
+    queryFn: () => unites_list(mamaId),
     initialData: [],
-  })
+  });
 }
 
-export const fetchUnitesForValidation = fetchUnites
+export const fetchUnitesForValidation = fetchUnites;
 
-export default useUnites
+export default useUnites;
+

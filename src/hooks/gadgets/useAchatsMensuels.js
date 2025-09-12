@@ -1,6 +1,6 @@
-import supabase from '@/lib/supabase';import { useEffect, useState } from 'react';
-
-import { useAuth } from '@/hooks/useAuth';
+import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { achats_mensuels_list } from "@/lib/db";
 
 export default function useAchatsMensuels() {
   const { mama_id, loading: authLoading } = useAuth() || {};
@@ -10,30 +10,24 @@ export default function useAchatsMensuels() {
 
   useEffect(() => {
     if (authLoading) return;
-    if (!mama_id) return;
-
-    const fetchData = async () => {
+    if (!mama_id) {
+      setData([]);
+      setLoading(false);
+      return;
+    }
+    (async () => {
       setLoading(true);
       setError(null);
       try {
-        const { data, error } = await supabase.
-        from('v_achats_mensuels').
-        select('mois, montant').
-        eq('mama_id', mama_id).
-        order('mois', { ascending: true });
-
-        if (error) throw error;
-
-        setData(data || []);
+        const rows = await achats_mensuels_list(mama_id);
+        setData(rows || []);
       } catch (e) {
         setError(e);
         setData([]);
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchData();
+    })();
   }, [authLoading, mama_id]);
 
   return { data, loading, error };

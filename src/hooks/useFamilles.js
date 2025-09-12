@@ -1,23 +1,16 @@
 import { useState, useCallback, useEffect } from 'react';
-import { supabase } from '@/lib/supa/client';
 import { useAuth } from '@/hooks/useAuth';
+import {
+  familles_list,
+  familles_insert,
+  familles_update,
+  familles_delete,
+  familles_batch_delete,
+} from '@/lib/db';
 
-/**
- * Récupère les familles pour un mama donné.
- * Retourne un objet { data: [] } pour éviter les accès undefined.
- */
 export async function fetchFamilles(mamaId) {
-  const { data, error } = await supabase
-    .from('familles')
-    .select('id, nom, actif, mama_id')
-    .eq('mama_id', mamaId)
-    .order('nom', { ascending: true });
-
-  if (error) {
-    console.warn('[fetchFamilles] fallback []', error);
-    return { data: [] };
-  }
-  return { data: data ?? [] };
+  const data = await familles_list(mamaId);
+  return { data };
 }
 
 export function useFamilles() {
@@ -28,7 +21,7 @@ export function useFamilles() {
   const list = useCallback(async () => {
     if (!mama_id) return [];
     setLoading(true);
-    const { data } = await fetchFamilles(mama_id);
+    const data = await familles_list(mama_id);
     setFamilles(data ?? []);
     setLoading(false);
     return data;
@@ -37,7 +30,7 @@ export function useFamilles() {
   const addFamille = useCallback(
     async (values) => {
       if (!mama_id) return;
-      await supabase.from('familles').insert([{ ...values, mama_id }]);
+      await familles_insert({ ...values, mama_id });
       return list();
     },
     [mama_id, list]
@@ -46,7 +39,7 @@ export function useFamilles() {
   const updateFamille = useCallback(
     async (id, values) => {
       if (!mama_id) return;
-      await supabase.from('familles').update(values).match({ id, mama_id });
+      await familles_update(id, mama_id, values);
       return list();
     },
     [mama_id, list]
@@ -55,7 +48,7 @@ export function useFamilles() {
   const deleteFamille = useCallback(
     async (id) => {
       if (!mama_id) return;
-      await supabase.from('familles').delete().match({ id, mama_id });
+      await familles_delete(id, mama_id);
       return list();
     },
     [mama_id, list]
@@ -64,7 +57,7 @@ export function useFamilles() {
   const batchDeleteFamilles = useCallback(
     async (ids) => {
       if (!mama_id || !ids?.length) return;
-      await supabase.from('familles').delete().in('id', ids).eq('mama_id', mama_id);
+      await familles_batch_delete(ids, mama_id);
       return list();
     },
     [mama_id, list]
@@ -88,3 +81,4 @@ export function useFamilles() {
 export const fetchFamillesForValidation = fetchFamilles;
 
 export default useFamilles;
+

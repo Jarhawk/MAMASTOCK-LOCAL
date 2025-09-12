@@ -1,151 +1,171 @@
-import {
-  exists,
-  mkdir,
-  readTextFile,
-  rename,
-  writeTextFile,
-} from "@tauri-apps/plugin-fs";
 import { appDataDir, join } from "@tauri-apps/api/path";
+import { exists, mkdir, readTextFile, writeTextFile, rename } from "@tauri-apps/plugin-fs";
+
+const isTauri = !!import.meta.env.TAURI_PLATFORM;
+const APP_DIR = "MamaStock";
+const USERS_FILE = "users.json";
 
 export type LocalUser = {
   id: string;
   email: string;
   mama_id: string;
+  role: string;
   passwordHash: string;
   salt: string;
   createdAt: string;
 };
-async function tauriBaseDir(): Promise<string> {
-  return appDataDir();
+
+async function tauriBaseDir() {
+  const base = await appDataDir();
+  return base;
 }
 
-async function legacyUsersPath(): Promise<string> {
+async function legacyUsersPath() {
   const base = await tauriBaseDir();
-  return join(base, "..", "MamaStock", "users.json");
+  const roaming = base.replace(/\\com\.mamastock\.local\\?$/i, "");
+  return await join(roaming, APP_DIR, USERS_FILE);
 }
 
-async function currentUsersPath(): Promise<string> {
+async function currentUsersDir() {
   const base = await tauriBaseDir();
-  return join(base, "MamaStock", "users.json");
+  return await join(base, APP_DIR);
 }
 
-async function ensureCurrentDir(): Promise<void> {
-  const base = await tauriBaseDir();
-  const dir = await join(base, "MamaStock");
-  await mkdir(dir, { recursive: true });
+async function currentUsersPath() {
+  const dir = await currentUsersDir();
+  return await join(dir, USERS_FILE);
 }
 
-async function migrateLegacyFile(): Promise<void> {
+async function ensureCurrentDir() {
+  const dir = await currentUsersDir();
+  if (!(await exists(dir))) await mkdir(dir, { recursive: true });
+}
+
+async function migrateLegacyFile() {
   const legacy = await legacyUsersPath();
-  const current = await currentUsersPath();
-  if (await exists(legacy)) {
-    if (!(await exists(current))) {
-      await ensureCurrentDir();
-      await rename(legacy, current);
-      try {
-        const txt = await readTextFile(current);
-        const arr = JSON.parse(txt) as any[];
-        const normalized = arr.map((u) => {
-          if (u.password_hash && !u.passwordHash) {
-            u.passwordHash = u.password_hash;
-          }
-          delete u.password_hash;
-          if (!u.createdAt) {
-            u.createdAt = new Date().toISOString();
-          }
-          return u;
-        });
-        await writeTextFile(current, JSON.stringify(normalized, null, 2));
-      } catch {
-        // ignore parse errors
-      }
+  const target = await currentUsersPath();
+  if (await exists(target)) return;
+  if (!(await exists(legacy))) return;
+
+  await ensureCurrentDir();
+  await rename(legacy, target);
+
+  try {
+    const txt = await readTextFile(target);
+    const arr = JSON.parse(txt);
+    if (Array.isArray(arr)) {
+      const norm = arr.map((u: any) => {
+        const out: any = { ...u };
+        if (!out.passwordHash && out.password_hash) {
+          out.passwordHash = out.password_hash;
+          delete out.password_hash;
+        }
+        if (!out.createdAt) out.createdAt = new Date().toISOString();
+        if (!out.role) out.role = "chef_site";
+        return out;
+      });
+      await writeTextFile(target, JSON.stringify(norm, null, 2));
     }
-  }
+  } catch {}
 }
 
 async function usersPath() {
-  if (typeof window === "undefined" || !(window as any).__TAURI__) {
-    throw new Error("Utilisation hors de Tauri.");
-  }
+  if (!isTauri) throw new Error("Tauri requis: lance via `npx tauri dev`.");
+  await ensureCurrentDir();
   await migrateLegacyFile();
-  return currentUsersPath();
+  return await currentUsersPath();
 }
 
 async function sha256Hex(input: string) {
   const enc = new TextEncoder();
   const digest = await crypto.subtle.digest("SHA-256", enc.encode(input));
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+  return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2,"0")).join("");
 }
 
 async function readUsers(): Promise<LocalUser[]> {
-  const file = await usersPath();
-  if (!(await exists(file))) return [];
-  try {
-    const txt = await readTextFile(file);
-    const arr = JSON.parse(txt) as any[];
-    return arr.map((u: any) => {
-      const passwordHash = u.passwordHash ?? u.password_hash;
-      const createdAt = u.createdAt ?? new Date().toISOString();
-      return {
-        id: u.id,
-        email: u.email,
-        mama_id: u.mama_id,
-        passwordHash,
-        salt: u.salt,
-        createdAt,
-      } as LocalUser;
-    });
-  } catch {
-    return [];
-  }
+  const path = await usersPath();
+  if (!(await exists(path))) return [];
+  const txt = await readTextFile(path);
+  try { return JSON.parse(txt) as LocalUser[]; } catch { return []; }
 }
 
-async function writeUsers(users: LocalUser[]) {
-  const file = await usersPath();
-  await ensureCurrentDir();
-  const normalized = users.map((u) => ({
-    id: u.id,
-    email: u.email,
-    mama_id: u.mama_id,
-    passwordHash: u.passwordHash,
-    salt: u.salt,
-    createdAt: u.createdAt,
-  }));
-  await writeTextFile(file, JSON.stringify(normalized, null, 2));
+async function writeUsers(list: LocalUser[]) {
+  const path = await usersPath();
+  await writeTextFile(path, JSON.stringify(list, null, 2));
 }
 
-export async function registerLocal(email: string, password: string) {
+export async function listLocalUsers() {
+  return await readUsers();
+}
+
+export async function registerLocal(
+  email: string,
+  password: string,
+  role: string = "chef_site"
+) {
   email = email.trim().toLowerCase();
   const users = await readUsers();
-  if (users.some((u) => u.email === email)) {
-    throw new Error("Email déjà utilisé.");
-  }
-  const id = crypto.randomUUID();
-  const mama_id = "local-" + Math.random().toString(36).slice(2, 8);
+  if (users.some(u => u.email === email)) throw new Error("Email déjà utilisé.");
   const salt = crypto.randomUUID();
-  const passwordHash = await sha256Hex(`${password}:${salt}`);
-  const createdAt = new Date().toISOString();
-  users.push({ id, email, mama_id, passwordHash, salt, createdAt });
+  const hash = await sha256Hex(`${password}:${salt}`);
+  const user: LocalUser = {
+    id: crypto.randomUUID(),
+    email,
+    mama_id: "local-" + Math.random().toString(36).slice(2, 8),
+    role,
+    passwordHash: hash,
+    salt,
+    createdAt: new Date().toISOString(),
+  };
+  users.push(user);
   await writeUsers(users);
-  return { id, email, mama_id };
+  return user;
 }
 
 export async function loginLocal(email: string, password: string) {
   email = email.trim().toLowerCase();
   const users = await readUsers();
-  const u = users.find((x) => x.email === email);
+  const u = users.find(x => x.email === email);
   if (!u) throw new Error("Utilisateur introuvable.");
-  const stored = u.passwordHash ?? (u as any).password_hash ?? null;
-  if (stored === null) throw new Error("Utilisateur corrompu.");
+  const stored = (u as any).passwordHash ?? (u as any).password_hash ?? null;
+  if (!stored) throw new Error("Utilisateur corrompu.");
   const check = await sha256Hex(`${password}:${u.salt}`);
-  if (check !== stored) {
-    const fallback = await sha256Hex(password);
-    if (fallback !== stored) {
-      throw new Error("Mot de passe invalide.");
-    }
-  }
-  return { id: u.id, email: u.email, mama_id: u.mama_id };
+  if (check === stored) return u;
+  // Dernier recours: anciens seeds non salés
+  const legacy = await sha256Hex(password);
+  if (legacy === stored) return u;
+  throw new Error("Mot de passe invalide.");
 }
 
+export async function updatePasswordLocal(email: string, newPassword: string) {
+  email = email.trim().toLowerCase();
+  const users = await readUsers();
+  const u = users.find((x) => x.email === email);
+  if (!u) throw new Error("Utilisateur introuvable.");
+  const salt = crypto.randomUUID();
+  const hash = await sha256Hex(`${newPassword}:${salt}`);
+  u.salt = salt;
+  u.passwordHash = hash;
+  await writeUsers(users);
+  return u;
+}
+
+export async function updateRoleLocal(id: string, role: string) {
+  const users = await readUsers();
+  const u = users.find((x) => x.id === id);
+  if (!u) throw new Error("Utilisateur introuvable.");
+  u.role = role;
+  await writeUsers(users);
+  return u;
+}
+
+export async function getUserLocal(id: string) {
+  const users = await readUsers();
+  return users.find((u) => u.id === id) || null;
+}
+
+export async function deleteUserLocal(id: string) {
+  const users = await readUsers();
+  const filtered = users.filter((u) => u.id !== id);
+  await writeUsers(filtered);
+}

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { loginLocal, registerLocal } from "@/auth/localAccount";
 import "./login.css";
 
 export default function LoginPage() {
   const nav = useNavigate();
-  const { loginWithDb, registerWithDb } = useAuth();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState("admin@mamastock.local");
   const [password, setPassword] = useState("Admin123!");
   const [error, setError] = useState("");
@@ -14,9 +15,9 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     try {
-      await loginWithDb(email, password);
-      console.info("[login] OK");
-      nav("/"); // redirige vers le tableau de bord
+      const u = await loginLocal(email, password);
+      signIn(u);
+      nav("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     }
@@ -26,8 +27,8 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     try {
-      await registerWithDb(email, password);
-      console.info("[register] OK");
+      const u = await registerLocal(email, password);
+      signIn(u);
       nav("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -78,4 +79,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

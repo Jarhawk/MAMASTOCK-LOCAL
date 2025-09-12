@@ -1,124 +1,84 @@
-import supabase from '@/lib/supabase';import { useState, useCallback } from 'react';
-
+import { useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { dashboards_list, gadget_add, gadget_update, gadget_delete } from '@/lib/db';
 
 export function useGadgets() {
-  const { mama_id, user_id } = useAuth();
+  const { id: user_id, mama_id } = useAuth();
   const [gadgets, setGadgets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchGadgets = useCallback(async () => {
-    if (!mama_id || !user_id) return [];
+    if (!user_id || !mama_id) return [];
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from('tableaux_de_bord').
-    select('liste_gadgets_json').
-    eq('utilisateur_id', user_id).
-    eq('mama_id', mama_id).
-    single();
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
-      setGadgets([]);
-      return [];
-    }
-    const list = data?.liste_gadgets_json || [];
-    setGadgets(list);
-    return list;
-  }, [mama_id, user_id]);
-
-  const saveGadgets = useCallback(
-    async (list) => {
-      if (!mama_id || !user_id) return null;
-      setLoading(true);
-      setError(null);
-      const { error } = await supabase.
-      from('tableaux_de_bord').
-      upsert(
-        { utilisateur_id: user_id, mama_id, liste_gadgets_json: list },
-        { onConflict: 'utilisateur_id,mama_id' }
-      );
-      setLoading(false);
-      if (error) {
-        setError(error.message || error);
-        return null;
-      }
+    try {
+      const dashboards = await dashboards_list(user_id, mama_id);
+      const list = (dashboards || []).flatMap((d) => d.widgets || []);
       setGadgets(list);
       return list;
-    },
-    [mama_id, user_id]
-  );
-
-  const addGadget = useCallback(
-    async (gadget) => {
-      if (!mama_id) return null;
-      setLoading(true);
-      setError(null);
-      const { data, error } = await supabase.
-      from('gadgets').
-      insert([{ ...gadget, mama_id }]).
-      select().
-      single();
+    } catch (e) {
+      setError(e.message || e);
+      setGadgets([]);
+      return [];
+    } finally {
       setLoading(false);
-      if (error) {
-        setError(error.message || error);
-        return null;
-      }
+    }
+  }, [user_id, mama_id]);
+
+  const addGadget = useCallback(async (gadget) => {
+    if (!mama_id) return null;
+    setLoading(true);
+    setError(null);
+    try {
+       const data = await gadget_add({ ...gadget, mama_id });
+       setGadgets((g) => [...g, data]);
       return data;
-    },
-    [mama_id]
-  );
-
-  const updateGadget = useCallback(
-    async (id, values) => {
-      if (!id || !mama_id) return null;
-      setLoading(true);
-      setError(null);
-      const { data, error } = await supabase.
-      from('gadgets').
-      update(values).
-      eq('id', id).
-      eq('mama_id', mama_id).
-      select().
-      single();
+    } catch (e) {
+      setError(e.message || e);
+      return null;
+    } finally {
       setLoading(false);
-      if (error) {
-        setError(error.message || error);
-        return null;
-      }
+    }
+  }, [mama_id]);
+
+  const updateGadget = useCallback(async (id, values) => {
+    if (!id) return null;
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await gadget_update(id, values);
+      setGadgets((g) => g.map((x) => (x.id === id ? data : x)));
       return data;
-    },
-    [mama_id]
-  );
-
-  const deleteGadget = useCallback(
-    async (id) => {
-      if (!id || !mama_id) return;
-      setLoading(true);
-      setError(null);
-      const { error } = await supabase.
-      from('gadgets').
-      delete().
-      eq('id', id).
-      eq('mama_id', mama_id);
+    } catch (e) {
+      setError(e.message || e);
+      return null;
+    } finally {
       setLoading(false);
-      if (error) {
-        setError(error.message || error);
-      }
-    },
-    [mama_id]
-  );
+    }
+  }, []);
+
+  const deleteGadget = useCallback(async (id) => {
+    if (!id) return;
+    setLoading(true);
+    setError(null);
+    try {
+      await gadget_delete(id);
+      setGadgets((g) => g.filter((x) => x.id !== id));
+    } catch (e) {
+      setError(e.message || e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   return {
     gadgets,
     loading,
     error,
     fetchGadgets,
-    saveGadgets,
     addGadget,
     updateGadget,
-    deleteGadget
+    deleteGadget,
   };
 }

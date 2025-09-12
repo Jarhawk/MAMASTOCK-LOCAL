@@ -1,76 +1,46 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-
+import { query } from '@/local/db';
 import { useAuth } from '@/hooks/useAuth';
 
 export function useAnalyse() {
   const { mama_id } = useAuth();
 
-  const applyPeriode = (query, { debut, fin } = {}) => {
-    if (debut) query = query.gte("mois", debut);
-    if (fin) query = query.lte("mois", fin);
-    return query;
-  };
+  function buildPeriode(where, params, { debut, fin } = {}) {
+    if (debut) { where.push('mois >= ?'); params.push(debut); }
+    if (fin) { where.push('mois <= ?'); params.push(fin); }
+  }
 
   async function getMonthlyPurchases(filters = {}) {
     if (!mama_id) return [];
-    let query = supabase.
-    from("v_achats_mensuels").
-    select("mois, montant_total").
-    eq("mama_id", mama_id).
-    order("mois", { ascending: true });
-    query = applyPeriode(query, filters);
-    const { data, error } = await query;
-    if (error) {
-      console.error("getMonthlyPurchases", error);
-      return [];
-    }
-    return data || [];
+    const where = ['mama_id = ?'];
+    const params = [mama_id];
+    buildPeriode(where, params, filters);
+    const sql = `SELECT mois, montant_total FROM v_achats_mensuels WHERE ${where.join(' AND ')} ORDER BY mois ASC`;
+    return await query(sql, params);
   }
 
   async function getEvolutionAchats(filters = {}) {
     if (!mama_id) return [];
-    let query = supabase.
-    from("v_evolution_achats").
-    select("mois, montant").
-    eq("mama_id", mama_id).
-    order("mois", { ascending: true });
-    query = applyPeriode(query, filters);
-    const { data, error } = await query;
-    if (error) {
-      console.error("getEvolutionAchats", error);
-      return [];
-    }
-    return data || [];
+    const where = ['mama_id = ?'];
+    const params = [mama_id];
+    buildPeriode(where, params, filters);
+    const sql = `SELECT mois, montant FROM v_evolution_achats WHERE ${where.join(' AND ')} ORDER BY mois ASC`;
+    return await query(sql, params);
   }
 
   async function getPmp() {
     if (!mama_id) return [];
-    const { data, error } = await supabase.
-    from("v_pmp").
-    select("*").
-    eq("mama_id", mama_id);
-    if (error) {
-      console.error("getPmp", error);
-      return [];
-    }
-    return data || [];
+    const sql = `SELECT * FROM v_pmp WHERE mama_id = ?`;
+    return await query(sql, [mama_id]);
   }
 
   async function getEcartsInventaire(filters = {}) {
     if (!mama_id) return [];
-    let query = supabase.
-    from("v_ecarts_inventaire").
-    select("date, ecart").
-    eq("mama_id", mama_id).
-    order("date", { ascending: true });
-    if (filters.produit_id) query = query.eq("produit_id", filters.produit_id);
-    const { data, error } = await query;
-    if (error) {
-      console.error("getEcartsInventaire", error);
-      return [];
-    }
-    return data || [];
+    const where = ['mama_id = ?'];
+    const params = [mama_id];
+    if (filters.produit_id) { where.push('produit_id = ?'); params.push(filters.produit_id); }
+    const sql = `SELECT date, ecart FROM v_ecarts_inventaire WHERE ${where.join(' AND ')} ORDER BY date ASC`;
+    return await query(sql, params);
   }
 
   return { getMonthlyPurchases, getEvolutionAchats, getPmp, getEcartsInventaire };

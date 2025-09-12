@@ -73,9 +73,8 @@ export default function Consolidation() {
       <div className="flex gap-4 text-sm">
         <div>CA: {kpis.ca}</div>
         <div>Achats: {kpis.achats}</div>
-        <div>FoodCost: {kpis.menu_foodcost}</div>
-        <div>Marge carte %: {kpis.marge_pct.toFixed ? kpis.marge_pct.toFixed(2) : kpis.marge_pct}</div>
-        <div>Écarts: {kpis.ecarts}</div>
+        <div>Marge: {kpis.marge}</div>
+        <div>Stock: {kpis.stock}</div>
       </div>
       {loading ? (
         <LoadingSpinner message="Chargement..." />
@@ -85,24 +84,20 @@ export default function Consolidation() {
             <thead>
               <tr>
                 <th>Site</th>
-                <th>Mois</th>
                 <th>CA</th>
                 <th>Achats</th>
-                <th>FoodCostMenus</th>
-                <th>MargeCarte%</th>
-                <th>ÉcartsInv</th>
+                <th>Marge</th>
+                <th>Stock</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={`${r.mama_id}-${r.mois}`}>
+                <tr key={r.mama_id}>
                   <td>{r.mama_id}</td>
-                  <td>{r.mois}</td>
-                  <td>{r.ca_total}</td>
-                  <td>{r.achats_total}</td>
-                  <td>{r.menu_foodcost_total}</td>
-                  <td>{r.marge_pct_moy}</td>
-                  <td>{r.ecart_valorise_total}</td>
+                  <td>{r.total_ventes}</td>
+                  <td>{r.total_achats}</td>
+                  <td>{r.marge}</td>
+                  <td>{r.valeur_stock}</td>
                 </tr>
               ))}
             </tbody>

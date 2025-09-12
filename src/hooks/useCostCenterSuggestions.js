@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
+import { readCostCenters } from "@/local/costCenters";
 
 
 export function useCostCenterSuggestions() {
@@ -15,18 +15,18 @@ export function useCostCenterSuggestions() {
     }
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.rpc(
-      "suggest_cost_centers",
-      { p_produit_id: produit_id }
-    );
-    setLoading(false);
-    if (error) {
-      setError(error);
+    try {
+      const centres = await readCostCenters();
+      const actifs = centres.filter((c) => c.actif);
+      setSuggestions(actifs);
+      return actifs;
+    } catch (err) {
+      setError(err);
       setSuggestions([]);
       return [];
+    } finally {
+      setLoading(false);
     }
-    setSuggestions(Array.isArray(data) ? data : []);
-    return data || [];
   }
 
   return { suggestions, loading, error, fetchSuggestions };

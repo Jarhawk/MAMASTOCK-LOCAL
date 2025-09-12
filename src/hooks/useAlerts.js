@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState, useCallback } from "react";
+import { alertes_list, alertes_add, alertes_update, alertes_delete } from "@/lib/db";
 
 import { useAuth } from '@/hooks/useAuth';
 
@@ -14,37 +14,30 @@ export function useAlerts() {
     if (!mama_id) return [];
     setLoading(true);
     setError(null);
-    let query = supabase.
-    from("regles_alertes").
-    select("*, produit:produit_id(id, nom)").
-    eq("mama_id", mama_id).
-    order("created_at", { ascending: false });
-
-    if (typeof actif === "boolean") query = query.eq("actif", actif);
-    if (search) query = query.ilike("produit.nom", `%${search}%`);
-
-    const { data, error } = await query;
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
+    try {
+      const data = await alertes_list(mama_id, { search, actif });
+      setRules(Array.isArray(data) ? data : []);
+      setError(null);
+      return data || [];
+    } catch (e) {
+      setError(e.message || e);
       setRules([]);
       return [];
+    } finally {
+      setLoading(false);
     }
-    setRules(Array.isArray(data) ? data : []);
-    return data || [];
   }, [mama_id]);
 
   async function addRule(values) {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("regles_alertes").
-    insert([{ ...values, mama_id }]);
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
-      return;
+    try {
+      await alertes_add({ ...values, mama_id });
+    } catch (e) {
+      setError(e.message || e);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -52,15 +45,12 @@ export function useAlerts() {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("regles_alertes").
-    update(values).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
-      return;
+    try {
+      await alertes_update(id, values);
+    } catch (e) {
+      setError(e.message || e);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -68,15 +58,12 @@ export function useAlerts() {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("regles_alertes").
-    delete().
-    eq("id", id).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
-      return;
+    try {
+      await alertes_delete(id);
+    } catch (e) {
+      setError(e.message || e);
+    } finally {
+      setLoading(false);
     }
   }
 

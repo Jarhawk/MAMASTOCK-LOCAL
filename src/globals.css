@@ -52,3 +52,10 @@
     transform: rotate(360deg);
   }
 }
+
+input, select, textarea {
+  color: #111;
+}
+.btn, button {
+  color: #111;
+}

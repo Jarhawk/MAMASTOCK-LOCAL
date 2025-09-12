@@ -1,11 +1,10 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
-
-import { useAuth } from '@/hooks/useAuth';
-import { useAuditLog } from "@/hooks/useAuditLog";
-import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
+
+import { useAuditLog } from "@/hooks/useAuditLog";
+import { readCostCenters, writeCostCenters } from "@/local/costCenters";
 
 export async function importCostCentersFromExcel(file, sheetName) {
   const buf = await file.arrayBuffer();
@@ -17,72 +16,94 @@ export async function importCostCentersFromExcel(file, sheetName) {
 }
 
 export function useCostCenters() {
-  const { mama_id } = useAuth();
   const { log } = useAuditLog();
   const [costCenters, setCostCenters] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   async function fetchCostCenters({ search = "" } = {}) {
-    if (!mama_id) return [];
     setLoading(true);
     setError(null);
-    let query = supabase.from("centres_de_cout").select("*").eq("mama_id", mama_id);
-    if (search) query = query.ilike("nom", `%${search}%`);
-    const { data, error } = await query.order("nom", { ascending: true });
-    setCostCenters(Array.isArray(data) ? data : []);
-    setLoading(false);
-    if (error) setError(error);
-    return data || [];
+    try {
+      let data = await readCostCenters();
+      if (search) {
+        const s = search.toLowerCase();
+        data = data.filter((c) => c.nom.toLowerCase().includes(s));
+      }
+      setCostCenters(data);
+      return data;
+    } catch (err) {
+      setError(err?.message || String(err));
+      setCostCenters([]);
+      return [];
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function addCostCenter(values) {
-    if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("centres_de_cout").
-    insert([{ ...values, mama_id }]);
-    if (error) setError(error);
-    setLoading(false);
-    await fetchCostCenters();
-    if (!error) await log("Ajout cost center", values);
+    try {
+      const list = await readCostCenters();
+      const cc = {
+        id: crypto.randomUUID(),
+        nom: values.nom,
+        actif: values.actif !== false,
+      };
+      list.push(cc);
+      await writeCostCenters(list);
+      await fetchCostCenters();
+      await log("Ajout cost center", cc);
+    } catch (err) {
+      setError(err?.message || String(err));
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function updateCostCenter(id, values) {
-    if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("centres_de_cout").
-    update(values).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    if (error) setError(error);
-    setLoading(false);
-    await fetchCostCenters();
-    if (!error) await log("Modification cost center", { id, ...values });
+    try {
+      const list = await readCostCenters();
+      const idx = list.findIndex((c) => c.id === id);
+      if (idx !== -1) {
+        list[idx] = { ...list[idx], ...values };
+        await writeCostCenters(list);
+        await log("Modification cost center", { id, ...values });
+      }
+      await fetchCostCenters();
+    } catch (err) {
+      setError(err?.message || String(err));
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function deleteCostCenter(id) {
-    if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("centres_de_cout").
-    update({ actif: false }).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    if (error) setError(error);
-    setLoading(false);
-    await fetchCostCenters();
-    if (!error) await log("Suppression cost center", { id });
+    try {
+      const list = await readCostCenters();
+      const idx = list.findIndex((c) => c.id === id);
+      if (idx !== -1) {
+        list[idx].actif = false;
+        await writeCostCenters(list);
+        await log("Suppression cost center", { id });
+      }
+      await fetchCostCenters();
+    } catch (err) {
+      setError(err?.message || String(err));
+    } finally {
+      setLoading(false);
+    }
   }
 
   function exportCostCentersToExcel() {
     const datas = (costCenters || []).map((c) => ({
       nom: c.nom,
-      actif: c.actif
+      actif: c.actif,
     }));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(datas), "CostCenters");
@@ -94,9 +115,14 @@ export function useCostCenters() {
     setLoading(true);
     setError(null);
     try {
-      return await importCostCentersFromExcel(file, sheetName);
+      const rows = await importCostCentersFromExcel(file, sheetName);
+      for (const row of rows) {
+        await addCostCenter({ nom: row.nom, actif: row.actif !== false });
+      }
+      await fetchCostCenters();
+      return rows;
     } catch (err) {
-      setError(err);
+      setError(err?.message || String(err));
       return [];
     } finally {
       setLoading(false);
@@ -112,6 +138,6 @@ export function useCostCenters() {
     updateCostCenter,
     deleteCostCenter,
     exportCostCentersToExcel,
-    importCostCentersFromExcel: importCostCentersFromExcelWithState
+    importCostCentersFromExcel: importCostCentersFromExcelWithState,
   };
 }

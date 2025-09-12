@@ -1,4 +1,5 @@
-import supabase from '@/lib/supabase';import * as XLSX from "xlsx";
+import { query } from '@/local/db';
+import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
 
@@ -27,25 +28,35 @@ const TEMPLATE_HEADERS = [
 
 
 export async function exportExcelProduits(mama_id) {
-  const { data, error } = await supabase.
-  from("produits").
-  select(
-    `nom, unite_id, unite:unites!fk_produits_unite(nom), famille:familles!fk_produits_famille(nom), sous_famille:sous_familles!fk_produits_sous_famille(nom), zone_stock:zones_stock(nom), stock_theorique, pmp, actif, seuil_min`
-  ).
-  eq("mama_id", mama_id);
+  const rowsRaw = await query(
+    `SELECT p.nom,
+            u.nom AS unite,
+            f.nom AS famille,
+            sf.nom AS sous_famille,
+            z.nom AS zone_stock,
+            p.stock_theorique AS stock,
+            p.pmp,
+            p.actif,
+            p.seuil_min
+     FROM produits p
+     LEFT JOIN unites u ON u.id = p.unite_id
+     LEFT JOIN familles f ON f.id = p.famille_id
+     LEFT JOIN sous_familles sf ON sf.id = p.sous_famille_id
+     LEFT JOIN inventaire_zones z ON z.id = p.zone_stock_id
+     WHERE p.mama_id = ?`,
+    [mama_id]
+  );
 
-  if (error) throw error;
-
-  const rows = (data || []).map((p) => ({
+  const rows = rowsRaw.map((p) => ({
     nom: p.nom,
-    unite: p.unite?.nom || "",
-    famille: p.famille?.nom || "",
-    sous_famille: p.sous_famille?.nom || "",
-    zone_stock: p.zone_stock?.nom || "",
-    stock: p.stock_theorique ?? p.stock ?? 0,
+    unite: p.unite || "",
+    famille: p.famille || "",
+    sous_famille: p.sous_famille || "",
+    zone_stock: p.zone_stock || "",
+    stock: p.stock ?? 0,
     pmp: p.pmp ?? "",
     actif: p.actif ? "TRUE" : "FALSE",
-    seuil_min: p.seuil_min ?? p.stock_min ?? 0
+    seuil_min: p.seuil_min ?? 0,
   }));
 
   const wb = XLSX.utils.book_new();

@@ -1,8 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { applyIlikeOr } from '@/lib/supa/textSearch';
+import { query } from '@/local/db';
 
 
 export function useGlobalSearch() {
@@ -15,16 +14,16 @@ export function useGlobalSearch() {
       return [];
     }
 
-    const prodReq = applyIlikeOr(
-      supabase.from('produits').select('id, nom').eq('mama_id', mama_id),
-      q
+    const like = `%${q}%`;
+    const prodReq = query(
+      'SELECT id, nom FROM produits WHERE mama_id = ? AND nom LIKE ? ORDER BY nom LIMIT 5',
+      [mama_id, like]
     );
-    const ficheReq = supabase
-      .from('fiches')
-      .select('id, nom')
-      .eq('mama_id', mama_id)
-      .ilike('nom', `%${q}%`);
-    const [{ data: produits }, { data: fiches }] = await Promise.all([prodReq, ficheReq]);
+    const ficheReq = query(
+      'SELECT id, nom FROM fiches_techniques WHERE mama_id = ? AND nom LIKE ? ORDER BY nom LIMIT 5',
+      [mama_id, like]
+    );
+    const [produits, fiches] = await Promise.all([prodReq, ficheReq]);
 
     const merged = [
       ...(produits || []).map((p) => ({ type: 'produit', id: p.id, nom: p.nom })),

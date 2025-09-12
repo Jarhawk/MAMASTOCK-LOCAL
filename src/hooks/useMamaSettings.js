@@ -1,11 +1,9 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { supabase } from '@/lib/supabaseClient';
 import { useCallback, useMemo } from "react";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/AuthContext';
 import { deduceEnabledModulesFromRights } from '@/lib/access';
-import { run } from '@/lib/supa/fetcher';
-import { logError } from '@/lib/supa/logError';
+import { readConfig, writeConfig } from '@/appFs';
 
 function safeQueryClient() {
   try {
@@ -38,8 +36,7 @@ const localEnabledModules = {};
 const localFeatureFlags = {};
 
 export default function useMamaSettings() {
-  const { userData } = useAuth();
-  const mamaId = userData?.mama_id;
+  const { user, mama_id: mamaId } = useAuth();
   const queryClient = safeQueryClient();
 
   const query = useQuery({
@@ -47,41 +44,26 @@ export default function useMamaSettings() {
     enabled: !!mamaId,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
-    queryFn: async ({ signal }) => {
-      const cols =
-        'logo_url, primary_color, secondary_color, email_envoi, email_alertes, dark_mode, langue, monnaie, timezone, rgpd_text, mentions_legales';
-      const q = supabase
-        .from('mamas')
-        .select(cols)
-        .eq('id', mamaId)
-        .maybeSingle()
-        .abortSignal(signal);
-
-      const { data, error } = await run(q);
-      if (error) {
-        logError('mamas maybeSingle', error);
-        return defaults;
-      }
-      return data ?? defaults;
+    queryFn: async () => {
+      const cfg = (await readConfig()) || {};
+      const settings = cfg.mamaSettings || {};
+      return { ...defaults, ...settings };
     },
   });
 
   const updateMamaSettings = useCallback(
     async (fields) => {
       if (!mamaId) return { error: 'missing mama_id' };
-      const { data, error } = await supabase.
-      from('mamas').
-      update(fields).
-      eq('id', mamaId).
-      select().
-      maybeSingle();
-      if (!error && data) {
-        queryClient.setQueryData(['mama-settings', mamaId], (old) => ({
-          ...(old || {}),
-          ...data
-        }));
-      }
-      return { data, error };
+      const cfg = (await readConfig()) || {};
+      const current = cfg.mamaSettings || {};
+      const next = { ...current, ...fields };
+      cfg.mamaSettings = next;
+      await writeConfig(cfg);
+      queryClient.setQueryData(['mama-settings', mamaId], (old) => ({
+        ...(old || {}),
+        ...next,
+      }));
+      return { data: next, error: null };
     },
     [mamaId, queryClient]
   );
@@ -89,19 +71,19 @@ export default function useMamaSettings() {
   const settings = useMemo(() => query.data ?? defaults, [query.data]);
 
   const fallbackModules = useMemo(
-    () => deduceEnabledModulesFromRights(userData?.access_rights),
-    [userData?.access_rights]
+    () => deduceEnabledModulesFromRights(user?.access_rights),
+    [user?.access_rights]
   );
 
   const enabledModules = useMemo(() => {
-    const em = query.data?.enabled_modules;
+    const em = settings?.enabled_modules;
     if (em && Object.keys(em).length > 0) return em;
     if (Object.keys(fallbackModules).length > 0) return fallbackModules;
     return localEnabledModules;
-  }, [query.data?.enabled_modules, fallbackModules]);
+  }, [settings?.enabled_modules, fallbackModules]);
   const featureFlags = useMemo(
-    () => query.data?.feature_flags ?? localFeatureFlags,
-    [query.data?.feature_flags]
+    () => settings?.feature_flags ?? localFeatureFlags,
+    [settings?.feature_flags]
   );
 
   return {

@@ -1,6 +1,6 @@
-import supabase from '@/lib/supabase';import { useEffect, useState } from 'react';
-
+import { useEffect, useState } from "react";
 import { useAuth } from '@/hooks/useAuth';
+import { top_fournisseurs_list } from '@/lib/db';
 
 export default function useTopFournisseurs() {
   const { mama_id, loading: authLoading } = useAuth() || {};
@@ -9,26 +9,20 @@ export default function useTopFournisseurs() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (authLoading) return;
-    if (!mama_id) return;
+    if (authLoading || !mama_id) return;
 
     const fetchData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const { data, error } = await supabase.
-        from('v_top_fournisseurs').
-        select('fournisseur_id, montant, mois').
-        eq('mama_id', mama_id);
-
-        if (error) throw error;
-
-        const rows = (data || []).map((r) => ({
-          id: r.fournisseur_id,
-          montant: r.montant,
-          mois: r.mois
-        }));
-        setData(rows);
+        const rows = await top_fournisseurs_list(mama_id);
+        setData(
+          (rows || []).map((r) => ({
+            id: r.id,
+            montant: Number(r.montant || 0),
+            mois: r.mois,
+          }))
+        );
       } catch (e) {
         setError(e);
         setData([]);

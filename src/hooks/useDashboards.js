@@ -1,11 +1,16 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState, useCallback } from "react";
-
 import { useAuth } from '@/hooks/useAuth';
+import {
+  dashboards_list,
+  dashboard_create,
+  gadget_add,
+  gadget_update,
+  gadget_delete,
+} from "@/lib/db";
 
 export function useDashboards() {
-  const { user_id, mama_id } = useAuth();
+  const { id: user_id, mama_id } = useAuth();
   const [dashboards, setDashboards] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,119 +19,95 @@ export function useDashboards() {
     if (!user_id || !mama_id) return [];
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("tableaux_de_bord").
-    select("*, gadgets:gadgets!tableau_id(*)").
-    eq("utilisateur_id", user_id).
-    eq("mama_id", mama_id).
-    order("created_at", { ascending: true });
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
+    try {
+      const data = await dashboards_list(user_id, mama_id);
+      setDashboards(Array.isArray(data) ? data : []);
+      return data || [];
+    } catch (e) {
+      setError(e.message || e);
       setDashboards([]);
       return [];
+    } finally {
+      setLoading(false);
     }
-    setDashboards(Array.isArray(data) ? data : []);
-    return data || [];
   }, [user_id, mama_id]);
 
   async function createDashboard(nom) {
     if (!user_id || !mama_id) return null;
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("tableaux_de_bord").
-    insert([{ nom, utilisateur_id: user_id, mama_id }]).
-    select().
-    single();
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
+    try {
+      const data = await dashboard_create({ nom, utilisateur_id: user_id, mama_id });
+      setDashboards((d) => [...d, { ...data, widgets: [] }]);
+      return data;
+    } catch (e) {
+      setError(e.message || e);
       return null;
+    } finally {
+      setLoading(false);
     }
-    setDashboards((d) => [...d, { ...data, widgets: [] }]);
-    return data;
   }
 
   async function addWidget(dashboardId, config) {
     if (!dashboardId) return null;
     setLoading(true);
     setError(null);
-    const { data: ordreData } = await supabase.
-    from("gadgets").
-    select("ordre").
-    eq("tableau_id", dashboardId).
-    order("ordre", { ascending: false }).
-    limit(1).
-    single();
-    const ordre = ordreData ? (ordreData.ordre || 0) + 1 : 0;
-    const { data, error } = await supabase.
-    from("gadgets").
-    insert([{ tableau_id: dashboardId, config, ordre, mama_id }]).
-    select().
-    single();
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
+    try {
+      const data = await gadget_add({ tableau_id: dashboardId, config, mama_id });
+      setDashboards((ds) =>
+        ds.map((db) =>
+          db.id === dashboardId
+            ? { ...db, widgets: [...(db.widgets || []), data] }
+            : db
+        )
+      );
+      return data;
+    } catch (e) {
+      setError(e.message || e);
       return null;
+    } finally {
+      setLoading(false);
     }
-    setDashboards((ds) =>
-    ds.map((db) =>
-    db.id === dashboardId ?
-    { ...db, widgets: [...(db.widgets || []), data] } :
-    db
-    )
-    );
-    return data;
   }
 
   async function updateWidget(dashboardId, id, values) {
     if (!dashboardId || !id) return null;
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("gadgets").
-    update(values).
-    eq("id", id).
-    eq("tableau_id", dashboardId).
-    eq("mama_id", mama_id).
-    select().
-    single();
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
+    try {
+      const data = await gadget_update(id, values);
+      setDashboards((ds) =>
+        ds.map((db) => ({
+          ...db,
+          widgets: db.widgets?.map((w) => (w.id === id ? data : w)) || [],
+        }))
+      );
+      return data;
+    } catch (e) {
+      setError(e.message || e);
       return null;
+    } finally {
+      setLoading(false);
     }
-    setDashboards((ds) =>
-    ds.map((db) => ({
-      ...db,
-      widgets: db.widgets?.map((w) => w.id === id ? data : w) || []
-    }))
-    );
-    return data;
   }
 
   async function deleteWidget(dashboardId, id) {
     if (!dashboardId || !id) return;
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("gadgets").
-    delete().
-    eq("id", id).
-    eq("tableau_id", dashboardId).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
-      return;
+    try {
+      await gadget_delete(id);
+      setDashboards((ds) =>
+        ds.map((db) => ({
+          ...db,
+          widgets: db.widgets?.filter((w) => w.id !== id) || [],
+        }))
+      );
+    } catch (e) {
+      setError(e.message || e);
+    } finally {
+      setLoading(false);
     }
-    setDashboards((ds) =>
-    ds.map((db) => ({
-      ...db,
-      widgets: db.widgets?.filter((w) => w.id !== id) || []
-    }))
-    );
   }
 
   return {
