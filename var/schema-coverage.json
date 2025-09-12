@@ -361,7 +361,7 @@
     "src/pages/Journal.jsx",
     "src/pages/Login.jsx",
     "src/pages/NotFound.jsx",
-    "src/pages/Onboarding.jsx",
+    "src/pages/Onboarding.tsx",
     "src/pages/Parametres/Familles.jsx",
     "src/pages/Pertes.jsx",
     "src/pages/Planning.jsx",

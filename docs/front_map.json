@@ -973,7 +973,7 @@
     },
     {
       "name": "Onboarding",
-      "file": "src/pages/Onboarding.jsx"
+      "file": "src/pages/Onboarding.tsx"
     },
     {
       "name": "Pertes",
@@ -2693,7 +2693,7 @@
     },
     {
       "name": "AuthCtx",
-      "file": "src/contexts/AuthContext.jsx"
+      "file": "src/context/AuthContext.tsx"
     }
   ],
   "dataContracts": [

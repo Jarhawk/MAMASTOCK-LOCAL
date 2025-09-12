@@ -7,7 +7,7 @@ Mise en place d'une authentification locale avec bcrypt, ajout d'une page Login 
 - scripts/seed-admin.js
 - src/pages/Login.jsx
 - src/router.jsx
-- src/contexts/AuthContext.jsx
+- src/context/AuthContext.tsx
 - src/db/users.json
 - public/migrations/002_seed.sql
 - db/sqlite/002_seed.sql
