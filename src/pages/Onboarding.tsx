@@ -1,60 +1,265 @@
-/// <reference types="vite/client" />
 import React, { useEffect, useState } from "react";
-import { steps, Step } from "@/onboarding/steps";
+import {
+  locateDb,
+  openDb,
+  tableCount,
+  ensureSeeds,
+  getMigrationsState,
+  isTauri,
+} from "@/lib/db/sql";
+import { registerLocal, loginLocal } from "@/auth/localAccount";
+
+const MODIFIED_SRC_FILES = [
+  "src/lib/db/sql.ts",
+  "src/pages/Onboarding.tsx",
+  "src/pages/Dashboard.jsx",
+];
 
 export default function Onboarding() {
-  const [status, setStatus] = useState<Record<string, boolean>>({});
+  const [state, setState] = useState<any>({});
   const [busy, setBusy] = useState(false);
+  const [reportPath, setReportPath] = useState<string | null>(null);
+  const [lastSeeds, setLastSeeds] = useState({
+    unites: 0,
+    familles: 0,
+    sous_familles: 0,
+  });
 
-  async function refresh() {
-    const s: Record<string, boolean> = {};
-    for (const st of steps) s[st.id] = await st.isDone();
-    setStatus(s);
+  async function checkAll() {
+    const s: any = {};
+    s.tauri = { ok: isTauri };
+    if (isTauri) {
+      const p = await locateDb();
+      s.dbFound = { ok: !!p, path: p };
+      try {
+        await openDb();
+        s.dbConnect = { ok: true };
+      } catch (e: any) {
+        s.dbConnect = { ok: false, error: e.message };
+      }
+      try {
+        const m = await getMigrationsState();
+        s.migrations = {
+          ok: m.migrationsTable,
+          userVersion: m.userVersion,
+          rows: m.rows,
+        };
+      } catch (e: any) {
+        s.migrations = { ok: false, error: e.message, userVersion: 0, rows: 0 };
+      }
+      try {
+        const un = await tableCount("unites");
+        const fa = await tableCount("familles");
+        const sf = await tableCount("sous_familles");
+        s.seeds = { ok: un > 0 && fa > 0 && sf > 0, inserted: lastSeeds };
+      } catch (e: any) {
+        s.seeds = { ok: false, error: e.message, inserted: lastSeeds };
+      }
+      try {
+        const adm = await checkAdmin();
+        s.admin = { ok: adm.present, email: adm.email, path: adm.path };
+      } catch (e: any) {
+        s.admin = { ok: false, error: e.message };
+      }
+    }
+    setState(s);
+    const path = await buildReport(s);
+    if (path) setReportPath(path);
   }
 
-  useEffect(() => { refresh(); }, []);
+  useEffect(() => {
+    checkAll();
+  }, []);
 
-  const allDone = Object.values(status).every(Boolean);
+  async function buildReport(s: any) {
+    if (!isTauri) return null;
+    const lines: string[] = [];
+    lines.push(`# Onboarding report`);
+    lines.push(`Date: ${new Date().toISOString()}`);
+    lines.push(`DB path: ${s.dbFound?.path || "(introuvable)"}`);
+    lines.push(`- Tauri: ${s.tauri.ok ? "OK" : "KO"}`);
+    lines.push(`- DB trouv\u00e9e: ${s.dbFound?.ok ? "OK" : "KO"}`);
+    lines.push(
+      `- Connexion DB: ${s.dbConnect?.ok ? "OK" : "KO"}${s.dbConnect?.error ? " - " + s.dbConnect.error : ""}`
+    );
+    lines.push(
+      `- Migrations: ${s.migrations?.ok ? "OK" : "KO"} (user_version=${s.migrations?.userVersion}, rows=${s.migrations?.rows})`
+    );
+    const ins = s.seeds?.inserted || { unites: 0, familles: 0, sous_familles: 0 };
+    lines.push(
+      `- Seeds: ${s.seeds?.ok ? "OK" : "KO"} (u=${ins.unites}, f=${ins.familles}, sf=${ins.sous_familles})`
+    );
+    lines.push(
+      `- Admin: ${s.admin?.ok ? "OK" : "KO"}${s.admin?.email ? " (" + s.admin.email + ")" : ""}`
+    );
+    lines.push("\nFichiers modifi\u00e9s dans src/:");
+    for (const f of MODIFIED_SRC_FILES) lines.push(`- ${f}`);
+    const txt = lines.join("\n");
+    return await writeReport(txt);
+  }
 
-  async function run(st: Step) {
+  async function writeReport(text: string) {
+    if (!isTauri) return null;
+    const { appDataDir, join } = await import("@tauri-apps/api/path");
+    const { exists, mkdir, writeTextFile } = await import("@tauri-apps/plugin-fs");
+    const base = await appDataDir();
+    const dir = await join(base, "MamaStock");
+    if (!(await exists(dir))) await mkdir(dir, { recursive: true });
+    const file = await join(dir, "onboarding-fix-report.md");
+    await writeTextFile(file, text);
+    return file;
+  }
+
+  async function checkAdmin() {
+    const { appDataDir, join } = await import("@tauri-apps/api/path");
+    const { exists, mkdir, readTextFile, writeTextFile } = await import(
+      "@tauri-apps/plugin-fs"
+    );
+    const base = await appDataDir();
+    const dir = await join(base, "MamaStock");
+    if (!(await exists(dir))) await mkdir(dir, { recursive: true });
+    const file = await join(dir, "users.json");
+    if (!(await exists(file))) {
+      await writeTextFile(file, "[]");
+      return { present: false, email: null, path: file };
+    }
+    const txt = await readTextFile(file);
+    let arr: any[] = [];
+    try {
+      arr = JSON.parse(txt);
+    } catch {}
+    const adm = arr.find((u) => u.role === "admin") || arr[0];
+    return { present: !!adm, email: adm?.email || null, path: file };
+  }
+
+  async function ensureAdmin() {
+    try {
+      const u = await registerLocal("admin@mamastock.local", "admin123");
+      return u.email;
+    } catch {
+      const u = await loginLocal("admin@mamastock.local", "admin123");
+      return u.email;
+    }
+  }
+
+  async function fix(step: string) {
+    if (!isTauri) return;
     setBusy(true);
-    try { await st.ensure(); }
-    finally { setBusy(false); await refresh(); }
+    try {
+      if (step === "dbFound") {
+        const { homeDir, join } = await import("@tauri-apps/api/path");
+        const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
+        const h = await homeDir();
+        const dir = await join(h, "MamaStock", "data");
+        if (!(await exists(dir))) await mkdir(dir, { recursive: true });
+        await openDb();
+      } else if (step === "dbConnect") {
+        await openDb();
+      } else if (step === "migrations") {
+        const db = await openDb();
+        await db.execute(
+          "CREATE TABLE IF NOT EXISTS __migrations__ (filename TEXT PRIMARY KEY, applied_at TEXT NOT NULL)"
+        );
+        await db.execute(
+          "CREATE TABLE IF NOT EXISTS unites (id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT NOT NULL UNIQUE, abbr TEXT, actif INTEGER NOT NULL DEFAULT 1)"
+        );
+        await db.execute(
+          "CREATE TABLE IF NOT EXISTS familles (id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT NOT NULL UNIQUE, actif INTEGER NOT NULL DEFAULT 1)"
+        );
+        await db.execute(
+          "CREATE TABLE IF NOT EXISTS sous_familles (id INTEGER PRIMARY KEY AUTOINCREMENT, famille_id INTEGER NOT NULL, nom TEXT NOT NULL, actif INTEGER NOT NULL DEFAULT 1, UNIQUE(famille_id, nom), FOREIGN KEY(famille_id) REFERENCES familles(id) ON UPDATE CASCADE ON DELETE RESTRICT)"
+        );
+        await db.execute("PRAGMA user_version=1");
+        await db.execute(
+          "INSERT OR IGNORE INTO __migrations__(filename, applied_at) VALUES ('001_schema.sql', datetime('now'))"
+        );
+      } else if (step === "seeds") {
+        const r = await ensureSeeds();
+        setLastSeeds(r);
+      } else if (step === "admin") {
+        await ensureAdmin();
+      }
+    } finally {
+      setBusy(false);
+      await checkAll();
+    }
+  }
+
+  const steps = [
+    { id: "tauri", title: "Tauri d\u00e9tect\u00e9" },
+    { id: "dbFound", title: "DB trouv\u00e9e" },
+    { id: "dbConnect", title: "Connexion DB OK" },
+    {
+      id: "migrations",
+      title: "Migrations d\u00e9tect\u00e9es",
+    },
+    { id: "seeds", title: "Unit\u00e9s/Familles seed OK" },
+    { id: "admin", title: "Admin local pr\u00e9sent" },
+  ];
+
+  function statusLabel(st: any) {
+    if (!st) return "";
+    if (st.ok) return "OK" + (st.email ? ` (${st.email})` : st.path ? ` (${st.path})` : "");
+    return "KO" + (st.error ? `: ${st.error}` : "");
   }
 
   return (
-    <div className="flex items-center justify-center h-full">
-      <div className="w-[620px] max-w-[90vw] rounded-2xl p-6 bg-slate-800/40 border border-slate-600/40">
-        <h2 className="text-slate-100 text-xl mb-4">Onboarding</h2>
-        <ul className="space-y-3">
-          {steps.map(st => (
-            <li key={st.id} className="flex items-start justify-between gap-3 p-3 rounded-xl bg-slate-900/40">
-              <div>
-                <div className="text-slate-100 font-medium">{st.title}</div>
-                {st.description && <div className="text-slate-400 text-sm">{st.description}</div>}
-              </div>
-              <div className="flex items-center gap-2">
-                {status[st.id] ? (
-                  <span className="text-emerald-400 text-sm">✓ Fait</span>
-                ) : (
-                  <button disabled={busy}
-                          onClick={() => run(st)}
-                          className="px-3 py-1 rounded-md bg-amber-500/90 hover:bg-amber-500 text-black text-sm">
-                    Faire
+    <div className="p-4">
+      {!isTauri && (
+        <div className="mb-4 text-red-500">Onboarding n\u00e9cessite Tauri (npx tauri dev)</div>
+      )}
+      <div className="mb-2">
+        <button
+          onClick={checkAll}
+          disabled={busy || !isTauri}
+          className="px-3 py-1 bg-blue-500 text-white rounded disabled:opacity-50"
+          id="check-all"
+          name="check-all"
+        >
+          Tout v\u00e9rifier
+        </button>
+      </div>
+      <table className="w-full text-sm">
+        <tbody>
+          {steps.map((st) => (
+            <tr key={st.id} className="border-b">
+              <td className="p-2">{st.title}</td>
+              <td className="p-2">{statusLabel(state[st.id])}</td>
+              <td className="p-2 text-right">
+                {!state[st.id]?.ok && (
+                  <button
+                    onClick={() => fix(st.id)}
+                    disabled={busy || !isTauri}
+                    className="px-2 py-1 bg-amber-400 text-black rounded disabled:opacity-50"
+                    id={`fix-${st.id}`}
+                    name={`fix-${st.id}`}
+                  >
+                    Corriger
                   </button>
                 )}
-              </div>
-            </li>
+              </td>
+            </tr>
           ))}
-        </ul>
-        <div className="mt-4 flex justify-end gap-2">
-          <a href="#/" className="px-3 py-1 text-slate-300 text-sm">Passer</a>
-          <a href="#/" className={"px-3 py-1 rounded-md text-sm " + (allDone ? "bg-lime-400 text-black" : "bg-slate-600/50 text-slate-300 pointer-events-none")}>
-            Terminer
-          </a>
+        </tbody>
+      </table>
+      {reportPath && (
+        <div className="mt-4 text-sm">
+          Rapport: {" "}
+          <button
+            onClick={() => openReport(reportPath)}
+            className="text-blue-500 underline"
+            id="open-report"
+            name="open-report"
+          >
+            ouvrir
+          </button>
         </div>
-      </div>
+      )}
     </div>
   );
 }
 
+async function openReport(path: string) {
+  const { open } = await import("@tauri-apps/plugin-shell");
+  await open(path);
+}
