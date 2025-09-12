@@ -9,6 +9,13 @@ INSERT INTO meta(schema_version)
   SELECT '1'
   WHERE NOT EXISTS (SELECT 1 FROM meta);
 
+-- Table des migrations (historique des migrations appliquées)
+-- ADDED FROM FRONT SCAN: suivi des migrations locales
+CREATE TABLE IF NOT EXISTS __migrations__ (
+  filename TEXT PRIMARY KEY,
+  applied_at TEXT NOT NULL
+);
+
 -- Table des utilisateurs
 CREATE TABLE IF NOT EXISTS utilisateurs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,6 +34,42 @@ CREATE TABLE IF NOT EXISTS fournisseurs (
   UNIQUE(nom)
 );
 
+-- Paramétrage: unités
+-- ADDED FROM FRONT SCAN: support des unités paramétrables
+CREATE TABLE IF NOT EXISTS unites (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nom TEXT NOT NULL UNIQUE,
+  abbr TEXT,
+  actif INTEGER NOT NULL DEFAULT 1
+);
+
+-- Paramétrage: familles
+-- ADDED FROM FRONT SCAN: support des familles de produits
+CREATE TABLE IF NOT EXISTS familles (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nom TEXT NOT NULL UNIQUE,
+  actif INTEGER NOT NULL DEFAULT 1
+);
+
+-- Paramétrage: sous-familles
+-- ADDED FROM FRONT SCAN: support des sous-familles de produits
+CREATE TABLE IF NOT EXISTS sous_familles (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  famille_id INTEGER NOT NULL,
+  nom TEXT NOT NULL,
+  actif INTEGER NOT NULL DEFAULT 1,
+  UNIQUE(famille_id, nom),
+  FOREIGN KEY(famille_id) REFERENCES familles(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+-- Zones de stockage pour inventaires
+-- ADDED FROM FRONT SCAN: gestion des zones d'inventaire
+CREATE TABLE IF NOT EXISTS inventaire_zones (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nom TEXT NOT NULL UNIQUE,
+  actif INTEGER NOT NULL DEFAULT 1
+);
+
 -- Table des produits
 CREATE TABLE IF NOT EXISTS produits (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,6 +79,16 @@ CREATE TABLE IF NOT EXISTS produits (
   actif INTEGER NOT NULL DEFAULT 1,
   pmp REAL NOT NULL DEFAULT 0,
   stock_theorique REAL NOT NULL DEFAULT 0,
+  valeur_stock REAL NOT NULL DEFAULT 0, -- ADDED FROM FRONT SCAN: valorisation du stock
+  unite_id INTEGER,
+  famille_id INTEGER,
+  sous_famille_id INTEGER,
+  stock_min REAL NOT NULL DEFAULT 0, -- ADDED FROM FRONT SCAN: seuil minimal de stock
+  zone_id INTEGER,
+  FOREIGN KEY(unite_id) REFERENCES unites(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  FOREIGN KEY(famille_id) REFERENCES familles(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  FOREIGN KEY(sous_famille_id) REFERENCES sous_familles(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  FOREIGN KEY(zone_id) REFERENCES inventaire_zones(id) ON UPDATE CASCADE ON DELETE SET NULL,
   UNIQUE(nom)
 );
 
@@ -44,7 +97,7 @@ CREATE TABLE IF NOT EXISTS factures (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   fournisseur_id INTEGER NOT NULL,
   date_iso TEXT NOT NULL,
-  FOREIGN KEY(fournisseur_id) REFERENCES fournisseurs(id)
+  FOREIGN KEY(fournisseur_id) REFERENCES fournisseurs(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 -- Table des lignes de facture
@@ -54,44 +107,196 @@ CREATE TABLE IF NOT EXISTS facture_lignes (
   produit_id INTEGER NOT NULL,
   quantite REAL NOT NULL,
   prix_unitaire REAL NOT NULL,
-  FOREIGN KEY(facture_id) REFERENCES factures(id),
-  FOREIGN KEY(produit_id) REFERENCES produits(id)
+  FOREIGN KEY(facture_id) REFERENCES factures(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(produit_id) REFERENCES produits(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 -- Index pour la recherche
 CREATE INDEX IF NOT EXISTS idx_fournisseurs_nom ON fournisseurs(nom);
 CREATE INDEX IF NOT EXISTS idx_produits_nom ON produits(nom);
+CREATE INDEX IF NOT EXISTS idx_produits_famille ON produits(famille_id);
+CREATE INDEX IF NOT EXISTS idx_produits_sous_famille ON produits(sous_famille_id);
+CREATE INDEX IF NOT EXISTS idx_produits_unite ON produits(unite_id);
+CREATE INDEX IF NOT EXISTS idx_produits_zone ON produits(zone_id);
 CREATE INDEX IF NOT EXISTS idx_factures_date ON factures(date_iso);
 CREATE INDEX IF NOT EXISTS idx_facture_lignes_produit ON facture_lignes(produit_id);
 CREATE INDEX IF NOT EXISTS idx_facture_lignes_facture ON facture_lignes(facture_id);
 
--- Trigger: mise à jour du PMP et du stock lors de l'insertion d'une ligne de facture
+-- Inventaires
+-- ADDED FROM FRONT SCAN: inventaires périodiques
+CREATE TABLE IF NOT EXISTS inventaires (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  date_iso TEXT NOT NULL,
+  zone_id INTEGER,
+  reference TEXT,
+  cloture INTEGER NOT NULL DEFAULT 0,
+  FOREIGN KEY(zone_id) REFERENCES inventaire_zones(id) ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+-- Lignes d'inventaire
+-- ADDED FROM FRONT SCAN: détails des inventaires
+CREATE TABLE IF NOT EXISTS inventaire_lignes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  inventaire_id INTEGER NOT NULL,
+  produit_id INTEGER NOT NULL,
+  quantite_reelle REAL NOT NULL,
+  quantite_theorique REAL NOT NULL DEFAULT 0,
+  FOREIGN KEY(inventaire_id) REFERENCES inventaires(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(produit_id) REFERENCES produits(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_inventaire_lignes_inv ON inventaire_lignes(inventaire_id);
+CREATE INDEX IF NOT EXISTS idx_inventaire_lignes_prod ON inventaire_lignes(produit_id);
+
+-- Réquisitions (sorties de stock internes)
+-- ADDED FROM FRONT SCAN: gestion des réquisitions
+CREATE TABLE IF NOT EXISTS requisitions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  date_iso TEXT NOT NULL,
+  reference TEXT
+);
+
+CREATE TABLE IF NOT EXISTS requisition_lignes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  requisition_id INTEGER NOT NULL,
+  produit_id INTEGER NOT NULL,
+  quantite REAL NOT NULL,
+  FOREIGN KEY(requisition_id) REFERENCES requisitions(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(produit_id) REFERENCES produits(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_requisition_lignes_req ON requisition_lignes(requisition_id);
+CREATE INDEX IF NOT EXISTS idx_requisition_lignes_prod ON requisition_lignes(produit_id);
+
+-- Recettes / fiches techniques
+-- ADDED FROM FRONT SCAN: gestion des recettes
+CREATE TABLE IF NOT EXISTS recettes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nom TEXT NOT NULL UNIQUE,
+  description TEXT,
+  actif INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS recette_lignes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  recette_id INTEGER NOT NULL,
+  produit_id INTEGER NOT NULL,
+  quantite REAL NOT NULL,
+  FOREIGN KEY(recette_id) REFERENCES recettes(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(produit_id) REFERENCES produits(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_recette_lignes_recette ON recette_lignes(recette_id);
+CREATE INDEX IF NOT EXISTS idx_recette_lignes_produit ON recette_lignes(produit_id);
+
+-- Menu du jour
+-- ADDED FROM FRONT SCAN: planification des recettes
+CREATE TABLE IF NOT EXISTS menus (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  date_iso TEXT NOT NULL UNIQUE,
+  description TEXT
+);
+
+CREATE TABLE IF NOT EXISTS menu_recettes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  menu_id INTEGER NOT NULL,
+  recette_id INTEGER NOT NULL,
+  portions REAL NOT NULL DEFAULT 1,
+  FOREIGN KEY(menu_id) REFERENCES menus(id) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(recette_id) REFERENCES recettes(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_menu_recettes_menu ON menu_recettes(menu_id);
+CREATE INDEX IF NOT EXISTS idx_menu_recettes_recette ON menu_recettes(recette_id);
+
+-- Tâches
+-- ADDED FROM FRONT SCAN: suivi des tâches
+CREATE TABLE IF NOT EXISTS taches (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  titre TEXT NOT NULL,
+  description TEXT,
+  priorite INTEGER NOT NULL DEFAULT 0,
+  date_echeance TEXT,
+  statut TEXT NOT NULL DEFAULT 'ouvert',
+  utilisateur_id INTEGER,
+  FOREIGN KEY(utilisateur_id) REFERENCES utilisateurs(id) ON UPDATE CASCADE ON DELETE SET NULL
+);
+CREATE INDEX IF NOT EXISTS idx_taches_statut ON taches(statut);
+CREATE INDEX IF NOT EXISTS idx_taches_utilisateur ON taches(utilisateur_id);
+
+-- Achats recommandés
+-- ADDED FROM FRONT SCAN: recommandations d'achat
+CREATE TABLE IF NOT EXISTS achats_recommandes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  produit_id INTEGER NOT NULL,
+  quantite REAL NOT NULL,
+  raison TEXT,
+  genere_le TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(produit_id) REFERENCES produits(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS idx_achats_rec_produit ON achats_recommandes(produit_id);
+
+-- Triggers de gestion du stock et du PMP
+DROP TRIGGER IF EXISTS trg_facture_ligne_insert;
+DROP TRIGGER IF EXISTS trg_facture_ligne_update;
+DROP TRIGGER IF EXISTS trg_facture_ligne_delete;
+
 CREATE TRIGGER IF NOT EXISTS trg_facture_ligne_insert
 AFTER INSERT ON facture_lignes
 BEGIN
   UPDATE produits SET
+    stock_theorique = stock_theorique + NEW.quantite,
+    valeur_stock = valeur_stock + (NEW.quantite * NEW.prix_unitaire),
     pmp = CASE
-      WHEN stock_theorique + NEW.quantite = 0 THEN pmp
-      ELSE ((pmp * stock_theorique) + (NEW.prix_unitaire * NEW.quantite)) / (stock_theorique + NEW.quantite)
-    END,
-    stock_theorique = stock_theorique + NEW.quantite
+      WHEN stock_theorique + NEW.quantite = 0 THEN 0
+      ELSE (valeur_stock + (NEW.quantite * NEW.prix_unitaire)) / (stock_theorique + NEW.quantite)
+    END
   WHERE id = NEW.produit_id;
 END;
 
--- Trigger: mise à jour du stock lors de la modification d'une ligne de facture
 CREATE TRIGGER IF NOT EXISTS trg_facture_ligne_update
 AFTER UPDATE ON facture_lignes
 BEGIN
   UPDATE produits SET
-    stock_theorique = stock_theorique - OLD.quantite + NEW.quantite
+    stock_theorique = stock_theorique - OLD.quantite + NEW.quantite,
+    valeur_stock = valeur_stock - (OLD.quantite * OLD.prix_unitaire) + (NEW.quantite * NEW.prix_unitaire),
+    pmp = CASE
+      WHEN stock_theorique - OLD.quantite + NEW.quantite = 0 THEN 0
+      ELSE (valeur_stock - (OLD.quantite * OLD.prix_unitaire) + (NEW.quantite * NEW.prix_unitaire)) /
+           (stock_theorique - OLD.quantite + NEW.quantite)
+    END
   WHERE id = NEW.produit_id;
 END;
 
--- Trigger: mise à jour du stock lors de la suppression d'une ligne de facture
 CREATE TRIGGER IF NOT EXISTS trg_facture_ligne_delete
 AFTER DELETE ON facture_lignes
 BEGIN
   UPDATE produits SET
-    stock_theorique = stock_theorique - OLD.quantite
+    stock_theorique = stock_theorique - OLD.quantite,
+    valeur_stock = valeur_stock - (OLD.quantite * OLD.prix_unitaire),
+    pmp = CASE
+      WHEN stock_theorique - OLD.quantite = 0 THEN 0
+      ELSE (valeur_stock - (OLD.quantite * OLD.prix_unitaire)) / (stock_theorique - OLD.quantite)
+    END
   WHERE id = OLD.produit_id;
+END;
+
+-- Trigger: ajustement du stock via inventaire
+-- ADDED FROM FRONT SCAN: mise à jour du stock après inventaire
+DROP TRIGGER IF EXISTS trg_inventaire_ligne_insert;
+CREATE TRIGGER IF NOT EXISTS trg_inventaire_ligne_insert
+AFTER INSERT ON inventaire_lignes
+BEGIN
+  UPDATE produits SET
+    stock_theorique = NEW.quantite_reelle,
+    valeur_stock = NEW.quantite_reelle * pmp
+  WHERE id = NEW.produit_id;
+END;
+
+-- Trigger: sortie de stock par réquisition
+-- ADDED FROM FRONT SCAN: consommation de stock
+DROP TRIGGER IF EXISTS trg_requisition_ligne_insert;
+CREATE TRIGGER IF NOT EXISTS trg_requisition_ligne_insert
+AFTER INSERT ON requisition_lignes
+BEGIN
+  UPDATE produits SET
+    stock_theorique = stock_theorique - NEW.quantite,
+    valeur_stock = valeur_stock - (NEW.quantite * pmp)
+  WHERE id = NEW.produit_id;
 END;
