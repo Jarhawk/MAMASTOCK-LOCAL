@@ -1,28 +1,12 @@
 // scripts/seed-admin.js
 import fs from "node:fs";
 import path from "node:path";
-import os from "node:os";
 import crypto from "node:crypto";
-
-/** Renvoie le dossier AppData conforme à Tauri appDataDir:
- *  - Windows: %APPDATA% (ex: C:\Users\...\AppData\Roaming)
- *  - macOS:   ~/Library/Application Support
- *  - Linux:   ~/.config
- */
-function appDataBase() {
-  const p = os.platform();
-  if (p === "win32") return process.env.APPDATA;
-  if (p === "darwin") return path.join(process.env.HOME ?? os.homedir(), "Library", "Application Support");
-  return path.join(process.env.HOME ?? os.homedir(), ".config");
-}
+import { getAppDataDbPath } from "./paths.js";
 
 // Même hiérarchie que appDataDir() côté Tauri:
-const base = appDataBase();
-if (!base) {
-  console.error("APPDATA/HOME introuvable. Abandon.");
-  process.exit(1);
-}
-const appRoot = path.join(base, "com.mamastock.local", "MamaStock");
+const dbPath = getAppDataDbPath();
+const appRoot = path.dirname(path.dirname(dbPath));
 const usersFile = path.join(appRoot, "users.json");
 
 fs.mkdirSync(appRoot, { recursive: true });
