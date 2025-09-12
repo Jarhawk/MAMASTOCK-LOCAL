@@ -33,7 +33,7 @@ import FournisseurDetail from './FournisseurDetail';
 import FournisseurForm from './FournisseurForm';
 import { PlusCircle, Search } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { fournisseurs_list } from '@/lib/db';
+import { listFournisseurs } from '@/lib/dal/fournisseurs';
 
 export default function Fournisseurs() {
   const {
@@ -63,7 +63,7 @@ export default function Fournisseurs() {
   const [diagMsg, setDiagMsg] = useState(null); // [diag]
   async function handleApiDiag() {
     if (!import.meta.env.DEV) return;
-    const rows = await fournisseurs_list();
+    const rows = await listFournisseurs();
     console.log('[api] fournisseurs', rows); // [compat]
   }
 
@@ -107,7 +107,7 @@ export default function Fournisseurs() {
 
   async function handleDiag() {
     try {
-      const rows = await fournisseurs_list();
+      const rows = await listFournisseurs();
       console.log('[diag] fournisseurs', rows); // [diag]
       setDiagMsg('Connexion SQLite OK');
     } catch (e) {
