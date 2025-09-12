@@ -1,9 +1,10 @@
-import { appDataDir, join } from "@tauri-apps/api/path";
-import { exists, mkdir, readTextFile, writeTextFile, rename } from "@tauri-apps/plugin-fs";
-
-const isTauri = !!import.meta.env.TAURI_PLATFORM;
+const isTauri = typeof window !== "undefined" && (
+  !!(window as any).__TAURI_INTERNALS__ || !!(window as any).__TAURI__
+);
 const APP_DIR = "MamaStock";
 const USERS_FILE = "users.json";
+
+export const LocalAccountEnv = { isTauri };
 
 export type LocalUser = {
   id: string;
@@ -15,65 +16,42 @@ export type LocalUser = {
   createdAt: string;
 };
 
-async function tauriBaseDir() {
-  const base = await appDataDir();
-  return base;
-}
-
-async function legacyUsersPath() {
-  const base = await tauriBaseDir();
-  const roaming = base.replace(/\\com\.mamastock\.local\\?$/i, "");
-  return await join(roaming, APP_DIR, USERS_FILE);
-}
-
-async function currentUsersDir() {
-  const base = await tauriBaseDir();
-  return await join(base, APP_DIR);
-}
-
-async function currentUsersPath() {
-  const dir = await currentUsersDir();
-  return await join(dir, USERS_FILE);
-}
-
-async function ensureCurrentDir() {
-  const dir = await currentUsersDir();
-  if (!(await exists(dir))) await mkdir(dir, { recursive: true });
-}
-
-async function migrateLegacyFile() {
-  const legacy = await legacyUsersPath();
-  const target = await currentUsersPath();
-  if (await exists(target)) return;
-  if (!(await exists(legacy))) return;
-
-  await ensureCurrentDir();
-  await rename(legacy, target);
-
-  try {
-    const txt = await readTextFile(target);
-    const arr = JSON.parse(txt);
-    if (Array.isArray(arr)) {
-      const norm = arr.map((u: any) => {
-        const out: any = { ...u };
-        if (!out.passwordHash && out.password_hash) {
-          out.passwordHash = out.password_hash;
-          delete out.password_hash;
-        }
-        if (!out.createdAt) out.createdAt = new Date().toISOString();
-        if (!out.role) out.role = "chef_site";
-        return out;
-      });
-      await writeTextFile(target, JSON.stringify(norm, null, 2));
-    }
-  } catch {}
-}
-
 async function usersPath() {
-  if (!isTauri) throw new Error("Tauri requis: lance via `npx tauri dev`.");
-  await ensureCurrentDir();
-  await migrateLegacyFile();
-  return await currentUsersPath();
+  if (!isTauri) return "browser://users.json";
+
+  const { appDataDir, join } = await import("@tauri-apps/api/path");
+  const { exists, mkdir, rename, readTextFile, writeTextFile } = await import("@tauri-apps/plugin-fs");
+
+  const base = await appDataDir();
+  const dir = await join(base, APP_DIR);
+  if (!(await exists(dir))) await mkdir(dir, { recursive: true });
+
+  const target = await join(dir, USERS_FILE);
+
+  const roaming = base.replace(/\\com\.mamastock\.local\\?$/i, "");
+  const legacy = await join(roaming, APP_DIR, USERS_FILE);
+  if (!(await exists(target)) && (await exists(legacy))) {
+    await rename(legacy, target);
+    try {
+      const txt = await readTextFile(target);
+      const arr = JSON.parse(txt);
+      if (Array.isArray(arr)) {
+        const norm = arr.map((u: any) => {
+          const out: any = { ...u };
+          if (!out.passwordHash && out.password_hash) {
+            out.passwordHash = out.password_hash;
+            delete out.password_hash;
+          }
+          if (!out.createdAt) out.createdAt = new Date().toISOString();
+          if (!out.role) out.role = "chef_site";
+          return out;
+        });
+        await writeTextFile(target, JSON.stringify(norm, null, 2));
+      }
+    } catch {}
+  }
+
+  return target;
 }
 
 async function sha256Hex(input: string) {
@@ -84,6 +62,12 @@ async function sha256Hex(input: string) {
 
 async function readUsers(): Promise<LocalUser[]> {
   const path = await usersPath();
+  if (path.startsWith("browser://")) {
+    const txt = localStorage.getItem("mama.users.json");
+    if (!txt) return [];
+    try { return JSON.parse(txt) as LocalUser[]; } catch { return []; }
+  }
+  const { exists, readTextFile } = await import("@tauri-apps/plugin-fs");
   if (!(await exists(path))) return [];
   const txt = await readTextFile(path);
   try { return JSON.parse(txt) as LocalUser[]; } catch { return []; }
@@ -91,6 +75,11 @@ async function readUsers(): Promise<LocalUser[]> {
 
 async function writeUsers(list: LocalUser[]) {
   const path = await usersPath();
+  if (path.startsWith("browser://")) {
+    localStorage.setItem("mama.users.json", JSON.stringify(list, null, 2));
+    return;
+  }
+  const { writeTextFile } = await import("@tauri-apps/plugin-fs");
   await writeTextFile(path, JSON.stringify(list, null, 2));
 }
 
