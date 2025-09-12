@@ -1,17 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-import os from "node:os";
 import Database from "better-sqlite3";
+import { getAppDataDbPath } from "./paths.js";
 
-function appDataBase() {
-  const p = os.platform();
-  if (p === "win32") return process.env.APPDATA;
-  if (p === "darwin") return path.join(process.env.HOME ?? os.homedir(), "Library", "Application Support");
-  return path.join(process.env.HOME ?? os.homedir(), ".config");
-}
-
-const base = appDataBase();
-const dbFile = path.join(base, "com.mamastock.local", "MamaStock", "data", "mamastock.db");
+const dbFile = getAppDataDbPath();
 fs.mkdirSync(path.dirname(dbFile), { recursive: true });
 
 const db = new Database(dbFile);
