@@ -1,8 +1,8 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-import { useState } from "react";
+import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
+import { zones_stock_list, getDb } from '@/lib/db';
 import { toast } from 'sonner';
 
 export function useInventaireZones() {
@@ -15,35 +15,35 @@ export function useInventaireZones() {
     if (!mama_id) return [];
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("inventaire_zones").
-    select("*").
-    eq("mama_id", mama_id).
-    eq("actif", true).
-    order("nom", { ascending: true });
-    setLoading(false);
-    if (error) {
-      setError(error);
-      toast.error(error.message);
+    try {
+      const data = await zones_stock_list(mama_id);
+      setZones(Array.isArray(data) ? data : []);
+      return data || [];
+    } catch (err) {
+      setError(err);
+      toast.error(err.message);
       return [];
+    } finally {
+      setLoading(false);
     }
-    setZones(Array.isArray(data) ? data : []);
-    return data || [];
   }
 
   async function createZone(zone) {
     if (!mama_id) return;
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("inventaire_zones").
-    insert([{ ...zone, mama_id, actif: true }]);
-    setLoading(false);
-    if (error) {
-      setError(error);
-      toast.error(error.message);
-    } else {
+    try {
+      const db = await getDb();
+      await db.execute(
+        'INSERT INTO inventaire_zones(nom,mama_id,actif) VALUES(?,?,1)',
+        [zone.nom, mama_id]
+      );
       await getZones();
+    } catch (err) {
+      setError(err);
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -51,17 +51,23 @@ export function useInventaireZones() {
     if (!mama_id || !id) return;
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("inventaire_zones").
-    update(fields).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) {
-      setError(error);
-      toast.error(error.message);
-    } else {
+    try {
+      const entries = Object.entries(fields);
+      if (!entries.length) return;
+      const sets = entries.map(([k]) => `${k} = ?`).join(', ');
+      const params = entries.map(([, v]) => v);
+      params.push(id, mama_id);
+      const db = await getDb();
+      await db.execute(
+        `UPDATE inventaire_zones SET ${sets} WHERE id = ? AND mama_id = ?`,
+        params
+      );
       await getZones();
+    } catch (err) {
+      setError(err);
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -69,28 +75,29 @@ export function useInventaireZones() {
     if (!mama_id || !id) return;
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("inventaire_zones").
-    update({ actif: false }).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) {
-      setError(error);
-      toast.error(error.message);
-    } else {
+    try {
+      const db = await getDb();
+      await db.execute(
+        'UPDATE inventaire_zones SET actif = 0 WHERE id = ? AND mama_id = ?',
+        [id, mama_id]
+      );
       await getZones();
+    } catch (err) {
+      setError(err);
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
     }
   }
 
   async function reactivateZone(id) {
     if (!mama_id || !id) return;
-    const { error } = await supabase.
-    from("inventaire_zones").
-    update({ actif: true }).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    if (!error) await getZones();
+    const db = await getDb();
+    await db.execute(
+      'UPDATE inventaire_zones SET actif = 1 WHERE id = ? AND mama_id = ?',
+      [id, mama_id]
+    );
+    await getZones();
   }
 
   return {
@@ -101,6 +108,8 @@ export function useInventaireZones() {
     createZone,
     updateZone,
     deleteZone,
-    reactivateZone
+    reactivateZone,
   };
 }
+
+export default useInventaireZones;

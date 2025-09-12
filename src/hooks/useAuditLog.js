@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
+import { exec } from '@/local/db';
 
 import { useAuth } from '@/hooks/useAuth';
 
@@ -8,31 +8,21 @@ export function useAuditLog() {
 
   async function log(action, details = null) {
     if (!mama_id) return;
-    await supabase.from("journaux_utilisateur").insert([
-    {
-      mama_id,
-      user_id: user?.id || null,
-      action,
-      details,
-      done_by: user?.id || null
-    }]
+    await exec(
+      `INSERT INTO journaux_utilisateur(mama_id, user_id, action, details, done_by)
+       VALUES(?, ?, ?, ?, ?)`,
+      [mama_id, user?.id || null, action, details, user?.id || null]
     );
   }
-
 
   async function logSecurityEvent({ type, user_id = null, description = "" }) {
     if (!mama_id) return;
     const ip = window?.location?.hostname || null;
     const navigateur = navigator.userAgent;
-    await supabase.from("logs_securite").insert([
-    {
-      mama_id,
-      type,
-      user_id: user_id || user?.id || null,
-      ip,
-      navigateur,
-      description
-    }]
+    await exec(
+      `INSERT INTO logs_securite(mama_id, type, user_id, ip, navigateur, description)
+       VALUES(?, ?, ?, ?, ?, ?)`,
+      [mama_id, type, user_id || user?.id || null, ip, navigateur, description]
     );
   }
 

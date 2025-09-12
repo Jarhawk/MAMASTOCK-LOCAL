@@ -1,97 +1,74 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
+import {
+  facture_lignes_by_facture,
+  facture_ligne_get,
+  facture_add_ligne,
+  facture_ligne_update,
+  facture_ligne_delete,
+} from "@/lib/db";
 
-import { useAuth } from '@/hooks/useAuth';
-
-// Hook managing invoice line items (facture_lignes)
 export function useInvoiceItems() {
-  const { mama_id } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch all items linked to a given invoice
   async function fetchItemsByInvoice(invoiceId) {
-    if (!invoiceId || !mama_id) return [];
+    if (!invoiceId) return [];
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("facture_lignes").
-    select(
-      "*, produit:produits!facture_lignes_produit_id_fkey(id, nom, unite_id, unite:unites!fk_produits_unite(nom), famille:familles!fk_produits_famille(nom))"
-    ).
-    eq("facture_id", invoiceId).
-    eq("mama_id", mama_id).
-    order("id");
-    setItems(data || []);
-    setLoading(false);
-    if (error) setError(error);
-    return data || [];
+    try {
+      const rows = await facture_lignes_by_facture(invoiceId);
+      setItems(rows);
+      return rows;
+    } catch (e) {
+      setError(e);
+      return [];
+    } finally {
+      setLoading(false);
+    }
   }
 
-  // Retrieve a single item by primary key
   async function fetchItemById(id) {
-    if (!id || !mama_id) return null;
-    const { data, error } = await supabase.
-    from("facture_lignes").
-    select(
-      "*, produit:produits!facture_lignes_produit_id_fkey(id, nom, unite_id, unite:unites!fk_produits_unite(nom), famille:familles!fk_produits_famille(nom))"
-    ).
-    eq("id", id).
-    eq("mama_id", mama_id).
-    single();
-    if (error) {
-      setError(error);
+    if (!id) return null;
+    try {
+      return await facture_ligne_get(id);
+    } catch (e) {
+      setError(e);
       return null;
     }
-    return data;
   }
 
-  // Insert a new item attached to an invoice
   async function addItem(invoiceId, item) {
-    if (!invoiceId || !mama_id) return { error: "no mama_id" };
-    const { produit_id, ...rest } = item || {};
-    const payload = {
-      ...rest,
-      produit_id,
-      facture_id: invoiceId,
-      mama_id
-    };
-    const { data, error } = await supabase.
-    from("facture_lignes").
-    insert([payload]);
-    if (error) setError(error);
-    return { data, error };
+    if (!invoiceId) return { error: "no invoice" };
+    try {
+      await facture_add_ligne({ facture_id: invoiceId, ...item });
+      return { error: null };
+    } catch (e) {
+      setError(e);
+      return { error: e };
+    }
   }
 
-  // Update item by id
   async function updateItem(id, fields) {
-    if (!id || !mama_id) return { error: "no mama_id" };
-    const { produit_id, ...rest } = fields || {};
-    const payload = {
-      ...rest,
-      ...(produit_id !== undefined && { produit_id })
-    };
-    const { data, error } = await supabase.
-    from("facture_lignes").
-    update(payload).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    if (error) setError(error);
-    return { data, error };
+    if (!id) return { error: "no id" };
+    try {
+      await facture_ligne_update(id, fields);
+      return { error: null };
+    } catch (e) {
+      setError(e);
+      return { error: e };
+    }
   }
 
-  // Delete item by id
   async function deleteItem(id) {
-    if (!id || !mama_id) return { error: "no mama_id" };
-    const { error } = await supabase.
-    from("facture_lignes").
-    eq("id", id).
-    eq("mama_id", mama_id).
-    delete();
-    if (error) setError(error);
-    return { error };
+    if (!id) return { error: "no id" };
+    try {
+      await facture_ligne_delete(id);
+      return { error: null };
+    } catch (e) {
+      setError(e);
+      return { error: e };
+    }
   }
 
   return {
@@ -102,6 +79,6 @@ export function useInvoiceItems() {
     fetchItemById,
     addItem,
     updateItem,
-    deleteItem
+    deleteItem,
   };
 }

@@ -1,8 +1,11 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useEffect, useState, useCallback } from "react";
-
 import { useAuth } from '@/hooks/useAuth';
+import {
+  signalements_list,
+  signalement_insert,
+  signalement_get,
+} from "@/local/signalements";
 
 export function useSignalements() {
   const { mama_id, user_id, loading: authLoading } = useAuth();
@@ -15,16 +18,11 @@ export function useSignalements() {
 
     setLoading(true);
     try {
-      const { data, error } = await supabase.
-      from("signalements").
-      select("*").
-      eq("mama_id", mama_id).
-      order("date", { ascending: false });
-
-      if (error) throw error;
-      setSignalements(data || []);
+      const list = await signalements_list({ mama_id });
+      setSignalements(Array.isArray(list) ? list : []);
+      setError(null);
     } catch (err) {
-      console.error("❌ Erreur chargement signalements:", err.message);
+      console.error("❌ Erreur chargement signalements:", err?.message);
       setError(err);
       setSignalements([]);
     } finally {
@@ -39,22 +37,12 @@ export function useSignalements() {
   const addSignalement = async (newSignalement) => {
     if (!mama_id || authLoading) return;
 
-    const { error } = await supabase.
-    from("signalements").
-    insert([
-    {
+    await signalement_insert({
       ...newSignalement,
       mama_id,
       created_by: user_id,
-      date: new Date().toISOString()
-    }]
-    );
-
-    if (error) {
-      console.error("❌ Erreur ajout signalement:", error.message);
-      throw error;
-    }
-
+      date: new Date().toISOString(),
+    });
     await fetchSignalements();
   };
 
@@ -70,25 +58,17 @@ export function useSignalement(id) {
   useEffect(() => {
     const fetchSignalement = async () => {
       if (!id || !mama_id || authLoading) return;
-
       try {
-        const { data, error } = await supabase.
-        from("signalements").
-        select("*").
-        eq("id", id).
-        eq("mama_id", mama_id).
-        single();
-
-        if (error) throw error;
-        setSignalement(data);
+        const sig = await signalement_get(mama_id, id);
+        setSignalement(sig);
+        setError(null);
       } catch (err) {
-        console.error("❌ Erreur fetch signalement:", err.message);
+        console.error("❌ Erreur fetch signalement:", err?.message);
         setError(err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchSignalement();
   }, [id, mama_id, authLoading]);
 

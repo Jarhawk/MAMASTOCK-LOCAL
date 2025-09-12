@@ -1,10 +1,9 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'sonner';
+import { readConfig } from '@/appFs';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 
 const MultiMamaContext = createContext();
@@ -29,32 +28,19 @@ export function MultiMamaProvider({ children }) {
 
   async function fetchMamas() {
     setLoading(true);
-    let data = [];
     try {
-      if (isSuperadmin) {
-        const { data: rows, error } = await supabase.
-        from('mamas').
-        select('id, nom').
-        order('nom');
-        if (error) throw error;
-        data = rows || [];
-      } else if (authMamaId) {
-        const { data: row, error } = await supabase.
-        from('mamas').
-        select('id, nom').
-        eq('id', authMamaId).
-        maybeSingle();
-        if (error) throw error;
-        data = row ? [row] : [];
+      const cfg = (await readConfig()) || {};
+      let data = Array.isArray(cfg.mamas) ? cfg.mamas : [];
+      if (!isSuperadmin && authMamaId) {
+        data = data.filter((m) => m.id === authMamaId);
       }
-    } catch (err) {
-      toast.error(err.message || 'Erreur chargement établissements');
+      setMamas(data);
+      if (!mamaActif && data.length > 0) {
+        changeMama(data[0].id);
+      }
+    } finally {
+      setLoading(false);
     }
-    setMamas(Array.isArray(data) ? data : []);
-    if (!mamaActif && Array.isArray(data) && data.length > 0) {
-      changeMama(data[0].id);
-    }
-    setLoading(false);
   }
 
   const changeMama = (id) => {

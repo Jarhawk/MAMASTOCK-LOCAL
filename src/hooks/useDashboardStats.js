@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState, useRef, useEffect, useCallback } from "react";
+import { readText, existsFile } from "@/local/files";
 
 import { useAuth } from '@/hooks/useAuth';
 
@@ -19,49 +19,36 @@ export function useDashboardStats(options = {}) {
   const {
     auto = false,
     interval = 30000,
-    retry = 2,
     page = 1,
     pageSize = 30,
-    params = {}
   } = options;
 
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const retries = useRef(0);
   const intervalId = useRef(null);
 
-  // Fonction unique pour fetch (callback pour dépendances stables)
-  const fetchStats = useCallback(async (opts = {}) => {
+  const fetchStats = useCallback(async () => {
     if (!mama_id || authLoading) return;
     setLoading(true);
     setError(null);
     try {
-      const { data, error } = await supabase.rpc("dashboard_stats", {
-        mama_id_param: mama_id,
-        page_param: opts.page || page,
-        page_size_param: opts.pageSize || pageSize,
-        ...params,
-        ...opts.params // surcharge possible
-      });
-      if (error) throw error;
-      setStats(data);
-      retries.current = 0; // Reset retry si succès
-    } catch (err) {
-      console.error('Erreur dashboard_stats:', err);
-      setError(err.message || "Erreur récupération stats dashboard.");
-      setStats(null);
-      // Retry intelligent
-      if (retries.current < retry) {
-        retries.current += 1;
-        setTimeout(() => fetchStats(opts), 1200); // attente avant retry
+      if (await existsFile("stats/dashboard_stats.json")) {
+        const txt = await readText("stats/dashboard_stats.json");
+        const json = JSON.parse(txt);
+        setStats(json);
+      } else {
+        setStats(null);
       }
+    } catch (err) {
+      console.error("Erreur dashboard_stats:", err);
+      setError(err?.message || "Erreur récupération stats dashboard.");
+      setStats(null);
     } finally {
       setLoading(false);
     }
-  }, [mama_id, authLoading, params, page, pageSize, retry]);
+  }, [mama_id, authLoading]);
 
-  // Refresh auto si demandé
   useEffect(() => {
     if (!auto) return;
     if (!mama_id || authLoading) return;
@@ -70,26 +57,23 @@ export function useDashboardStats(options = {}) {
     return () => clearInterval(intervalId.current);
   }, [auto, interval, fetchStats, mama_id, authLoading]);
 
-  // Reset stats si déconnexion/changement user
-  useEffect(() => {
-    if (!mama_id && !authLoading) setStats(null);
-  }, [mama_id, authLoading]);
-
-  // Pagination : fetch si page/pageSize changent (hors auto)
   useEffect(() => {
     if (auto) return;
     if (!mama_id || authLoading) return;
-    fetchStats({ page, pageSize });
+    fetchStats();
   }, [page, pageSize, mama_id, authLoading, auto, fetchStats]);
+
+  useEffect(() => {
+    if (!mama_id && !authLoading) setStats(null);
+  }, [mama_id, authLoading]);
 
   return {
     stats,
     loading,
     error,
     fetchStats,
-    // helpers
     refresh: fetchStats,
-    setPage: (p) => fetchStats({ page: p, pageSize }),
-    setPageSize: (sz) => fetchStats({ page, pageSize: sz })
+    setPage: () => fetchStats(),
+    setPageSize: () => fetchStats(),
   };
 }

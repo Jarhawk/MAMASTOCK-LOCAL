@@ -1,25 +1,14 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
-
-import { useAuth } from '@/hooks/useAuth';
+import { fournisseurs_inactifs } from "@/lib/db";
 
 export function useFournisseursInactifs() {
-  const { mama_id } = useAuth();
   const [fournisseurs, setFournisseurs] = useState([]);
 
   async function fetchInactifs() {
-    if (!mama_id) return [];
-    const { data, error } = await supabase.
-    from('v_fournisseurs_inactifs').
-    select('*').
-    eq('mama_id', mama_id);
-    if (error) {
-      setFournisseurs([]);
-      return [];
-    }
-    setFournisseurs(Array.isArray(data) ? data : []);
-    return data || [];
+    const rows = await fournisseurs_inactifs();
+    setFournisseurs(Array.isArray(rows) ? rows : []);
+    return rows || [];
   }
 
   return { fournisseurs, fetchInactifs };

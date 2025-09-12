@@ -1,9 +1,9 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useEffect, useState } from "react";
 
 import { toast } from "react-toastify";
 import { useAuth } from '@/hooks/useAuth';
+import { produits_list, requisitions_create, requisition_ligne_add } from "@/lib/db";
 import { LiquidBackground, TouchLight } from "@/components/LiquidBackground";
 import GlassCard from "@/components/ui/GlassCard";
 
@@ -15,11 +15,7 @@ export default function MobileRequisition() {
 
   useEffect(() => {
     if (authLoading || !mama_id) return;
-    supabase.
-    from("produits").
-    select("id, nom").
-    eq("mama_id", mama_id).
-    then(({ data }) => setProduits(data || []));
+    produits_list("", false, 1, 1000).then((rows) => setProduits(rows || []));
   }, [mama_id, authLoading]);
 
   const handleSubmit = async () => {
@@ -29,29 +25,14 @@ export default function MobileRequisition() {
       return;
     }
 
-    const { data, error } = await supabase.
-    from("requisitions").
-    insert([{ zone: "Bar", mama_id }]).
-    select("id").
-    eq("mama_id", mama_id).
-    single();
-
-    if (error || !data?.id) {
-      toast.error("Erreur lors de la création de la réquisition");
-      return;
-    }
-
-    const { error: lineError } = await supabase.
-    from("requisition_lignes").
-    insert([{ requisition_id: data.id, produit_id: selectedId, quantite, mama_id }]).
-    eq("mama_id", mama_id);
-
-    if (lineError) {
-      toast.error("Erreur lors de l'ajout du produit");
-    } else {
+    try {
+      const id = await requisitions_create({ zone: "Bar", mama_id });
+      await requisition_ligne_add({ requisition_id: id, produit_id: selectedId, quantite, mama_id });
       toast.success("Réquisition enregistrée !");
       setSelectedId("");
       setQuantite(1);
+    } catch (e) {
+      toast.error("Erreur lors de l'ajout du produit");
     }
   };
 

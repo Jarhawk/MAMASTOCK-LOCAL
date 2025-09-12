@@ -1,8 +1,6 @@
-import { supabase } from '@/lib/supabaseClient';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { run } from '@/lib/supa/fetcher';
-import { logError } from '@/lib/supa/logError';
+import { getDb } from '@/lib/db';
 
 export default function useDerniersAcces() {
   const { mama_id } = useAuth();
@@ -15,39 +13,33 @@ export default function useDerniersAcces() {
       if (!mama_id) return [];
       setLoading(true);
       setError(null);
-      const { data: rows, error: err } = await run(
-        supabase
-          .from('logs_securite')
-          .select(
-            'utilisateur_id, created_at, utilisateur:utilisateurs!logs_securite_utilisateur_id_fkey(email, auth_id)'
-          )
-          .eq('mama_id', mama_id)
-          .order('created_at', { ascending: false })
-          .limit(50)
-          .abortSignal(signal)
-      );
-      if (err) {
-        logError('useDerniersAcces', err);
+      try {
+        const db = await getDb();
+        const rows = await db.select(
+          `SELECT utilisateur_id, created_at, email
+           FROM logs_securite
+           WHERE mama_id = ?
+           ORDER BY created_at DESC
+           LIMIT 50`,
+          [mama_id]
+        );
+        const seen = {};
+        const list = [];
+        for (const row of rows || []) {
+          if (!row.utilisateur_id || seen[row.utilisateur_id]) continue;
+          seen[row.utilisateur_id] = true;
+          list.push({ id: row.utilisateur_id, email: row.email, date: row.created_at });
+          if (list.length >= 5) break;
+        }
+        setData(list);
+        setLoading(false);
+        return list;
+      } catch (err) {
         setError(err);
         setData([]);
         setLoading(false);
         return [];
       }
-      const seen = {};
-      const list = [];
-      for (const row of rows || []) {
-        if (!row.utilisateur_id || seen[row.utilisateur_id]) continue;
-        seen[row.utilisateur_id] = true;
-        list.push({
-          id: row.utilisateur_id,
-          email: row.utilisateur?.email,
-          date: row.created_at,
-        });
-        if (list.length >= 5) break;
-      }
-      setData(list);
-      setLoading(false);
-      return list;
     },
     [mama_id]
   );

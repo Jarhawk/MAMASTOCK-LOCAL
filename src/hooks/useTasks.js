@@ -1,10 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState, useCallback } from "react";
-
-import { useAuth } from '@/hooks/useAuth';
-
-const SELECT = '*, assigned:utilisateurs!taches_assigned_to_fkey(nom)';
+import { taches_list, tache_get, taches_by_status, tache_add, tache_update, tache_delete } from "@/lib/db";
+import { useAuth } from "@/hooks/useAuth";
 
 export function useTasks() {
   const { mama_id } = useAuth();
@@ -16,105 +13,87 @@ export function useTasks() {
     if (!mama_id) return [];
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from('taches').
-    select(SELECT).
-    eq('mama_id', mama_id).
-    order('next_echeance', { ascending: true });
-    setLoading(false);
-    if (error) {
-      setError(error.message);
+    try {
+      const rows = await taches_list(mama_id);
+      setTasks(Array.isArray(rows) ? rows : []);
+      return rows || [];
+    } catch (e) {
+      setError(e.message || String(e));
       return [];
+    } finally {
+      setLoading(false);
     }
-    setTasks(Array.isArray(data) ? data : []);
-    return data || [];
   }, [mama_id]);
 
   const fetchTaskById = useCallback(async (id) => {
     if (!mama_id || !id) return null;
-    const { data, error } = await supabase.
-    from('taches').
-    select(SELECT).
-    eq('id', id).
-    eq('mama_id', mama_id).
-    single();
-    if (error) {
-      setError(error.message);
+    try {
+      return await tache_get(id, mama_id);
+    } catch (e) {
+      setError(e.message || String(e));
       return null;
     }
-    return data;
   }, [mama_id]);
 
   const fetchTasksByStatus = useCallback(async (statut) => {
     if (!mama_id) return [];
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from('taches').
-    select(SELECT).
-    eq('mama_id', mama_id).
-    eq('statut', statut).
-    order('next_echeance', { ascending: true });
-    setLoading(false);
-    if (error) {
-      setError(error.message);
+    try {
+      const rows = await taches_by_status(mama_id, statut);
+      return rows || [];
+    } catch (e) {
+      setError(e.message || String(e));
       return [];
+    } finally {
+      setLoading(false);
     }
-    return data || [];
   }, [mama_id]);
 
   const addTask = useCallback(async (values) => {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("taches").
-    insert([{ ...values, mama_id }]).
-    select().
-    single();
-    setLoading(false);
-    if (error) {
-      setError(error.message);
-      return { error };
+    try {
+      const data = await tache_add({ ...values, mama_id });
+      await fetchTasks();
+      setLoading(false);
+      return data;
+    } catch (e) {
+      setLoading(false);
+      setError(e.message || String(e));
+      return { error: e };
     }
-    await fetchTasks();
-    return data;
   }, [mama_id, fetchTasks]);
 
   const updateTask = useCallback(async (id, values) => {
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("taches").
-    update(values).
-    eq("id", id).
-    eq("mama_id", mama_id).
-    select().
-    single();
-    setLoading(false);
-    if (error) {
-      setError(error.message);
-      return { error };
+    try {
+      const data = await tache_update(id, mama_id, values);
+      await fetchTasks();
+      setLoading(false);
+      return data;
+    } catch (e) {
+      setLoading(false);
+      setError(e.message || String(e));
+      return { error: e };
     }
-    await fetchTasks();
-    return data;
   }, [mama_id, fetchTasks]);
 
   const deleteTask = useCallback(async (id) => {
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("taches").
-    delete().
-    eq("id", id).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) {
-      setError(error.message);
-      return { error };
+    try {
+      await tache_delete(id, mama_id);
+      await fetchTasks();
+      setLoading(false);
+      return {};
+    } catch (e) {
+      setLoading(false);
+      setError(e.message || String(e));
+      return { error: e };
     }
-    await fetchTasks();
-    return {};
   }, [mama_id, fetchTasks]);
 
   return {

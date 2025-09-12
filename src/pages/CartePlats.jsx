@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState, useEffect } from "react";
 import { useAuth } from '@/hooks/useAuth';
+import { fiches_actives_list, familles_list } from "@/lib/db";
 
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import TableContainer from "@/components/ui/TableContainer";
@@ -19,19 +19,11 @@ export default function CartePlats() {
   useEffect(() => {
     if (!mama_id || authLoading) return;
     Promise.all([
-    supabase.
-    from("fiches_techniques").
-    select("*").
-    eq("mama_id", mama_id).
-    eq("actif", true),
-    supabase.
-    from("familles").
-    select("nom").
-    eq("mama_id", mama_id).
-    eq("actif", true)]
-    ).then(([ficheRes, familleRes]) => {
-      setFiches(ficheRes.data || []);
-      setFamilles((familleRes.data || []).map((f) => f.nom));
+      fiches_actives_list(mama_id),
+      familles_list(mama_id)
+    ]).then(([fichesRows, famillesRows]) => {
+      setFiches(fichesRows || []);
+      setFamilles((famillesRows || []).map((f) => f.nom));
     });
   }, [mama_id, authLoading]);
 

@@ -1,8 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
-
-import { useAuth } from '@/hooks/useAuth';
+import { readConfig, writeConfig } from "@/appFs";
+import { useAuth } from "@/hooks/useAuth";
 
 export function useMama() {
   const { mama_id } = useAuth();
@@ -14,28 +13,39 @@ export function useMama() {
     if (!mama_id) return null;
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("mamas").
-    select("*").
-    eq("id", mama_id).
-    single();
-    if (!error) setMama(data);
-    setError(error);
-    setLoading(false);
-    return data;
+    try {
+      const cfg = (await readConfig()) || {};
+      const list = Array.isArray(cfg.mamas) ? cfg.mamas : [];
+      const found = list.find((m) => m.id === mama_id) || null;
+      setMama(found);
+      return found;
+    } catch (err) {
+      setError(err);
+      return null;
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function updateMama(fields) {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("mamas").
-    update(fields).
-    eq("id", mama_id);
-    setError(error);
-    setLoading(false);
-    if (!error) await fetchMama();
+    try {
+      const cfg = (await readConfig()) || {};
+      const list = Array.isArray(cfg.mamas) ? cfg.mamas : [];
+      const idx = list.findIndex((m) => m.id === mama_id);
+      if (idx === -1) throw new Error("Mama introuvable");
+      list[idx] = { ...list[idx], ...fields };
+      cfg.mamas = list;
+      await writeConfig(cfg);
+      setMama(list[idx]);
+    } catch (err) {
+      setError(err);
+      return { error: err.message };
+    } finally {
+      setLoading(false);
+    }
   }
 
   return { mama, loading, error, fetchMama, updateMama };

@@ -1,8 +1,6 @@
-import { supabase } from '@/lib/supabaseClient';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { run } from '@/lib/supa/fetcher';
-import { logError } from '@/lib/supa/logError';
+import { getDb } from '@/lib/db';
 
 export default function useProduitsUtilises() {
   const { mama_id } = useAuth();
@@ -17,35 +15,34 @@ export default function useProduitsUtilises() {
       setError(null);
       const start = new Date();
       start.setDate(start.getDate() - 30);
-      const { data: rows, error: err } = await run(
-        supabase
-          .from('v_produits_utilises')
-          .select('produit_id, produit_nom, quantite, date_utilisation')
-          .eq('mama_id', mama_id)
-          .gte('date_utilisation', start.toISOString().slice(0, 10))
-          .abortSignal(signal)
-      );
-      if (err) {
-        logError('useProduitsUtilises', err);
+      try {
+        const db = await getDb();
+        const rows = await db.select(
+          `SELECT produit_id, produit_nom, quantite, date_utilisation
+           FROM v_produits_utilises
+           WHERE mama_id = ? AND date_utilisation >= ?`,
+          [mama_id, start.toISOString().slice(0, 10)]
+        );
+        const totals = {};
+        (rows || []).forEach((r) => {
+          const id = r.produit_id;
+          if (!totals[id]) {
+            totals[id] = { id, nom: r.produit_nom, total: 0 };
+          }
+          totals[id].total += Number(r.quantite || 0);
+        });
+        const list = Object.values(totals)
+          .sort((a, b) => b.total - a.total)
+          .slice(0, 5);
+        setData(list);
+        setLoading(false);
+        return list;
+      } catch (err) {
         setError(err);
         setData([]);
         setLoading(false);
         return [];
       }
-      const totals = {};
-      (rows || []).forEach((r) => {
-        const id = r.produit_id;
-        if (!totals[id]) {
-          totals[id] = { id, nom: r.produit_nom, total: 0 };
-        }
-        totals[id].total += Number(r.quantite || 0);
-      });
-      const list = Object.values(totals)
-        .sort((a, b) => b.total - a.total)
-        .slice(0, 5);
-      setData(list);
-      setLoading(false);
-      return list;
     },
     [mama_id]
   );

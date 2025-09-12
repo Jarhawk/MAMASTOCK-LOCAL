@@ -1,9 +1,9 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
+import { useMamas } from '@/hooks/useMamas';
 import { Button } from '@/components/ui/button';
 import TableContainer from '@/components/ui/TableContainer';
 import {
@@ -18,49 +18,42 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 
 export default function Mamas() {
   const { mama_id: myMama, role } = useAuth();
-  const [mamas, setMamas] = useState([]);
+  const {
+    mamas,
+    loading,
+    fetchMamas,
+    toggleMamaActive,
+    addMama,
+    updateMama,
+  } = useMamas();
   const [search, setSearch] = useState('');
   const [editMama, setEditMama] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [confirmId, setConfirmId] = useState(null);
 
   useEffect(() => {
     fetchMamas();
   }, []);
 
-  const fetchMamas = async () => {
-    setLoading(true);
-    let query = supabase.from('mamas').select('*');
-    if (role !== 'superadmin') query = query.eq('id', myMama);
-    const { data, error } = await query.order('nom', { ascending: true });
-    if (!error) setMamas(data || []);
-    setLoading(false);
-  };
-
   const handleToggleActive = async (id, actif) => {
     if (role !== 'superadmin' && id !== myMama) {
       toast.error('Action non autorisée');
       return;
     }
-    const { error } = await supabase.
-    from('mamas').
-    update({ actif }).
-    eq('id', id);
-    if (!error) {
+    const res = await toggleMamaActive(id, actif);
+    if (!res?.error) {
       toast.success(
         actif ? 'Établissement réactivé.' : 'Établissement désactivé.'
       );
-      fetchMamas();
     } else {
-      toast.error('Erreur lors de la mise à jour.');
+      toast.error(res.error || 'Erreur lors de la mise à jour.');
     }
     setConfirmId(null);
   };
 
   const filtered = mamas.filter(
     (m) =>
-    m.nom?.toLowerCase().includes(search.toLowerCase()) ||
-    m.ville?.toLowerCase().includes(search.toLowerCase())
+      m.nom?.toLowerCase().includes(search.toLowerCase()) ||
+      m.ville?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -73,13 +66,13 @@ export default function Mamas() {
           value={search}
           onChange={(e) => setSearch(e.target.value)} />
 
-        {role === 'superadmin' &&
-        <Button
-          onClick={() => setEditMama({ nom: '', ville: '', actif: true })}>
-
+        {role === 'superadmin' && (
+          <Button
+            onClick={() => setEditMama({ nom: '', ville: '', actif: true })}
+          >
             + Nouvel établissement
           </Button>
-        }
+        )}
       </div>
       <TableContainer className="mb-6">
         {loading ?
@@ -179,11 +172,15 @@ export default function Mamas() {
           </DialogDescription>
           <MamaForm
             mama={editMama}
+            mamas={mamas}
+            addMama={addMama}
+            updateMama={updateMama}
             onSaved={() => {
               fetchMamas();
               setEditMama(null);
             }}
-            onClose={() => setEditMama(null)} />
+            onClose={() => setEditMama(null)}
+          />
 
         </DialogContent>
       </Dialog>

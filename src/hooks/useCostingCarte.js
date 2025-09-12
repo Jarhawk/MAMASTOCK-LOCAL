@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
+import { costing_carte_list, settings_get } from '@/lib/db';
 import { useState, useCallback } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -20,17 +20,12 @@ export function useCostingCarte() {
       setLoading(true);
       setError(null);
       try {
-        let query = supabase.
-        from('v_costing_carte').
-        select('*').
-        eq('mama_id', mama_id);
-
-        if (filters.type) query = query.eq('type', filters.type);
-        if (filters.famille) query = query.eq('famille', filters.famille);
-        if (filters.actif !== undefined) query = query.eq('actif', filters.actif);
-
-        const { data: rows, error } = await query.order('nom');
-        if (error) throw error;
+        const rows = await costing_carte_list({
+          mama_id,
+          type: filters.type,
+          famille: filters.famille,
+          actif: filters.actif,
+        });
         setData(rows || []);
         return rows || [];
       } catch (e) {
@@ -47,12 +42,7 @@ export function useCostingCarte() {
   const fetchSettings = useCallback(
     async () => {
       if (!mama_id) return null;
-      const { data: row, error } = await supabase.
-      from('settings').
-      select('objectif_marge_pct, objectif_food_cost_pct').
-      eq('mama_id', mama_id).
-      single();
-      if (error) return null;
+      const row = await settings_get(mama_id);
       setSettings(row);
       return row;
     },

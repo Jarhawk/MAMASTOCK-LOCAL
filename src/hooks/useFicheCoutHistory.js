@@ -1,7 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
-
+import { fiche_cout_history_list } from '@/lib/db';
 import { useAuth } from '@/hooks/useAuth';
 
 export function useFicheCoutHistory() {
@@ -15,15 +14,8 @@ export function useFicheCoutHistory() {
     setLoading(true);
     setError(null);
     try {
-      const { data, error } = await supabase.
-      from("fiche_cout_history").
-      select("*").
-      eq("fiche_id", fiche_id).
-      eq("mama_id", mama_id).
-      order("changed_at", { ascending: false });
-
-      if (error) throw error;
-      setHistory(Array.isArray(data) ? data : []);
+      const rows = await fiche_cout_history_list(fiche_id);
+      setHistory(Array.isArray(rows) ? rows : []);
     } catch (err) {
       setError(err.message || "Erreur chargement historique coût fiche.");
       setHistory([]);

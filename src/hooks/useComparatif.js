@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState, useEffect, useCallback } from "react";
+import { comparatif_produit } from "@/lib/db";
 
 import { useAuth } from '@/hooks/useAuth';
 
@@ -21,46 +21,39 @@ export function useComparatif(productId) {
     }
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("fournisseur_produits").
-    select("prix_achat, date_livraison, fournisseur_id, fournisseur:fournisseur_id(nom)").
-    eq("produit_id", id).
-    eq("mama_id", mama_id).
-    order("date_livraison", { ascending: false });
-
-    if (error) {
-      setError(error);
-      setLignes([]);
-      setLoading(false);
-      return [];
-    }
-
-    const grouped = {};
-    for (const row of data || []) {
-      const fid = row.fournisseur_id;
-      if (!grouped[fid]) {
-        grouped[fid] = {
-          fournisseur: row.fournisseur?.nom || "-",
-          dernierPrix: parseFloat(row.prix_achat),
-          total: parseFloat(row.prix_achat),
-          nb: 1
-        };
-      } else {
-        grouped[fid].nb += 1;
-        grouped[fid].total += parseFloat(row.prix_achat);
+    try {
+      const data = await comparatif_produit(id);
+      const grouped = {};
+      for (const row of data || []) {
+        const fid = row.fournisseur_id;
+        const prix = parseFloat(row.prix_achat);
+        if (!grouped[fid]) {
+          grouped[fid] = {
+            fournisseur: row.fournisseur_nom || "-",
+            dernierPrix: prix,
+            total: prix,
+            nb: 1,
+          };
+        } else {
+          grouped[fid].nb += 1;
+          grouped[fid].total += prix;
+        }
       }
+      const lignesRes = Object.values(grouped).map((l) => ({
+        fournisseur: l.fournisseur,
+        dernierPrix: l.dernierPrix,
+        nb: l.nb,
+        pmp: l.total / l.nb,
+      }));
+      setLignes(lignesRes);
+      return lignesRes;
+    } catch (e) {
+      setError(e);
+      setLignes([]);
+      return [];
+    } finally {
+      setLoading(false);
     }
-
-    const lignesRes = Object.values(grouped).map((l) => ({
-      fournisseur: l.fournisseur,
-      dernierPrix: l.dernierPrix,
-      nb: l.nb,
-      pmp: l.total / l.nb
-    }));
-
-    setLignes(lignesRes);
-    setLoading(false);
-    return lignesRes;
   }, [mama_id, productId]);
 
   useEffect(() => {

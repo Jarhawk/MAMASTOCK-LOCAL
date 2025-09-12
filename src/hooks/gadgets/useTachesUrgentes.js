@@ -1,8 +1,6 @@
-import { supabase } from '@/lib/supabaseClient';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { run } from '@/lib/supa/fetcher';
-import { logError } from '@/lib/supa/logError';
+import { getDb } from '@/lib/db';
 
 export default function useTachesUrgentes() {
   const { mama_id } = useAuth();
@@ -18,29 +16,28 @@ export default function useTachesUrgentes() {
       const today = new Date();
       const limitDate = new Date();
       limitDate.setDate(today.getDate() + 7);
-      const { data: rows, error: err } = await run(
-        supabase
-          .from('taches')
-          .select('id, titre, date_echeance')
-          .eq('mama_id', mama_id)
-          .is('actif', true)
-          .not('statut', 'eq', 'terminee')
-          .gte('date_echeance', today.toISOString().slice(0, 10))
-          .lte('date_echeance', limitDate.toISOString().slice(0, 10))
-          .order('date_echeance', { ascending: true })
-          .limit(5)
-          .abortSignal(signal)
-      );
-      if (err) {
-        logError('useTachesUrgentes', err);
+      try {
+        const db = await getDb();
+        const rows = await db.select(
+          `SELECT id, titre, date_echeance FROM taches
+           WHERE mama_id = ? AND actif = 1 AND statut != 'terminee'
+             AND date_echeance >= ? AND date_echeance <= ?
+           ORDER BY date_echeance ASC LIMIT 5`,
+          [
+            mama_id,
+            today.toISOString().slice(0, 10),
+            limitDate.toISOString().slice(0, 10),
+          ]
+        );
+        setData(rows ?? []);
+        setLoading(false);
+        return rows ?? [];
+      } catch (err) {
         setError(err);
         setData([]);
         setLoading(false);
         return [];
       }
-      setData(rows ?? []);
-      setLoading(false);
-      return rows ?? [];
     },
     [mama_id]
   );

@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTaches } from "@/hooks/useTaches";
+import { useTasks } from "@/hooks/useTasks";
 import { useUtilisateurs } from "@/hooks/useUtilisateurs";
 import { Button } from "@/components/ui/button";
 import GlassCard from "@/components/ui/GlassCard";
@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 
 export default function TacheForm({ task }) {
   const navigate = useNavigate();
-  const { createTache, updateTache } = useTaches();
+  const { addTask, updateTask } = useTasks();
   const { users, fetchUsers } = useUtilisateurs();
   const [form, setForm] = useState({
     titre: task?.titre || "",
@@ -41,10 +41,10 @@ export default function TacheForm({ task }) {
     setLoading(true);
     try {
       if (task) {
-        await updateTache(task.id, form);
+        await updateTask(task.id, form);
         toast.success("Tâche mise à jour !");
       } else {
-        await createTache(form);
+        await addTask(form);
         toast.success("Tâche créée !");
       }
       navigate("/taches");

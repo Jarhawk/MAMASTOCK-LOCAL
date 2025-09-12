@@ -167,7 +167,7 @@ export default function Fournisseurs() {
       {banner && (
         <div
           className={`mb-4 p-2 rounded text-sm text-white ${
-            banner === 'Connexion Supabase OK' ? 'bg-green-600' : 'bg-red-600'
+            banner === 'Connexion SQLite OK' ? 'bg-green-600' : 'bg-red-600'
           }`}
         >
           {banner}
@@ -226,7 +226,7 @@ export default function Fournisseurs() {
               Export PDF
             </Button>
             <Button className="w-auto" onClick={handleDiag}>
-              Tester Supabase
+              Tester base locale
             </Button>
             {import.meta.env.DEV && (
               <Button className="w-auto" onClick={handleApiDiag}>

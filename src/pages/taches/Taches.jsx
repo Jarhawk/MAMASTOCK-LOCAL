@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useTaches } from "@/hooks/useTaches";
+import { useTasks } from "@/hooks/useTasks";
 import { useUtilisateurs } from "@/hooks/useUtilisateurs";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
@@ -11,7 +11,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
 
 export default function Taches() {
-  const { taches, loading, error, fetchTaches, createTache } = useTaches();
+  const { tasks, loading, error, fetchTasks, addTask } = useTasks();
   const { users, fetchUsers } = useUtilisateurs();
   const [filters, setFilters] = useState({ statut: "", priorite: "", utilisateur: "", start: "", end: "" });
   const [view, setView] = useState("table");
@@ -22,8 +22,8 @@ export default function Taches() {
   }, [fetchUsers]);
 
   useEffect(() => {
-    fetchTaches(filters);
-  }, [fetchTaches, filters]);
+    fetchTasks();
+  }, [fetchTasks]);
 
   const handleChange = e => setFilters(f => ({ ...f, [e.target.name]: e.target.value }));
   const handleQuickChange = e => setQuick(q => ({ ...q, [e.target.name]: e.target.value }));
@@ -31,13 +31,26 @@ export default function Taches() {
     e.preventDefault();
     if (!quick.titre.trim()) return;
     try {
-      await createTache(quick);
+      await addTask(quick);
       toast.success('Tâche ajoutée');
       setQuick({ titre: '', date_echeance: '' });
     } catch (err) {
       toast.error(err?.message || "Erreur ajout");
     }
   };
+
+  const filtered = tasks.filter(t => {
+    if (filters.statut && t.statut !== filters.statut) return false;
+    if (filters.priorite && t.priorite !== filters.priorite) return false;
+    if (
+      filters.utilisateur &&
+      !(t.utilisateurs_taches || []).some(a => a.utilisateur_id === filters.utilisateur)
+    )
+      return false;
+    if (filters.start && t.date_echeance < filters.start) return false;
+    if (filters.end && t.date_echeance > filters.end) return false;
+    return true;
+  });
 
   return (
     <div className="p-6 text-sm">
@@ -116,7 +129,7 @@ export default function Taches() {
           onChange={handleChange}
           className="form-input"
         />
-        <Button onClick={() => fetchTaches(filters)}>Filtrer</Button>
+        <Button onClick={() => fetchTasks()}>Filtrer</Button>
         </div>
       </GlassCard>
       {loading && <LoadingSpinner message="Chargement..." />}
@@ -134,7 +147,7 @@ export default function Taches() {
               </tr>
             </thead>
             <tbody>
-              {taches.map(t => (
+              {filtered.map(t => (
                 <tr key={t.id} className="border-t">
                   <td className="px-2 py-1">{t.statut}</td>
                   <td className="px-2 py-1">
@@ -152,7 +165,7 @@ export default function Taches() {
                   </td>
                 </tr>
               ))}
-              {taches.length === 0 && !loading && (
+              {filtered.length === 0 && !loading && (
                 <tr>
                   <td colSpan="5" className="py-4 text-center text-gray-500">
                     Aucune tâche
@@ -163,7 +176,7 @@ export default function Taches() {
           </table>
         </TableContainer>
       ) : (
-        <TachesKanban taches={taches} />
+        <TachesKanban taches={filtered} />
       )}
     </div>
   );

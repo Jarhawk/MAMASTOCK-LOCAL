@@ -1,9 +1,13 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
-
 import { useAuth } from '@/hooks/useAuth';
 import { useAuditLog } from "@/hooks/useAuditLog";
+import {
+  pertes_list,
+  pertes_add,
+  pertes_update,
+  pertes_delete,
+} from "@/local/pertes";
 
 export function usePertes() {
   const { mama_id } = useAuth();
@@ -16,36 +20,30 @@ export function usePertes() {
     if (!mama_id) return [];
     setLoading(true);
     setError(null);
-    let query = supabase.
-    from("pertes").
-    select("*, produit:produit_id(nom)").
-    eq("mama_id", mama_id).
-    order("date_perte", { ascending: false });
-    if (debut) query = query.gte("date_perte", debut);
-    if (fin) query = query.lte("date_perte", fin);
-    const { data, error } = await query;
-    setLoading(false);
-    if (error) {
-      setError(error);
+    try {
+      const data = await pertes_list({ mama_id, debut, fin });
+      setPertes(data);
+      return data;
+    } catch (e) {
+      setError(e);
       return [];
+    } finally {
+      setLoading(false);
     }
-    setPertes(Array.isArray(data) ? data : []);
-    return data || [];
   }
 
   async function addPerte(values) {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("pertes").
-    insert([{ ...values, mama_id }]);
-    setLoading(false);
-    if (error) {
-      setError(error);
-    } else {
+    try {
+      await pertes_add({ ...values, mama_id });
       await log("Ajout perte", values);
       await fetchPertes();
+    } catch (e) {
+      setError(e);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -53,17 +51,14 @@ export function usePertes() {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("pertes").
-    update(values).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) {
-      setError(error);
-    } else {
+    try {
+      await pertes_update(id, values);
       await log("Modification perte", { id, ...values });
       await fetchPertes();
+    } catch (e) {
+      setError(e);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -71,17 +66,14 @@ export function usePertes() {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("pertes").
-    delete().
-    eq("id", id).
-    eq("mama_id", mama_id);
-    setLoading(false);
-    if (error) {
-      setError(error);
-    } else {
+    try {
+      await pertes_delete(id);
       await log("Suppression perte", { id });
       await fetchPertes();
+    } catch (e) {
+      setError(e);
+    } finally {
+      setLoading(false);
     }
   }
 

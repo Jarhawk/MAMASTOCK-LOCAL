@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
+import { performance_fiches_list } from '@/lib/db';
 import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -13,19 +13,18 @@ export default function usePerformanceFiches() {
   async function fetchData() {
     if (!mama_id) return [];
     setLoading(true);
-    const { data, error } = await supabase.
-    from('v_performance_fiches').
-    select('*').
-    eq('mama_id', mama_id);
-    setLoading(false);
-    if (error) {
-      setError(error.message || error);
+    try {
+      const rows = await performance_fiches_list(mama_id);
+      setError(null);
+      setData(Array.isArray(rows) ? rows : []);
+      return rows || [];
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
       setData([]);
       return [];
+    } finally {
+      setLoading(false);
     }
-    setError(null);
-    setData(Array.isArray(data) ? data : []);
-    return data || [];
   }
 
   return { data, loading, error, fetchData };

@@ -1,30 +1,25 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-// src/hooks/useRequisitions.js
-
 import { useAuth } from '@/hooks/useAuth';
+import {
+  requisitions_list,
+  requisition_get,
+  requisition_create,
+  requisition_update,
+  requisition_delete,
+} from "@/local/requisitions";
 
 export function useRequisitions() {
   const { mama_id } = useAuth();
 
   async function fetchRequisitions({ search = "", page = 1, limit = 20 } = {}) {
     if (!mama_id) return { data: [], count: 0 };
-    let query = supabase.
-    from("v_requisitions").
-    select(
-      "id, date_requisition, quantite, mama_id, produit_id, produit_nom, photo_url",
-      { count: "exact" }
-    ).
-    eq("mama_id", mama_id).
-    order("date_requisition", { ascending: false }).
-    range((page - 1) * limit, page * limit - 1);
-    if (search) query = query.ilike("produit_nom", `%${search}%`);
-    const { data, count, error } = await query;
-    if (error) {
-      console.error("❌ Erreur fetchRequisitions:", error.message);
-      return { data: [], count: 0 };
-    }
-    return { data: data || [], count: count || 0 };
+    const { data, count } = await requisitions_list({
+      mama_id,
+      search,
+      page,
+      limit,
+    });
+    return { data, count };
   }
 
   async function getRequisitions({
@@ -37,50 +32,21 @@ export function useRequisitions() {
     limit = 10
   } = {}) {
     if (!mama_id) return { data: [], count: 0 };
-    let query = supabase.
-    from("requisitions").
-    select(
-      `id, date_requisition, statut, zone_id, mama_id,
-      lignes:requisition_lignes ( id, produit_id, unite, quantite )`,
-      { count: "exact" }
-    ).
-    eq("mama_id", mama_id).
-    order("date_requisition", { ascending: false }).
-    range((page - 1) * limit, page * limit - 1);
-    if (zone) query = query.eq("zone_id", zone);
-    if (statut) query = query.eq("statut", statut);
-    if (debut) query = query.gte("date_requisition", debut);
-    if (fin) query = query.lte("date_requisition", fin);
-    const { data, count, error } = await query;
-    if (error) {
-      console.error("❌ Erreur getRequisitions:", error.message);
-      return { data: [], count: 0 };
-    }
-    let rows = data || [];
-    if (produit) {
-      rows = rows.filter((r) => (r.lignes || []).some((l) => l.produit_id === produit));
-    }
-    return { data: rows, count: count || 0 };
+    return await requisitions_list({
+      mama_id,
+      zone,
+      statut,
+      debut,
+      fin,
+      produit,
+      page,
+      limit,
+    });
   }
 
   async function getRequisitionById(id) {
     if (!id || !mama_id) return null;
-    const { data, error } = await supabase.
-    from("requisitions").
-    select(
-      `id, date_requisition, statut, zone_id, mama_id, commentaire,
-      lignes:requisition_lignes!requisition_id(
-        id, produit_id, unite, quantite, produit:produit_id(id, nom)
-      )`
-    ).
-    eq("id", id).
-    eq("mama_id", mama_id).
-    single();
-    if (error) {
-      console.error("❌ Erreur getRequisitionById:", error.message);
-      return null;
-    }
-    return data || null;
+    return await requisition_get(mama_id, id);
   }
 
   async function createRequisition({
@@ -91,66 +57,26 @@ export function useRequisitions() {
     lignes = []
   }) {
     if (!mama_id || !zone_id) return { error: "mama_id manquant" };
-    const { data, error } = await supabase.
-    from("requisitions").
-    insert([
-    {
+    const { id } = await requisition_create({
       date_requisition,
       zone_id,
       commentaire,
       statut,
-      actif: true,
-      mama_id
-    }]
-    ).
-    select().
-    single();
-    if (error) {
-      console.error("❌ Erreur creation requisition:", error.message);
-      return { error };
-    }
-    const requisition = data;
-    if (lignes.length) {
-      const toInsert = lignes.map((l) => ({
-        requisition_id: requisition.id,
-        produit_id: l.produit_id,
-        quantite: Number(l.quantite),
-        unite: l.unite,
-        mama_id
-      }));
-      const { error: lineErr } = await supabase.from("requisition_lignes").insert(toInsert);
-      if (lineErr) console.error("❌ Erreur lignes requisition:", lineErr.message);
-    }
-    return { data: requisition };
+      mama_id,
+      lignes,
+    });
+    return { data: await requisition_get(mama_id, id) };
   }
 
   async function updateRequisition(id, fields) {
     if (!mama_id) return { error: "mama_id manquant" };
-    const { data, error } = await supabase.
-    from("requisitions").
-    update(fields).
-    eq("id", id).
-    eq("mama_id", mama_id).
-    select().
-    single();
-    if (error) {
-      console.error("❌ Erreur update requisition:", error.message);
-      return { error };
-    }
-    return { data };
+    await requisition_update(id, fields);
+    return { data: await requisition_get(mama_id, id) };
   }
 
   async function deleteRequisition(id) {
     if (!mama_id) return { error: "mama_id manquant" };
-    const { error } = await supabase.
-    from("requisitions").
-    delete().
-    eq("id", id).
-    eq("mama_id", mama_id);
-    if (error) {
-      console.error("❌ Erreur delete requisition:", error.message);
-      return { error };
-    }
+    await requisition_delete(id);
     return { data: true };
   }
 

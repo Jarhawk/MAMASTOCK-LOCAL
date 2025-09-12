@@ -1,5 +1,4 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
@@ -48,20 +47,12 @@ export default function CommandeDetail() {
   const fournisseur = commande.fournisseur;
 
   const handleSendEmail = async () => {
+    // En mode local, l'envoi direct par email n'est pas géré.
     try {
-      const base64 = await generateCommandePDFBase64(commande, template, fournisseur);
-      const { error } = await supabase.functions.invoke("sendCommandeEmail", {
-        body: {
-          commande,
-          fournisseur,
-          pdfBase64: base64
-        }
-      });
-
-      if (error) throw error;
-      toast.success("Email envoyé au fournisseur");
+      await generateCommandePDFBase64(commande, template, fournisseur);
+      toast.info("PDF généré : envoyez-le manuellement par votre client mail");
     } catch {
-      toast.error("Erreur lors de l'envoi de l'email");
+      toast.error("Erreur lors de la génération du PDF");
     }
   };
 

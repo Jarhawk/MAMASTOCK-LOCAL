@@ -1,28 +1,10 @@
-import supabase from '@/lib/supabase';import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { requisitions_quantites_since } from "@/lib/db";
 
 import { useAuth } from '@/hooks/useAuth';
 
 export async function fetchConsoMoyenne(mamaId, sinceISO) {
-
-  // NOTE: "quantite" DOIT correspondre au vrai nom (ou à l’alias de la vue v_requisition_lignes)
-  const { data, error } = await supabase.
-  from('requisition_lignes') // ou 'v_requisition_lignes' si tu as créé la vue alias
-  .select(`
-      quantite,
-      requisitions!inner (
-        date_requisition,
-        mama_id,
-        statut
-      )
-    `).
-  eq('requisitions.mama_id', mamaId).
-  eq('requisitions.statut', 'réalisée').
-  gte('requisitions.date_requisition', sinceISO)
-  // Tri sur le champ de la table référencée
-  .order('date_requisition', { referencedTable: 'requisitions', ascending: true });
-
-  if (error) throw error;
-  return data;
+  return await requisitions_quantites_since(mamaId, sinceISO);
 }
 
 export default function useConsoMoyenne() {
@@ -42,7 +24,7 @@ export default function useConsoMoyenne() {
 
       const daily = {};
       (data || []).forEach((m) => {
-        const d = m.requisitions.date_requisition?.slice(0, 10);
+        const d = m.date_requisition?.slice(0, 10);
         if (!daily[d]) daily[d] = 0;
         daily[d] += Number(m.quantite || 0);
       });

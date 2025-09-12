@@ -1,5 +1,4 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -72,13 +71,7 @@ export default function EmailsEnvoyes() {
     try {
       const { data: commande } = await fetchCommandeById(commandeId);
       if (!commande) throw new Error();
-      const { data: tpl } = await supabase.
-      rpc('get_template_commande', {
-        p_mama: mama_id,
-        p_fournisseur: commande.fournisseur_id
-      }).
-      single();
-      const template = tpl || null;
+      const template = null;
       const blob = await pdf(
         <CommandePDF
           commande={commande}

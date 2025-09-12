@@ -1,9 +1,9 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useEffect, useState } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
 import { useInventaires } from "@/hooks/useInventaires";
+import { produits_list } from "@/lib/db";
 import { LiquidBackground, TouchLight } from "@/components/LiquidBackground";
 import GlassCard from "@/components/ui/GlassCard";
 
@@ -15,13 +15,7 @@ export default function MobileInventaire() {
 
   useEffect(() => {
     if (authLoading || !mama_id) return;
-    supabase.
-    from("produits").
-    select(
-      "id, nom, unite_id, unite:unites!fk_produits_unite(nom), famille_id, sous_famille_id, famille:familles!fk_produits_famille(nom), sous_famille:sous_familles!fk_produits_sous_famille(nom)"
-    ).
-    eq("mama_id", mama_id).
-    then(({ data }) => setProduits(data || []));
+    produits_list("", false, 1, 1000).then((rows) => setProduits(rows || []));
   }, [mama_id, authLoading]);
 
   const handleChange = (id, value) => {

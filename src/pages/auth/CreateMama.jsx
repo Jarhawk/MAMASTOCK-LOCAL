@@ -1,9 +1,9 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from '@/hooks/useAuth';
+import { useMamas } from '@/hooks/useMamas';
 import PageWrapper from "@/components/ui/PageWrapper";
 import GlassCard from "@/components/ui/GlassCard";
 import MamaLogo from "@/components/ui/MamaLogo";
@@ -14,7 +14,8 @@ import { toast } from 'sonner';
 export default function CreateMama() {
   const [nom, setNom] = useState("");
   const [loading, setLoading] = useState(false);
-  const { mama_id, auth_id, refreshUser } = useAuth();
+  const { mama_id } = useAuth();
+  const { addMama } = useMamas();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,17 +26,7 @@ export default function CreateMama() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data: mama, error } = await supabase.
-      from("mamas").
-      insert({ nom }).
-      select().
-      single();
-      if (error) throw error;
-      await supabase.
-      from("utilisateurs").
-      update({ mama_id: mama.id }).
-      eq("auth_id", auth_id);
-      await refreshUser();
+      await addMama({ nom });
       toast.success("Établissement créé");
       navigate("/onboarding");
     } catch (err) {

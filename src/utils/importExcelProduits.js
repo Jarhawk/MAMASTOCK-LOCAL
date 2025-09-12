@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supa/client'
+import { query, getDb } from '@/local/db';
 import * as XLSX from "xlsx";
 import { v4 as uuidv4 } from "uuid";
 
@@ -62,11 +62,11 @@ export async function parseProduitsFile(file, mama_id) {
     produitsRes
   ] = await Promise.all([
     fetchFamillesForValidation(mama_id),
-    supabase.from("sous_familles").select("id, nom").eq("mama_id", mama_id),
+    query("SELECT id, nom FROM sous_familles WHERE mama_id = ?", [mama_id]),
     fetchUnitesForValidation(mama_id),
     fetchZonesStock(mama_id),
-    supabase.from("fournisseurs").select("id").eq("mama_id", mama_id),
-    supabase.from("produits").select("nom").eq("mama_id", mama_id)
+    query("SELECT id FROM fournisseurs WHERE mama_id = ?", [mama_id]),
+    query("SELECT nom FROM produits WHERE mama_id = ?", [mama_id])
   ]);
 
   const mapByName = (res) =>
@@ -76,11 +76,11 @@ export async function parseProduitsFile(file, mama_id) {
   const unitesMap = mapByName(unitesRes);
   const zonesMap = mapByName(zonesRes);
   const fournisseurIds = new Set(
-    (fournisseursRes.data || []).map((f) => String(f.id))
+    fournisseursRes.map((f) => String(f.id))
   );
 
   const existingNames = new Set(
-    (produitsRes.data || []).map((p) => p.nom.toLowerCase())
+    produitsRes.map((p) => p.nom.toLowerCase())
   );
 
   const maps = {
@@ -143,6 +143,7 @@ export async function parseProduitsFile(file, mama_id) {
 }
 
 export async function insertProduits(rows) {
+  const db = await getDb();
   const results = [];
   for (const r of rows) {
     const {
@@ -157,13 +158,30 @@ export async function insertProduits(rows) {
     payload.seuil_min = payload.stock_min;
     delete payload.stock_min;
     try {
-      const { data, error } = await supabase.
-      from("produits").
-      insert([payload]).
-      select("id").
-      single();
-      if (error) results.push({ ...r, insertError: error.message });else
-      results.push({ ...r, id: data.id, insertError: null });
+      await db.execute(
+        `INSERT INTO produits
+        (nom, unite_id, famille_id, zone_stock_id, stock_min, actif, sous_famille_id, code, allergenes, pmp, stock_theorique, dernier_prix, fournisseur_id, mama_id, seuil_min)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+        [
+          payload.nom,
+          payload.unite_id,
+          payload.famille_id,
+          payload.zone_stock_id,
+          payload.stock_min ?? 0,
+          payload.actif ? 1 : 0,
+          payload.sous_famille_id ?? null,
+          payload.code ?? null,
+          payload.allergenes ?? null,
+          payload.pmp ?? null,
+          payload.stock_theorique ?? null,
+          payload.dernier_prix ?? null,
+          payload.fournisseur_id ?? null,
+          payload.mama_id,
+          payload.seuil_min ?? null,
+        ]
+      );
+      const [{ id }] = await db.select('SELECT last_insert_rowid() as id');
+      results.push({ ...r, id, insertError: null });
     } catch (err) {
       results.push({ ...r, insertError: err.message });
     }

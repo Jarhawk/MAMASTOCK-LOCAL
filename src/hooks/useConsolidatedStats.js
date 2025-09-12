@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
+import { consolidation_performance } from "@/lib/db";
 
 
 export function useConsolidatedStats() {
@@ -10,16 +10,27 @@ export function useConsolidatedStats() {
 
   async function fetchStats() {
     setLoading(true);
-    const { data, error } = await supabase.rpc("consolidated_stats");
-    setLoading(false);
-    if (error) {
-      console.error('Erreur consolidated_stats:', error);
-      setError(error.message || error);
+    try {
+      const end = new Date().toISOString().slice(0, 10);
+      const data = await consolidation_performance({ start: "2000-01-01", end });
+      const mapped = (data || []).map((r: any) => ({
+        mama_id: r.mama_id,
+        nom: r.mama_id,
+        stock_valorise: r.valeur_stock || 0,
+        conso_mois: r.total_achats || 0,
+        nb_mouvements: 0,
+      }));
+      setStats(mapped);
+      setError(null);
+      return mapped;
+    } catch (e) {
+      console.error("Erreur consolidated_stats:", e);
+      setError(e.message || e);
       setStats([]);
       return [];
+    } finally {
+      setLoading(false);
     }
-    setStats(Array.isArray(data) ? data : []);
-    return data || [];
   }
 
   return { stats, loading, error, fetchStats };

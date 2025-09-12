@@ -1,9 +1,11 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
 
 import { useTemplatesCommandes } from "@/hooks/useTemplatesCommandes";
 import { Button } from "@/components/ui/button";
+import { saveBinary } from "@/local/files";
+import { appDataDir, join } from "@tauri-apps/api/path";
+import { convertFileSrc } from "@tauri-apps/api/tauri";
 
 export default function TemplateCommandeForm({ template = {}, onClose, fournisseurs = [] }) {
   const { createTemplate, updateTemplate } = useTemplatesCommandes();
@@ -25,12 +27,12 @@ export default function TemplateCommandeForm({ template = {}, onClose, fournisse
   const handleLogoUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const path = `templates/${Date.now()}-${file.name}`;
-    const { error } = await supabase.storage.from("public").upload(path, file);
-    if (!error) {
-      const { data } = supabase.storage.from("public").getPublicUrl(path);
-      setLogoUrl(data.publicUrl);
-    }
+    const array = new Uint8Array(await file.arrayBuffer());
+    const rel = `templates/${Date.now()}-${file.name}`;
+    await saveBinary(rel, array);
+    const base = await appDataDir();
+    const full = await join(base, "MamaStock", rel);
+    setLogoUrl(full);
   };
 
   const toggleChamp = (champ) => {
@@ -88,7 +90,7 @@ export default function TemplateCommandeForm({ template = {}, onClose, fournisse
         <div>
           <label className="block text-sm font-medium">Logo</label>
           <input type="file" onChange={handleLogoUpload} className="mb-1" />
-          {logoUrl && <img src={logoUrl} alt="logo" className="h-16" />}
+          {logoUrl && <img src={convertFileSrc(logoUrl)} alt="logo" className="h-16" />}
         </div>
 
         <div>

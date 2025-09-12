@@ -1,8 +1,8 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
+import { readConfig, writeConfig } from '@/appFs';
 import * as XLSX from "xlsx";
 import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";
 import { saveAs } from "file-saver";
@@ -17,15 +17,31 @@ export function useMamas() {
   async function fetchMamas({ search = "" } = {}) {
     setLoading(true);
     setError(null);
-    let query = supabase.from("mamas").select("*");
-    if (role !== "superadmin") query = query.eq("id", mama_id);
-    if (search) query = query.ilike("nom", `%${search}%`);
+    try {
+      const cfg = (await readConfig()) || {};
+      let list = Array.isArray(cfg.mamas) ? cfg.mamas : [];
+      if (role !== "superadmin" && mama_id) {
+        list = list.filter((m) => m.id === mama_id);
+      }
+      if (search) {
+        const low = search.toLowerCase();
+        list = list.filter((m) => (m.nom || '').toLowerCase().includes(low));
+      }
+      list.sort((a, b) => (a.nom || '').localeCompare(b.nom || ''));
+      setMamas(list);
+      return list;
+    } catch (err) {
+      setError(err);
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }
 
-    const { data, error } = await query.order("nom", { ascending: true });
-    setMamas(Array.isArray(data) ? data : []);
-    setLoading(false);
-    if (error) setError(error);
-    return data || [];
+  async function saveMamas(newList) {
+    const cfg = (await readConfig()) || {};
+    cfg.mamas = newList;
+    await writeConfig(cfg);
   }
 
   // 2. Ajouter un établissement
@@ -33,12 +49,17 @@ export function useMamas() {
     if (role !== "superadmin") return { error: "Action non autorisée" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("mamas").
-    insert([mama]);
-    if (error) setError(error);
-    setLoading(false);
-    await fetchMamas();
+    try {
+      const list = [...mamas];
+      const item = { id: mama.id || crypto.randomUUID(), ...mama };
+      list.push(item);
+      await saveMamas(list);
+      setMamas(list);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   // 3. Modifier un établissement
@@ -48,13 +69,17 @@ export function useMamas() {
     }
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("mamas").
-    update(updateFields).
-    eq("id", id);
-    if (error) setError(error);
-    setLoading(false);
-    await fetchMamas();
+    try {
+      const list = mamas.map((m) =>
+        m.id === id ? { ...m, ...updateFields } : m
+      );
+      await saveMamas(list);
+      setMamas(list);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   // 4. Activer/désactiver un établissement
@@ -64,13 +89,17 @@ export function useMamas() {
     }
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("mamas").
-    update({ actif }).
-    eq("id", id);
-    if (error) setError(error);
-    setLoading(false);
-    await fetchMamas();
+    try {
+      const list = mamas.map((m) =>
+        m.id === id ? { ...m, actif } : m
+      );
+      await saveMamas(list);
+      setMamas(list);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
 

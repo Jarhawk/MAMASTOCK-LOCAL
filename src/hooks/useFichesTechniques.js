@@ -1,8 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState } from "react";
-
 import { useAuth } from '@/hooks/useAuth';
+import { fiches_actives_list, fiches_create, fiches_update, fiches_delete } from '@/lib/db';
 
 export function useFichesTechniques() {
   const { mama_id } = useAuth();
@@ -14,13 +13,7 @@ export function useFichesTechniques() {
     setLoading(true);
     setError(null);
     try {
-      const { data, error } = await supabase.
-      from("fiches_techniques").
-      select("*").
-      eq("mama_id", mama_id).
-      order("nom", { ascending: true });
-
-      if (error) throw error;
+      const data = await fiches_actives_list(mama_id);
       setFichesTechniques(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('fetchFichesTechniques error:', err);
@@ -35,61 +28,52 @@ export function useFichesTechniques() {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { data, error } = await supabase.
-    from("fiches_techniques").
-    insert([{ ...ft, mama_id }]).
-    select("id").
-    single();
-    if (error) {
-      console.error('addFicheTechnique error:', error);
+    try {
+      const id = await fiches_create({ ...ft, mama_id }, []);
+      const fiche = { ...ft, id };
+      setFichesTechniques((prev) => [...prev, fiche]);
+      return { data: id };
+    } catch (err) {
+      console.error('addFicheTechnique error:', err);
+      setError(err);
+      return { error: err };
+    } finally {
       setLoading(false);
-      setError(error);
-      return { error };
     }
-    const fiche = { ...ft, id: data?.id };
-    setFichesTechniques((prev) => [...prev, fiche]);
-    setLoading(false);
-    return { data: fiche.id };
   }
 
   async function updateFicheTechnique(id, updateFields) {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("fiches_techniques").
-    update(updateFields).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    if (error) {
-      console.error('updateFicheTechnique error:', error);
+    try {
+      await fiches_update(id, mama_id, updateFields, []);
+      setFichesTechniques((prev) => prev.map((f) => f.id === id ? { ...f, ...updateFields } : f));
+      return { data: id };
+    } catch (err) {
+      console.error('updateFicheTechnique error:', err);
+      setError(err);
+      return { error: err };
+    } finally {
       setLoading(false);
-      setError(error);
-      return { error };
     }
-    setFichesTechniques((prev) => prev.map((f) => f.id === id ? { ...f, ...updateFields } : f));
-    setLoading(false);
-    return { data: id };
   }
 
   async function deleteFicheTechnique(id) {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("fiches_techniques").
-    update({ actif: false }).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    if (error) {
-      console.error('deleteFicheTechnique error:', error);
+    try {
+      await fiches_delete(id, mama_id);
+      setFichesTechniques((prev) => prev.filter((f) => f.id !== id));
+      return { data: id };
+    } catch (err) {
+      console.error('deleteFicheTechnique error:', err);
+      setError(err);
+      return { error: err };
+    } finally {
       setLoading(false);
-      setError(error);
-      return { error };
     }
-    setFichesTechniques((prev) => prev.filter((f) => f.id !== id));
-    setLoading(false);
-    return { data: id };
   }
 
   return {
@@ -99,6 +83,6 @@ export function useFichesTechniques() {
     fetchFichesTechniques,
     addFicheTechnique,
     updateFicheTechnique,
-    deleteFicheTechnique
+    deleteFicheTechnique,
   };
 }

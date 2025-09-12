@@ -1,8 +1,8 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useEffect, useState } from "react";
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from "@/hooks/useAuth";
+import { readConfig } from "@/appFs";
 import { Button } from "@/components/ui/button";
 import { useFournisseurAPI } from "@/hooks/useFournisseurAPI";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
@@ -16,21 +16,16 @@ export default function CommandesEnvoyees() {
   const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
-    if (!mama_id) return;
     setPageLoading(true);
-    supabase.
-    from("commandes").
-    select("*, fournisseur:fournisseur_id(nom)").
-    eq("mama_id", mama_id).
-    order("created_at", { ascending: false }).
-    then(({ data }) => {
-      setItems(data || []);
+    readConfig().then((cfg) => {
+      const list = (cfg && cfg.commandes_envoyees) || [];
+      setItems(list);
       setPageLoading(false);
     });
   }, [mama_id]);
 
-  const relancer = async (id) => {
-    await envoyerCommande(id);
+  const relancer = async (commande) => {
+    await envoyerCommande(commande);
   };
 
   if (authLoading || pageLoading) return <LoadingSpinner message="Chargement..." />;
@@ -56,7 +51,7 @@ export default function CommandesEnvoyees() {
               <td className="px-2 py-1">{c.fournisseur?.nom || "-"}</td>
               <td className="px-2 py-1">{c.statut}</td>
               <td className="px-2 py-1">
-                <Button size="sm" onClick={() => relancer(c.id)}>
+                <Button size="sm" onClick={() => relancer(c)}>
                   Relancer
                 </Button>
               </td>

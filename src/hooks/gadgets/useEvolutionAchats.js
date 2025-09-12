@@ -1,9 +1,7 @@
-import { supabase } from '@/lib/supabaseClient';
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { createAsyncState } from '../_shared/createAsyncState';
-import { run } from '@/lib/supa/fetcher';
-import { logError } from '@/lib/supa/logError';
+import { getDb } from '@/lib/db';
 
 export default function useEvolutionAchats() {
   const { mama_id, loading: authLoading } = useAuth() || {};
@@ -16,22 +14,20 @@ export default function useEvolutionAchats() {
       const start = new Date();
       start.setMonth(start.getMonth() - 12);
       const filterDate = start.toISOString().slice(0, 10);
-      const { data, error } = await run(
-        supabase
-          .from('v_evolution_achats')
-          .select('mois, montant')
-          .eq('mama_id', mama_id)
-          .gte('mois', filterDate)
-          .order('mois', { ascending: true })
-          .abortSignal(signal)
-      );
-      if (error) {
-        logError('useEvolutionAchats', error);
+      try {
+        const db = await getDb();
+        const rows = await db.select(
+          `SELECT mois, montant FROM v_evolution_achats
+           WHERE mama_id = ? AND mois >= ?
+           ORDER BY mois ASC`,
+          [mama_id, filterDate]
+        );
+        setState({ data: rows ?? [], loading: false, error: null });
+        return rows ?? [];
+      } catch (error) {
         setState({ data: [], loading: false, error });
         return [];
       }
-      setState({ data: data ?? [], loading: false, error: null });
-      return data ?? [];
     },
     [mama_id]
   );

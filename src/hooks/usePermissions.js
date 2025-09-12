@@ -1,5 +1,10 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
+import {
+  permissions_list,
+  permission_add,
+  permission_update,
+  permission_delete,
+} from '@/lib/db';
 import { useState } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
@@ -18,16 +23,20 @@ export function usePermissions() {
     if (!mama_id && role !== "superadmin") return [];
     setLoading(true);
     setError(null);
-    let query = supabase.from("permissions").select("*");
-    if (role !== "superadmin") query = query.eq("mama_id", mama_id);
-    if (roleId) query = query.eq("role_id", roleId);
-    if (userId) query = query.eq("user_id", userId);
-
-    const { data, error } = await query.order("role_id", { ascending: true });
-    setPermissions(Array.isArray(data) ? data : []);
-    setLoading(false);
-    if (error) setError(error);
-    return data || [];
+    try {
+      const data = await permissions_list({
+        mama_id: role !== "superadmin" ? mama_id : undefined,
+        role_id: roleId,
+        user_id: userId,
+      });
+      setPermissions(Array.isArray(data) ? data : []);
+      return data || [];
+    } catch (err) {
+      setError(err);
+      return [];
+    } finally {
+      setLoading(false);
+    }
   }
 
   // 2. Ajouter une permission
@@ -35,12 +44,14 @@ export function usePermissions() {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("permissions").
-    insert([{ ...permission, mama_id }]);
-    if (error) setError(error);
-    setLoading(false);
-    await fetchPermissions();
+    try {
+      await permission_add({ ...permission, mama_id });
+      await fetchPermissions();
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   // 3. Modifier une permission
@@ -48,14 +59,14 @@ export function usePermissions() {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("permissions").
-    update(updateFields).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    if (error) setError(error);
-    setLoading(false);
-    await fetchPermissions();
+    try {
+      await permission_update(id, updateFields);
+      await fetchPermissions();
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   // 4. Supprimer une permission
@@ -63,14 +74,14 @@ export function usePermissions() {
     if (!mama_id) return { error: "Aucun mama_id" };
     setLoading(true);
     setError(null);
-    const { error } = await supabase.
-    from("permissions").
-    update({ actif: false }).
-    eq("id", id).
-    eq("mama_id", mama_id);
-    if (error) setError(error);
-    setLoading(false);
-    await fetchPermissions();
+    try {
+      await permission_delete(id);
+      await fetchPermissions();
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   // 5. Export Excel

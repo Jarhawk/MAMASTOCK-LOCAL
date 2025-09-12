@@ -1,46 +1,27 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
-
 import { useAuth } from '@/hooks/useAuth';
+import {
+  usage_stats_module_counts,
+  usage_stats_last_seen,
+  logs_securite_frequent_errors,
+} from "@/lib/db";
 
 export function useUsageStats() {
   const { mama_id } = useAuth();
 
   async function getModuleUsageCount() {
     if (!mama_id) return [];
-    const { data, error } = await supabase.
-    from("usage_stats").
-    select("module, count:id").
-    eq("mama_id", mama_id).
-    group("module");
-    if (error) return [];
-    return data || [];
+    return await usage_stats_module_counts(mama_id);
   }
 
   async function getLastSeen(user_id) {
     if (!mama_id || !user_id) return null;
-    const { data } = await supabase.
-    from("usage_stats").
-    select("timestamp").
-    eq("mama_id", mama_id).
-    eq("user_id", user_id).
-    order("timestamp", { ascending: false }).
-    limit(1).
-    single();
-    return data?.timestamp || null;
+    return await usage_stats_last_seen(mama_id, user_id);
   }
 
   async function getFrequentErrors() {
     if (!mama_id) return [];
-    const { data } = await supabase.
-    from("logs_securite").
-    select("description, count:id").
-    eq("mama_id", mama_id).
-    ilike("type", "%erreur%").
-    group("description").
-    order("count", { ascending: false }).
-    limit(5);
-    return data || [];
+    return await logs_securite_frequent_errors(mama_id);
   }
 
   return { getModuleUsageCount, getLastSeen, getFrequentErrors };

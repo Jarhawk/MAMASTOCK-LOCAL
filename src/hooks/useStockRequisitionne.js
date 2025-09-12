@@ -1,8 +1,8 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 import { useState, useEffect, useCallback } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
+import { stock_requisitionne_list } from '@/local/stockRequisitionne';
 
 export function useStockRequisitionne() {
   const { mama_id } = useAuth();
@@ -12,17 +12,10 @@ export function useStockRequisitionne() {
   const fetchStock = useCallback(async () => {
     if (!mama_id) return [];
     setLoading(true);
-    const { data, error } = await supabase.
-    from("v_stock_requisitionne").
-    select("*").
-    eq("mama_id", mama_id);
+    const data = await stock_requisitionne_list(mama_id);
     setLoading(false);
-    if (error) {
-      console.error("❌ Erreur fetchStockRequisitionne:", error.message);
-      return [];
-    }
-    setStock(data || []);
-    return data || [];
+    setStock(data);
+    return data;
   }, [mama_id]);
 
   useEffect(() => {

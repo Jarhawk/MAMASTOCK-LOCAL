@@ -1,8 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 // src/hooks/useStats.js
 import { useState, useEffect, useCallback } from "react";
-
+import { one } from "@/local/db";
 import { useAuth } from '@/hooks/useAuth';
 
 export function useStats() {
@@ -13,24 +12,32 @@ export function useStats() {
   const fetchStats = useCallback(async () => {
     setLoading(true);
 
-    const queries = [
-    supabase.from("produits").select("id").eq("mama_id", mama_id),
-    supabase.from("fiches_techniques").select("cout_total").eq("mama_id", mama_id),
-    supabase.
-    from("requisition_lignes").
-    select("quantite, requisitions!inner(mama_id, statut)").
-    eq("requisitions.mama_id", mama_id).
-    eq("requisitions.statut", "réalisée")];
+    const totalProduits =
+      (await one<{ cnt: number }>(
+        "SELECT COUNT(*) as cnt FROM produits WHERE mama_id = ?",
+        [mama_id]
+      ))?.cnt || 0;
 
+    const fichesRow =
+      (await one<{ count: number; total: number }>(
+        "SELECT COUNT(*) as count, SUM(cout_total) as total FROM fiches_techniques WHERE mama_id = ?",
+        [mama_id]
+      )) || { count: 0, total: 0 };
 
-    const [products, fiches, mouvements] = await Promise.all(queries.map((q) => q));
+    const mouvementsTotal =
+      (await one<{ total: number }>(
+        `SELECT SUM(rl.quantite) as total
+         FROM requisition_lignes rl
+         JOIN requisitions r ON rl.requisition_id = r.id
+         WHERE r.mama_id = ? AND r.statut = 'réalisée'`,
+        [mama_id]
+      ))?.total || 0;
 
     setStats({
-      totalProduits: products.data?.length || 0,
-      totalFiches: fiches.data?.length || 0,
-      coutTotalFiches: fiches.data?.reduce((a, f) => a + (f.cout_total || 0), 0) || 0,
-      mouvementsTotal:
-      mouvements.data?.reduce((a, m) => a + (m.quantite || 0), 0) || 0
+      totalProduits,
+      totalFiches: fichesRow.count || 0,
+      coutTotalFiches: fichesRow.total || 0,
+      mouvementsTotal,
     });
 
     setLoading(false);

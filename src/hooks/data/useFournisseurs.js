@@ -1,8 +1,11 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // fix: avoid ilike.%% on empty search.
 import { useQuery } from '@tanstack/react-query';
-import { normalizeSearchTerm } from '@/lib/supa/textSearch';
 import { fournisseurs_list } from '@/lib/db';
+
+function normalizeSearchTerm(q = '') {
+  return q.trim();
+}
 
 export function useFournisseurs(params = {}) {
   const {

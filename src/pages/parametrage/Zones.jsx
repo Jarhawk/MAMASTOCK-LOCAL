@@ -1,5 +1,4 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import supabase from '@/lib/supabase';
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useZones } from '@/hooks/useZones';
@@ -12,7 +11,7 @@ import Unauthorized from '@/pages/auth/Unauthorized';
 
 
 export default function Zones() {
-  const { fetchZones, updateZone } = useZones();
+  const { fetchZones, updateZone, deleteZone } = useZones();
   const { hasAccess, loading, mama_id } = useAuth();
   const canEdit = hasAccess('zones_stock', 'peut_modifier');
   const [filters, setFilters] = useState({ q: '', type: '', actif: true });
@@ -24,16 +23,8 @@ export default function Zones() {
   }, [filters, fetchZones]);
 
   async function handleDelete(id) {
-    const reassign = window.prompt(
-      'Réassigner vers la zone (laisser vide pour aucune)'
-    );
-    const { error } = await supabase.rpc('safe_delete_zone', {
-      p_mama: mama_id,
-      p_zone: id,
-      p_reassign_to: reassign || null
-    });
-    if (error) toast.error(error.message);else
-    {
+    const { error } = await deleteZone(id);
+    if (error) toast.error(String(error)); else {
       toast.success('Zone supprimée');
       const refreshed = await fetchZones(filters);
       setRows(Array.isArray(refreshed) ? refreshed : []);
