@@ -5,7 +5,6 @@ const root = process.cwd();
 const MIGS = [
   "db/sqlite/001_schema.sql",
   "db/sqlite/002_seed.sql",
-  "db/sqlite/003_pmp_valeur_stock.sql",
 ];
 const db = new Database(":memory:");
 for (const mig of MIGS) {
