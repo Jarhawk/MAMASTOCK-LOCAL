@@ -1,139 +1,85 @@
-// scripts/sqlite-apply.js
+// scripts/sqlite-apply.js (ESM)
 import fs from "node:fs";
 import path from "node:path";
-import os from "node:os";
 import Database from "better-sqlite3";
 
-const SQL_DIR = path.resolve("db/sqlite");
+// Emplacement DB final (déjà utilisé dans le projet)
+const DB_PATH = process.env.MS_DB_PATH
+  || path.join(process.env.USERPROFILE || process.env.HOME, "MamaStock", "data", "mamastock.db");
 
-// -- utilitaires -----------------------------------------------------------
+const SQL_DIR = path.join(process.cwd(), "db", "sqlite");
 
-export function ensureAppDbPath() {
-  const base = process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming");
-  const dir = path.join(base, "MamaStock", "data");
-  fs.mkdirSync(dir, { recursive: true });
-  return path.join(dir, "mamastock.db");
+function ensureDir(p) { fs.mkdirSync(p, { recursive: true }); }
+
+function listSqlFiles(dir) {
+  return fs.readdirSync(dir)
+    .filter(f => f.endsWith(".sql"))
+    .sort((a,b) => a.localeCompare(b)); // 001_, 002_, 003_...
 }
 
-export function readSqlFile(p) {
-  return fs.readFileSync(p, "utf8");
+function readSql(file) {
+  let sql = fs.readFileSync(file, "utf8");
+  // enlever BOM éventuel + commentaires /* ... */ et // ... en fin de ligne
+  if (sql.charCodeAt(0) === 0xFEFF) sql = sql.slice(1);
+  sql = sql.replace(/\/\*[\s\S]*?\*\//g, "");
+  sql = sql.replace(/(^|[^:])\/\/.*$/gm, "$1");
+  return sql.trim();
 }
 
-export function stripComments(sql) {
-  return sql
-    .replace(/--.*$/gm, "")
-    .replace(/\/\*[\s\S]*?\*\//g, "");
-}
-
-export function splitStatements(sql) {
-  const statements = [];
-  let current = "";
-  let depth = 0;
-  let inString = false;
-  let quote = "";
-  for (let i = 0; i < sql.length; i++) {
-    const ch = sql[i];
-    if (inString) {
-      current += ch;
-      if (ch === quote && sql[i - 1] !== "\\") inString = false;
-      continue;
-    }
-    if (ch === "'" || ch === '"' || ch === "`") {
-      inString = true;
-      quote = ch;
-      current += ch;
-      continue;
-    }
-    const ahead5 = sql.slice(i, i + 5).toUpperCase();
-    const ahead3 = sql.slice(i, i + 3).toUpperCase();
-    if (ahead5 === "BEGIN") {
-      depth++;
-    } else if (ahead3 === "END" && depth > 0) {
-      const after = sql.slice(i + 3).match(/^\s*(.)/);
-      if (after && after[1] === ";") depth--;
-    }
-    if (ch === ";" && depth === 0) {
-      if (current.trim()) statements.push(current.trim());
-      current = "";
-    } else {
-      current += ch;
-    }
-  }
-  if (current.trim()) statements.push(current.trim());
-  return statements;
-}
-
-export function columnExists(db, table, col) {
+function alreadyApplied(db, filename) {
   try {
-    const rows = db.pragma(`table_info(${table})`);
-    return rows.some((r) => r.name === col);
-  } catch {
-    return false;
-  }
+    db.prepare(`CREATE TABLE IF NOT EXISTS __migrations__ (
+      filename TEXT PRIMARY KEY,
+      applied_at TEXT NOT NULL
+    )`).run();
+    const row = db.prepare(`SELECT 1 FROM __migrations__ WHERE filename=?`).get(filename);
+    return !!row;
+  } catch (e) { throw e; }
 }
 
-export function guardAlterAddColumn(sql, db) {
-  const statements = splitStatements(sql);
-  const kept = [];
-  const re = /^ALTER\s+TABLE\s+[`"']?(\w+)[`"']?\s+ADD\s+COLUMN\s+[`"']?(\w+)[`"']?/i;
-  for (const stmt of statements) {
-    const m = stmt.match(re);
-    if (m) {
-      const table = m[1];
-      const col = m[2];
-      if (columnExists(db, table, col)) {
-        continue; // colonne déjà présente
-      }
-    }
-    kept.push(stmt);
-  }
-  return kept.join(";\n");
+function markApplied(db, filename) {
+  db.prepare(`INSERT OR IGNORE INTO __migrations__ (filename, applied_at)
+              VALUES (?, datetime('now'))`).run(filename);
 }
-
-// -- principal -------------------------------------------------------------
 
 function main() {
-  const dbPath = ensureAppDbPath();
-  const db = new Database(dbPath);
+  ensureDir(path.dirname(DB_PATH));
+  const db = new Database(DB_PATH);
   db.pragma("journal_mode = WAL");
+  db.pragma("foreign_keys = ON");
 
-  if (!fs.existsSync(SQL_DIR)) {
-    console.error(`missing SQL directory: ${SQL_DIR}`);
-    process.exit(1);
-  }
+  const files = listSqlFiles(SQL_DIR);
+  for (const f of files) {
+    const full = path.join(SQL_DIR, f);
 
-  const files = fs
-    .readdirSync(SQL_DIR)
-    .filter((f) => f.toLowerCase().endsWith(".sql"))
-    .sort((a, b) => a.localeCompare(b, "en"));
-
-  for (const file of files) {
-    const full = path.join(SQL_DIR, file);
-    let sql = readSqlFile(full);
-    sql = stripComments(sql);
-    sql = guardAlterAddColumn(sql, db);
-    const statements = splitStatements(sql);
-
-    if (statements.length === 0) {
-      console.log(`skipped ${file}`);
+    // ⚠️ Skip explicite : ignorer 003_pmp_valeur_stock.sql devenu obsolète
+    if (/^003_pmp_valeur_stock\.sql$/i.test(f)) {
+      console.log(`skip ${f} (intégré dans 001_schema.sql)`);
       continue;
     }
 
-    db.exec("BEGIN");
-    for (const stmt of statements) {
-      try {
-        db.exec(stmt);
-      } catch (err) {
-        db.exec("ROLLBACK");
-        console.error(`error in ${file} executing:`);
-        console.error(stmt);
-        console.error(err);
-        process.exit(1);
-      }
+    if (alreadyApplied(db, f)) {
+      console.log(`skip ${f} (déjà appliqué)`);
+      continue;
     }
-    db.exec("COMMIT");
-    console.log(`applied ${file}`);
+
+    const sql = readSql(full);
+    if (!sql) { console.log(`skip ${f} (vide)`); continue; }
+
+    const txn = db.transaction(() => db.exec(sql));
+    try {
+      txn();
+      markApplied(db, f);
+      console.log(`applied ${path.join("db/sqlite", f)}`);
+    } catch (e) {
+      console.error(`\nFAILED on ${f}\n${e.message}`);
+      db.close();
+      process.exit(1);
+    }
   }
+
+  console.log(`OK: ${DB_PATH}`);
+  db.close();
 }
 
 main();
