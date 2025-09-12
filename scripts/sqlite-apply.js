@@ -52,12 +52,6 @@ function main() {
   for (const f of files) {
     const full = path.join(SQL_DIR, f);
 
-    // ⚠️ Skip explicite : ignorer 003_pmp_valeur_stock.sql devenu obsolète
-    if (/^003_pmp_valeur_stock\.sql$/i.test(f)) {
-      console.log(`skip ${f} (intégré dans 001_schema.sql)`);
-      continue;
-    }
-
     if (alreadyApplied(db, f)) {
       console.log(`skip ${f} (déjà appliqué)`);
       continue;
