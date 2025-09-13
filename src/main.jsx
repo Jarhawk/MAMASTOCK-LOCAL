@@ -15,6 +15,13 @@ import "./globals.css";
 import "nprogress/nprogress.css";
 import { runSqlSelfTest } from "@/debug/sqlSelfTest";
 
+// DEV only: unregister any service workers to avoid PWA caching in Tauri/Vite dev
+if (import.meta.env.DEV && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    for (const r of regs) r.unregister().catch(() => {});
+  }).catch(() => {});
+}
+
 if (import.meta.env.DEV && import.meta.env.TAURI_PLATFORM) {
   import("@/debug/check-capabilities-runtime");
 }
