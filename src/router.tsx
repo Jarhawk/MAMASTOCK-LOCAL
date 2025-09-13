@@ -13,7 +13,7 @@ import Unites from "@/pages/parametrage/Unites";
 import DossierDonnees from "@/pages/DossierDonnees";
 import AuthDebug from "@/pages/debug/AuthDebug";
 import Sidebar from "@/components/Sidebar";
-import { isTauri, getDb } from "@/lib/db/sql";
+import { isTauri } from "@/lib/db/sql";
 
 function AppLayout() {
   return (
@@ -34,10 +34,10 @@ const routes = [
       { index: true, element: <Dashboard /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "parametrage/familles", element: <Familles /> },
-      { path: "parametrage/sous-familles", element: <SousFamilles /> },
+      { path: "parametrage/sousfamilles", element: <SousFamilles /> },
       { path: "parametrage/unites", element: <Unites /> },
-      { path: "parametrage/dossier-donnees", element: <DossierDonnees /> },
-      { path: "debug/auth", element: <AuthDebug /> },
+      { path: "dossierdonnees", element: <DossierDonnees /> },
+      { path: "debug/authdebug", element: <AuthDebug /> },
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },
