@@ -20,6 +20,16 @@ if (import.meta.env.DEV && import.meta.env.TAURI_PLATFORM) {
 
 runSqlSelfTest().catch(console.error);
 
+if (
+  typeof window !== "undefined" &&
+  window.location.hostname === "localhost" &&
+  !import.meta.env.TAURI_PLATFORM
+) {
+  console.warn(
+    "Vous êtes dans le navigateur. Ouvrez l’app dans la fenêtre Tauri pour activer SQLite."
+  );
+}
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
