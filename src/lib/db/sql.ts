@@ -1,7 +1,9 @@
 // src/lib/db/sql.ts
 /// <reference types="vite/client" />
 
-import Database from "@tauri-apps/plugin-sql";
+import { Database } from "@tauri-apps/plugin-sql";
+import { appDataDir, join } from "@tauri-apps/api/path";
+import { exists, mkdir } from "@tauri-apps/plugin-fs";
 
 export const isTauri = !!import.meta.env.TAURI_PLATFORM;
 export { isTauri as IS_TAURI };
@@ -26,8 +28,33 @@ const hasTauriEnv =
     ((window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__)) ||
   isTauri;
 
-let _db: any | null = null;
-let _loading: Promise<any> | null = null;
+let _db: Database | null = null;
+let _loading: Promise<Database> | null = null;
+
+export async function locateDb(): Promise<string> {
+  const base = await appDataDir();
+  const dir = await join(base, "MamaStock");
+  if (!(await exists(dir))) {
+    await mkdir(dir, { recursive: true });
+  }
+  return await join(dir, "mamastock.db");
+}
+
+export async function openDb(): Promise<Database> {
+  if (!isTauri) throw new Error("Tauri required");
+  if (_db) return _db;
+  if (_loading) return _loading;
+  const path = await locateDb();
+  _loading = Database.load(`sqlite:${path}`)
+    .then((db) => {
+      _db = db;
+      return db;
+    })
+    .finally(() => {
+      _loading = null;
+    });
+  return _loading;
+}
 
 export async function getDb() {
   if (_db) return _db;
@@ -41,35 +68,53 @@ export async function getDb() {
         execute: async () => Promise.reject(new Error("SQL désactivé (forceTauri)")),
         select: async () => Promise.reject(new Error("SQL désactivé (forceTauri)")),
         close: async () => Promise.reject(new Error("SQL désactivé (forceTauri)")),
-      };
+      } as unknown as Database;
       _db = mock;
       return mock;
     }
     throw new Error("Tauri requis: lance via `npx tauri dev`");
   }
 
-  _loading = Database.load("sqlite:mamastock.db")
-    .then((db) => {
-      _db = db;
-      return db;
-    })
-    .finally(() => {
-      _loading = null;
-    });
+  return openDb();
+}
 
-  return _loading;
+export async function ensureSeeds() {
+  const db = await openDb();
+  await db.execute(
+    "CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT)"
+  );
+  await db.execute(
+    "INSERT OR IGNORE INTO meta(key,value) VALUES ('installed','1')"
+  );
+}
+
+export async function getMigrationsState(): Promise<
+  { id: string; applied_at: string }[]
+> {
+  const db = await openDb();
+  await db.execute(
+    "CREATE TABLE IF NOT EXISTS __migrations__(id TEXT PRIMARY KEY, applied_at TEXT DEFAULT CURRENT_TIMESTAMP)"
+  );
+  const rows = await db.select(
+    "SELECT id, applied_at FROM __migrations__ ORDER BY applied_at"
+  );
+  return rows as { id: string; applied_at: string }[];
 }
 
 export async function tableCount(name: string): Promise<number> {
-  const db = await getDb();
-  const rows = await db.select(`SELECT COUNT(*) as c FROM ${name}`);
-  return rows?.[0]?.c ?? 0;
+  const db = await openDb();
+  const table = name.replace(/"/g, '""');
+  const rows = await db.select(
+    `SELECT COUNT(*) as c FROM "${table}"`
+  );
+  return (rows as any)?.[0]?.c ?? 0;
 }
 
 export async function closeDb() {
   if (!_db) return;
   try {
-    await _db.close?.();
-  } catch {}
-  _db = null;
+    await _db.close();
+  } finally {
+    _db = null;
+  }
 }
