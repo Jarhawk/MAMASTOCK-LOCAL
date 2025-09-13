@@ -1,56 +1,69 @@
+// src/lib/db/sql.ts
+/// <reference types="vite/client" />
+
 import Database from "@tauri-apps/plugin-sql";
 
-export const isTauri = !!import.meta.env.TAURI_PLATFORM;
+const forceTauri = (() => {
+  if (typeof window === "undefined") return false;
+  try {
+    return new URLSearchParams(window.location.search).get("forceTauri") === "1";
+  } catch {
+    return false;
+  }
+})();
+
+const hasTauriEnv =
+  (typeof window !== "undefined" &&
+    ((window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__)) ||
+  !!import.meta.env?.TAURI_PLATFORM;
+
+export const isTauri = !!(hasTauriEnv || forceTauri);
+export { isTauri as IS_TAURI };
 
 let _db: any | null = null;
 let _loading: Promise<any> | null = null;
 
 export async function getDb() {
-  if (!isTauri) throw new Error("Tauri required: run with `npx tauri dev`.");
   if (_db) return _db;
   if (_loading) return _loading;
 
-  _loading = (async () => {
-    try {
-      // nécessite sql:allow-load
-      const db = await Database.load("sqlite:mamastock.db");
+  if (!hasTauriEnv) {
+    if (forceTauri) {
+      console.warn("[sql] SQL désactivé (forceTauri)");
+      const mock = {
+        load: async () => Promise.reject(new Error("SQL désactivé (forceTauri)")),
+        execute: async () => Promise.reject(new Error("SQL désactivé (forceTauri)")),
+        select: async () => Promise.reject(new Error("SQL désactivé (forceTauri)")),
+        close: async () => Promise.reject(new Error("SQL désactivé (forceTauri)")),
+      };
+      _db = mock;
+      return mock;
+    }
+    throw new Error("Tauri requis: lance via `npx tauri dev`");
+  }
+
+  _loading = Database.load("sqlite:mamastock.db")
+    .then((db) => {
       _db = db;
       return db;
-    } catch (e:any) {
-      // message typique => "sql.load not allowed. Permissions associated with this command: sql:allow-load, sql:default"
-      console.error("[getDb] load failed:", e?.message ?? e);
-      throw e;
-    } finally {
+    })
+    .finally(() => {
       _loading = null;
-    }
-  })();
+    });
 
   return _loading;
 }
 
+export async function tableCount(name: string): Promise<number> {
+  const db = await getDb();
+  const rows = await db.select(`SELECT COUNT(*) as c FROM ${name}`);
+  return rows?.[0]?.c ?? 0;
+}
+
 export async function closeDb() {
   if (!_db) return;
-  try { await _db.close?.(); } catch {}
+  try {
+    await _db.close?.();
+  } catch {}
   _db = null;
-}
-
-export async function selectOne<T=any>(sql: string, params: any[] = []): Promise<T|null> {
-  const db = await getDb();
-  const rows: T[] = await db.select(sql, params);
-  return rows?.[0] ?? null;
-}
-
-export async function selectAll<T=any>(sql: string, params: any[] = []): Promise<T[]> {
-  const db = await getDb();
-  return await db.select(sql, params);
-}
-
-export async function exec(sql: string, params: any[] = []): Promise<void> {
-  const db = await getDb();
-  await db.execute(sql, params);
-}
-
-export async function tableCount(name: string): Promise<number> {
-  const row = await selectOne<{ c:number }>(`SELECT COUNT(*) AS c FROM ${name}`);
-  return row?.c ?? 0;
 }
