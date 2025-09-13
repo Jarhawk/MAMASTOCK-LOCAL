@@ -10,7 +10,10 @@
     "core:window:default",
     "core:resources:default",
     "log:default",
+
     "fs:default",
+    "fs:allow-open",
+    "fs:allow-read",
     "fs:allow-mkdir",
     "fs:create-app-specific-dirs",
     "fs:allow-appdata-write",
