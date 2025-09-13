@@ -3,6 +3,8 @@ import { homeDir, appDataDir, join } from "@tauri-apps/api/path";
 import { exists } from "@tauri-apps/plugin-fs";
 import { isTauri } from "@/lib/runtime";
 
+export { isTauri };
+
 let _db: any | null = null;
 let _dbPath: string | null = null;
 
@@ -42,6 +44,10 @@ export async function openDb() {
     _dbPath = p;
     return _db;
   }
+}
+
+export async function getDb() {
+  return openDb();
 }
 
 export async function tableCount(name: string): Promise<number> {

@@ -1,8 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { createAsyncState } from '../_shared/createAsyncState';
-import { getDb } from '@/lib/sql';
-import { isTauri } from '@/lib/runtime';
+import { getDb, isTauri } from '@/lib/db/sql';
 
 export default function useEvolutionAchats() {
   const { mama_id, loading: authLoading } = useAuth() || {};

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { isTauri } from '@/tauriEnv';
+import { isTauri } from '@/lib/db/sql';
 
 export default function DossierDonnees() {
   const [baseDir, setBaseDir] = useState('');
@@ -8,7 +8,7 @@ export default function DossierDonnees() {
   const [dbExists, setDbExists] = useState(false);
 
   const refresh = async () => {
-    if (!isTauri()) return;
+    if (!isTauri) return;
     const { appDataDir, join } = await import('@tauri-apps/api/path');
     const { exists, mkdir } = await import('@tauri-apps/plugin-fs');
     const root = await appDataDir();
@@ -27,13 +27,13 @@ export default function DossierDonnees() {
   }, []);
 
   const openDir = async () => {
-    if (!isTauri()) return;
+    if (!isTauri) return;
     const { open } = await import('@tauri-apps/plugin-shell');
     await open(baseDir);
   };
 
   const ensureDir = async () => {
-    if (!isTauri()) return;
+    if (!isTauri) return;
     const { mkdir, exists } = await import('@tauri-apps/plugin-fs');
     const { join } = await import('@tauri-apps/api/path');
     await mkdir(baseDir, { recursive: true });
@@ -54,8 +54,8 @@ export default function DossierDonnees() {
         )}
       </div>
       <div className="flex gap-2">
-        <Button onClick={openDir} disabled={!isTauri()}>Ouvrir le dossier</Button>
-        <Button onClick={ensureDir} disabled={!isTauri()}>Créer si manquant</Button>
+        <Button onClick={openDir} disabled={!isTauri}>Ouvrir le dossier</Button>
+        <Button onClick={ensureDir} disabled={!isTauri}>Créer si manquant</Button>
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
-import { isTauri } from "@/lib/runtime";
-import { getDb } from "@/lib/sql";
+import { getDb, isTauri } from "@/lib/db/sql";
 
 export function useAdvancedStats() {
   const [data, setData] = useState([]);

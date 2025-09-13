@@ -6,9 +6,8 @@ import {
   produits_list,
   inventaires_list,
   inventaire_create,
-} from '@/lib/db';
-import { getDb } from '@/lib/sql';
-import { isTauri } from '@/lib/runtime';
+  } from '@/lib/db';
+  import { getDb, isTauri } from '@/lib/db/sql';
 
 export function useStock() {
   const { mama_id } = useAuth();

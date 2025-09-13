@@ -1,10 +1,41 @@
 import { useState, useEffect, useCallback } from 'react';
-import { requisitions_quantites_since } from "@/lib/db";
-
 import { useAuth } from '@/hooks/useAuth';
+import { getDb, isTauri } from '@/lib/db/sql';
 
 export async function fetchConsoMoyenne(mamaId, sinceISO) {
-  return await requisitions_quantites_since(mamaId, sinceISO);
+  if (!isTauri) {
+    return { conso: 0 };
+  }
+  try {
+    const db = await getDb();
+    const rows = await db.select(
+      `SELECT rl.quantite, r.date_requisition
+         FROM requisition_lignes rl
+         JOIN requisitions r ON r.id = rl.requisition_id
+        WHERE r.mama_id = ?
+          AND r.statut = 'réalisée'
+          AND r.date_requisition >= ?
+        ORDER BY r.date_requisition ASC`,
+      [mamaId, sinceISO]
+    );
+    const daily = {};
+    (rows || []).forEach((m) => {
+      const d = m.date_requisition?.slice(0, 10);
+      if (!daily[d]) daily[d] = 0;
+      daily[d] += Number(m.quantite || 0);
+    });
+    const values = Object.values(daily);
+    const conso = values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+    return { conso };
+  } catch (e) {
+    const msg = String(e?.message || e);
+    if (msg.includes('sql.load not allowed')) {
+      console.warn('fetchConsoMoyenne: sql.load not allowed');
+      // TODO: vérifier src-tauri/capabilities/sql.json
+      return { conso: 0 };
+    }
+    throw e;
+  }
 }
 
 export default function useConsoMoyenne() {
@@ -13,37 +44,28 @@ export default function useConsoMoyenne() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchData = useCallback(async () => {
-    if (!mama_id) return 0;
-    setLoading(true);
-    setError(null);
-    try {
-      const start = new Date();
-      start.setDate(start.getDate() - 7);
-      const data = await fetchConsoMoyenne(mama_id, start.toISOString());
-
-      const daily = {};
-      (data || []).forEach((m) => {
-        const d = m.date_requisition?.slice(0, 10);
-        if (!daily[d]) daily[d] = 0;
-        daily[d] += Number(m.quantite || 0);
-      });
-      const values = Object.values(daily);
-      const avgValue = values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
-      setAvg(avgValue);
-      if (import.meta.env.DEV) {
-        console.debug('Chargement dashboard terminé');
+    const fetchData = useCallback(async () => {
+      if (!mama_id) return 0;
+      setLoading(true);
+      setError(null);
+      try {
+        const start = new Date();
+        start.setDate(start.getDate() - 7);
+        const { conso } = await fetchConsoMoyenne(mama_id, start.toISOString());
+        setAvg(conso);
+        if (import.meta.env.DEV) {
+          console.debug('Chargement dashboard terminé');
+        }
+        return conso;
+      } catch (e) {
+        console.warn('useConsoMoyenne', e);
+        setError(e);
+        setAvg(0);
+        return 0;
+      } finally {
+        setLoading(false);
       }
-      return avgValue;
-    } catch (e) {
-      console.warn('useConsoMoyenne', e);
-      setError(e);
-      setAvg(0);
-      return 0;
-    } finally {
-      setLoading(false);
-    }
-  }, [mama_id]);
+    }, [mama_id]);
 
   useEffect(() => {
     fetchData();

@@ -1,15 +1,8 @@
-import Database from "@tauri-apps/plugin-sql";
 import { dataDbPath, inAppDir } from "@/lib/paths";
 import { readConfig, writeConfig } from "@/appFs";
-import { isTauri } from "@/tauriEnv";
+import { getDb as baseGetDb, isTauri } from "@/lib/db/sql";
 
-let _db: any;
-export async function getDb() {
-  if (_db) return _db;
-  const file = await dataDbPath();
-  _db = await Database.load(`sqlite:${file}`);
-  return _db;
-}
+export { baseGetDb as getDb, isTauri };
 
 // Fournisseurs
 export async function fournisseurs_list() {

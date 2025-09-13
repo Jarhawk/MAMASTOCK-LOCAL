@@ -1,23 +1,4 @@
-import Database from "@tauri-apps/plugin-sql";
-import { exists, mkdir } from "@tauri-apps/plugin-fs";
-import { dirname } from "@tauri-apps/api/path";
-import { dataDbPath } from "@/lib/paths";
-import { isTauri } from "@/lib/runtime";
-async function dbPath() {
-  if (!isTauri) throw new Error("Lance l'app via Tauri (npx tauri dev).");
-  const path = await dataDbPath();
-  const dir = await dirname(path);
-  if (!(await exists(dir))) await mkdir(dir, { recursive: true });
-  return path;
-}
-
-let _db: Database | null = null;
-async function getDb() {
-  if (_db) return _db;
-  const path = await dbPath();
-  _db = await Database.load(`sqlite:${path}`);
-  return _db!;
-}
+import { getDb, isTauri } from "@/lib/db/sql";
 
 function b64url(buf: Uint8Array) {
   // base64url sans padding
@@ -65,6 +46,7 @@ function unpackHash(stored: string) {
 }
 
 export async function registerLocal(email: string, password: string): Promise<LocalUser> {
+  if (!isTauri) throw new Error("Tauri required");
   email = email.trim().toLowerCase();
   await ensureTables();
   const db = await getDb();
@@ -82,6 +64,7 @@ export async function registerLocal(email: string, password: string): Promise<Lo
 }
 
 export async function loginLocal(email: string, password: string): Promise<LocalUser> {
+  if (!isTauri) throw new Error("Tauri required");
   email = email.trim().toLowerCase();
   await ensureTables();
   const db = await getDb();

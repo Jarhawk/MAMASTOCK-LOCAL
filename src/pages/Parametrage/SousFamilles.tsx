@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getDb } from '@/lib/sql';
+import { getDb, isTauri } from '@/lib/db/sql';
 
 interface Famille { id: number; nom: string; }
 interface SousFamille { id: number; nom: string; famille_id: number; famille: string; }
@@ -13,6 +13,10 @@ export default function SousFamilles() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isTauri) {
+      setError('Base de données indisponible');
+      return;
+    }
     getDb()
       .then(setDb)
       .catch(() => setError('Base de données indisponible'));
@@ -25,9 +29,10 @@ export default function SousFamilles() {
     }
   }, [db]);
 
-  async function loadFamilles() {
-    try {
-      const rows = await db.select<Famille[]>(
+    async function loadFamilles() {
+      if (!db || !isTauri) return;
+      try {
+        const rows = await db.select<Famille[]>(
         'SELECT id, nom FROM familles ORDER BY nom'
       );
       setFamilles(rows);
@@ -36,9 +41,10 @@ export default function SousFamilles() {
     }
   }
 
-  async function reload() {
-    try {
-      const rows = await db.select<SousFamille[]>(
+    async function reload() {
+      if (!db || !isTauri) return;
+      try {
+        const rows = await db.select<SousFamille[]>(
         `SELECT s.id, s.nom, s.famille_id, f.nom AS famille
          FROM sous_familles s
          JOIN familles f ON f.id = s.famille_id
@@ -50,10 +56,10 @@ export default function SousFamilles() {
     }
   }
 
-  async function add() {
-    if (!familleId || !nom) return;
-    try {
-      await db.execute('INSERT INTO sous_familles(famille_id, nom) VALUES (?, ?)', [
+    async function add() {
+      if (!isTauri || !db || !familleId || !nom) return;
+      try {
+        await db.execute('INSERT INTO sous_familles(famille_id, nom) VALUES (?, ?)', [
         Number(familleId),
         nom,
       ]);
@@ -69,9 +75,10 @@ export default function SousFamilles() {
     }
   }
 
-  async function remove(id: number) {
-    try {
-      await db.execute('DELETE FROM sous_familles WHERE id = ?', [id]);
+    async function remove(id: number) {
+      if (!isTauri || !db) return;
+      try {
+        await db.execute('DELETE FROM sous_familles WHERE id = ?', [id]);
       reload();
     } catch {
       alert('Suppression impossible');

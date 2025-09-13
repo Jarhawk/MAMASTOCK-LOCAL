@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getDb } from '@/lib/sql';
+import { getDb, isTauri } from '@/lib/db/sql';
 
 interface Famille {
   id: number;
@@ -12,19 +12,24 @@ export default function Familles() {
   const [nom, setNom] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    getDb()
-      .then(setDb)
-      .catch(() => setError('Base de données indisponible'));
-  }, []);
+    useEffect(() => {
+      if (!isTauri) {
+        setError('Base de données indisponible');
+        return;
+      }
+      getDb()
+        .then(setDb)
+        .catch(() => setError('Base de données indisponible'));
+    }, []);
 
   useEffect(() => {
     if (db) reload();
   }, [db]);
 
-  async function reload() {
-    try {
-      const rows = await db.select<Famille[]>(
+    async function reload() {
+      if (!db || !isTauri) return;
+      try {
+        const rows = await db.select<Famille[]>(
         'SELECT id, nom FROM familles ORDER BY nom'
       );
       setItems(rows);
@@ -33,10 +38,10 @@ export default function Familles() {
     }
   }
 
-  async function add() {
-    if (!nom) return;
-    try {
-      await db.execute('INSERT INTO familles(nom) VALUES (?)', [nom]);
+    async function add() {
+      if (!isTauri || !db || !nom) return;
+      try {
+        await db.execute('INSERT INTO familles(nom) VALUES (?)', [nom]);
       setNom('');
       reload();
     } catch (e: any) {
@@ -48,9 +53,10 @@ export default function Familles() {
     }
   }
 
-  async function remove(id: number) {
-    try {
-      await db.execute('DELETE FROM familles WHERE id = ?', [id]);
+    async function remove(id: number) {
+      if (!isTauri || !db) return;
+      try {
+        await db.execute('DELETE FROM familles WHERE id = ?', [id]);
       reload();
     } catch {
       alert('Suppression impossible');

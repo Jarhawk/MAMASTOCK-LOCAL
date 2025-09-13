@@ -1,25 +1,10 @@
 /// <reference types="vite/client" />
-import { exists, mkdir } from "@tauri-apps/plugin-fs";
-import Database from "@tauri-apps/plugin-sql";
-import { dirname } from "@tauri-apps/api/path";
-import { dataDbPath } from "@/lib/paths";
-import { isTauri } from "@/lib/runtime";
-async function dbPath() {
-  if (!isTauri) throw new Error("Lance l'app via Tauri (npx tauri dev).");
-  const path = await dataDbPath();
-  const dir = await dirname(path);
-  if (!(await exists(dir))) await mkdir(dir, { recursive: true });
-  return path;
-}
-
-export async function openDb() {
-  const path = await dbPath();
-  return await Database.load("sqlite:" + path);
-}
+import { getDb, isTauri } from "@/lib/db/sql";
 
 /** Crée les tables minimales si absentes */
 export async function initSchema() {
-  const db = await openDb();
+  if (!isTauri) throw new Error("Lance l'app via Tauri (npx tauri dev).");
+  const db = await getDb();
   await db.execute(`
     PRAGMA journal_mode = WAL;
 
@@ -58,7 +43,7 @@ export async function initSchema() {
 }
 
 export async function sumStock(itemId: string): Promise<number> {
-  const db = await openDb();
+  const db = await getDb();
   const rows = await db.select("SELECT COALESCE(SUM(qty),0) AS s FROM stock_movements WHERE item_id = $1", [itemId]);
   return Number(rows?.[0]?.s ?? 0);
 }
