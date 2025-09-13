@@ -13,7 +13,7 @@ export function useConsolidatedStats() {
     try {
       const end = new Date().toISOString().slice(0, 10);
       const data = await consolidation_performance({ start: "2000-01-01", end });
-      const mapped = (data || []).map((r: any) => ({
+      const mapped = (data || []).map((r) => ({
         mama_id: r.mama_id,
         nom: r.mama_id,
         stock_valorise: r.valeur_stock || 0,
