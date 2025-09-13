@@ -1,11 +1,11 @@
 import { useAuth } from '@/hooks/useAuth';
-import { getDb } from '@/lib/db';
+import { isTauri, getDb } from '@/lib/sql';
 
 export function useRuptureAlerts() {
   const { mama_id } = useAuth();
 
   async function fetchAlerts(type = null) {
-    if (!mama_id) return [];
+    if (!mama_id || !isTauri) return [];
     const db = await getDb();
     const params = [];
     let sql =
@@ -24,7 +24,7 @@ export function useRuptureAlerts() {
 
   async function generateSuggestions() {
     // Pas de génération automatique hors ligne
-    if (!mama_id) return { suggestions: [] };
+    if (!mama_id || !isTauri) return { suggestions: [] };
     return { suggestions: [] };
   }
 

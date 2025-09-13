@@ -1,10 +1,11 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { getDb } from '@/lib/db';
+import { isTauri, getDb } from '@/lib/sql';
 
 // Stats d’évolution d’achats (tous fournisseurs ou par fournisseur)
 export function useFournisseurStats() {
   // Stats tous fournisseurs (évolution mensuelle)
   async function fetchStatsAll() {
+    if (!isTauri) return [];
     const db = await getDb();
     const rows = await db.select(
       `SELECT substr(f.date_iso,1,7) as mois, IFNULL(SUM(fl.quantite * fl.prix_unitaire),0) as total_achats
@@ -18,6 +19,7 @@ export function useFournisseurStats() {
 
   // Stats pour 1 fournisseur précis (évolution mensuelle)
   async function fetchStatsForFournisseur(fournisseur_id) {
+    if (!isTauri) return [];
     const db = await getDb();
     const rows = await db.select(
       `SELECT substr(f.date_iso,1,7) as mois, IFNULL(SUM(fl.quantite * fl.prix_unitaire),0) as total_achats

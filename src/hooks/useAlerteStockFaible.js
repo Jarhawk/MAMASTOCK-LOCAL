@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { getDb } from '@/lib/db';
+import { isTauri, getDb } from '@/lib/sql';
 
 /**
  * Hook for low stock alerts based on v_alertes_rupture_api view.
@@ -17,7 +17,7 @@ export function useAlerteStockFaible({ page = 1, pageSize = 20 } = {}) {
 
   const fetchData = useCallback(
     async (signal) => {
-      if (!mama_id) return [];
+      if (!mama_id || !isTauri) return [];
       setLoading(true);
       setError(null);
       const offset = (page - 1) * pageSize;
@@ -46,7 +46,7 @@ export function useAlerteStockFaible({ page = 1, pageSize = 20 } = {}) {
   );
 
   useEffect(() => {
-    if (!mama_id) return;
+    if (!mama_id || !isTauri) return;
     const controller = new AbortController();
     fetchData(controller.signal);
     return () => controller.abort();

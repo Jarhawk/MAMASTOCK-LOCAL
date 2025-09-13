@@ -6,8 +6,8 @@ import {
   produits_list,
   inventaires_list,
   inventaire_create,
-  getDb,
 } from '@/lib/db';
+import { isTauri, getDb } from '@/lib/sql';
 
 export function useStock() {
   const { mama_id } = useAuth();
@@ -16,6 +16,10 @@ export function useStock() {
   const [error, setError] = useState(null);
 
   const fetchStocks = useCallback(async () => {
+    if (!isTauri) {
+      setStocks([]);
+      return [];
+    }
     setLoading(true);
     setError(null);
     try {
@@ -36,7 +40,7 @@ export function useStock() {
   }
 
   const getStockTheorique = useCallback(async (produit_id) => {
-    if (!produit_id) return 0;
+    if (!produit_id || !isTauri) return 0;
     const db = await getDb();
     const rows = await db.select(
       'SELECT stock_theorique FROM produits WHERE id = ?',
@@ -46,13 +50,13 @@ export function useStock() {
   }, []);
 
   const getInventaires = useCallback(async () => {
-    if (!mama_id) return [];
+    if (!mama_id || !isTauri) return [];
     return await inventaires_list(mama_id);
   }, [mama_id]);
 
   const createInventaire = useCallback(
     async (payload) => {
-      if (!mama_id) return null;
+      if (!mama_id || !isTauri) return null;
       return await inventaire_create({ ...payload, mama_id });
     },
     [mama_id]

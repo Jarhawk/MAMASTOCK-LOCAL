@@ -2,7 +2,8 @@
 import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
-import { zones_stock_list, getDb } from '@/lib/db';
+import { zones_stock_list } from '@/lib/db';
+import { isTauri, getDb } from '@/lib/sql';
 import { toast } from 'sonner';
 
 export function useInventaireZones() {
@@ -12,7 +13,7 @@ export function useInventaireZones() {
   const [error, setError] = useState(null);
 
   async function getZones() {
-    if (!mama_id) return [];
+    if (!mama_id || !isTauri) return [];
     setLoading(true);
     setError(null);
     try {
@@ -29,7 +30,7 @@ export function useInventaireZones() {
   }
 
   async function createZone(zone) {
-    if (!mama_id) return;
+    if (!mama_id || !isTauri) return;
     setLoading(true);
     setError(null);
     try {
@@ -48,7 +49,7 @@ export function useInventaireZones() {
   }
 
   async function updateZone(id, fields) {
-    if (!mama_id || !id) return;
+    if (!mama_id || !id || !isTauri) return;
     setLoading(true);
     setError(null);
     try {
@@ -72,7 +73,7 @@ export function useInventaireZones() {
   }
 
   async function deleteZone(id) {
-    if (!mama_id || !id) return;
+    if (!mama_id || !id || !isTauri) return;
     setLoading(true);
     setError(null);
     try {
@@ -91,7 +92,7 @@ export function useInventaireZones() {
   }
 
   async function reactivateZone(id) {
-    if (!mama_id || !id) return;
+    if (!mama_id || !id || !isTauri) return;
     const db = await getDb();
     await db.execute(
       'UPDATE inventaire_zones SET actif = 1 WHERE id = ? AND mama_id = ?',

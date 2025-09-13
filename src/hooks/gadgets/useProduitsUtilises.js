@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { getDb } from '@/lib/db';
+import { isTauri, getDb } from '@/lib/sql';
 
 export default function useProduitsUtilises() {
   const { mama_id } = useAuth();
@@ -10,7 +10,7 @@ export default function useProduitsUtilises() {
 
   const fetchData = useCallback(
     async (signal) => {
-      if (!mama_id) return [];
+      if (!mama_id || !isTauri) return [];
       setLoading(true);
       setError(null);
       const start = new Date();
