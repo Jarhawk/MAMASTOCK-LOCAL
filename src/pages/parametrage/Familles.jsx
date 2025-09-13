@@ -2,28 +2,34 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
-import { listFamilles, createFamille, renameFamille, deleteFamille } from '@/lib/familles';
+import { listFamilles, createFamille, updateFamille, deleteFamille } from '@/lib/familles';
 import ListingContainer from '@/components/ui/ListingContainer';
 import TableHeader from '@/components/ui/TableHeader';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
-import { isTauri, getDb } from '@/lib/db/sql';
+import { isTauri } from '@/lib/db/sql';
 
 export default function Familles() {
   const { hasAccess, loading: authLoading } = useAuth();
   const canEdit = hasAccess('parametrage', 'peut_modifier');
   const [familles, setFamilles] = useState([]);
   const [loading, setLoading] = useState(true);
-    const [edit, setEdit] = useState(null);
+  const [edit, setEdit] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(null);
+  const forceTauri = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('forceTauri');
 
   const refresh = async () => {
     try {
       setLoading(true);
-      const data = isTauri ? await listFamilles() : [];
-      setFamilles(data);
+      if (isTauri || forceTauri) {
+        const data = await listFamilles();
+        setFamilles(data);
+      }
     } catch (err) {
       console.error(err);
+      toast.error(err.message || 'Erreur lors du chargement');
     } finally {
       setLoading(false);
     }
@@ -36,30 +42,35 @@ export default function Familles() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        if (edit?.id) {
-          await renameFamille(edit.id, edit.nom || '');
-        } else {
-          await createFamille(edit?.nom || '');
-        }
+      setSaving(true);
+      if (edit?.id) {
+        await updateFamille(edit.id, { code: edit.code, libelle: edit.libelle });
+      } else {
+        await createFamille({ code: edit.code, libelle: edit.libelle });
+      }
       toast.success('Famille enregistrée');
       setEdit(null);
       await refresh();
     } catch (err) {
       console.error(err);
       toast.error("Erreur lors de l'enregistrement");
+    } finally {
+      setSaving(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (confirm('Supprimer cet élément ?')) {
-      try {
-        await deleteFamille(id);
-        toast.success('Famille supprimée');
-        await refresh();
-      } catch (err) {
-        console.error(err);
-        toast.error('Suppression échouée');
-      }
+    if (!confirm('Supprimer cet élément ?')) return;
+    try {
+      setDeleting(id);
+      await deleteFamille(id);
+      toast.success('Famille supprimée');
+      await refresh();
+    } catch (err) {
+      console.error(err);
+      toast.error('Suppression échouée');
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -69,21 +80,26 @@ export default function Familles() {
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Familles</h1>
-        <TableHeader className="gap-2">
-          <Button onClick={() => setEdit({ nom: '' })}>+ Nouvelle famille</Button>
-        </TableHeader>
+      {!isTauri && !forceTauri && (
+        <p className="mb-2 text-sm text-yellow-700">Ouvre dans Tauri pour activer le SQL</p>
+      )}
+      <TableHeader className="gap-2">
+        <Button onClick={() => setEdit({ code: '', libelle: '' })}>+ Nouvelle famille</Button>
+      </TableHeader>
       <ListingContainer className="w-full overflow-x-auto">
         <table className="text-sm w-full">
           <thead>
             <tr>
-              <th className="px-2 py-1">Nom</th>
+              <th className="px-2 py-1">Code</th>
+              <th className="px-2 py-1">Libellé</th>
               <th className="px-2 py-1">Actions</th>
             </tr>
           </thead>
           <tbody>
             {familles.map((f) => (
               <tr key={f.id}>
-                <td className="px-2 py-1">{f.nom}</td>
+                <td className="px-2 py-1">{f.code}</td>
+                <td className="px-2 py-1">{f.libelle}</td>
                 <td className="px-2 py-1 flex gap-2">
                   <Button size="sm" variant="outline" onClick={() => setEdit(f)}>
                     Modifier
@@ -91,16 +107,17 @@ export default function Familles() {
                   <Button
                     size="sm"
                     variant="outline"
+                    disabled={deleting === f.id}
                     onClick={() => handleDelete(f.id)}
                   >
-                    Supprimer
+                    {deleting === f.id ? '...' : 'Supprimer'}
                   </Button>
                 </td>
               </tr>
             ))}
             {familles.length === 0 && (
               <tr>
-                <td colSpan="2" className="py-2">
+                <td colSpan="3" className="py-2">
                   Aucune famille
                 </td>
               </tr>
@@ -111,20 +128,31 @@ export default function Familles() {
       {edit && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="absolute inset-0 bg-black/50" onClick={() => setEdit(null)} />
-          <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-lg p-6 w-full max-w-md">
+          <div
+            className="relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-lg p-6 w-full max-w-md"
+          >
             <form onSubmit={handleSubmit} className="flex flex-col gap-2">
               <input
                 className="input"
-                placeholder="Nom"
+                placeholder="Code"
                 required
-                value={edit.nom || ''}
-                onChange={(e) => setEdit({ ...edit, nom: e.target.value })}
+                value={edit.code || ''}
+                onChange={(e) => setEdit({ ...edit, code: e.target.value })}
+              />
+              <input
+                className="input"
+                placeholder="Libellé"
+                required
+                value={edit.libelle || ''}
+                onChange={(e) => setEdit({ ...edit, libelle: e.target.value })}
               />
               <div className="flex justify-end gap-2 mt-2">
                 <Button type="button" variant="outline" onClick={() => setEdit(null)}>
                   Annuler
                 </Button>
-                <Button type="submit">Enregistrer</Button>
+                <Button type="submit" disabled={saving}>
+                  {saving ? '...' : 'Enregistrer'}
+                </Button>
               </div>
             </form>
           </div>
@@ -133,3 +161,4 @@ export default function Familles() {
     </div>
   );
 }
+

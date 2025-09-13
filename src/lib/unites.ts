@@ -1,19 +1,48 @@
-import { getDb, selectAll, selectOne, exec } from "@/lib/db/sql";
+import { getDb } from "@/lib/db/sql";
 
-export type Unite = { id:number; nom:string; abbr?:string|null; actif:number };
+export type Unite = {
+  id: number;
+  code: string;
+  libelle: string;
+  created_at?: string;
+};
 
 export async function listUnites(): Promise<Unite[]> {
-  return await selectAll<Unite>("SELECT id, nom, abbr, actif FROM unites ORDER BY nom ASC");
+  const db = await getDb();
+  return await db.select(
+    "SELECT id, code, libelle, created_at FROM unites ORDER BY libelle"
+  );
 }
-export async function getUnite(id:number): Promise<Unite|null> {
-  return await selectOne<Unite>("SELECT id, nom, abbr, actif FROM unites WHERE id = ?", [id]);
+
+export async function createUnite({
+  code,
+  libelle,
+}: {
+  code: string;
+  libelle: string;
+}): Promise<Unite> {
+  const db = await getDb();
+  const rows: Unite[] = await db.select(
+    "INSERT INTO unites(code, libelle) VALUES (?, ?) RETURNING *",
+    [code, libelle]
+  );
+  return rows[0];
 }
-export async function createUnite(nom:string, abbr?:string|null){
-  await exec("INSERT INTO unites(nom, abbr, actif) VALUES(?, ?, 1)", [nom.trim(), abbr ?? null]);
+
+export async function updateUnite(
+  id: number,
+  { code, libelle }: { code: string; libelle: string }
+): Promise<void> {
+  const db = await getDb();
+  await db.execute("UPDATE unites SET code=?, libelle=? WHERE id=?", [
+    code,
+    libelle,
+    id,
+  ]);
 }
-export async function updateUnite(id:number, nom:string, abbr?:string|null, actif:boolean=true){
-  await exec("UPDATE unites SET nom=?, abbr=?, actif=? WHERE id=?", [nom.trim(), abbr ?? null, actif?1:0, id]);
+
+export async function deleteUnite(id: number): Promise<void> {
+  const db = await getDb();
+  await db.execute("DELETE FROM unites WHERE id=?", [id]);
 }
-export async function deleteUnite(id:number){
-  await exec("DELETE FROM unites WHERE id=?", [id]);
-}
+

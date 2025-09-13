@@ -1,23 +1,49 @@
-import { selectAll, exec } from "@/lib/db/sql";
-export type SousFamille = { id:number; famille_id:number; nom:string; actif:number };
+import { getDb } from "@/lib/db/sql";
+
+export type SousFamille = {
+  id: number;
+  famille_id: number;
+  code: string;
+  libelle: string;
+};
 
 export async function listSousFamilles(): Promise<SousFamille[]> {
-  return await selectAll<SousFamille>(`
-    SELECT sf.id, sf.famille_id, sf.nom, sf.actif
-    FROM sous_familles sf
-    JOIN familles f ON f.id = sf.famille_id
-    ORDER BY f.nom ASC, sf.nom ASC
-  `);
+  const db = await getDb();
+  return await db.select(
+    "SELECT id, famille_id, code, libelle FROM sous_familles ORDER BY libelle"
+  );
 }
-export async function createSousFamille(familleId:number, nom:string){
-  await exec("INSERT INTO sous_familles(famille_id, nom, actif) VALUES(?,?,1)", [familleId, nom.trim()]);
+
+export async function createSousFamille({
+  famille_id,
+  code,
+  libelle,
+}: {
+  famille_id: number;
+  code: string;
+  libelle: string;
+}): Promise<SousFamille> {
+  const db = await getDb();
+  const rows: SousFamille[] = await db.select(
+    "INSERT INTO sous_familles(famille_id, code, libelle) VALUES (?,?,?) RETURNING *",
+    [famille_id, code, libelle]
+  );
+  return rows[0];
 }
-export async function renameSousFamille(id:number, nom:string){
-  await exec("UPDATE sous_familles SET nom=? WHERE id=?", [nom.trim(), id]);
+
+export async function updateSousFamille(
+  id: number,
+  { famille_id, code, libelle }: { famille_id: number; code: string; libelle: string }
+): Promise<void> {
+  const db = await getDb();
+  await db.execute(
+    "UPDATE sous_familles SET famille_id=?, code=?, libelle=? WHERE id=?",
+    [famille_id, code, libelle, id]
+  );
 }
-export async function setSousFamilleActif(id:number, actif:boolean){
-  await exec("UPDATE sous_familles SET actif=? WHERE id=?", [actif?1:0, id]);
+
+export async function deleteSousFamille(id: number): Promise<void> {
+  const db = await getDb();
+  await db.execute("DELETE FROM sous_familles WHERE id=?", [id]);
 }
-export async function deleteSousFamille(id:number){
-  await exec("DELETE FROM sous_familles WHERE id=?", [id]);
-}
+
