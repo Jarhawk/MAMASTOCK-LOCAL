@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2025-09-13T10:11:12.959Z",
-  "root": "/workspace/MAMASTOCK-LOCAL",
-  "srcDir": "/workspace/MAMASTOCK-LOCAL/src",
+  "generatedAt": "2025-09-13T10:16:19.849Z",
+  "root": "C:/Users/dark_/Desktop/mamastock.com/MAMASTOCK-LOCAL",
+  "srcDir": "C:/Users/dark_/Desktop/mamastock.com/MAMASTOCK-LOCAL/src",
   "entrypoints": [
     "src/main.jsx",
     "src/router.tsx"
@@ -57,7 +57,6 @@
     "src/pages/CartePlats.jsx",
     "src/pages/Consentements.jsx",
     "src/pages/Dashboard.jsx",
-    "src/pages/Debug/Auth.tsx",
     "src/pages/DossierDonnees.jsx",
     "src/pages/EngineeringMenu.jsx",
     "src/pages/Feedback.jsx",
@@ -66,10 +65,6 @@
     "src/pages/Login.jsx",
     "src/pages/NotFound.jsx",
     "src/pages/Onboarding.tsx",
-    "src/pages/Parametrage/DossierDonnees.tsx",
-    "src/pages/Parametrage/Familles.tsx",
-    "src/pages/Parametrage/SousFamilles.tsx",
-    "src/pages/Parametrage/Unites.tsx",
     "src/pages/Parametres/Familles.jsx",
     "src/pages/Pertes.jsx",
     "src/pages/Planning.jsx",
@@ -115,6 +110,7 @@
     "src/pages/cuisine/MenuDuJour.jsx",
     "src/pages/dashboard/DashboardBuilder.jsx",
     "src/pages/debug/AccessExample.jsx",
+    "src/pages/debug/Auth.tsx",
     "src/pages/debug/AuthDebug.jsx",
     "src/pages/debug/Debug.jsx",
     "src/pages/debug/DebugAuth.jsx",
@@ -175,9 +171,11 @@
     "src/pages/parametrage/APIKeys.jsx",
     "src/pages/parametrage/AccessRights.jsx",
     "src/pages/parametrage/CentreCoutForm.jsx",
+    "src/pages/parametrage/DossierDonnees.tsx",
     "src/pages/parametrage/ExportComptaPage.jsx",
     "src/pages/parametrage/ExportUserData.jsx",
     "src/pages/parametrage/Familles.jsx",
+    "src/pages/parametrage/Familles.tsx",
     "src/pages/parametrage/InvitationsEnAttente.jsx",
     "src/pages/parametrage/InviteUser.jsx",
     "src/pages/parametrage/MamaForm.jsx",
@@ -193,10 +191,12 @@
     "src/pages/parametrage/RoleForm.jsx",
     "src/pages/parametrage/Roles.jsx",
     "src/pages/parametrage/SousFamilles.jsx",
+    "src/pages/parametrage/SousFamilles.tsx",
     "src/pages/parametrage/SystemTools.jsx",
     "src/pages/parametrage/TemplateCommandeForm.jsx",
     "src/pages/parametrage/TemplatesCommandes.jsx",
     "src/pages/parametrage/Unites.jsx",
+    "src/pages/parametrage/Unites.tsx",
     "src/pages/parametrage/Utilisateurs.jsx",
     "src/pages/parametrage/ZoneAccess.jsx",
     "src/pages/parametrage/ZoneForm.jsx",
@@ -680,11 +680,11 @@
       "missing": []
     },
     "src/components/fiches/FicheRentabiliteCard.jsx": {
-      "internal": [],
+      "internal": [
+        "src/components/ui/Card.jsx"
+      ],
       "external": [],
-      "missing": [
-        "@/components/ui/Card"
-      ]
+      "missing": []
     },
     "src/components/fiches/FicheRow.jsx": {
       "internal": [
@@ -3545,13 +3545,6 @@
       ],
       "missing": []
     },
-    "src/pages/Debug/Auth.tsx": {
-      "internal": [
-        "src/hooks/useAuth.ts"
-      ],
-      "external": [],
-      "missing": []
-    },
     "src/pages/DossierDonnees.jsx": {
       "internal": [
         "src/components/ui/button.jsx",
@@ -3653,42 +3646,6 @@
         "@tauri-apps/api/path",
         "@tauri-apps/plugin-fs",
         "@tauri-apps/plugin-shell"
-      ],
-      "missing": []
-    },
-    "src/pages/Parametrage/DossierDonnees.tsx": {
-      "internal": [],
-      "external": [
-        "react",
-        "@tauri-apps/api/path",
-        "@tauri-apps/plugin-shell"
-      ],
-      "missing": []
-    },
-    "src/pages/Parametrage/Familles.tsx": {
-      "internal": [
-        "src/lib/db/sql.ts"
-      ],
-      "external": [
-        "react"
-      ],
-      "missing": []
-    },
-    "src/pages/Parametrage/SousFamilles.tsx": {
-      "internal": [
-        "src/lib/db/sql.ts"
-      ],
-      "external": [
-        "react"
-      ],
-      "missing": []
-    },
-    "src/pages/Parametrage/Unites.tsx": {
-      "internal": [
-        "src/lib/unites.ts"
-      ],
-      "external": [
-        "react"
       ],
       "missing": []
     },
@@ -4295,6 +4252,13 @@
         "src/hooks/useAuth.ts",
         "src/components/ui/LoadingSpinner.jsx",
         "src/components/ui/GlassCard.jsx"
+      ],
+      "external": [],
+      "missing": []
+    },
+    "src/pages/debug/Auth.tsx": {
+      "internal": [
+        "src/hooks/useAuth.ts"
       ],
       "external": [],
       "missing": []
@@ -5119,6 +5083,15 @@
       "external": [],
       "missing": []
     },
+    "src/pages/parametrage/DossierDonnees.tsx": {
+      "internal": [],
+      "external": [
+        "react",
+        "@tauri-apps/api/path",
+        "@tauri-apps/plugin-shell"
+      ],
+      "missing": []
+    },
     "src/pages/parametrage/ExportComptaPage.jsx": {
       "internal": [
         "src/components/ui/button.jsx",
@@ -5158,6 +5131,15 @@
       "external": [
         "react",
         "sonner"
+      ],
+      "missing": []
+    },
+    "src/pages/parametrage/Familles.tsx": {
+      "internal": [
+        "src/lib/db/sql.ts"
+      ],
+      "external": [
+        "react"
       ],
       "missing": []
     },
@@ -5327,6 +5309,15 @@
       ],
       "missing": []
     },
+    "src/pages/parametrage/SousFamilles.tsx": {
+      "internal": [
+        "src/lib/db/sql.ts"
+      ],
+      "external": [
+        "react"
+      ],
+      "missing": []
+    },
     "src/pages/parametrage/SystemTools.jsx": {
       "internal": [
         "src/lib/db.ts",
@@ -5378,6 +5369,15 @@
       "external": [
         "react",
         "sonner"
+      ],
+      "missing": []
+    },
+    "src/pages/parametrage/Unites.tsx": {
+      "internal": [
+        "src/lib/unites.ts"
+      ],
+      "external": [
+        "react"
       ],
       "missing": []
     },
@@ -6051,6 +6051,20 @@
       ],
       "missing": []
     },
+    "src/tauriEnv.ts": {
+      "internal": [],
+      "external": [],
+      "missing": []
+    },
+    "src/tauriLog.ts": {
+      "internal": [
+        "src/lib/db/sql.ts"
+      ],
+      "external": [
+        "@tauri-apps/plugin-log"
+      ],
+      "missing": []
+    },
     "src/tauri/fsStore.ts": {
       "internal": [
         "src/lib/db/sql.ts",
@@ -6070,20 +6084,6 @@
     "src/tauri/isTauri.ts": {
       "internal": [],
       "external": [],
-      "missing": []
-    },
-    "src/tauriEnv.ts": {
-      "internal": [],
-      "external": [],
-      "missing": []
-    },
-    "src/tauriLog.ts": {
-      "internal": [
-        "src/lib/db/sql.ts"
-      ],
-      "external": [
-        "@tauri-apps/plugin-log"
-      ],
       "missing": []
     },
     "src/types/api.d.ts": {
@@ -6486,6 +6486,10 @@
     {
       "from": "src/components/fiches/FicheLigne.jsx",
       "to": "src/components/ui/button.jsx"
+    },
+    {
+      "from": "src/components/fiches/FicheRentabiliteCard.jsx",
+      "to": "src/components/ui/Card.jsx"
     },
     {
       "from": "src/components/fiches/FicheRow.jsx",
@@ -8636,10 +8640,6 @@
       "to": "src/lib/db/sql.ts"
     },
     {
-      "from": "src/pages/Debug/Auth.tsx",
-      "to": "src/hooks/useAuth.ts"
-    },
-    {
       "from": "src/pages/DossierDonnees.jsx",
       "to": "src/components/ui/button.jsx"
     },
@@ -8762,18 +8762,6 @@
     {
       "from": "src/pages/Onboarding.tsx",
       "to": "src/auth/localAccount.ts"
-    },
-    {
-      "from": "src/pages/Parametrage/Familles.tsx",
-      "to": "src/lib/db/sql.ts"
-    },
-    {
-      "from": "src/pages/Parametrage/SousFamilles.tsx",
-      "to": "src/lib/db/sql.ts"
-    },
-    {
-      "from": "src/pages/Parametrage/Unites.tsx",
-      "to": "src/lib/unites.ts"
     },
     {
       "from": "src/pages/Parametres/Familles.jsx",
@@ -9658,6 +9646,10 @@
     {
       "from": "src/pages/debug/AccessExample.jsx",
       "to": "src/components/ui/GlassCard.jsx"
+    },
+    {
+      "from": "src/pages/debug/Auth.tsx",
+      "to": "src/hooks/useAuth.ts"
     },
     {
       "from": "src/pages/debug/AuthDebug.jsx",
@@ -10892,6 +10884,10 @@
       "to": "src/lib/db/sql.ts"
     },
     {
+      "from": "src/pages/parametrage/Familles.tsx",
+      "to": "src/lib/db/sql.ts"
+    },
+    {
       "from": "src/pages/parametrage/InvitationsEnAttente.jsx",
       "to": "src/components/ui/PageWrapper.jsx"
     },
@@ -11120,6 +11116,10 @@
       "to": "src/lib/db/sql.ts"
     },
     {
+      "from": "src/pages/parametrage/SousFamilles.tsx",
+      "to": "src/lib/db/sql.ts"
+    },
+    {
       "from": "src/pages/parametrage/SystemTools.jsx",
       "to": "src/lib/db.ts"
     },
@@ -11186,6 +11186,10 @@
     {
       "from": "src/pages/parametrage/Unites.jsx",
       "to": "src/lib/db/sql.ts"
+    },
+    {
+      "from": "src/pages/parametrage/Unites.tsx",
+      "to": "src/lib/unites.ts"
     },
     {
       "from": "src/pages/parametrage/Utilisateurs.jsx",
@@ -12044,16 +12048,16 @@
       "to": "src/db/index.ts"
     },
     {
+      "from": "src/tauriLog.ts",
+      "to": "src/lib/db/sql.ts"
+    },
+    {
       "from": "src/tauri/fsStore.ts",
       "to": "src/lib/db/sql.ts"
     },
     {
       "from": "src/tauri/fsStore.ts",
       "to": "src/lib/paths.ts"
-    },
-    {
-      "from": "src/tauriLog.ts",
-      "to": "src/lib/db/sql.ts"
     },
     {
       "from": "src/utils/__tests__/number.test.ts",
@@ -12137,7 +12141,6 @@
     "src/pages/BarManager.jsx",
     "src/pages/CartePlats.jsx",
     "src/pages/Consentements.jsx",
-    "src/pages/Debug/Auth.tsx",
     "src/pages/EngineeringMenu.jsx",
     "src/pages/Feedback.jsx",
     "src/pages/HelpCenter.jsx",
@@ -12145,10 +12148,6 @@
     "src/pages/Login.jsx",
     "src/pages/NotFound.jsx",
     "src/pages/Onboarding.tsx",
-    "src/pages/Parametrage/DossierDonnees.tsx",
-    "src/pages/Parametrage/Familles.tsx",
-    "src/pages/Parametrage/SousFamilles.tsx",
-    "src/pages/Parametrage/Unites.tsx",
     "src/pages/Parametres/Familles.jsx",
     "src/pages/Pertes.jsx",
     "src/pages/Planning.jsx",
@@ -12194,6 +12193,7 @@
     "src/pages/cuisine/MenuDuJour.jsx",
     "src/pages/dashboard/DashboardBuilder.jsx",
     "src/pages/debug/AccessExample.jsx",
+    "src/pages/debug/Auth.tsx",
     "src/pages/debug/Debug.jsx",
     "src/pages/debug/DebugAuth.jsx",
     "src/pages/debug/DebugRights.jsx",
@@ -12253,8 +12253,10 @@
     "src/pages/parametrage/APIKeys.jsx",
     "src/pages/parametrage/AccessRights.jsx",
     "src/pages/parametrage/CentreCoutForm.jsx",
+    "src/pages/parametrage/DossierDonnees.tsx",
     "src/pages/parametrage/ExportComptaPage.jsx",
     "src/pages/parametrage/ExportUserData.jsx",
+    "src/pages/parametrage/Familles.tsx",
     "src/pages/parametrage/InvitationsEnAttente.jsx",
     "src/pages/parametrage/InviteUser.jsx",
     "src/pages/parametrage/MamaForm.jsx",
@@ -12269,9 +12271,11 @@
     "src/pages/parametrage/RGPDConsentForm.jsx",
     "src/pages/parametrage/RoleForm.jsx",
     "src/pages/parametrage/Roles.jsx",
+    "src/pages/parametrage/SousFamilles.tsx",
     "src/pages/parametrage/SystemTools.jsx",
     "src/pages/parametrage/TemplateCommandeForm.jsx",
     "src/pages/parametrage/TemplatesCommandes.jsx",
+    "src/pages/parametrage/Unites.tsx",
     "src/pages/parametrage/Utilisateurs.jsx",
     "src/pages/parametrage/ZoneAccess.jsx",
     "src/pages/parametrage/ZoneForm.jsx",

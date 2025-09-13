@@ -1,5 +1,5 @@
 # Inventaire src/
-_Généré: 2025-09-13T10:11:12.959Z_
+_Généré: 2025-09-13T10:16:19.849Z_
 
 ## Entrypoints
 - `src/main.jsx`
@@ -35,7 +35,6 @@ _Généré: 2025-09-13T10:11:12.959Z_
 - `src/pages/BarManager.jsx`
 - `src/pages/CartePlats.jsx`
 - `src/pages/Consentements.jsx`
-- `src/pages/Debug/Auth.tsx`
 - `src/pages/EngineeringMenu.jsx`
 - `src/pages/Feedback.jsx`
 - `src/pages/HelpCenter.jsx`
@@ -43,10 +42,6 @@ _Généré: 2025-09-13T10:11:12.959Z_
 - `src/pages/Login.jsx`
 - `src/pages/NotFound.jsx`
 - `src/pages/Onboarding.tsx`
-- `src/pages/Parametrage/DossierDonnees.tsx`
-- `src/pages/Parametrage/Familles.tsx`
-- `src/pages/Parametrage/SousFamilles.tsx`
-- `src/pages/Parametrage/Unites.tsx`
 - `src/pages/Parametres/Familles.jsx`
 - `src/pages/Pertes.jsx`
 - `src/pages/Planning.jsx`
@@ -92,6 +87,7 @@ _Généré: 2025-09-13T10:11:12.959Z_
 - `src/pages/cuisine/MenuDuJour.jsx`
 - `src/pages/dashboard/DashboardBuilder.jsx`
 - `src/pages/debug/AccessExample.jsx`
+- `src/pages/debug/Auth.tsx`
 - `src/pages/debug/Debug.jsx`
 - `src/pages/debug/DebugAuth.jsx`
 - `src/pages/debug/DebugRights.jsx`
@@ -151,8 +147,10 @@ _Généré: 2025-09-13T10:11:12.959Z_
 - `src/pages/parametrage/APIKeys.jsx`
 - `src/pages/parametrage/AccessRights.jsx`
 - `src/pages/parametrage/CentreCoutForm.jsx`
+- `src/pages/parametrage/DossierDonnees.tsx`
 - `src/pages/parametrage/ExportComptaPage.jsx`
 - `src/pages/parametrage/ExportUserData.jsx`
+- `src/pages/parametrage/Familles.tsx`
 - `src/pages/parametrage/InvitationsEnAttente.jsx`
 - `src/pages/parametrage/InviteUser.jsx`
 - `src/pages/parametrage/MamaForm.jsx`
@@ -167,9 +165,11 @@ _Généré: 2025-09-13T10:11:12.959Z_
 - `src/pages/parametrage/RGPDConsentForm.jsx`
 - `src/pages/parametrage/RoleForm.jsx`
 - `src/pages/parametrage/Roles.jsx`
+- `src/pages/parametrage/SousFamilles.tsx`
 - `src/pages/parametrage/SystemTools.jsx`
 - `src/pages/parametrage/TemplateCommandeForm.jsx`
 - `src/pages/parametrage/TemplatesCommandes.jsx`
+- `src/pages/parametrage/Unites.tsx`
 - `src/pages/parametrage/Utilisateurs.jsx`
 - `src/pages/parametrage/ZoneAccess.jsx`
 - `src/pages/parametrage/ZoneForm.jsx`

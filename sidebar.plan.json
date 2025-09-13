@@ -69,11 +69,6 @@
       "why": "non trouvé dans le routeur"
     },
     {
-      "label": "Auth",
-      "file": "src/pages/Debug/Auth.tsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
       "label": "EngineeringMenu",
       "file": "src/pages/EngineeringMenu.jsx",
       "why": "non trouvé dans le routeur"
@@ -106,26 +101,6 @@
     {
       "label": "Onboarding",
       "file": "src/pages/Onboarding.tsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
-      "label": "DossierDonnees",
-      "file": "src/pages/Parametrage/DossierDonnees.tsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
-      "label": "Familles",
-      "file": "src/pages/Parametrage/Familles.tsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
-      "label": "SousFamilles",
-      "file": "src/pages/Parametrage/SousFamilles.tsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
-      "label": "Unites",
-      "file": "src/pages/Parametrage/Unites.tsx",
       "why": "non trouvé dans le routeur"
     },
     {
@@ -351,6 +326,11 @@
     {
       "label": "AccessExample",
       "file": "src/pages/debug/AccessExample.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Auth",
+      "file": "src/pages/debug/Auth.tsx",
       "why": "non trouvé dans le routeur"
     },
     {
@@ -649,6 +629,11 @@
       "why": "non trouvé dans le routeur"
     },
     {
+      "label": "DossierDonnees",
+      "file": "src/pages/parametrage/DossierDonnees.tsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
       "label": "ExportComptaPage",
       "file": "src/pages/parametrage/ExportComptaPage.jsx",
       "why": "non trouvé dans le routeur"
@@ -656,6 +641,11 @@
     {
       "label": "ExportUserData",
       "file": "src/pages/parametrage/ExportUserData.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Familles",
+      "file": "src/pages/parametrage/Familles.tsx",
       "why": "non trouvé dans le routeur"
     },
     {
@@ -729,6 +719,11 @@
       "why": "non trouvé dans le routeur"
     },
     {
+      "label": "SousFamilles",
+      "file": "src/pages/parametrage/SousFamilles.tsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
       "label": "SystemTools",
       "file": "src/pages/parametrage/SystemTools.jsx",
       "why": "non trouvé dans le routeur"
@@ -741,6 +736,11 @@
     {
       "label": "TemplatesCommandes",
       "file": "src/pages/parametrage/TemplatesCommandes.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Unites",
+      "file": "src/pages/parametrage/Unites.tsx",
       "why": "non trouvé dans le routeur"
     },
     {
