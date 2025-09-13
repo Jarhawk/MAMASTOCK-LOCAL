@@ -7,6 +7,7 @@ import { mapDbLineToUI } from '@/features/factures/invoiceMappers';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { toast } from 'sonner';
 import { facture_get } from '@/lib/db';
+import PiecesManager from "@/components/factures/PiecesManager";
 
 function toLabel(v) {
   if (v == null) return '';
@@ -64,15 +65,22 @@ export default function FactureDetail() {
   }, [id]);
 
   if (loading) return <LoadingSpinner message="Chargement..." />;
-
+  const selectedFactureId = id;
   return (
-    <FactureForm
-      initialForm={form}
-      initialLignes={lignes}
-      onClose={() => navigate(-1)}
-      onSaved={() => navigate(-1)} />);
-
-
+    <>
+      <FactureForm
+        initialForm={form}
+        initialLignes={lignes}
+        onClose={() => navigate(-1)}
+        onSaved={() => navigate(-1)}
+      />
+      {selectedFactureId ? (
+        <PiecesManager factureId={selectedFactureId} />
+      ) : (
+        <div className="text-sm opacity-70">Sélectionne une facture pour voir les pièces jointes</div>
+      )}
+    </>
+  );
 }
 
 export { toLabel };
