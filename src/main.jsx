@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/context/AuthContext";
-import { HelpProvider } from "@/context/HelpProvider";
 import { MultiMamaProvider } from "@/context/MultiMamaContext";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import CookieConsent from "@/components/CookieConsent";
@@ -77,16 +76,14 @@ function Root() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
-        <HelpProvider>
-          <MultiMamaProvider>
-            <ThemeProvider>
-              <ToastRoot />
-              <DebugRibbon />
-              <AppRouter />
-              <CookieConsent />
-            </ThemeProvider>
-          </MultiMamaProvider>
-        </HelpProvider>
+        <MultiMamaProvider>
+          <ThemeProvider>
+            <ToastRoot />
+            <DebugRibbon />
+            <AppRouter />
+            <CookieConsent />
+          </ThemeProvider>
+        </MultiMamaProvider>
       </QueryClientProvider>
     </AuthProvider>
   );

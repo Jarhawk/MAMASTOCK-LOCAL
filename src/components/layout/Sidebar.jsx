@@ -103,7 +103,7 @@ export default function Sidebar() {
               )}
               {canConfigure && (
                 <NavLink
-                  to="/parametrage/sous-familles"
+                  to="/parametrage/sousfamilles"
                   className={({ isActive }) =>
                     isActive ? "text-mamastockGold" : ""
                   }
@@ -123,7 +123,7 @@ export default function Sidebar() {
               )}
               {canConfigure && (
                 <NavLink
-                  to="/parametrage/dossier-donnees"
+                  to="/dossierdonnees"
                   className={({ isActive }) =>
                     isActive ? "text-mamastockGold" : ""
                   }
@@ -139,9 +139,8 @@ export default function Sidebar() {
             </div>
           </details>
         )}
-        {has("feedback") && <Link to="/feedback">Feedback</Link>}
         <NavLink
-          to="/debug/auth"
+          to="/debug/authdebug"
           className={({ isActive }) =>
             `text-xs opacity-50 mt-4 ${isActive ? "text-mamastockGold" : ""}`
           }
