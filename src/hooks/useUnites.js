@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { unites_list } from '@/lib/db';
 
-export async function fetchUnites(mamaId) {
+export async function listUnites(mamaId) {
   return await unites_list(mamaId);
 }
 
@@ -13,7 +13,7 @@ export function useUnites(mamaId) {
   });
 }
 
-export const fetchUnitesForValidation = fetchUnites;
+export const listUnitesForValidation = listUnites;
 
 export default useUnites;
 

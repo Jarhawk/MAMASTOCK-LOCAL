@@ -21,7 +21,7 @@ function RequisitionFormPage() {
   const { list: listZoneProducts } = useZoneProducts();
   const { myAccessibleZones } = useZones();
   const [zones, setZones] = useState([]);
-  const { unites, fetchUnites } = useUnites();
+    const { unites, listUnites } = useUnites();
 
   const [statut, setStatut] = useState("");
   const [commentaire, setCommentaire] = useState("");
@@ -31,7 +31,7 @@ function RequisitionFormPage() {
   const [zoneProducts, setZoneProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
 
-  useEffect(() => { myAccessibleZones({ mode: 'requisition' }).then(setZones); fetchUnites(); }, [myAccessibleZones, fetchUnites]);
+    useEffect(() => { myAccessibleZones({ mode: 'requisition' }).then(setZones); listUnites(); }, [myAccessibleZones, listUnites]);
 
   useEffect(() => {
     if (zones.length > 0) setZone(zones[0].id);

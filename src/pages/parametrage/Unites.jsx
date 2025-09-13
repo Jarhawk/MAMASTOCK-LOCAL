@@ -12,12 +12,12 @@ import Unauthorized from '@/pages/auth/Unauthorized';
 export default function Unites() {
   const { hasAccess, loading: authLoading } = useAuth();
   const canEdit = hasAccess('parametrage', 'peut_modifier');
-  const { unites, fetchUnites, addUnite, updateUnite, deleteUnite, loading } = useUnites();
+  const { unites, listUnites, addUnite, updateUnite, deleteUnite, loading } = useUnites();
   const [edit, setEdit] = useState(null);
 
   useEffect(() => {
-    fetchUnites();
-  }, [fetchUnites]);
+    listUnites();
+  }, [listUnites]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

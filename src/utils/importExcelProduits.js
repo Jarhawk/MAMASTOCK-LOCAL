@@ -3,7 +3,7 @@ import * as XLSX from "xlsx";
 import { v4 as uuidv4 } from "uuid";
 
 import { fetchFamillesForValidation } from "@/hooks/useFamilles";
-import { fetchUnitesForValidation } from "@/hooks/useUnites";
+import { listUnitesForValidation } from "@/hooks/useUnites";
 import { fetchZonesStock } from "@/hooks/useZonesStock";
 
 function parseBoolean(value) {
@@ -63,7 +63,7 @@ export async function parseProduitsFile(file, mama_id) {
   ] = await Promise.all([
     fetchFamillesForValidation(mama_id),
     query("SELECT id, nom FROM sous_familles WHERE mama_id = ?", [mama_id]),
-    fetchUnitesForValidation(mama_id),
+      listUnitesForValidation(mama_id),
     fetchZonesStock(mama_id),
     query("SELECT id FROM fournisseurs WHERE mama_id = ?", [mama_id]),
     query("SELECT nom FROM produits WHERE mama_id = ?", [mama_id])
