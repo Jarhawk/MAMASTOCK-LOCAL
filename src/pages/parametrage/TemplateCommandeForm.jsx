@@ -5,7 +5,7 @@ import { useTemplatesCommandes } from "@/hooks/useTemplatesCommandes";
 import { Button } from "@/components/ui/button";
 import { saveBinary } from "@/local/files";
 import { appDataDir, join } from "@tauri-apps/api/path";
-import { convertFileSrc } from "@tauri-apps/api/tauri";
+import { convertFileSrc } from "@tauri-apps/api/core";
 
 export default function TemplateCommandeForm({ template = {}, onClose, fournisseurs = [] }) {
   const { createTemplate, updateTemplate } = useTemplatesCommandes();
