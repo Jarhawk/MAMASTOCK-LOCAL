@@ -1,6 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { isTauri } from "@/lib/runtime";
-import { getDb } from "@/lib/sql";
+import { getDb, isTauri } from "@/lib/db/sql";
 
 // Returns defaults for an invoice line when a product is selected.
 // In the local offline mode we only provide PMP from the produits table.
