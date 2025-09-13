@@ -174,7 +174,7 @@ export default function Sidebar() {
               )}
               {canData && (
                 <NavLink
-                  to="/parametrage/data"
+                  to="/parametrage/dossier-donnees"
                   className={({ isActive }) =>
                     isActive ? "text-mamastockGold" : ""
                   }
@@ -185,15 +185,15 @@ export default function Sidebar() {
             </div>
           </details>
         )}
-
-        <a href="#/onboarding">Onboarding</a>
-        <Link to="/aide">Aide</Link>
         {has("feedback") && <Link to="/feedback">Feedback</Link>}
-        {import.meta.env.DEV && (
-          <Link to="/debug/auth" className="text-xs opacity-50 mt-4">
-            Debug Auth
-          </Link>
-        )}
+        <NavLink
+          to="/debug/auth"
+          className={({ isActive }) =>
+            `text-xs opacity-50 mt-4 ${isActive ? "text-mamastockGold" : ""}`
+          }
+        >
+          Debug Auth
+        </NavLink>
       </nav>
     </aside>
   );

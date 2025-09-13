@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 // Le menu latéral n'affiche que les modules pour lesquels
 // l'utilisateur possède le droit "peut_voir". Les droits proviennent
 // du contexte d'authentification (merge utilisateur + rôle).
@@ -91,9 +91,46 @@ export default function Sidebar() {
           <details open={pathname.startsWith("/parametrage")}>
             <summary className="cursor-pointer">Paramétrage</summary>
             <div className="ml-4 flex flex-col gap-1 mt-1">
-              {canConfigure && <Link to="/parametrage/familles">Familles</Link>}
-              {canConfigure && <Link to="/parametrage/sous-familles">Sous-familles</Link>}
-              {canConfigure && <Link to="/parametrage/unites">Unités</Link>}
+              {canConfigure && (
+                <NavLink
+                  to="/parametrage/familles"
+                  className={({ isActive }) =>
+                    isActive ? "text-mamastockGold" : ""
+                  }
+                >
+                  Familles
+                </NavLink>
+              )}
+              {canConfigure && (
+                <NavLink
+                  to="/parametrage/sous-familles"
+                  className={({ isActive }) =>
+                    isActive ? "text-mamastockGold" : ""
+                  }
+                >
+                  Sous-familles
+                </NavLink>
+              )}
+              {canConfigure && (
+                <NavLink
+                  to="/parametrage/unites"
+                  className={({ isActive }) =>
+                    isActive ? "text-mamastockGold" : ""
+                  }
+                >
+                  Unités
+                </NavLink>
+              )}
+              {canConfigure && (
+                <NavLink
+                  to="/parametrage/dossier-donnees"
+                  className={({ isActive }) =>
+                    isActive ? "text-mamastockGold" : ""
+                  }
+                >
+                  Dossier données
+                </NavLink>
+              )}
               {has("utilisateurs") && <Link to="/parametrage/utilisateurs">Utilisateurs</Link>}
               {has("roles") && <Link to="/parametrage/roles">Rôles</Link>}
               {has("mamas") && <Link to="/parametrage/mamas">Mamas</Link>}
@@ -102,10 +139,15 @@ export default function Sidebar() {
             </div>
           </details>
         )}
-
-        <a href="#/onboarding">Onboarding</a>
-        <Link to="/aide">Aide</Link>
         {has("feedback") && <Link to="/feedback">Feedback</Link>}
+        <NavLink
+          to="/debug/auth"
+          className={({ isActive }) =>
+            `text-xs opacity-50 mt-4 ${isActive ? "text-mamastockGold" : ""}`
+          }
+        >
+          Debug Auth
+        </NavLink>
       </nav>
     </aside>
   );
