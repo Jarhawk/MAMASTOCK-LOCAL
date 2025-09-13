@@ -1,5 +1,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use tauri::{Manager};
+use tauri::window::FileDropEvent;
+
 fn main() {
     let mut builder = tauri::Builder::default();
 
@@ -22,6 +25,24 @@ fn main() {
     {
         builder = builder.plugin(tauri_plugin_log::Builder::default().build());
     }
+
+    builder.setup(|app| {
+        if let Some(win) = app.get_webview_window("main") {
+            win.on_file_drop(|_w, ev| {
+                match ev {
+                    FileDropEvent::Hovered { .. } => true,
+                    FileDropEvent::Dropped { paths, .. } => {
+                        // Autorise UNIQUEMENT les fichiers réguliers (ignore dossiers/URLs/etc.)
+                        let only_files = paths.iter().all(|p| p.is_file());
+                        only_files
+                    }
+                    FileDropEvent::Cancelled => true,
+                    _ => true,
+                }
+            });
+        }
+        Ok(())
+    }).expect("setup failed");
 
     builder
         .run(tauri::generate_context!())
