@@ -1,46 +1,35 @@
 // src/lib/db/sql.ts
-import { isTauri, requireTauri } from "../runtime";
-import { homeDir, join } from "@tauri-apps/api/path";
+import Database from "@tauri-apps/plugin-sql"; // ⚠️ default export, pas { Database }
+import { appDataDir, join } from "@tauri-apps/api/path";
 
-// Cache db unique
-let _db: any | null = null;
+/** Détection runtime fiable (marche en dev via TAURI_DEV_URL) */
+export const isTauri: boolean = (() => {
+  try {
+    return typeof window !== "undefined" && !!(window as any).__TAURI_INTERNALS__;
+  } catch {
+    return false;
+  }
+})();
 
-export { isTauri, requireTauri }; // <-- ré-export pour les appels existants
+export function requireTauri() {
+  if (!isTauri) throw new Error("Tauri requis: lance via `npx tauri dev`.");
+}
 
+let _dbPromise: Promise<any> | null = null;
+
+/** DB SQLite (fichier dans AppData\Roaming\com.mamastock.local\MamaStock\mamastock.db) */
 export async function getDb() {
-  requireTauri("Tauri required: run via `npx tauri dev` to access SQLite");
-
-  if (_db) return _db;
-
-  // v2: import par défaut + import dynamique
-  const { default: Database } = await import("@tauri-apps/plugin-sql");
-
-  try {
-    // fichier dans AppData/Roaming/MamaStock/data/mamastock.db (côté plugin)
-    const base = await homeDir();
-    const abs  = await join(base, "MamaStock", "data", "mamastock.db");
-    _db = await Database.load(`sqlite:${abs}`);
-    return _db;
-  } catch (e: any) {
-    const msg = String(e?.message || e);
-    if (msg.includes("sql.load not allowed")) {
-      throw new Error(
-        "sql.load not allowed – ajoute `sql:allow-load` dans src-tauri/capabilities/sql.json puis relance Tauri"
-      );
-    }
-    throw e;
+  requireTauri();
+  if (!_dbPromise) {
+    const base = await appDataDir();
+    const file = await join(base, "MamaStock", "mamastock.db");
+    _dbPromise = Database.load(`sqlite:${file}`); // nécessite sql:allow-load
   }
+  return _dbPromise;
 }
 
-export async function closeDb() {
-  try {
-    if (_db?.close) await _db.close();
-  } finally {
-    _db = null;
-  }
-}
+// ---------- Helpers Dashboard / util ----------
 
-// --- ident safe (pas d'injection d'identifiants) ---
 function _assertIdent(name: string): string {
   if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(name)) {
     throw new Error(`Invalid identifier: ${name}`);
@@ -53,8 +42,7 @@ export async function tableCount(table: string): Promise<number> {
   const db = await getDb();
   const t = _assertIdent(table);
   const rows = await db.select(`SELECT COUNT(*) AS c FROM ${t}`);
-  const n = rows?.[0]?.c ?? 0;
-  return Number(n);
+  return Number(rows?.[0]?.c ?? 0);
 }
 
 /** Compte plusieurs tables d'un coup */
@@ -69,13 +57,21 @@ export async function tableCounts(tables: string[]): Promise<Record<string, numb
   return out;
 }
 
-/** Récupère les KPI depuis la vue si elle existe */
+/** KPI depuis la vue (si existante) */
 export async function getDashboardKPI(): Promise<any[]> {
   const db = await getDb();
   try {
-    return await db.select(`SELECT * FROM v_dashboard_kpi`);
+    return await db.select("SELECT * FROM v_dashboard_kpi");
   } catch {
     return [];
   }
 }
 
+export default {
+  isTauri,
+  requireTauri,
+  getDb,
+  tableCount,
+  tableCounts,
+  getDashboardKPI,
+};
