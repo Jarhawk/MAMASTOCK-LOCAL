@@ -1,5 +1,6 @@
 // src/lib/db/sql.ts
 import { isTauri, requireTauri } from "../runtime";
+import { homeDir, join } from "@tauri-apps/api/path";
 
 // Cache db unique
 let _db: any | null = null;
@@ -16,7 +17,9 @@ export async function getDb() {
 
   try {
     // fichier dans AppData/Roaming/MamaStock/data/mamastock.db (côté plugin)
-    _db = await Database.load("sqlite:mamastock.db");
+    const base = await homeDir();
+    const abs  = await join(base, "MamaStock", "data", "mamastock.db");
+    _db = await Database.load(`sqlite:${abs}`);
     return _db;
   } catch (e: any) {
     const msg = String(e?.message || e);
