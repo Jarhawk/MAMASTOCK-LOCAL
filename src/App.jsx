@@ -1,5 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import Router from "@/router";
+import Sidebar from "@/components/sidebar.autogen";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import nprogress from 'nprogress';
 import { useEffect } from 'react';
