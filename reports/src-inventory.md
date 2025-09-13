@@ -1,5 +1,5 @@
 # Inventaire src/ (pages, routes, dépendances)
-_Généré: 2025-09-13T09:47:03.739Z_
+_Généré: 2025-09-13T10:14:55.712Z_
 
 **Entrypoints:**
 - `src\main.jsx`
