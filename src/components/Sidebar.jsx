@@ -10,7 +10,7 @@ export default function Sidebar() {
       <img src={logo} alt="MamaStock" className="h-20 mx-auto mt-4 mb-6" />
       <nav className="flex flex-col gap-2 text-sm">
         <NavLink
-          to="/dashboard"
+          to="/"
           className={({ isActive }) => (isActive ? "text-mamastockGold" : "")}
         >
           Dashboard
@@ -28,7 +28,7 @@ export default function Sidebar() {
               Familles
             </NavLink>
             <NavLink
-              to="/parametrage/sousfamilles"
+              to="/parametrage/sous-familles"
               className={({ isActive }) =>
                 isActive ? "text-mamastockGold" : ""
               }
@@ -47,7 +47,7 @@ export default function Sidebar() {
         </details>
 
         <NavLink
-          to="/dossierdonnees"
+          to="/data"
           className={({ isActive }) => (isActive ? "text-mamastockGold" : "")}
         >
           Dossier données
