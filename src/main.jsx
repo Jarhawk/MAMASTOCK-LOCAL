@@ -1,4 +1,4 @@
-import "@/sw-guard";
+import { setupPwaGuard } from "@/pwa/guard";
 import React, { useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -14,6 +14,8 @@ import { testRandom } from "/src/shims/selftest";
 import "./globals.css";
 import "nprogress/nprogress.css";
 import { runSqlSelfTest } from "@/debug/sqlSelfTest";
+
+setupPwaGuard();
 
 // DEV only: unregister any service workers to avoid PWA caching in Tauri/Vite dev
 if (import.meta.env.DEV && 'serviceWorker' in navigator) {
