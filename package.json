@@ -21,8 +21,8 @@
     "check:tauri-plugins": "node scripts/check-tauri-plugins.js",
     "check:cap": "node scripts/check-capabilities.js",
     "scan:src": "node scripts/scan-src.js",
-    "fix:sql-perms": "node scripts/fix-sql-capabilities.js",
-    "check:cap:runtime": "set TAURI_DEV_URL=http://localhost:5173/?capcheck=1 && npx tauri dev"
+    "check:cap:runtime": "set TAURI_DEV_URL=http://localhost:5173/?capcheck=1 && npx tauri dev",
+    "fix:cap": "node scripts/normalize-capabilities.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
