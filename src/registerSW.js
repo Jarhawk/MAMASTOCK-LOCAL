@@ -1,7 +1,8 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/tauriEnv";
 import { canRegisterSW } from "@/sw-guard";
 // SW disabled in DEV
-if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+if (!isTauri && import.meta.env.PROD && 'serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
       const registrations = await navigator.serviceWorker.getRegistrations();
