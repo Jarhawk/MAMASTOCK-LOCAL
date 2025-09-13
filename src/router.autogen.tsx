@@ -1031,3 +1031,8 @@ export function buildAutoElements() {
   routes.push({ path: "*", element: <div style={{padding:16}}>Page introuvable</div> });
   return routes;
 }
+
+export const routes = buildAutoElements();
+
+// compat: allow both `import { routes }` and `import routes`
+export default routes;
