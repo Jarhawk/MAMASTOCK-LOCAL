@@ -12,6 +12,9 @@ import nprogress from "nprogress";
 import { testRandom } from "/src/shims/selftest";
 import "./globals.css";
 import "nprogress/nprogress.css";
+import { runSqlSelfTest } from "@/debug/sqlSelfTest";
+
+runSqlSelfTest().catch(console.error);
 
 const queryClient = new QueryClient({
   defaultOptions: {
