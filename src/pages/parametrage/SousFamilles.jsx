@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
-import { listSousFamilles, createSousFamille, updateSousFamille, deleteSousFamille } from '@/lib/sousFamilles';
+import { listSousFamilles, createSousFamille, renameSousFamille, deleteSousFamille } from '@/lib/sousFamilles';
 import { listFamilles } from '@/lib/familles';
 import ListingContainer from '@/components/ui/ListingContainer';
 import TableHeader from '@/components/ui/TableHeader';
@@ -41,11 +41,11 @@ export default function SousFamilles() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (edit?.id) {
-        await updateSousFamille(edit.id, edit.famille_id, edit.code || '', edit.libelle || '');
-      } else {
-        await createSousFamille(edit?.famille_id, edit?.code || '', edit?.libelle || '');
-      }
+        if (edit?.id) {
+          await renameSousFamille(edit.id, edit.nom || '');
+        } else {
+          await createSousFamille(edit?.famille_id, edit?.nom || '');
+        }
       toast.success('Sous-famille enregistrée');
       setEdit(null);
       await refresh();
@@ -74,42 +74,40 @@ export default function SousFamilles() {
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Sous-familles</h1>
-      <TableHeader className="gap-2">
-        <Button onClick={() => setEdit({ code: '', libelle: '', famille_id: familles[0]?.id })}>+ Nouvelle sous-famille</Button>
-      </TableHeader>
+        <TableHeader className="gap-2">
+          <Button onClick={() => setEdit({ nom: '', famille_id: familles[0]?.id })}>+ Nouvelle sous-famille</Button>
+        </TableHeader>
       <ListingContainer className="w-full overflow-x-auto">
         <table className="text-sm w-full">
           <thead>
-            <tr>
-              <th className="px-2 py-1">Code</th>
-              <th className="px-2 py-1">Libellé</th>
-              <th className="px-2 py-1">Famille</th>
-              <th className="px-2 py-1">Actions</th>
-            </tr>
+              <tr>
+                <th className="px-2 py-1">Nom</th>
+                <th className="px-2 py-1">Famille</th>
+                <th className="px-2 py-1">Actions</th>
+              </tr>
           </thead>
           <tbody>
-            {sousFamilles.map((sf) => (
-              <tr key={sf.id}>
-                <td className="px-2 py-1">{sf.code}</td>
-                <td className="px-2 py-1">{sf.libelle}</td>
-                <td className="px-2 py-1">{sf.famille_libelle || ''}</td>
-                <td className="px-2 py-1 flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => setEdit(sf)}>
-                    Modifier
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={() => handleDelete(sf.id)}>
-                    Supprimer
-                  </Button>
-                </td>
-              </tr>
-            ))}
-            {sousFamilles.length === 0 && (
-              <tr>
-                <td colSpan="4" className="py-2">
-                  Aucune sous-famille
-                </td>
-              </tr>
-            )}
+              {sousFamilles.map((sf) => (
+                <tr key={sf.id}>
+                  <td className="px-2 py-1">{sf.nom}</td>
+                  <td className="px-2 py-1">{familles.find((f) => f.id === sf.famille_id)?.nom || ''}</td>
+                  <td className="px-2 py-1 flex gap-2">
+                    <Button size="sm" variant="outline" onClick={() => setEdit(sf)}>
+                      Modifier
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={() => handleDelete(sf.id)}>
+                      Supprimer
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+              {sousFamilles.length === 0 && (
+                <tr>
+                  <td colSpan="3" className="py-2">
+                    Aucune sous-famille
+                  </td>
+                </tr>
+              )}
           </tbody>
         </table>
       </ListingContainer>
@@ -120,26 +118,21 @@ export default function SousFamilles() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-2">
               <input
                 className="input"
-                placeholder="Code"
-                value={edit.code || ''}
-                onChange={(e) => setEdit({ ...edit, code: e.target.value })}
-              />
-              <input
-                className="input"
-                placeholder="Libellé"
+                placeholder="Nom"
                 required
-                value={edit.libelle || ''}
-                onChange={(e) => setEdit({ ...edit, libelle: e.target.value })}
+                value={edit.nom || ''}
+                onChange={(e) => setEdit({ ...edit, nom: e.target.value })}
               />
               <select
                 className="input"
                 value={edit.famille_id || ''}
                 onChange={(e) => setEdit({ ...edit, famille_id: Number(e.target.value) })}
+                disabled={!!edit.id}
               >
                 <option value="">Sélectionner une famille</option>
                 {familles.map((f) => (
                   <option key={f.id} value={f.id}>
-                    {f.libelle}
+                    {f.nom}
                   </option>
                 ))}
               </select>
