@@ -1,15 +1,15 @@
 {
   "$schema": "../gen/schemas/plugin-sql.json",
   "identifier": "sql",
-  "description": "Permissions for SQL plugin",
-  "windows": [
-    "main"
-  ],
+  "description": "SQL plugin capabilities (dev wide-open)",
+  "windows": ["main"],
   "permissions": [
     "sql:default",
     "sql:allow-load",
+    "sql:allow-close",
     "sql:allow-select",
     "sql:allow-execute",
-    "sql:allow-close"
+    "sql:allow-batch",
+    "sql:allow-transaction"
   ]
 }
