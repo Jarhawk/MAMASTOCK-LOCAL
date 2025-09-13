@@ -28,7 +28,7 @@ export default function CreateMama() {
     try {
       await addMama({ nom });
       toast.success("Établissement créé");
-      navigate("/onboarding");
+      navigate("/dashboard");
     } catch (err) {
       if (err?.message) toast.error(err.message);
     } finally {

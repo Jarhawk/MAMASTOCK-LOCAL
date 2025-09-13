@@ -2,8 +2,8 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
-import { useSousFamilles } from '@/hooks/useSousFamilles';
-import { useFamilles } from '@/hooks/useFamilles';
+import { listSousFamilles, createSousFamille, updateSousFamille, deleteSousFamille } from '@/lib/sousFamilles';
+import { listFamilles } from '@/lib/familles';
 import ListingContainer from '@/components/ui/ListingContainer';
 import TableHeader from '@/components/ui/TableHeader';
 import { Button } from '@/components/ui/button';
@@ -13,21 +13,39 @@ import Unauthorized from '@/pages/auth/Unauthorized';
 export default function SousFamilles() {
   const { hasAccess, loading: authLoading } = useAuth();
   const canEdit = hasAccess('parametrage', 'peut_modifier');
-  const { sousFamilles, list, create, update, remove, loading } = useSousFamilles();
-  const { familles } = useFamilles();
+  const [sousFamilles, setSousFamilles] = useState([]);
+  const [familles, setFamilles] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [edit, setEdit] = useState(null);
 
+  const refresh = async () => {
+    try {
+      setLoading(true);
+      const [sf, f] = await Promise.all([listSousFamilles(), listFamilles()]);
+      setSousFamilles(sf);
+      setFamilles(f);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    list();
-  }, [list]);
+    refresh();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (edit?.id) await update(edit.id, { code: edit.code, nom: edit.nom, famille_id: edit.famille_id });
-      else await create({ code: edit?.code || '', nom: edit?.nom || '', famille_id: edit?.famille_id });
+      if (edit?.id) {
+        await updateSousFamille(edit.id, edit.famille_id, edit.code || '', edit.libelle || '');
+      } else {
+        await createSousFamille(edit?.famille_id, edit?.code || '', edit?.libelle || '');
+      }
       toast.success('Sous-famille enregistrée');
       setEdit(null);
+      await refresh();
     } catch (err) {
       console.error(err);
       toast.error("Erreur lors de l'enregistrement");
@@ -37,8 +55,9 @@ export default function SousFamilles() {
   const handleDelete = async (id) => {
     if (confirm('Supprimer cet élément ?')) {
       try {
-        await remove(id);
+        await deleteSousFamille(id);
         toast.success('Sous-famille supprimée');
+        await refresh();
       } catch (err) {
         console.error(err);
         toast.error('Suppression échouée');
@@ -53,14 +72,14 @@ export default function SousFamilles() {
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Sous-familles</h1>
       <TableHeader className="gap-2">
-        <Button onClick={() => setEdit({ code: '', nom: '', famille_id: familles[0]?.id })}>+ Nouvelle sous-famille</Button>
+        <Button onClick={() => setEdit({ code: '', libelle: '', famille_id: familles[0]?.id })}>+ Nouvelle sous-famille</Button>
       </TableHeader>
       <ListingContainer className="w-full overflow-x-auto">
         <table className="text-sm w-full">
           <thead>
             <tr>
               <th className="px-2 py-1">Code</th>
-              <th className="px-2 py-1">Nom</th>
+              <th className="px-2 py-1">Libellé</th>
               <th className="px-2 py-1">Famille</th>
               <th className="px-2 py-1">Actions</th>
             </tr>
@@ -69,8 +88,8 @@ export default function SousFamilles() {
             {sousFamilles.map((sf) => (
               <tr key={sf.id}>
                 <td className="px-2 py-1">{sf.code}</td>
-                <td className="px-2 py-1">{sf.nom}</td>
-                <td className="px-2 py-1">{sf.familles?.nom || ''}</td>
+                <td className="px-2 py-1">{sf.libelle}</td>
+                <td className="px-2 py-1">{sf.famille_libelle || ''}</td>
                 <td className="px-2 py-1 flex gap-2">
                   <Button size="sm" variant="outline" onClick={() => setEdit(sf)}>
                     Modifier
@@ -104,20 +123,20 @@ export default function SousFamilles() {
               />
               <input
                 className="input"
-                placeholder="Nom"
+                placeholder="Libellé"
                 required
-                value={edit.nom || ''}
-                onChange={(e) => setEdit({ ...edit, nom: e.target.value })}
+                value={edit.libelle || ''}
+                onChange={(e) => setEdit({ ...edit, libelle: e.target.value })}
               />
               <select
                 className="input"
                 value={edit.famille_id || ''}
-                onChange={(e) => setEdit({ ...edit, famille_id: e.target.value })}
+                onChange={(e) => setEdit({ ...edit, famille_id: Number(e.target.value) })}
               >
                 <option value="">Sélectionner une famille</option>
                 {familles.map((f) => (
                   <option key={f.id} value={f.id}>
-                    {f.nom}
+                    {f.libelle}
                   </option>
                 ))}
               </select>
