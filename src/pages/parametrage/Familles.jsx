@@ -2,13 +2,13 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
-import { listFamilles, createFamille, updateFamille, deleteFamille } from '@/lib/familles';
+import { listFamilles, createFamille, renameFamille, deleteFamille } from '@/lib/familles';
 import ListingContainer from '@/components/ui/ListingContainer';
 import TableHeader from '@/components/ui/TableHeader';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
-import { isTauri, getDb } from '@/lib/db/sql';
+import { isTauri } from '@/lib/db/sql';
 
 export default function Familles() {
   const { hasAccess, loading: authLoading } = useAuth();
@@ -37,9 +37,9 @@ export default function Familles() {
     e.preventDefault();
     try {
       if (edit?.id) {
-        await updateFamille(edit.id, edit.code || '', edit.libelle || '');
+        await renameFamille(edit.id, edit.nom || '');
       } else {
-        await createFamille(edit?.code || '', edit?.libelle || '');
+        await createFamille(edit?.nom || '');
       }
       toast.success('Famille enregistrée');
       setEdit(null);
@@ -70,22 +70,20 @@ export default function Familles() {
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Familles</h1>
       <TableHeader className="gap-2">
-        <Button onClick={() => setEdit({ code: '', libelle: '' })}>+ Nouvelle famille</Button>
+        <Button onClick={() => setEdit({ nom: '' })}>+ Nouvelle famille</Button>
       </TableHeader>
       <ListingContainer className="w-full overflow-x-auto">
         <table className="text-sm w-full">
           <thead>
             <tr>
-              <th className="px-2 py-1">Code</th>
-              <th className="px-2 py-1">Libellé</th>
+              <th className="px-2 py-1">Nom</th>
               <th className="px-2 py-1">Actions</th>
             </tr>
           </thead>
           <tbody>
             {familles.map((f) => (
               <tr key={f.id}>
-                <td className="px-2 py-1">{f.code}</td>
-                <td className="px-2 py-1">{f.libelle}</td>
+                <td className="px-2 py-1">{f.nom}</td>
                 <td className="px-2 py-1 flex gap-2">
                   <Button size="sm" variant="outline" onClick={() => setEdit(f)}>
                     Modifier
@@ -101,11 +99,11 @@ export default function Familles() {
               </tr>
             ))}
             {familles.length === 0 && (
-              <tr>
-                <td colSpan="3" className="py-2">
-                  Aucune famille
-                </td>
-              </tr>
+            <tr>
+              <td colSpan="2" className="py-2">
+                Aucune famille
+              </td>
+            </tr>
             )}
           </tbody>
         </table>
@@ -117,16 +115,10 @@ export default function Familles() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-2">
               <input
                 className="input"
-                placeholder="Code"
-                value={edit.code || ''}
-                onChange={(e) => setEdit({ ...edit, code: e.target.value })}
-              />
-              <input
-                className="input"
-                placeholder="Libellé"
+                placeholder="Nom"
                 required
-                value={edit.libelle || ''}
-                onChange={(e) => setEdit({ ...edit, libelle: e.target.value })}
+                value={edit.nom || ''}
+                onChange={(e) => setEdit({ ...edit, nom: e.target.value })}
               />
               <div className="flex justify-end gap-2 mt-2">
                 <Button type="button" variant="outline" onClick={() => setEdit(null)}>

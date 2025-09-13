@@ -8,14 +8,14 @@ import TableHeader from '@/components/ui/TableHeader';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
-import { isTauri, getDb } from '@/lib/db/sql';
+import { isTauri } from '@/lib/db/sql';
 
 export default function Unites() {
   const { hasAccess, loading: authLoading } = useAuth();
   const canEdit = hasAccess('parametrage', 'peut_modifier');
   const [unites, setUnites] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ code: '', libelle: '' });
+  const [form, setForm] = useState({ nom: '', abbr: '' });
 
   const refresh = async () => {
     setLoading(true);
@@ -37,9 +37,9 @@ export default function Unites() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createUnite(form.code, form.libelle);
+      await createUnite(form.nom, form.abbr);
       toast.success('Unité créée');
-      setForm({ code: '', libelle: '' });
+      setForm({ nom: '', abbr: '' });
       await refresh();
     } catch (err) {
       console.error(err);
@@ -68,16 +68,16 @@ export default function Unites() {
       <form onSubmit={handleSubmit} className="flex gap-2 mb-4">
         <input
           className="input"
-          placeholder="Code"
-          value={form.code}
-          onChange={(e) => setForm({ ...form, code: e.target.value })}
+          placeholder="Nom"
+          required
+          value={form.nom}
+          onChange={(e) => setForm({ ...form, nom: e.target.value })}
         />
         <input
           className="input"
-          placeholder="Libellé"
-          required
-          value={form.libelle}
-          onChange={(e) => setForm({ ...form, libelle: e.target.value })}
+          placeholder="Abréviation"
+          value={form.abbr}
+          onChange={(e) => setForm({ ...form, abbr: e.target.value })}
         />
         <Button type="submit">Ajouter</Button>
       </form>
@@ -86,16 +86,16 @@ export default function Unites() {
         <table className="text-sm w-full">
           <thead>
             <tr>
-              <th className="px-2 py-1">Code</th>
-              <th className="px-2 py-1">Libellé</th>
+              <th className="px-2 py-1">Nom</th>
+              <th className="px-2 py-1">Abréviation</th>
               <th className="px-2 py-1">Actions</th>
             </tr>
           </thead>
           <tbody>
             {unites.map((u) => (
               <tr key={u.id}>
-                <td className="px-2 py-1">{u.code}</td>
-                <td className="px-2 py-1">{u.libelle}</td>
+                <td className="px-2 py-1">{u.nom}</td>
+                <td className="px-2 py-1">{u.abbr}</td>
                 <td className="px-2 py-1">
                   <Button size="sm" variant="outline" onClick={() => handleDelete(u.id)}>
                     Supprimer

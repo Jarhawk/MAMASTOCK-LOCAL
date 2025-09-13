@@ -48,6 +48,21 @@ export async function closeDb() {
   }
 }
 
+export async function selectAll<T = any>(sql: string, params: any[] = []): Promise<T[]> {
+  const db = await getDb();
+  return db.select<T[]>(sql, params);
+}
+
+export async function selectOne<T = any>(sql: string, params: any[] = []): Promise<T | null> {
+  const rows = await selectAll<T>(sql, params);
+  return rows[0] ?? null;
+}
+
+export async function exec(sql: string, params: any[] = []): Promise<void> {
+  const db = await getDb();
+  await db.execute(sql, params);
+}
+
 // ---------- Helpers Dashboard / util ----------
 
 function _assertIdent(name: string): string {
