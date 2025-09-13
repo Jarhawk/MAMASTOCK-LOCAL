@@ -9,9 +9,19 @@ export default function SidebarAutogen() {
     <aside className="w-64 p-3 border-r border-border bg-background">
       <nav>
         <ul className="space-y-1">
+        <li key="/debug/accessexample">
+          <NavLink to="/debug/accessexample" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
+            Access Example
+          </NavLink>
+        </li>
         <li key="/consolidation/accessmultisites">
           <NavLink to="/consolidation/accessmultisites" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
             Access Multi Sites
+          </NavLink>
+        </li>
+        <li key="/parametrage/accessrights">
+          <NavLink to="/parametrage/accessrights" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
+            Access Rights
           </NavLink>
         </li>
         <li key="/accueil">
@@ -44,6 +54,11 @@ export default function SidebarAutogen() {
             Alertes
           </NavLink>
         </li>
+        <li key="/stock/alertesrupture">
+          <NavLink to="/stock/alertesrupture" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
+            Alertes Rupture
+          </NavLink>
+        </li>
         <li key="/analyse/analyse">
           <NavLink to="/analyse/analyse" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
             Analyse
@@ -57,11 +72,6 @@ export default function SidebarAutogen() {
         <li key="/fournisseurs/apifournisseurform">
           <NavLink to="/fournisseurs/apifournisseurform" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
             Api Fournisseur Form
-          </NavLink>
-        </li>
-        <li key="/debug/auth">
-          <NavLink to="/debug/auth" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Auth
           </NavLink>
         </li>
         <li key="/barmanager">
@@ -124,9 +134,9 @@ export default function SidebarAutogen() {
             Costing Carte
           </NavLink>
         </li>
-        <li key="/dashboard">
-          <NavLink to="/dashboard" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Dashboard
+        <li key="/dashboard/dashboardbuilder">
+          <NavLink to="/dashboard/dashboardbuilder" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
+            Dashboard Builder
           </NavLink>
         </li>
         <li key="/documents/documentform">
@@ -136,11 +146,6 @@ export default function SidebarAutogen() {
         </li>
         <li key="/dossierdonnees">
           <NavLink to="/dossierdonnees" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Dossier Donnees
-          </NavLink>
-        </li>
-        <li key="/parametrage/dossierdonnees">
-          <NavLink to="/parametrage/dossierdonnees" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
             Dossier Donnees
           </NavLink>
         </li>
@@ -244,19 +249,14 @@ export default function SidebarAutogen() {
             Notification Settings Form
           </NavLink>
         </li>
-        <li key="/onboarding">
-          <NavLink to="/onboarding" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Onboarding
+        <li key="/onboarding/onboardingutilisateur">
+          <NavLink to="/onboarding/onboardingutilisateur" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
+            Onboarding Utilisateur
           </NavLink>
         </li>
         <li key="/pertes">
           <NavLink to="/pertes" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
             Pertes
-          </NavLink>
-        </li>
-        <li key="/planning">
-          <NavLink to="/planning" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Planning
           </NavLink>
         </li>
         <li key="/planningdetail">
@@ -314,14 +314,14 @@ export default function SidebarAutogen() {
             Simulation
           </NavLink>
         </li>
+        <li key="/planning/simulationplanner">
+          <NavLink to="/planning/simulationplanner" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
+            Simulation Planner
+          </NavLink>
+        </li>
         <li key="/stats/stats">
           <NavLink to="/stats/stats" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
             Stats
-          </NavLink>
-        </li>
-        <li key="/stock">
-          <NavLink to="/stock" className={({isActive}) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Stock
           </NavLink>
         </li>
         <li key="/surcouts/surcouts">
