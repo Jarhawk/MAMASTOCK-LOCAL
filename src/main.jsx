@@ -34,7 +34,7 @@ const queryClient = new QueryClient({
   },
 });
 
-function Root() {
+function AppRoot() {
   console.log("[debug] App mounted");
   useEffect(() => {
     testRandom().catch((err) =>
@@ -81,19 +81,23 @@ function Root() {
   }, []);
 
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <MultiMamaProvider>
-          <ThemeProvider>
-            <ToastRoot />
-            <DebugRibbon />
-            <AppRouter />
-            <CookieConsent />
-          </ThemeProvider>
-        </MultiMamaProvider>
-      </QueryClientProvider>
-    </AuthProvider>
+    <>
+      <AppRouter />
+      <CookieConsent />
+    </>
   );
 }
 
-createRoot(document.getElementById("root")).render(<Root />);
+createRoot(document.getElementById("root")).render(
+  <AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <MultiMamaProvider>
+        <ThemeProvider>
+          <ToastRoot />
+          <DebugRibbon />
+          <AppRoot />
+        </ThemeProvider>
+      </MultiMamaProvider>
+    </QueryClientProvider>
+  </AuthProvider>
+);
