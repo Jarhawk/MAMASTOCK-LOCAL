@@ -14,6 +14,10 @@ import "./globals.css";
 import "nprogress/nprogress.css";
 import { runSqlSelfTest } from "@/debug/sqlSelfTest";
 
+if (import.meta.env.DEV && import.meta.env.TAURI_PLATFORM) {
+  import("@/debug/check-capabilities-runtime");
+}
+
 runSqlSelfTest().catch(console.error);
 
 const queryClient = new QueryClient({
