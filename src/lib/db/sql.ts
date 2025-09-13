@@ -40,3 +40,42 @@ export async function closeDb() {
   }
 }
 
+// --- ident safe (pas d'injection d'identifiants) ---
+function _assertIdent(name: string): string {
+  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(name)) {
+    throw new Error(`Invalid identifier: ${name}`);
+  }
+  return name;
+}
+
+/** Compte les lignes d'une table */
+export async function tableCount(table: string): Promise<number> {
+  const db = await getDb();
+  const t = _assertIdent(table);
+  const rows = await db.select(`SELECT COUNT(*) AS c FROM ${t}`);
+  const n = rows?.[0]?.c ?? 0;
+  return Number(n);
+}
+
+/** Compte plusieurs tables d'un coup */
+export async function tableCounts(tables: string[]): Promise<Record<string, number>> {
+  const db = await getDb();
+  const out: Record<string, number> = {};
+  for (const tname of tables) {
+    const t = _assertIdent(tname);
+    const r = await db.select(`SELECT COUNT(*) AS c FROM ${t}`);
+    out[tname] = Number(r?.[0]?.c ?? 0);
+  }
+  return out;
+}
+
+/** Récupère les KPI depuis la vue si elle existe */
+export async function getDashboardKPI(): Promise<any[]> {
+  const db = await getDb();
+  try {
+    return await db.select(`SELECT * FROM v_dashboard_kpi`);
+  } catch {
+    return [];
+  }
+}
+
