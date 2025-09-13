@@ -3,5 +3,10 @@
   "identifier": "sql",
   "description": "Permissions for SQL plugin",
   "windows": ["main"],
-  "permissions": ["sql:default", "sql:allow-load", "sql:allow-select", "sql:allow-execute"]
+  "permissions": [
+    "sql:default",
+    "sql:allow-load",
+    "sql:allow-select",
+    "sql:allow-execute"
+  ]
 }
