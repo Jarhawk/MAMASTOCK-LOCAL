@@ -1,373 +1,265 @@
-// ESM - Node >=18
-import fs from "fs/promises";
-import fssync from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+#!/usr/bin/env node
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const ROOT = process.cwd();
-const SRC_DIR = path.resolve(ROOT, "src");
-const REPORT_DIR = path.resolve(ROOT, "reports");
+const ROOT = path.resolve(__dirname, '..');
+const SRC_DIR = path.join(ROOT, 'src');
 
-// Helpers --------------------------------------------------------------
+const IGNORED_DIRS = new Set(['node_modules','dist','src-tauri','coverage','.vite']);
+const EXTENSIONS = ['.js','.jsx','.ts','.tsx'];
 
-const SRC_EXTS = [".ts", ".tsx", ".js", ".jsx"];
-const INDEX_BASENAMES = ["index"];
-const IMPORT_RE = /(?:^|\s)import\s+(?:["']([^"']+)["']|[^'"']+?from\s+["']([^"']+)["'])/gm;
-const DYN_IMPORT_RE = /import\s*\(\s*["']([^"']+)["']\s*\)/gm;
-const EXPORT_FROM_RE = /export\s+[^;]*?\s+from\s+["']([^"']+)["']/gm;
-const ROUTE_PATH_RE = /path\s*:\s*["'`](.*?)["'`]/g;
+function toPosix(p){return p.split(path.sep).join('/');}
 
-function toPosix(p) {
-  return p.split(path.sep).join("/");
-}
-
-function withoutQuery(spec) {
-  return spec.split("?")[0].split("#")[0];
-}
-
-function isExternal(spec) {
-  // external if it doesn't start with './', '../', or alias '@/'
-  if (spec.startsWith("./") || spec.startsWith("../") || spec.startsWith("@/")) return false;
-  // data URLs / virtuals are external too
-  if (/^(data:|virtual:)/.test(spec)) return true;
-  // bare specifier -> external
-  return true;
-}
-
-function isSourceFile(file) {
-  return SRC_EXTS.includes(path.extname(file));
-}
-
-async function exists(p) {
-  try { await fs.access(p); return true; } catch { return false; }
-}
-
-async function readText(p) {
-  return fs.readFile(p, "utf8");
-}
-
-async function writeText(p, txt) {
-  await fs.mkdir(path.dirname(p), { recursive: true });
-  await fs.writeFile(p, txt, "utf8");
-}
-
-function uniq(arr) {
-  return Array.from(new Set(arr));
-}
-
-function sortBy(a, key) {
-  return [...a].sort((x, y) => String(x[key]).localeCompare(String(y[key])));
-}
-
-// Resolve --------------------------------------------------------------
-
-async function resolveToFile(fromFile, specRaw) {
-  let spec = withoutQuery(specRaw);
-  if (spec.startsWith("@/")) {
-    spec = "./" + spec.slice(2); // -> relative to SRC
-    fromFile = path.join(SRC_DIR, "dummy.js"); // so resolve from SRC
+async function walk(dir){
+  const out=[];
+  const entries=await fs.readdir(dir,{withFileTypes:true});
+  for(const e of entries){
+    if(IGNORED_DIRS.has(e.name)) continue;
+    const full=path.join(dir,e.name);
+    if(e.isDirectory()) out.push(...await walk(full));
+    else if(EXTENSIONS.includes(path.extname(e.name))) out.push(full);
   }
-  const fromDir = path.dirname(fromFile);
-  let target = spec.startsWith(".") ? path.resolve(fromDir, spec) : spec;
-
-  // external?
-  if (!spec.startsWith(".") && !spec.startsWith("./") && !spec.startsWith("../")) {
-    return { kind: "external", id: spec };
-  }
-
-  // try exact
-  if (await exists(target) && fssync.statSync(target).isFile()) {
-    return { kind: "file", file: target };
-  }
-  // try extensions
-  for (const ext of SRC_EXTS.concat([".json"])) {
-    const p = target + ext;
-    if (await exists(p)) return { kind: "file", file: p };
-  }
-  // try index.* in directory
-  if (await exists(target) && fssync.statSync(target).isDirectory()) {
-    for (const base of INDEX_BASENAMES) {
-      for (const ext of SRC_EXTS.concat([".json"])) {
-        const p = path.join(target, base + ext);
-        if (await exists(p)) return { kind: "file", file: p };
-      }
-    }
-  }
-  // give up
-  return { kind: "missing", id: specRaw };
-}
-
-// Parse imports --------------------------------------------------------
-
-function parseImports(code) {
-  const specs = [];
-  let m;
-  IMPORT_RE.lastIndex = 0;
-  while ((m = IMPORT_RE.exec(code))) {
-    const s = m[1] || m[2];
-    if (s) specs.push(s);
-  }
-  DYN_IMPORT_RE.lastIndex = 0;
-  while ((m = DYN_IMPORT_RE.exec(code))) {
-    const s = m[1];
-    if (s) specs.push(s);
-  }
-  EXPORT_FROM_RE.lastIndex = 0;
-  while ((m = EXPORT_FROM_RE.exec(code))) {
-    const s = m[1];
-    if (s) specs.push(s);
-  }
-  return uniq(specs);
-}
-
-// Router detection -----------------------------------------------------
-
-async function detectRoutes(routerFile) {
-  try {
-    const code = await readText(routerFile);
-    const paths = [];
-    let m;
-    ROUTE_PATH_RE.lastIndex = 0;
-    while ((m = ROUTE_PATH_RE.exec(code))) {
-      if (m[1]) paths.push(m[1]);
-    }
-    return uniq(paths).sort();
-  } catch {
-    return [];
-  }
-}
-
-// Crawl ----------------------------------------------------------------
-
-async function listSourceFiles() {
-  const out = [];
-  async function walk(dir) {
-    const ents = await fs.readdir(dir, { withFileTypes: true });
-    for (const e of ents) {
-      const p = path.join(dir, e.name);
-      if (e.isDirectory()) await walk(p);
-      else if (isSourceFile(p)) out.push(p);
-    }
-  }
-  await walk(SRC_DIR);
   return out;
 }
 
-async function buildGraph() {
-  const files = await listSourceFiles();
-  const graph = new Map(); // file -> {imports:[], externals:[], miss:[]}
-  const allExternals = new Map(); // name -> count
+function parseImports(code){
+  const specs=new Set();
+  const re=/^\s*import\s+[^'";]*?from\s+['"]([^'"']+)['"]/gm;
+  const side=/^\s*import\s+['"]([^'"']+)['"]/gm;
+  const dyn=/import\(\s*['"]([^'"']+)['"]\s*\)/g;
+  let m;
+  while((m=re.exec(code))) specs.add(m[1]);
+  while((m=side.exec(code))) specs.add(m[1]);
+  while((m=dyn.exec(code))) specs.add(m[1]);
+  return [...specs];
+}
 
-  for (const file of files) {
-    const code = await readText(file);
-    const specs = parseImports(code);
-    const imports = [];
-    const externals = [];
-    const missing = [];
+async function resolveSpec(fromFile,spec){
+  let s=spec.split('?')[0].split('#')[0];
+  if(s.startsWith('@/')){
+    s='./'+s.slice(2);
+    fromFile=path.join(SRC_DIR,'dummy.js');
+  }
+  if(!s.startsWith('.')) return {kind:'external',id:s};
+  const base=path.resolve(path.dirname(fromFile),s);
+  const tries=[base,...EXTENSIONS.map(ext=>base+ext)];
+  for(const p of tries){
+    try{
+      const st=await fs.stat(p);
+      if(st.isFile()) return {kind:'file',file:p};
+      if(st.isDirectory()){
+        for(const ext of EXTENSIONS){
+          const idx=path.join(p,'index'+ext);
+          try{const st2=await fs.stat(idx);if(st2.isFile()) return {kind:'file',file:idx};}catch{}
+        }
+      }
+    }catch{}
+  }
+  return {kind:'missing',id:spec};
+}
 
-    for (const s of specs) {
-      const res = await resolveToFile(file, s);
-      if (res.kind === "file") {
-        imports.push(res.file);
-      } else if (res.kind === "external") {
-        externals.push(res.id);
-        allExternals.set(res.id, (allExternals.get(res.id) ?? 0) + 1);
-      } else {
+function buildImportNameMap(code){
+  const map={};
+  const re=/^\s*import\s+([^;]+)\s+from\s+['"]([^'"']+)['"]/gm;
+  let m;
+  while((m=re.exec(code))){
+    const clause=m[1].trim();
+    const spec=m[2];
+    if(clause.startsWith('{')){
+      const inner=clause.slice(1,-1);
+      inner.split(',').map(s=>s.trim()).filter(Boolean).forEach(n=>{
+        const [orig,alias]=n.split(/\s+as\s+/);
+        map[(alias||orig).trim()]=spec;
+      });
+    }else if(clause.startsWith('*')){
+      const alias=clause.split(/\s+as\s+/)[1];
+      if(alias) map[alias.trim()]=spec;
+    }else if(clause.includes('{')){
+      const [defPart,rest]=clause.split('{');
+      const defName=defPart.replace(',','').trim();
+      if(defName) map[defName]=spec;
+      const inner=rest.replace('}','');
+      inner.split(',').map(s=>s.trim()).filter(Boolean).forEach(n=>{
+        const [orig,alias]=n.split(/\s+as\s+/);
+        map[(alias||orig).trim()]=spec;
+      });
+    }else{
+      map[clause]=spec;
+    }
+  }
+  return map;
+}
+
+async function extractRoutes(routerFile){
+  const code=await fs.readFile(routerFile,'utf8');
+  const importMap=buildImportNameMap(code);
+  const routes=[];
+  const objRe=/\{[^{}]*path\s*:\s*['"]([^'"`]+)['"][^{}]*element\s*:\s*<([A-Za-z0-9_]+)/gs;
+  let m;
+  while((m=objRe.exec(code))){
+    const routePath=m[1];
+    const comp=m[2];
+    const spec=importMap[comp];
+    let fileRel=null;
+    if(spec){
+      const res=await resolveSpec(routerFile,spec);
+      if(res.kind==='file') fileRel=toPosix(path.relative(ROOT,res.file));
+    }
+    routes.push({path:routePath,component:comp,file:fileRel});
+  }
+  const jsxRe=/<Route[^>]*path\s*=\s*['"]([^'"`]+)['"][^>]*element\s*=\s*{<([A-Za-z0-9_]+)/g;
+  while((m=jsxRe.exec(code))){
+    const routePath=m[1];
+    const comp=m[2];
+    const spec=importMap[comp];
+    let fileRel=null;
+    if(spec){
+      const res=await resolveSpec(routerFile,spec);
+      if(res.kind==='file') fileRel=toPosix(path.relative(ROOT,res.file));
+    }
+    routes.push({path:routePath,component:comp,file:fileRel});
+  }
+  return routes;
+}
+
+function slugify(str){return str.replace(/\s+/g,'-').toLowerCase();}
+function labelize(str){const s=str.replace(/[-_]/g,' ');return s.charAt(0).toUpperCase()+s.slice(1);} 
+function uniq(arr){return [...new Set(arr)];}
+
+async function main(){
+  const files=await walk(SRC_DIR);
+  files.sort();
+  const imports={};
+  const edges=[];
+  for(const file of files){
+    const code=await fs.readFile(file,'utf8');
+    const specs=parseImports(code);
+    const rel=toPosix(path.relative(ROOT,file));
+    const internal=[], external=[], missing=[];
+    for(const s of specs){
+      const res=await resolveSpec(file,s);
+      if(res.kind==='file'){
+        const relDep=toPosix(path.relative(ROOT,res.file));
+        internal.push(relDep);
+        edges.push({from:rel,to:relDep});
+      }else if(res.kind==='external'){
+        external.push(res.id);
+      }else{
         missing.push(res.id);
       }
     }
-    graph.set(file, { imports: uniq(imports), externals: uniq(externals), missing: uniq(missing) });
+    imports[rel]={internal:uniq(internal),external:uniq(external),missing:uniq(missing)};
   }
 
-  return { files, graph, allExternals };
-}
+  const pages=files.filter(f=>toPosix(f).startsWith(toPosix(path.join(SRC_DIR,'pages'))))
+                   .map(f=>toPosix(path.relative(ROOT,f)));
 
-function reachableFrom(graph, entryFiles) {
-  const seen = new Set(entryFiles);
-  const stack = [...entryFiles];
-  while (stack.length) {
-    const cur = stack.pop();
-    const node = graph.get(cur);
-    if (!node) continue;
-    for (const nxt of node.imports) {
-      if (!seen.has(nxt)) {
-        seen.add(nxt);
-        stack.push(nxt);
-      }
+  const routerCandidates=['router.tsx','router.jsx','router.ts','router.js'].map(f=>path.join(SRC_DIR,f));
+  let routerFile=null;
+  for(const cand of routerCandidates){
+    try{const st=await fs.stat(cand);if(st.isFile()){routerFile=cand;break;}}catch{}
+  }
+  if(!routerFile){
+    for(const f of files){
+      const code=await fs.readFile(f,'utf8');
+      if(/createBrowserRouter|<Route/g.test(code)){routerFile=f;break;}
     }
   }
-  return seen;
-}
+  const routes=routerFile?await extractRoutes(routerFile):[];
+  const pagesRouted=uniq(routes.map(r=>r.file).filter(Boolean));
+  const orphans=pages.filter(p=>!pagesRouted.includes(p));
 
-// Front map (optional) -------------------------------------------------
-
-async function readFrontMap() {
-  const candidates = [
-    path.resolve(ROOT, "front_map.json"),
-    path.resolve(SRC_DIR, "front_map.json"),
-  ];
-  for (const p of candidates) {
-    if (await exists(p)) {
-      try {
-        const raw = await readText(p);
-        return JSON.parse(raw);
-      } catch {}
-    }
+  const entrypoints=[];
+  for(const ep of ['main.jsx','main.tsx']){
+    const p=path.join(SRC_DIR,ep);try{const st=await fs.stat(p);if(st.isFile()) entrypoints.push(toPosix(path.relative(ROOT,p)));}catch{}
   }
-  return null;
-}
+  if(routerFile) entrypoints.push(toPosix(path.relative(ROOT,routerFile)));
 
-// Main -----------------------------------------------------------------
-
-(async function main() {
-  await fs.mkdir(REPORT_DIR, { recursive: true });
-
-  const { files, graph, allExternals } = await buildGraph();
-
-  // Pages under src/pages
-  const pages = files
-    .filter(f => toPosix(f).includes("/src/pages/"))
-    .map(f => path.relative(ROOT, f))
-    .sort();
-
-  // Router file candidates
-  const routerCandidates = [
-    path.resolve(SRC_DIR, "router.tsx"),
-    path.resolve(SRC_DIR, "router.jsx"),
-    path.resolve(SRC_DIR, "router.ts"),
-    path.resolve(SRC_DIR, "router.js"),
-  ];
-  const routerFile = (await Promise.all(routerCandidates.map(exists)))
-    .map((ok, i) => (ok ? routerCandidates[i] : null))
-    .find(Boolean);
-
-  const routerPaths = routerFile ? await detectRoutes(routerFile) : [];
-
-  // Entrypoints
-  const entryCandidates = [
-    path.resolve(SRC_DIR, "main.tsx"),
-    path.resolve(SRC_DIR, "main.jsx"),
-    ...(routerFile ? [routerFile] : []),
-  ].filter(p => fssync.existsSync(p));
-
-  const reachable = reachableFrom(graph, entryCandidates);
-  const orphans = files
-    .filter(f => !reachable.has(f))
-    .map(f => path.relative(ROOT, f))
-    .sort();
-
-  // External deps ranking
-  const externalList = [...allExternals.entries()]
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count);
-
-  // Missing resolves
-  const missing = [];
-  for (const [file, node] of graph.entries()) {
-    for (const m of node.missing) {
-      missing.push({ file: path.relative(ROOT, file), spec: m });
-    }
+  const sidebar={};
+  function groupFor(file){
+    const after=file.replace(/^src\/pages\//,'');
+    const parts=after.split('/');
+    if(parts.length===1) return labelize(parts[0].replace(/\.(js|jsx|ts|tsx)$/,''));
+    return labelize(parts[0]);
+  }
+  for(const file of pagesRouted){
+    const after=file.replace(/^src\/pages\//,'');
+    const noExt=after.replace(/\.(js|jsx|ts|tsx)$/,'');
+    const slug=noExt.split('/').map(slugify).join('/');
+    const label=labelize(path.basename(noExt));
+    const group=groupFor(file);
+    if(!sidebar[group]) sidebar[group]=[];
+    sidebar[group].push({label,path:slug,file});
+  }
+  if(orphans.length){
+    sidebar['__orphans__']=orphans.map(f=>({label:labelize(path.basename(f).replace(/\.(js|jsx|ts|tsx)$/,'')),file:f,why:'non trouvé dans le routeur'}));
   }
 
-  // Sidebar suggestion
-  function toSlug(p) {
-    return p
-      .replace(/^\/+/, "")
-      .replace(/\.(tsx?|jsx?)$/, "")
-      .replace(/\\/g, "/")
-      .split("/")
-      .map((seg) => seg.replace(/\s+/g, "-").toLowerCase())
-      .join("/");
-  }
+  const stats={pages:pages.length,routes:routes.length,routedPages:pagesRouted.length,orphans:orphans.length};
+  const routerRel=routerFile?toPosix(path.relative(ROOT,routerFile)):null;
 
-  const pageSidebar = pages.map(rel => {
-    const relPosix = toPosix(rel);
-    const afterPages = relPosix.split("/src/pages/")[1] || relPosix;
-    const slug = "/" + toSlug(afterPages).replace(/(\/index)?$/, "").replace(/\/$/, "");
-    const label = path.basename(afterPages).replace(/\.(tsx?|jsx?)$/,"");
-    const group = path.dirname(afterPages);
-    return { file: rel, slug, label, group };
-  });
-
-  // front_map.json (optional)
-  const frontMap = await readFrontMap();
-
-  const report = {
-    generatedAt: new Date().toISOString(),
-    root: ROOT,
-    srcDir: SRC_DIR,
-    entrypoints: entryCandidates.map(p => path.relative(ROOT, p)),
-    routerFile: routerFile ? path.relative(ROOT, routerFile) : null,
-    routerPaths,
+  const report={
+    generatedAt:new Date().toISOString(),
+    root:toPosix(ROOT),
+    srcDir:toPosix(SRC_DIR),
+    entrypoints,
+    routerFile:routerRel,
+    routes,
     pages,
-    pageSidebar,
-    externals: externalList,
+    imports,
+    graph:edges,
+    pageSidebar:Object.entries(sidebar).flatMap(([g,items])=>g==='__orphans__'?[]:items.map(it=>({...it,group:g}))),
     orphans,
-    missing,
-    frontMap,
-    notes: [
-      "Les 'orphans' sont des fichiers non atteints depuis main/router via la chaîne d'import.",
-      "La sidebar suggérée est heuristique; croisez avec routerPaths et front_map.json.",
-      "Les 'missing' sont des imports non résolus (chemin à corriger, extension manquante, alias?).",
-    ],
+    stats
   };
 
-  // JSON
-  await writeText(path.join(REPORT_DIR, "src-inventory.json"), JSON.stringify(report, null, 2));
-
-  // Markdown
-  const md = [];
-  md.push(`# Inventaire src/ (pages, routes, dépendances)`);
+  await fs.writeFile(path.join(ROOT,'src-inventory.json'),JSON.stringify(report,null,2));
+  const md=[];
+  md.push('# Inventaire src/');
   md.push(`_Généré: ${report.generatedAt}_`);
-  md.push("");
-  md.push(`**Entrypoints:**`);
-  md.push(report.entrypoints.map(p => `- \`${p}\``).join("\n") || "- (aucun)");
-  md.push("");
-  md.push(`**Router:** ${report.routerFile ? "`" + report.routerFile + "`" : "_non détecté_"} `);
-  md.push("");
-  md.push(`**Routes détectées (heuristique \`path:\`):**`);
-  md.push(report.routerPaths.map(p => `- \`${p}\``).join("\n") || "- (aucune)");
-  md.push("");
-  md.push(`## Pages (src/pages)`);
-  md.push(report.pages.map(p => `- \`${p}\``).join("\n") || "- (aucune)");
-  md.push("");
-  md.push(`## Sidebar suggérée (heuristique)`);
-  if (report.pageSidebar.length) {
-    const grouped = {};
-    for (const item of report.pageSidebar) {
-      grouped[item.group] = grouped[item.group] || [];
-      grouped[item.group].push(item);
-    }
-    for (const [grp, items] of Object.entries(grouped)) {
-      md.push(`### ${grp}`);
-      md.push(items.map(it => `- **${it.label}** → \`${it.slug}\`  _(file: \`${it.file}\`)_`).join("\n"));
-      md.push("");
-    }
-  } else {
-    md.push("- (aucune)");
+  md.push('');
+  md.push('## Entrypoints');
+  md.push(entrypoints.map(p=>`- \`${p}\``).join('\n') || '- (aucun)');
+  md.push('');
+  md.push('## Router');
+  md.push(routerRel?`- \`${routerRel}\``:'- (non détecté)');
+  md.push('');
+  md.push('## Routes');
+  if(routes.length){
+    md.push('| path | file |');
+    md.push('| --- | --- |');
+    for(const r of routes){md.push(`| \`${r.path}\` | ${r.file?`\`${r.file}\``:''} |`);}
+  }else{
+    md.push('- (aucune)');
   }
-  md.push("");
-  md.push(`## Dépendances externes (imports npm, par fréquence)`);
-  md.push(report.externals.map(d => `- \`${d.name}\` × ${d.count}`).join("\n") || "- (aucune)");
-  md.push("");
-  md.push(`## Orphelins (non atteints depuis main/router)`);
-  md.push(report.orphans.map(p => `- \`${p}\``).join("\n") || "- (aucun)");
-  md.push("");
-  md.push(`## Imports non résolus (à corriger)`);
-  md.push(report.missing.map(m => `- \`${m.spec}\`  (dans \`${m.file}\`)`).join("\n") || "- (aucun)");
-  md.push("");
-  if (report.frontMap) {
-    md.push(`## front_map.json (trouvé)`);
-    md.push("```json");
-    md.push(JSON.stringify(report.frontMap, null, 2));
-    md.push("```");
-  }
-  await writeText(path.join(REPORT_DIR, "src-inventory.md"), md.join("\n"));
+  md.push('');
+  md.push('## Pages routées');
+  md.push(pagesRouted.map(p=>`- \`${p}\``).join('\n') || '- (aucune)');
+  md.push('');
+  md.push('## Pages orphelines');
+  md.push(orphans.map(p=>`- \`${p}\``).join('\n') || '- (aucune)');
+  md.push('');
+  md.push('## Stats');
+  md.push(`- Pages: ${stats.pages}`);
+  md.push(`- Routes: ${stats.routes}`);
+  md.push(`- Pages routées: ${stats.routedPages}`);
+  md.push(`- Orphelines: ${stats.orphans}`);
+  await fs.writeFile(path.join(ROOT,'src-inventory.md'),md.join('\n'));
+  await fs.writeFile(path.join(ROOT,'sidebar.plan.json'),JSON.stringify(sidebar,null,2));
 
-  console.log(`\n✅ Scan terminé.\n- ${path.relative(ROOT, path.join(REPORT_DIR, "src-inventory.json"))}\n- ${path.relative(ROOT, path.join(REPORT_DIR, "src-inventory.md"))}\n`);
-})().catch((e) => {
-  console.error("scan-src failed:", e);
-  process.exit(1);
-});
+  console.log(`Pages routées: ${pagesRouted.length} / ${pages.length}`);
+  console.log(`Orphelines: ${orphans.length}`);
+  console.log(`Router: ${routerRel || 'non détecté'}`);
+  const actions=[];
+  if(orphans[0]) actions.push(`ajouter route pour ${orphans[0]}`);
+  if(orphans[1]) actions.push(`retirer page ${orphans[1]}`);
+  actions.push('fusionner routes ou nettoyer la sidebar');
+  while(actions.length<3) actions.push('revoir la configuration du routeur');
+  console.log('Actions suggérées:');
+  for(const a of actions.slice(0,3)) console.log(`- ${a}`);
+}
+
+main().catch(err=>{console.error(err);process.exit(1);});

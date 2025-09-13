@@ -1,0 +1,1007 @@
+{
+  "Dashboard": [
+    {
+      "label": "Dashboard",
+      "path": "dashboard",
+      "file": "src/pages/Dashboard.jsx"
+    }
+  ],
+  "Parametrage": [
+    {
+      "label": "Familles",
+      "path": "parametrage/familles",
+      "file": "src/pages/parametrage/Familles.jsx"
+    },
+    {
+      "label": "SousFamilles",
+      "path": "parametrage/sousfamilles",
+      "file": "src/pages/parametrage/SousFamilles.jsx"
+    },
+    {
+      "label": "Unites",
+      "path": "parametrage/unites",
+      "file": "src/pages/parametrage/Unites.jsx"
+    }
+  ],
+  "DossierDonnees": [
+    {
+      "label": "DossierDonnees",
+      "path": "dossierdonnees",
+      "file": "src/pages/DossierDonnees.jsx"
+    }
+  ],
+  "Debug": [
+    {
+      "label": "AuthDebug",
+      "path": "debug/authdebug",
+      "file": "src/pages/debug/AuthDebug.jsx"
+    }
+  ],
+  "__orphans__": [
+    {
+      "label": "Accueil",
+      "file": "src/pages/Accueil.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "AideContextuelle",
+      "file": "src/pages/AideContextuelle.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Alertes",
+      "file": "src/pages/Alertes.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "BarManager",
+      "file": "src/pages/BarManager.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "CartePlats",
+      "file": "src/pages/CartePlats.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Consentements",
+      "file": "src/pages/Consentements.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Auth",
+      "file": "src/pages/Debug/Auth.tsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "EngineeringMenu",
+      "file": "src/pages/EngineeringMenu.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Feedback",
+      "file": "src/pages/Feedback.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "HelpCenter",
+      "file": "src/pages/HelpCenter.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Journal",
+      "file": "src/pages/Journal.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Login",
+      "file": "src/pages/Login.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "NotFound",
+      "file": "src/pages/NotFound.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Onboarding",
+      "file": "src/pages/Onboarding.tsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "DossierDonnees",
+      "file": "src/pages/Parametrage/DossierDonnees.tsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Familles",
+      "file": "src/pages/Parametrage/Familles.tsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "SousFamilles",
+      "file": "src/pages/Parametrage/SousFamilles.tsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Unites",
+      "file": "src/pages/Parametrage/Unites.tsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Familles",
+      "file": "src/pages/Parametres/Familles.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Pertes",
+      "file": "src/pages/Pertes.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Planning",
+      "file": "src/pages/Planning.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "PlanningDetail",
+      "file": "src/pages/PlanningDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "PlanningForm",
+      "file": "src/pages/PlanningForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "PlanningModule",
+      "file": "src/pages/PlanningModule.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Rgpd",
+      "file": "src/pages/Rgpd.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Stock",
+      "file": "src/pages/Stock.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Utilisateurs",
+      "file": "src/pages/Utilisateurs.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Validations",
+      "file": "src/pages/Validations.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "AchatDetail",
+      "file": "src/pages/achats/AchatDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "AchatForm",
+      "file": "src/pages/achats/AchatForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Achats",
+      "file": "src/pages/achats/Achats.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Aide",
+      "file": "src/pages/aide/Aide.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "AideForm",
+      "file": "src/pages/aide/AideForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Analyse",
+      "file": "src/pages/analyse/Analyse.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "AnalyseCostCenter",
+      "file": "src/pages/analyse/AnalyseCostCenter.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuEngineering",
+      "file": "src/pages/analyse/MenuEngineering.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "TableauxDeBord",
+      "file": "src/pages/analyse/TableauxDeBord.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "AnalytiqueDashboard",
+      "file": "src/pages/analytique/AnalytiqueDashboard.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Blocked",
+      "file": "src/pages/auth/Blocked.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "CreateMama",
+      "file": "src/pages/auth/CreateMama.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Logout",
+      "file": "src/pages/auth/Logout.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Pending",
+      "file": "src/pages/auth/Pending.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ResetPassword",
+      "file": "src/pages/auth/ResetPassword.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "RoleError",
+      "file": "src/pages/auth/RoleError.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Unauthorized",
+      "file": "src/pages/auth/Unauthorized.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "UpdatePassword",
+      "file": "src/pages/auth/UpdatePassword.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "BLCreate",
+      "file": "src/pages/bons_livraison/BLCreate.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "BLDetail",
+      "file": "src/pages/bons_livraison/BLDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "BLForm",
+      "file": "src/pages/bons_livraison/BLForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "BonsLivraison",
+      "file": "src/pages/bons_livraison/BonsLivraison.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Carte",
+      "file": "src/pages/carte/Carte.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "CatalogueSyncViewer",
+      "file": "src/pages/catalogue/CatalogueSyncViewer.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "CommandeDetail",
+      "file": "src/pages/commandes/CommandeDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "CommandeForm",
+      "file": "src/pages/commandes/CommandeForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Commandes",
+      "file": "src/pages/commandes/Commandes.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "CommandesEnvoyees",
+      "file": "src/pages/commandes/CommandesEnvoyees.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "AccessMultiSites",
+      "file": "src/pages/consolidation/AccessMultiSites.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Consolidation",
+      "file": "src/pages/consolidation/Consolidation.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "CostBoisson",
+      "file": "src/pages/costboisson/CostBoisson.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "CostingCarte",
+      "file": "src/pages/costing/CostingCarte.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuDuJour",
+      "file": "src/pages/cuisine/MenuDuJour.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "DashboardBuilder",
+      "file": "src/pages/dashboard/DashboardBuilder.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "AccessExample",
+      "file": "src/pages/debug/AccessExample.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Debug",
+      "file": "src/pages/debug/Debug.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "DebugAuth",
+      "file": "src/pages/debug/DebugAuth.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "DebugRights",
+      "file": "src/pages/debug/DebugRights.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "DebugUser",
+      "file": "src/pages/debug/DebugUser.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "DocumentForm",
+      "file": "src/pages/documents/DocumentForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Documents",
+      "file": "src/pages/documents/Documents.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Ecarts",
+      "file": "src/pages/ecarts/Ecarts.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "EmailsEnvoyes",
+      "file": "src/pages/emails/EmailsEnvoyes.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuEngineering",
+      "file": "src/pages/engineering/MenuEngineering.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "FactureCreate",
+      "file": "src/pages/factures/FactureCreate.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "FactureDetail",
+      "file": "src/pages/factures/FactureDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "FactureForm",
+      "file": "src/pages/factures/FactureForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Factures",
+      "file": "src/pages/factures/Factures.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ImportFactures",
+      "file": "src/pages/factures/ImportFactures.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "FicheDetail",
+      "file": "src/pages/fiches/FicheDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "FicheForm",
+      "file": "src/pages/fiches/FicheForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Fiches",
+      "file": "src/pages/fiches/Fiches.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ApiFournisseurForm",
+      "file": "src/pages/fournisseurs/ApiFournisseurForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ApiFournisseurs",
+      "file": "src/pages/fournisseurs/ApiFournisseurs.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "FournisseurApiSettingsForm",
+      "file": "src/pages/fournisseurs/FournisseurApiSettingsForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "FournisseurCreate",
+      "file": "src/pages/fournisseurs/FournisseurCreate.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "FournisseurDetail",
+      "file": "src/pages/fournisseurs/FournisseurDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "FournisseurDetailPage",
+      "file": "src/pages/fournisseurs/FournisseurDetailPage.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "FournisseurForm",
+      "file": "src/pages/fournisseurs/FournisseurForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Fournisseurs",
+      "file": "src/pages/fournisseurs/Fournisseurs.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ComparatifPrix",
+      "file": "src/pages/fournisseurs/comparatif/ComparatifPrix.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "PrixFournisseurs",
+      "file": "src/pages/fournisseurs/comparatif/PrixFournisseurs.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "EcartInventaire",
+      "file": "src/pages/inventaire/EcartInventaire.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Inventaire",
+      "file": "src/pages/inventaire/Inventaire.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "InventaireDetail",
+      "file": "src/pages/inventaire/InventaireDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "InventaireForm",
+      "file": "src/pages/inventaire/InventaireForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "InventaireZones",
+      "file": "src/pages/inventaire/InventaireZones.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Cgu",
+      "file": "src/pages/legal/Cgu.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Cgv",
+      "file": "src/pages/legal/Cgv.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Confidentialite",
+      "file": "src/pages/legal/Confidentialite.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Contact",
+      "file": "src/pages/legal/Contact.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Licence",
+      "file": "src/pages/legal/Licence.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MentionsLegales",
+      "file": "src/pages/legal/MentionsLegales.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuDuJour",
+      "file": "src/pages/menu/MenuDuJour.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuDuJourJour",
+      "file": "src/pages/menu/MenuDuJourJour.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuDetail",
+      "file": "src/pages/menus/MenuDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuDuJour",
+      "file": "src/pages/menus/MenuDuJour.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuDuJourDetail",
+      "file": "src/pages/menus/MenuDuJourDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuDuJourForm",
+      "file": "src/pages/menus/MenuDuJourForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuForm",
+      "file": "src/pages/menus/MenuForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuGroupeDetail",
+      "file": "src/pages/menus/MenuGroupeDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuGroupeForm",
+      "file": "src/pages/menus/MenuGroupeForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuGroupes",
+      "file": "src/pages/menus/MenuGroupes.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MenuPDF",
+      "file": "src/pages/menus/MenuPDF.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Menus",
+      "file": "src/pages/menus/Menus.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MobileAccueil",
+      "file": "src/pages/mobile/MobileAccueil.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MobileInventaire",
+      "file": "src/pages/mobile/MobileInventaire.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MobileRequisition",
+      "file": "src/pages/mobile/MobileRequisition.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "NotificationSettingsForm",
+      "file": "src/pages/notifications/NotificationSettingsForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "NotificationsInbox",
+      "file": "src/pages/notifications/NotificationsInbox.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "OnboardingUtilisateur",
+      "file": "src/pages/onboarding/OnboardingUtilisateur.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "APIKeys",
+      "file": "src/pages/parametrage/APIKeys.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "AccessRights",
+      "file": "src/pages/parametrage/AccessRights.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "CentreCoutForm",
+      "file": "src/pages/parametrage/CentreCoutForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ExportComptaPage",
+      "file": "src/pages/parametrage/ExportComptaPage.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ExportUserData",
+      "file": "src/pages/parametrage/ExportUserData.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "InvitationsEnAttente",
+      "file": "src/pages/parametrage/InvitationsEnAttente.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "InviteUser",
+      "file": "src/pages/parametrage/InviteUser.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MamaForm",
+      "file": "src/pages/parametrage/MamaForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "MamaSettingsForm",
+      "file": "src/pages/parametrage/MamaSettingsForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Mamas",
+      "file": "src/pages/parametrage/Mamas.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Parametrage",
+      "file": "src/pages/parametrage/Parametrage.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ParametresCommandes",
+      "file": "src/pages/parametrage/ParametresCommandes.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Periodes",
+      "file": "src/pages/parametrage/Periodes.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Permissions",
+      "file": "src/pages/parametrage/Permissions.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "PermissionsAdmin",
+      "file": "src/pages/parametrage/PermissionsAdmin.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "PermissionsForm",
+      "file": "src/pages/parametrage/PermissionsForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "RGPDConsentForm",
+      "file": "src/pages/parametrage/RGPDConsentForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "RoleForm",
+      "file": "src/pages/parametrage/RoleForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Roles",
+      "file": "src/pages/parametrage/Roles.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "SystemTools",
+      "file": "src/pages/parametrage/SystemTools.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "TemplateCommandeForm",
+      "file": "src/pages/parametrage/TemplateCommandeForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "TemplatesCommandes",
+      "file": "src/pages/parametrage/TemplatesCommandes.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Utilisateurs",
+      "file": "src/pages/parametrage/Utilisateurs.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ZoneAccess",
+      "file": "src/pages/parametrage/ZoneAccess.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ZoneForm",
+      "file": "src/pages/parametrage/ZoneForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Zones",
+      "file": "src/pages/parametrage/Zones.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "SimulationPlanner",
+      "file": "src/pages/planning/SimulationPlanner.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ProduitDetail",
+      "file": "src/pages/produits/ProduitDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ProduitForm",
+      "file": "src/pages/produits/ProduitForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Produits",
+      "file": "src/pages/produits/Produits.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "PromotionForm",
+      "file": "src/pages/promotions/PromotionForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Promotions",
+      "file": "src/pages/promotions/Promotions.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "LandingPage",
+      "file": "src/pages/public/LandingPage.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Onboarding",
+      "file": "src/pages/public/Onboarding.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Signup",
+      "file": "src/pages/public/Signup.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Receptions",
+      "file": "src/pages/receptions/Receptions.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Recettes",
+      "file": "src/pages/recettes/Recettes.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "GraphCost",
+      "file": "src/pages/reporting/GraphCost.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Reporting",
+      "file": "src/pages/reporting/Reporting.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ReportingPDF",
+      "file": "src/pages/reporting/ReportingPDF.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "RequisitionDetail",
+      "file": "src/pages/requisitions/RequisitionDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "RequisitionForm",
+      "file": "src/pages/requisitions/RequisitionForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Requisitions",
+      "file": "src/pages/requisitions/Requisitions.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "SignalementDetail",
+      "file": "src/pages/signalements/SignalementDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "SignalementForm",
+      "file": "src/pages/signalements/SignalementForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Signalements",
+      "file": "src/pages/signalements/Signalements.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Simulation",
+      "file": "src/pages/simulation/Simulation.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "SimulationForm",
+      "file": "src/pages/simulation/SimulationForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "SimulationMenu",
+      "file": "src/pages/simulation/SimulationMenu.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "SimulationResult",
+      "file": "src/pages/simulation/SimulationResult.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Stats",
+      "file": "src/pages/stats/Stats.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "StatsAdvanced",
+      "file": "src/pages/stats/StatsAdvanced.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "StatsConsolidation",
+      "file": "src/pages/stats/StatsConsolidation.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "StatsCostCenters",
+      "file": "src/pages/stats/StatsCostCenters.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "StatsCostCentersPivot",
+      "file": "src/pages/stats/StatsCostCentersPivot.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "StatsFiches",
+      "file": "src/pages/stats/StatsFiches.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "StatsStock",
+      "file": "src/pages/stats/StatsStock.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "AlertesRupture",
+      "file": "src/pages/stock/AlertesRupture.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Inventaire",
+      "file": "src/pages/stock/Inventaire.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "InventaireForm",
+      "file": "src/pages/stock/InventaireForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Requisitions",
+      "file": "src/pages/stock/Requisitions.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "TransfertForm",
+      "file": "src/pages/stock/TransfertForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Transferts",
+      "file": "src/pages/stock/Transferts.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "ComparateurFiches",
+      "file": "src/pages/supervision/ComparateurFiches.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "GroupeParamForm",
+      "file": "src/pages/supervision/GroupeParamForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Logs",
+      "file": "src/pages/supervision/Logs.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Rapports",
+      "file": "src/pages/supervision/Rapports.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "SupervisionGroupe",
+      "file": "src/pages/supervision/SupervisionGroupe.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Surcouts",
+      "file": "src/pages/surcouts/Surcouts.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Alertes",
+      "file": "src/pages/taches/Alertes.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "TacheDetail",
+      "file": "src/pages/taches/TacheDetail.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "TacheForm",
+      "file": "src/pages/taches/TacheForm.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "TacheNew",
+      "file": "src/pages/taches/TacheNew.jsx",
+      "why": "non trouvé dans le routeur"
+    },
+    {
+      "label": "Taches",
+      "file": "src/pages/taches/Taches.jsx",
+      "why": "non trouvé dans le routeur"
+    }
+  ]
+}
