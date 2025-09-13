@@ -1,14 +1,10 @@
-import Database from "@tauri-apps/plugin-sql";
+import { getDb as baseGetDb, closeDb as baseCloseDb } from "@/lib/db/sql";
 import { dataDbPath, inAppDir } from "@/lib/paths";
 import { readConfig, writeConfig } from "@/appFs";
 import { isTauri } from "@/tauriEnv";
 
-let _db: any;
 export async function getDb() {
-  if (_db) return _db;
-  const file = await dataDbPath();
-  _db = await Database.load(`sqlite:${file}`);
-  return _db;
+  return baseGetDb();
 }
 
 // Fournisseurs
@@ -510,11 +506,9 @@ export async function compta_mapping_list(mama_id: string, type: string) {
 }
 
 export async function closeDb() {
-  if (_db) {
-    await _db.close();
-    _db = null;
-  }
+  await baseCloseDb();
 }
+
 
 export async function backupDb() {
   const src = await dataDbPath();

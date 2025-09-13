@@ -1,6 +1,5 @@
 // src/auth/sqliteAuth.ts
-import { appDataDir, join } from "@tauri-apps/api/path";
-import Database from "@tauri-apps/plugin-sql";
+import { getDb } from "@/lib/db/sql";
 import bcrypt from "bcryptjs";
 
 export type DbUser = {
@@ -12,20 +11,9 @@ export type DbUser = {
   created_at: string;
 };
 
-async function dbPath() {
-  const base = await appDataDir();
-  return await join(base, "MamaStock", "data", "mamastock.db");
-}
-
-async function openDb() {
-  const p = await dbPath();
-  // nécessite permission "sql:allow-load"
-  return await Database.load(`sqlite:${p}`);
-}
-
 export async function loginSqlite(email: string, password: string) {
   email = email.trim().toLowerCase();
-  const db = await openDb();
+  const db = await getDb();
   const rows = await db.select<DbUser[]>(
     "SELECT id,email,mama_id,mot_de_passe_hash,salt,created_at FROM users WHERE email = ? LIMIT 1",
     [email]
@@ -44,7 +32,7 @@ export async function loginSqlite(email: string, password: string) {
 
 export async function registerSqlite(email: string, password: string) {
   email = email.trim().toLowerCase();
-  const db = await openDb();
+  const db = await getDb();
   const exists = await db.select<{ cnt: number }[]>(
     "SELECT COUNT(*) as cnt FROM users WHERE email = ?",
     [email]
@@ -62,3 +50,4 @@ export async function registerSqlite(email: string, password: string) {
 
   return { id, email, mama_id };
 }
+

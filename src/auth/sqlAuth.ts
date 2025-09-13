@@ -1,35 +1,20 @@
-import Database from "@tauri-apps/plugin-sql";
-import { exists, mkdir } from "@tauri-apps/plugin-fs";
-import { dirname } from "@tauri-apps/api/path";
-import { dataDbPath } from "@/lib/paths";
-import { isTauri } from "@/lib/runtime";
-async function dbPath() {
-  if (!isTauri) throw new Error("Lance l'app via Tauri (npx tauri dev).");
-  const path = await dataDbPath();
-  const dir = await dirname(path);
-  if (!(await exists(dir))) await mkdir(dir, { recursive: true });
-  return path;
-}
-
-let _db: Database | null = null;
-async function getDb() {
-  if (_db) return _db;
-  const path = await dbPath();
-  _db = await Database.load(`sqlite:${path}`);
-  return _db!;
-}
+import { getDb } from "@/lib/db/sql";
 
 function b64url(buf: Uint8Array) {
   // base64url sans padding
   let s = btoa(String.fromCharCode(...buf));
-  return s.replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  return s.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
+
 async function sha256Hex(input: string) {
   const enc = new TextEncoder();
   const digest = await crypto.subtle.digest("SHA-256", enc.encode(input));
-  return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2,"0")).join("");
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
-function makeSalt(len=16) {
+
+function makeSalt(len = 16) {
   const u8 = new Uint8Array(len);
   crypto.getRandomValues(u8);
   return b64url(u8);
@@ -64,28 +49,48 @@ function unpackHash(stored: string) {
   return null;
 }
 
-export async function registerLocal(email: string, password: string): Promise<LocalUser> {
+export async function registerLocal(
+  email: string,
+  password: string
+): Promise<LocalUser> {
   email = email.trim().toLowerCase();
   await ensureTables();
   const db = await getDb();
-  const exists = await db.select<{ count: number }[]>("SELECT COUNT(*) as count FROM utilisateurs WHERE email = ?", [email]);
+  const exists = await db.select<{ count: number }[]>(
+    "SELECT COUNT(*) as count FROM utilisateurs WHERE email = ?",
+    [email]
+  );
   if (exists[0]?.count) throw new Error("Email déjà utilisé.");
 
   const salt = makeSalt();
-  const hex  = await sha256Hex(`${password}:${salt}`);
+  const hex = await sha256Hex(`${password}:${salt}`);
   const stored = packHash(hex, salt);
 
-  await db.execute("INSERT INTO utilisateurs (email, mot_de_passe_hash, role, actif) VALUES (?, ?, 'admin', 1)", [email, stored]);
+  await db.execute(
+    "INSERT INTO utilisateurs (email, mot_de_passe_hash, role, actif) VALUES (?, ?, 'admin', 1)",
+    [email, stored]
+  );
 
   // retourne profil minimal attendu par useAuth()
-  return { id: (await db.select<{ id:number }[]>("SELECT last_insert_rowid() as id"))[0].id, email, mama_id: "local" };
+  return {
+    id: (await db.select<{ id: number }[]>("SELECT last_insert_rowid() as id"))[0].id,
+    email,
+    mama_id: "local",
+  };
 }
 
-export async function loginLocal(email: string, password: string): Promise<LocalUser> {
+export async function loginLocal(
+  email: string,
+  password: string
+): Promise<LocalUser> {
   email = email.trim().toLowerCase();
   await ensureTables();
   const db = await getDb();
-  const rows = await db.select<{ id:number; email:string; mot_de_passe_hash:string }[]>(
+  const rows = await db.select<{
+    id: number;
+    email: string;
+    mot_de_passe_hash: string;
+  }[]>(
     "SELECT id, email, mot_de_passe_hash FROM utilisateurs WHERE email=? AND actif=1 LIMIT 1",
     [email]
   );
@@ -99,3 +104,4 @@ export async function loginLocal(email: string, password: string): Promise<Local
 
   return { id: u.id, email: u.email, mama_id: "local" };
 }
+
