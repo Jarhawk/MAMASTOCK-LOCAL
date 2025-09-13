@@ -2,7 +2,9 @@
   "$schema": "../gen/schemas/plugin-sql.json",
   "identifier": "sql",
   "description": "SQL plugin capabilities (dev)",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "sql:default",
     "sql:allow-load",
