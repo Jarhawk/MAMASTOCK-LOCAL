@@ -1,4 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+// NOTE: Service worker désactivé en développement (fichier renommé en .dev-disabled.js)
+
 const isTauri = self.location.protocol === "tauri:" || self.location.host === "tauri.localhost";
 
 if (isTauri) {
