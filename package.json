@@ -19,6 +19,7 @@
     "check:native": "node scripts/check-node-native.js",
     "check:tauri-imports": "node scripts/check-tauri-imports.js",
     "check:tauri-plugins": "node scripts/check-tauri-plugins.js",
+    "check:cap": "node scripts/check-capabilities.js",
     "scan:src": "node scripts/scan-src.js"
   },
   "dependencies": {
