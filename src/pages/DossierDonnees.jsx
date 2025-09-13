@@ -3,6 +3,16 @@ import { Button } from '@/components/ui/button';
 import { isTauri } from '@/lib/db/sql';
 
 export default function DossierDonnees() {
+  if (!isTauri) {
+    return (
+      <div className="p-6 text-sm">
+        <h2 className="font-semibold mb-2">Fonction disponible uniquement dans l’application Tauri</h2>
+        <p>
+          Ferme l’onglet navigateur et utilise la fenêtre <b>MamaStock</b> (lancée via <code>npx tauri dev</code>).
+        </p>
+      </div>
+    );
+  }
   const [baseDir, setBaseDir] = useState('');
   const [dbPath, setDbPath] = useState('');
   const [dbExists, setDbExists] = useState(false);
