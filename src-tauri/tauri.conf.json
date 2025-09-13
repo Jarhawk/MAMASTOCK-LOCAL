@@ -12,8 +12,10 @@
         "height": 800,
         "resizable": true,
         "fullscreen": false,
-        "visible": true
+        "visible": true,
+        "url": "tauri://localhost"
       }
-    ]
+    ],
+    "security": { "csp": null }
   }
 }

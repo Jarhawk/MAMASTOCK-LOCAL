@@ -1,4 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { canRegisterSW } from "@/sw-guard";
 // SW disabled in DEV
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
@@ -10,8 +11,10 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
         await Promise.all(keys.map((k) => caches.delete(k)));
       }
 
-      const registration = await navigator.serviceWorker.register('/service-worker.js');
-      console.info('SW registered', registration);
+      if (canRegisterSW) {
+        const registration = await navigator.serviceWorker.register('/service-worker.js');
+        console.info('SW registered', registration);
+      }
     } catch (registrationError) {
       console.error('SW registration failed', registrationError);
     }
