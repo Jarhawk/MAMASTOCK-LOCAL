@@ -19,7 +19,8 @@
     "check:native": "node scripts/check-node-native.js",
     "check:tauri-imports": "node scripts/check-tauri-imports.js",
     "check:tauri-plugins": "node scripts/check-tauri-plugins.js",
-    "scan:src": "node scripts/scan-src.js"
+    "scan:src": "node scripts/scan-src.js",
+    "fix:sql-perms": "node scripts/fix-sql-capabilities.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",

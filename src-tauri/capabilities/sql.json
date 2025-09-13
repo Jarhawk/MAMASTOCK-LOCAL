@@ -2,11 +2,14 @@
   "$schema": "../gen/schemas/plugin-sql.json",
   "identifier": "sql",
   "description": "Permissions for SQL plugin",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "sql:default",
     "sql:allow-load",
     "sql:allow-select",
-    "sql:allow-execute"
+    "sql:allow-execute",
+    "sql:allow-close"
   ]
 }
