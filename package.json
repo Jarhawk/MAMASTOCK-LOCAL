@@ -22,7 +22,8 @@
     "check:cap": "node scripts/check-capabilities.js",
     "scan:src": "node scripts/scan-src.js",
     "check:cap:runtime": "set TAURI_DEV_URL=http://localhost:5173/?capcheck=1 && npx tauri dev",
-    "fix:cap": "node scripts/normalize-capabilities.js"
+    "fix:cap": "node scripts/normalize-capabilities.js",
+    "sync:cap:window": "node scripts/sync-sql-cap-window.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
