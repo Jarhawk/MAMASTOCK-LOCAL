@@ -1,8 +1,8 @@
 // src/lib/db/sql.ts
-import Database from "@tauri-apps/plugin-sql"; // ⚠️ default export, pas { Database }
+import Database from "@tauri-apps/plugin-sql"; // ⚠️ default export
 import { appDataDir, join } from "@tauri-apps/api/path";
 
-/** Détection runtime fiable (marche en dev via TAURI_DEV_URL) */
+/** Détection runtime fiable (marche en dev via TAURI_DEV_URL dans la fenêtre Tauri) */
 export const isTauri: boolean = (() => {
   try {
     return typeof window !== "undefined" && !!(window as any).__TAURI_INTERNALS__;
@@ -16,16 +16,36 @@ export function requireTauri() {
 }
 
 let _dbPromise: Promise<any> | null = null;
+let _db: any | null = null;
 
-/** DB SQLite (fichier dans AppData\Roaming\com.mamastock.local\MamaStock\mamastock.db) */
+/** Ouvre (ou réutilise) la connexion SQLite située dans AppData\Roaming\com.mamastock.local\MamaStock\mamastock.db */
 export async function getDb() {
   requireTauri();
+  if (_db) return _db;
   if (!_dbPromise) {
-    const base = await appDataDir();
-    const file = await join(base, "MamaStock", "mamastock.db");
-    _dbPromise = Database.load(`sqlite:${file}`); // nécessite sql:allow-load
+    _dbPromise = (async () => {
+      const base = await appDataDir();
+      const file = await join(base, "MamaStock", "mamastock.db");
+      const db = await Database.load(`sqlite:${file}`); // nécessite sql:allow-load
+      _db = db;
+      return db;
+    })();
   }
   return _dbPromise;
+}
+
+/** Ferme la connexion si possible et purge le cache (best-effort) */
+export async function closeDb() {
+  try {
+    if (_db && typeof _db.close === "function") {
+      await _db.close();
+    }
+  } catch {
+    // certains backends n'exposent pas close(); on ignore
+  } finally {
+    _db = null;
+    _dbPromise = null;
+  }
 }
 
 // ---------- Helpers Dashboard / util ----------
@@ -71,6 +91,7 @@ export default {
   isTauri,
   requireTauri,
   getDb,
+  closeDb,
   tableCount,
   tableCounts,
   getDashboardKPI,
