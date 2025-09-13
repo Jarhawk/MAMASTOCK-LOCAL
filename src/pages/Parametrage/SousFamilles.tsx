@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Database from '@tauri-apps/plugin-sql';
+import { getDb } from '@/lib/sql';
 
 interface Famille { id: number; nom: string; }
 interface SousFamille { id: number; nom: string; famille_id: number; famille: string; }
@@ -13,7 +13,7 @@ export default function SousFamilles() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    Database.load('sqlite:mamastock.db')
+    getDb()
       .then(setDb)
       .catch(() => setError('Base de données indisponible'));
   }, []);
