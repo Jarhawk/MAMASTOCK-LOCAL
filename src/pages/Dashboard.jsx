@@ -8,7 +8,7 @@ import GadgetTachesUrgentes from '@/components/gadgets/GadgetTachesUrgentes';
 import GadgetConsoMoyenne from '@/components/gadgets/GadgetConsoMoyenne';
 import GadgetDerniersAcces from '@/components/gadgets/GadgetDerniersAcces';
 import React, { useEffect, useState } from 'react';
-import { isTauri, tableCount } from '@/lib/db/sql';
+import { isTauri, getDb, tableCount } from '@/lib/db/sql';
 
 export default function Dashboard() {
   const [needsOnboarding, setNeedsOnboarding] = useState(false);

@@ -9,19 +9,9 @@ import TableHeader from '@/components/ui/TableHeader';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
-import { isTauri } from '@/lib/db/sql';
+import { isTauri, getDb } from '@/lib/db/sql';
 
 export default function SousFamilles() {
-  if (!isTauri) {
-    return (
-      <div className="p-6 text-sm">
-        <h2 className="font-semibold mb-2">Fonction disponible uniquement dans l’application Tauri</h2>
-        <p>
-          Ferme l’onglet navigateur et utilise la fenêtre <b>MamaStock</b> (lancée via <code>npx tauri dev</code>).
-        </p>
-      </div>
-    );
-  }
   const { hasAccess, loading: authLoading } = useAuth();
   const canEdit = hasAccess('parametrage', 'peut_modifier');
   const [sousFamilles, setSousFamilles] = useState([]);
@@ -32,7 +22,9 @@ export default function SousFamilles() {
   const refresh = async () => {
     try {
       setLoading(true);
-      const [sf, f] = await Promise.all([listSousFamilles(), listFamilles()]);
+      const [sf, f] = isTauri
+        ? await Promise.all([listSousFamilles(), listFamilles()])
+        : [[], []];
       setSousFamilles(sf);
       setFamilles(f);
     } catch (err) {

@@ -13,13 +13,13 @@ export default function Familles() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isTauri) {
+    if (isTauri) {
+      getDb()
+        .then(setDb)
+        .catch(() => setError('Base de données indisponible'));
+    } else {
       setError('Base de données indisponible');
-      return;
     }
-    getDb()
-      .then(setDb)
-      .catch(() => setError('Base de données indisponible'));
   }, []);
 
   useEffect(() => {

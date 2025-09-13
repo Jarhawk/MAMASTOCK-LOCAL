@@ -7,7 +7,7 @@ import LanguageSelector from "@/components/ui/LanguageSelector";
 import { shutdownDbSafely } from "@/lib/shutdown";
 import { releaseLock } from "@/lib/lock";
 import { getDataDir } from "@/lib/db";
-import { isTauri } from "@/lib/db/sql";
+import { isTauri, getDb } from "@/lib/db/sql";
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -43,14 +43,15 @@ export default function Navbar() {
     }, []);
 
     const handleQuit = useCallback(async () => {
-      if (!isTauri) {
-        return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
+      if (isTauri) {
+        const { appWindow } = await import("@tauri-apps/api/window");
+        const dir = await getDataDir();
+        await shutdownDbSafely();
+        await releaseLock(dir);
+        await appWindow.close();
+      } else {
+        console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
       }
-      const { appWindow } = await import("@tauri-apps/api/window");
-      const dir = await getDataDir();
-      await shutdownDbSafely();
-      await releaseLock(dir);
-      await appWindow.close();
     }, []);
 
   return (
@@ -115,7 +116,6 @@ export default function Navbar() {
               <button
                 onClick={handleQuit}
                 className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-md transition"
-                disabled={!isTauri}
               >
         Quitter & synchroniser
       </button>

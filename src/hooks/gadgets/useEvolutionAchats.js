@@ -37,7 +37,7 @@ export default function useEvolutionAchats() {
   );
 
     useEffect(() => {
-      if (authLoading || !isTauri) return;
+      if (authLoading) return;
       const controller = new AbortController();
       fetchData(controller.signal);
       return () => controller.abort();

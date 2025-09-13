@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";
+import { isTauri, getDb } from "@/lib/db/sql";
 import { inAppDir } from "@/lib/paths";
 
 type Json = unknown;
