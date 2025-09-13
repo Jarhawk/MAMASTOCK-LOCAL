@@ -1,33 +1,26 @@
 import { getDb } from "@/lib/sql";
 
-export interface SousFamille {
-  id: number;
-  famille_id: number;
-  code: string;
-  libelle: string;
-  famille_libelle?: string;
-}
-
-export async function listSousFamilles(): Promise<SousFamille[]> {
+export async function listSousFamilles() {
   const db = await getDb();
-  return await db.select<SousFamille[]>(
-    `SELECT sf.id, sf.famille_id, sf.code, sf.libelle, f.libelle AS famille_libelle
+  return await db.select(
+    `SELECT sf.id, sf.code, sf.libelle, sf.famille_id, f.libelle as famille
      FROM sous_familles sf
-     JOIN familles f ON f.id = sf.famille_id
+     LEFT JOIN familles f ON f.id = sf.famille_id
      ORDER BY sf.libelle;`
   );
 }
 
-export async function createSousFamille(
-  famille_id: number,
-  code: string,
-  libelle: string
-) {
+export async function createSousFamille(code: string, libelle: string, famille_id: number) {
   const db = await getDb();
   await db.execute(
-    "INSERT INTO sous_familles (famille_id, code, libelle) VALUES (?, ?, ?);",
-    [famille_id, code, libelle]
+    "INSERT INTO sous_familles (code, libelle, famille_id) VALUES (?, ?, ?);",
+    [code.trim(), libelle.trim(), famille_id]
   );
+}
+
+export async function deleteSousFamille(id: number) {
+  const db = await getDb();
+  await db.execute("DELETE FROM sous_familles WHERE id = ?;", [id]);
 }
 
 export async function updateSousFamille(
@@ -41,9 +34,4 @@ export async function updateSousFamille(
     "UPDATE sous_familles SET famille_id = ?, code = ?, libelle = ? WHERE id = ?;",
     [famille_id, code, libelle, id]
   );
-}
-
-export async function deleteSousFamille(id: number) {
-  const db = await getDb();
-  await db.execute("DELETE FROM sous_familles WHERE id = ?;", [id]);
 }

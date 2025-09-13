@@ -17,7 +17,7 @@ export async function createFamille(code: string, libelle: string) {
   const db = await getDb();
   await db.execute(
     "INSERT INTO familles (code, libelle) VALUES (?, ?);",
-    [code, libelle]
+    [code.trim(), libelle.trim()]
   );
 }
 

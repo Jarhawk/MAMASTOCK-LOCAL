@@ -1,21 +1,29 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { isTauri, getDb } from '@/lib/sql';
+import { isTauri } from "@/lib/runtime";
+import { getDb } from "@/lib/sql";
 
 // Returns defaults for an invoice line when a product is selected.
 // In the local offline mode we only provide PMP from the produits table.
 
 export function useProduitLineDefaults() {
-  const fetchDefaults = async ({ produit_id } = {}) => {
-    if (!produit_id || !isTauri) return { unite_id: null, unite: '', pmp: 0 };
-    try {
-      const db = await getDb();
-      const rows = await db.select('SELECT pmp FROM produits WHERE id = ? LIMIT 1', [produit_id]);
-      const pmp = Number(rows[0]?.pmp ?? 0);
-      return { unite_id: null, unite: '', pmp };
-    } catch {
-      return { unite_id: null, unite: '', pmp: 0 };
-    }
-  };
+    const fetchDefaults = async ({ produit_id } = {}) => {
+      if (!isTauri) {
+        console.info('useProduitLineDefaults: ignoré hors Tauri');
+        return { unite_id: null, unite: '', pmp: 0 };
+      }
+      if (!produit_id) return { unite_id: null, unite: '', pmp: 0 };
+      try {
+        const db = await getDb();
+        const rows = await db.select(
+          'SELECT pmp FROM produits WHERE id = ? LIMIT 1',
+          [produit_id]
+        );
+        const pmp = Number(rows[0]?.pmp ?? 0);
+        return { unite_id: null, unite: '', pmp };
+      } catch {
+        return { unite_id: null, unite: '', pmp: 0 };
+      }
+    };
 
   return { fetchDefaults };
 }

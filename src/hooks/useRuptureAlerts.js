@@ -1,12 +1,17 @@
 import { useAuth } from '@/hooks/useAuth';
-import { isTauri, getDb } from '@/lib/sql';
+import { getDb } from '@/lib/sql';
+import { isTauri } from '@/lib/runtime';
 
 export function useRuptureAlerts() {
   const { mama_id } = useAuth();
 
-  async function fetchAlerts(type = null) {
-    if (!mama_id || !isTauri) return [];
-    const db = await getDb();
+    async function fetchAlerts(type = null) {
+      if (!isTauri) {
+        console.info('useRuptureAlerts: ignoré hors Tauri');
+        return [];
+      }
+      if (!mama_id) return [];
+      const db = await getDb();
     const params = [];
     let sql =
       "SELECT produit_id as id, produit_id, nom, unite, fournisseur_nom, stock_actuel, stock_min, manque, consommation_prevue, receptions, stock_projete, type FROM v_alertes_rupture_api";
@@ -22,10 +27,14 @@ export function useRuptureAlerts() {
     }
   }
 
-  async function generateSuggestions() {
-    // Pas de génération automatique hors ligne
-    if (!mama_id || !isTauri) return { suggestions: [] };
-    return { suggestions: [] };
+    async function generateSuggestions() {
+      // Pas de génération automatique hors ligne
+      if (!isTauri) {
+        console.info('useRuptureAlerts: ignoré hors Tauri');
+        return { suggestions: [] };
+      }
+      if (!mama_id) return { suggestions: [] };
+      return { suggestions: [] };
   }
 
   return { fetchAlerts, generateSuggestions };

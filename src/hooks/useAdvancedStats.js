@@ -1,16 +1,20 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
-import { isTauri, getDb } from "@/lib/sql";
+import { isTauri } from "@/lib/runtime";
+import { getDb } from "@/lib/sql";
 
 export function useAdvancedStats() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function fetchStats({ start, end } = {}) {
-    if (!isTauri) return [];
-    setLoading(true);
-    try {
+    async function fetchStats({ start, end } = {}) {
+      if (!isTauri) {
+        console.info('useAdvancedStats: ignoré hors Tauri');
+        return [];
+      }
+      setLoading(true);
+      try {
       const db = await getDb();
       const params = [];
       let sql = "SELECT mois, montant FROM v_advanced_stats";

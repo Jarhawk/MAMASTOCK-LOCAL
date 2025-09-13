@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { isTauri, getDb } from '@/lib/sql';
+import { getDb } from '@/lib/sql';
+import { isTauri } from '@/lib/runtime';
 
 export default function useProduitsUtilises() {
   const { mama_id } = useAuth();
@@ -9,10 +10,14 @@ export default function useProduitsUtilises() {
   const [error, setError] = useState(null);
 
   const fetchData = useCallback(
-    async (signal) => {
-      if (!mama_id || !isTauri) return [];
-      setLoading(true);
-      setError(null);
+      async (signal) => {
+        if (!isTauri) {
+          console.info('useProduitsUtilises: ignoré hors Tauri');
+          return [];
+        }
+        if (!mama_id) return [];
+        setLoading(true);
+        setError(null);
       const start = new Date();
       start.setDate(start.getDate() - 30);
       try {
@@ -47,11 +52,11 @@ export default function useProduitsUtilises() {
     [mama_id]
   );
 
-  useEffect(() => {
-    const controller = new AbortController();
-    fetchData(controller.signal);
-    return () => controller.abort();
-  }, [fetchData]);
+    useEffect(() => {
+      const controller = new AbortController();
+      fetchData(controller.signal);
+      return () => controller.abort();
+    }, [fetchData]);
 
   const refresh = useCallback(() => {
     const controller = new AbortController();

@@ -2,8 +2,7 @@ import Database from "@tauri-apps/plugin-sql";
 import { exists, mkdir } from "@tauri-apps/plugin-fs";
 import { dirname } from "@tauri-apps/api/path";
 import { dataDbPath } from "@/lib/paths";
-
-const isTauri = !!import.meta.env.TAURI_PLATFORM;
+import { isTauri } from "@/lib/runtime";
 async function dbPath() {
   if (!isTauri) throw new Error("Lance l'app via Tauri (npx tauri dev).");
   const path = await dataDbPath();

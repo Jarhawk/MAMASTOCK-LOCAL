@@ -13,8 +13,7 @@ import Unites from "@/pages/parametrage/Unites";
 import DossierDonnees from "@/pages/DossierDonnees";
 import AuthDebug from "@/pages/debug/AuthDebug";
 import Sidebar from "@/components/Sidebar";
-
-const isTauri = !!import.meta.env.TAURI_PLATFORM;
+import { isTauri } from "@/lib/runtime";
 
 function AppLayout() {
   return (

@@ -1,6 +1,4 @@
-const isTauri = typeof window !== "undefined" && (
-  !!(window as any).__TAURI_INTERNALS__ || !!(window as any).__TAURI__
-);
+import { isTauri } from "@/lib/runtime";
 const APP_DIR = "MamaStock";
 const USERS_FILE = "users.json";
 
