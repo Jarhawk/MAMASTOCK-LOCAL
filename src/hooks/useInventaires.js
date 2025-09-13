@@ -12,7 +12,8 @@ import {
   inventaire_cloture,
   inventaire_last_closed,
 } from '@/lib/db';
-import { isTauri, getDb } from '@/lib/sql';
+import { getDb } from '@/lib/sql';
+import { isTauri } from '@/lib/runtime';
 
 export function useInventaires() {
   const { mama_id } = useAuth();
@@ -135,11 +136,15 @@ export function useInventaires() {
     }
   }
 
-  async function validateInventaireStock(inventaireId) {
-    if (!mama_id || !inventaireId || !isTauri) return false;
-    const inv = await inventaire_get(inventaireId, mama_id);
-    if (!inv) return false;
-    const db = await getDb();
+    async function validateInventaireStock(inventaireId) {
+      if (!isTauri) {
+        console.info('useInventaires: ignoré hors Tauri');
+        return false;
+      }
+      if (!mama_id || !inventaireId) return false;
+      const inv = await inventaire_get(inventaireId, mama_id);
+      if (!inv) return false;
+      const db = await getDb();
     for (const line of inv.lignes || []) {
       const rows = await db.select(
         'SELECT stock_theorique FROM produits WHERE id = ? AND mama_id = ?',

@@ -1,4 +1,5 @@
-import { isTauri, getDb } from "@/lib/sql";
+import { getDb } from "@/lib/sql";
+import { isTauri } from "@/lib/runtime";
 
 (async () => {
   if (!isTauri) return;
