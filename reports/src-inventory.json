@@ -1,0 +1,2133 @@
+{
+  "generatedAt": "2025-09-13T09:47:03.739Z",
+  "root": "C:\\Users\\dark_\\Desktop\\mamastock.com\\MAMASTOCK-LOCAL",
+  "srcDir": "C:\\Users\\dark_\\Desktop\\mamastock.com\\MAMASTOCK-LOCAL\\src",
+  "entrypoints": [
+    "src\\main.jsx",
+    "src\\router.tsx"
+  ],
+  "routerFile": "src\\router.tsx",
+  "routerPaths": [
+    "*",
+    "/",
+    "dashboard",
+    "debug/auth",
+    "parametrage/dossier-donnees",
+    "parametrage/familles",
+    "parametrage/sous-familles",
+    "parametrage/unites"
+  ],
+  "pages": [
+    "src\\pages\\Accueil.jsx",
+    "src\\pages\\AideContextuelle.jsx",
+    "src\\pages\\Alertes.jsx",
+    "src\\pages\\BarManager.jsx",
+    "src\\pages\\CartePlats.jsx",
+    "src\\pages\\Consentements.jsx",
+    "src\\pages\\Dashboard.jsx",
+    "src\\pages\\DossierDonnees.jsx",
+    "src\\pages\\EngineeringMenu.jsx",
+    "src\\pages\\Feedback.jsx",
+    "src\\pages\\HelpCenter.jsx",
+    "src\\pages\\Journal.jsx",
+    "src\\pages\\Login.jsx",
+    "src\\pages\\NotFound.jsx",
+    "src\\pages\\Onboarding.tsx",
+    "src\\pages\\Parametres\\Familles.jsx",
+    "src\\pages\\Pertes.jsx",
+    "src\\pages\\Planning.jsx",
+    "src\\pages\\PlanningDetail.jsx",
+    "src\\pages\\PlanningForm.jsx",
+    "src\\pages\\PlanningModule.jsx",
+    "src\\pages\\Rgpd.jsx",
+    "src\\pages\\Stock.jsx",
+    "src\\pages\\Utilisateurs.jsx",
+    "src\\pages\\Validations.jsx",
+    "src\\pages\\achats\\AchatDetail.jsx",
+    "src\\pages\\achats\\AchatForm.jsx",
+    "src\\pages\\achats\\Achats.jsx",
+    "src\\pages\\aide\\Aide.jsx",
+    "src\\pages\\aide\\AideForm.jsx",
+    "src\\pages\\analyse\\Analyse.jsx",
+    "src\\pages\\analyse\\AnalyseCostCenter.jsx",
+    "src\\pages\\analyse\\MenuEngineering.jsx",
+    "src\\pages\\analyse\\TableauxDeBord.jsx",
+    "src\\pages\\analytique\\AnalytiqueDashboard.jsx",
+    "src\\pages\\auth\\Blocked.jsx",
+    "src\\pages\\auth\\CreateMama.jsx",
+    "src\\pages\\auth\\Logout.jsx",
+    "src\\pages\\auth\\Pending.jsx",
+    "src\\pages\\auth\\ResetPassword.jsx",
+    "src\\pages\\auth\\RoleError.jsx",
+    "src\\pages\\auth\\Unauthorized.jsx",
+    "src\\pages\\auth\\UpdatePassword.jsx",
+    "src\\pages\\bons_livraison\\BLCreate.jsx",
+    "src\\pages\\bons_livraison\\BLDetail.jsx",
+    "src\\pages\\bons_livraison\\BLForm.jsx",
+    "src\\pages\\bons_livraison\\BonsLivraison.jsx",
+    "src\\pages\\carte\\Carte.jsx",
+    "src\\pages\\catalogue\\CatalogueSyncViewer.jsx",
+    "src\\pages\\commandes\\CommandeDetail.jsx",
+    "src\\pages\\commandes\\CommandeForm.jsx",
+    "src\\pages\\commandes\\Commandes.jsx",
+    "src\\pages\\commandes\\CommandesEnvoyees.jsx",
+    "src\\pages\\consolidation\\AccessMultiSites.jsx",
+    "src\\pages\\consolidation\\Consolidation.jsx",
+    "src\\pages\\costboisson\\CostBoisson.jsx",
+    "src\\pages\\costing\\CostingCarte.jsx",
+    "src\\pages\\cuisine\\MenuDuJour.jsx",
+    "src\\pages\\dashboard\\DashboardBuilder.jsx",
+    "src\\pages\\debug\\AccessExample.jsx",
+    "src\\pages\\debug\\Auth.tsx",
+    "src\\pages\\debug\\AuthDebug.jsx",
+    "src\\pages\\debug\\Debug.jsx",
+    "src\\pages\\debug\\DebugAuth.jsx",
+    "src\\pages\\debug\\DebugRights.jsx",
+    "src\\pages\\debug\\DebugUser.jsx",
+    "src\\pages\\documents\\DocumentForm.jsx",
+    "src\\pages\\documents\\Documents.jsx",
+    "src\\pages\\ecarts\\Ecarts.jsx",
+    "src\\pages\\emails\\EmailsEnvoyes.jsx",
+    "src\\pages\\engineering\\MenuEngineering.jsx",
+    "src\\pages\\factures\\FactureCreate.jsx",
+    "src\\pages\\factures\\FactureDetail.jsx",
+    "src\\pages\\factures\\FactureForm.jsx",
+    "src\\pages\\factures\\Factures.jsx",
+    "src\\pages\\factures\\ImportFactures.jsx",
+    "src\\pages\\fiches\\FicheDetail.jsx",
+    "src\\pages\\fiches\\FicheForm.jsx",
+    "src\\pages\\fiches\\Fiches.jsx",
+    "src\\pages\\fournisseurs\\ApiFournisseurForm.jsx",
+    "src\\pages\\fournisseurs\\ApiFournisseurs.jsx",
+    "src\\pages\\fournisseurs\\FournisseurApiSettingsForm.jsx",
+    "src\\pages\\fournisseurs\\FournisseurCreate.jsx",
+    "src\\pages\\fournisseurs\\FournisseurDetail.jsx",
+    "src\\pages\\fournisseurs\\FournisseurDetailPage.jsx",
+    "src\\pages\\fournisseurs\\FournisseurForm.jsx",
+    "src\\pages\\fournisseurs\\Fournisseurs.jsx",
+    "src\\pages\\fournisseurs\\comparatif\\ComparatifPrix.jsx",
+    "src\\pages\\fournisseurs\\comparatif\\PrixFournisseurs.jsx",
+    "src\\pages\\inventaire\\EcartInventaire.jsx",
+    "src\\pages\\inventaire\\Inventaire.jsx",
+    "src\\pages\\inventaire\\InventaireDetail.jsx",
+    "src\\pages\\inventaire\\InventaireForm.jsx",
+    "src\\pages\\inventaire\\InventaireZones.jsx",
+    "src\\pages\\legal\\Cgu.jsx",
+    "src\\pages\\legal\\Cgv.jsx",
+    "src\\pages\\legal\\Confidentialite.jsx",
+    "src\\pages\\legal\\Contact.jsx",
+    "src\\pages\\legal\\Licence.jsx",
+    "src\\pages\\legal\\MentionsLegales.jsx",
+    "src\\pages\\menu\\MenuDuJour.jsx",
+    "src\\pages\\menu\\MenuDuJourJour.jsx",
+    "src\\pages\\menus\\MenuDetail.jsx",
+    "src\\pages\\menus\\MenuDuJour.jsx",
+    "src\\pages\\menus\\MenuDuJourDetail.jsx",
+    "src\\pages\\menus\\MenuDuJourForm.jsx",
+    "src\\pages\\menus\\MenuForm.jsx",
+    "src\\pages\\menus\\MenuGroupeDetail.jsx",
+    "src\\pages\\menus\\MenuGroupeForm.jsx",
+    "src\\pages\\menus\\MenuGroupes.jsx",
+    "src\\pages\\menus\\MenuPDF.jsx",
+    "src\\pages\\menus\\Menus.jsx",
+    "src\\pages\\mobile\\MobileAccueil.jsx",
+    "src\\pages\\mobile\\MobileInventaire.jsx",
+    "src\\pages\\mobile\\MobileRequisition.jsx",
+    "src\\pages\\notifications\\NotificationSettingsForm.jsx",
+    "src\\pages\\notifications\\NotificationsInbox.jsx",
+    "src\\pages\\onboarding\\OnboardingUtilisateur.jsx",
+    "src\\pages\\parametrage\\APIKeys.jsx",
+    "src\\pages\\parametrage\\AccessRights.jsx",
+    "src\\pages\\parametrage\\CentreCoutForm.jsx",
+    "src\\pages\\parametrage\\DossierDonnees.tsx",
+    "src\\pages\\parametrage\\ExportComptaPage.jsx",
+    "src\\pages\\parametrage\\ExportUserData.jsx",
+    "src\\pages\\parametrage\\Familles.jsx",
+    "src\\pages\\parametrage\\Familles.tsx",
+    "src\\pages\\parametrage\\InvitationsEnAttente.jsx",
+    "src\\pages\\parametrage\\InviteUser.jsx",
+    "src\\pages\\parametrage\\MamaForm.jsx",
+    "src\\pages\\parametrage\\MamaSettingsForm.jsx",
+    "src\\pages\\parametrage\\Mamas.jsx",
+    "src\\pages\\parametrage\\Parametrage.jsx",
+    "src\\pages\\parametrage\\ParametresCommandes.jsx",
+    "src\\pages\\parametrage\\Periodes.jsx",
+    "src\\pages\\parametrage\\Permissions.jsx",
+    "src\\pages\\parametrage\\PermissionsAdmin.jsx",
+    "src\\pages\\parametrage\\PermissionsForm.jsx",
+    "src\\pages\\parametrage\\RGPDConsentForm.jsx",
+    "src\\pages\\parametrage\\RoleForm.jsx",
+    "src\\pages\\parametrage\\Roles.jsx",
+    "src\\pages\\parametrage\\SousFamilles.jsx",
+    "src\\pages\\parametrage\\SousFamilles.tsx",
+    "src\\pages\\parametrage\\SystemTools.jsx",
+    "src\\pages\\parametrage\\TemplateCommandeForm.jsx",
+    "src\\pages\\parametrage\\TemplatesCommandes.jsx",
+    "src\\pages\\parametrage\\Unites.jsx",
+    "src\\pages\\parametrage\\Unites.tsx",
+    "src\\pages\\parametrage\\Utilisateurs.jsx",
+    "src\\pages\\parametrage\\ZoneAccess.jsx",
+    "src\\pages\\parametrage\\ZoneForm.jsx",
+    "src\\pages\\parametrage\\Zones.jsx",
+    "src\\pages\\planning\\SimulationPlanner.jsx",
+    "src\\pages\\produits\\ProduitDetail.jsx",
+    "src\\pages\\produits\\ProduitForm.jsx",
+    "src\\pages\\produits\\Produits.jsx",
+    "src\\pages\\promotions\\PromotionForm.jsx",
+    "src\\pages\\promotions\\Promotions.jsx",
+    "src\\pages\\public\\LandingPage.jsx",
+    "src\\pages\\public\\Onboarding.jsx",
+    "src\\pages\\public\\Signup.jsx",
+    "src\\pages\\receptions\\Receptions.jsx",
+    "src\\pages\\recettes\\Recettes.jsx",
+    "src\\pages\\reporting\\GraphCost.jsx",
+    "src\\pages\\reporting\\Reporting.jsx",
+    "src\\pages\\reporting\\ReportingPDF.jsx",
+    "src\\pages\\requisitions\\RequisitionDetail.jsx",
+    "src\\pages\\requisitions\\RequisitionForm.jsx",
+    "src\\pages\\requisitions\\Requisitions.jsx",
+    "src\\pages\\signalements\\SignalementDetail.jsx",
+    "src\\pages\\signalements\\SignalementForm.jsx",
+    "src\\pages\\signalements\\Signalements.jsx",
+    "src\\pages\\simulation\\Simulation.jsx",
+    "src\\pages\\simulation\\SimulationForm.jsx",
+    "src\\pages\\simulation\\SimulationMenu.jsx",
+    "src\\pages\\simulation\\SimulationResult.jsx",
+    "src\\pages\\stats\\Stats.jsx",
+    "src\\pages\\stats\\StatsAdvanced.jsx",
+    "src\\pages\\stats\\StatsConsolidation.jsx",
+    "src\\pages\\stats\\StatsCostCenters.jsx",
+    "src\\pages\\stats\\StatsCostCentersPivot.jsx",
+    "src\\pages\\stats\\StatsFiches.jsx",
+    "src\\pages\\stats\\StatsStock.jsx",
+    "src\\pages\\stock\\AlertesRupture.jsx",
+    "src\\pages\\stock\\Inventaire.jsx",
+    "src\\pages\\stock\\InventaireForm.jsx",
+    "src\\pages\\stock\\Requisitions.jsx",
+    "src\\pages\\stock\\TransfertForm.jsx",
+    "src\\pages\\stock\\Transferts.jsx",
+    "src\\pages\\supervision\\ComparateurFiches.jsx",
+    "src\\pages\\supervision\\GroupeParamForm.jsx",
+    "src\\pages\\supervision\\Logs.jsx",
+    "src\\pages\\supervision\\Rapports.jsx",
+    "src\\pages\\supervision\\SupervisionGroupe.jsx",
+    "src\\pages\\surcouts\\Surcouts.jsx",
+    "src\\pages\\taches\\Alertes.jsx",
+    "src\\pages\\taches\\TacheDetail.jsx",
+    "src\\pages\\taches\\TacheForm.jsx",
+    "src\\pages\\taches\\TacheNew.jsx",
+    "src\\pages\\taches\\Taches.jsx"
+  ],
+  "pageSidebar": [
+    {
+      "file": "src\\pages\\Accueil.jsx",
+      "slug": "/src/pages/accueil",
+      "label": "Accueil",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\AideContextuelle.jsx",
+      "slug": "/src/pages/aidecontextuelle",
+      "label": "AideContextuelle",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Alertes.jsx",
+      "slug": "/src/pages/alertes",
+      "label": "Alertes",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\BarManager.jsx",
+      "slug": "/src/pages/barmanager",
+      "label": "BarManager",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\CartePlats.jsx",
+      "slug": "/src/pages/carteplats",
+      "label": "CartePlats",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Consentements.jsx",
+      "slug": "/src/pages/consentements",
+      "label": "Consentements",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Dashboard.jsx",
+      "slug": "/src/pages/dashboard",
+      "label": "Dashboard",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\DossierDonnees.jsx",
+      "slug": "/src/pages/dossierdonnees",
+      "label": "DossierDonnees",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\EngineeringMenu.jsx",
+      "slug": "/src/pages/engineeringmenu",
+      "label": "EngineeringMenu",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Feedback.jsx",
+      "slug": "/src/pages/feedback",
+      "label": "Feedback",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\HelpCenter.jsx",
+      "slug": "/src/pages/helpcenter",
+      "label": "HelpCenter",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Journal.jsx",
+      "slug": "/src/pages/journal",
+      "label": "Journal",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Login.jsx",
+      "slug": "/src/pages/login",
+      "label": "Login",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\NotFound.jsx",
+      "slug": "/src/pages/notfound",
+      "label": "NotFound",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Onboarding.tsx",
+      "slug": "/src/pages/onboarding",
+      "label": "Onboarding",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Parametres\\Familles.jsx",
+      "slug": "/src/pages/parametres/familles",
+      "label": "Familles",
+      "group": "src/pages/Parametres"
+    },
+    {
+      "file": "src\\pages\\Pertes.jsx",
+      "slug": "/src/pages/pertes",
+      "label": "Pertes",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Planning.jsx",
+      "slug": "/src/pages/planning",
+      "label": "Planning",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\PlanningDetail.jsx",
+      "slug": "/src/pages/planningdetail",
+      "label": "PlanningDetail",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\PlanningForm.jsx",
+      "slug": "/src/pages/planningform",
+      "label": "PlanningForm",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\PlanningModule.jsx",
+      "slug": "/src/pages/planningmodule",
+      "label": "PlanningModule",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Rgpd.jsx",
+      "slug": "/src/pages/rgpd",
+      "label": "Rgpd",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Stock.jsx",
+      "slug": "/src/pages/stock",
+      "label": "Stock",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Utilisateurs.jsx",
+      "slug": "/src/pages/utilisateurs",
+      "label": "Utilisateurs",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\Validations.jsx",
+      "slug": "/src/pages/validations",
+      "label": "Validations",
+      "group": "src/pages"
+    },
+    {
+      "file": "src\\pages\\achats\\AchatDetail.jsx",
+      "slug": "/src/pages/achats/achatdetail",
+      "label": "AchatDetail",
+      "group": "src/pages/achats"
+    },
+    {
+      "file": "src\\pages\\achats\\AchatForm.jsx",
+      "slug": "/src/pages/achats/achatform",
+      "label": "AchatForm",
+      "group": "src/pages/achats"
+    },
+    {
+      "file": "src\\pages\\achats\\Achats.jsx",
+      "slug": "/src/pages/achats/achats",
+      "label": "Achats",
+      "group": "src/pages/achats"
+    },
+    {
+      "file": "src\\pages\\aide\\Aide.jsx",
+      "slug": "/src/pages/aide/aide",
+      "label": "Aide",
+      "group": "src/pages/aide"
+    },
+    {
+      "file": "src\\pages\\aide\\AideForm.jsx",
+      "slug": "/src/pages/aide/aideform",
+      "label": "AideForm",
+      "group": "src/pages/aide"
+    },
+    {
+      "file": "src\\pages\\analyse\\Analyse.jsx",
+      "slug": "/src/pages/analyse/analyse",
+      "label": "Analyse",
+      "group": "src/pages/analyse"
+    },
+    {
+      "file": "src\\pages\\analyse\\AnalyseCostCenter.jsx",
+      "slug": "/src/pages/analyse/analysecostcenter",
+      "label": "AnalyseCostCenter",
+      "group": "src/pages/analyse"
+    },
+    {
+      "file": "src\\pages\\analyse\\MenuEngineering.jsx",
+      "slug": "/src/pages/analyse/menuengineering",
+      "label": "MenuEngineering",
+      "group": "src/pages/analyse"
+    },
+    {
+      "file": "src\\pages\\analyse\\TableauxDeBord.jsx",
+      "slug": "/src/pages/analyse/tableauxdebord",
+      "label": "TableauxDeBord",
+      "group": "src/pages/analyse"
+    },
+    {
+      "file": "src\\pages\\analytique\\AnalytiqueDashboard.jsx",
+      "slug": "/src/pages/analytique/analytiquedashboard",
+      "label": "AnalytiqueDashboard",
+      "group": "src/pages/analytique"
+    },
+    {
+      "file": "src\\pages\\auth\\Blocked.jsx",
+      "slug": "/src/pages/auth/blocked",
+      "label": "Blocked",
+      "group": "src/pages/auth"
+    },
+    {
+      "file": "src\\pages\\auth\\CreateMama.jsx",
+      "slug": "/src/pages/auth/createmama",
+      "label": "CreateMama",
+      "group": "src/pages/auth"
+    },
+    {
+      "file": "src\\pages\\auth\\Logout.jsx",
+      "slug": "/src/pages/auth/logout",
+      "label": "Logout",
+      "group": "src/pages/auth"
+    },
+    {
+      "file": "src\\pages\\auth\\Pending.jsx",
+      "slug": "/src/pages/auth/pending",
+      "label": "Pending",
+      "group": "src/pages/auth"
+    },
+    {
+      "file": "src\\pages\\auth\\ResetPassword.jsx",
+      "slug": "/src/pages/auth/resetpassword",
+      "label": "ResetPassword",
+      "group": "src/pages/auth"
+    },
+    {
+      "file": "src\\pages\\auth\\RoleError.jsx",
+      "slug": "/src/pages/auth/roleerror",
+      "label": "RoleError",
+      "group": "src/pages/auth"
+    },
+    {
+      "file": "src\\pages\\auth\\Unauthorized.jsx",
+      "slug": "/src/pages/auth/unauthorized",
+      "label": "Unauthorized",
+      "group": "src/pages/auth"
+    },
+    {
+      "file": "src\\pages\\auth\\UpdatePassword.jsx",
+      "slug": "/src/pages/auth/updatepassword",
+      "label": "UpdatePassword",
+      "group": "src/pages/auth"
+    },
+    {
+      "file": "src\\pages\\bons_livraison\\BLCreate.jsx",
+      "slug": "/src/pages/bons_livraison/blcreate",
+      "label": "BLCreate",
+      "group": "src/pages/bons_livraison"
+    },
+    {
+      "file": "src\\pages\\bons_livraison\\BLDetail.jsx",
+      "slug": "/src/pages/bons_livraison/bldetail",
+      "label": "BLDetail",
+      "group": "src/pages/bons_livraison"
+    },
+    {
+      "file": "src\\pages\\bons_livraison\\BLForm.jsx",
+      "slug": "/src/pages/bons_livraison/blform",
+      "label": "BLForm",
+      "group": "src/pages/bons_livraison"
+    },
+    {
+      "file": "src\\pages\\bons_livraison\\BonsLivraison.jsx",
+      "slug": "/src/pages/bons_livraison/bonslivraison",
+      "label": "BonsLivraison",
+      "group": "src/pages/bons_livraison"
+    },
+    {
+      "file": "src\\pages\\carte\\Carte.jsx",
+      "slug": "/src/pages/carte/carte",
+      "label": "Carte",
+      "group": "src/pages/carte"
+    },
+    {
+      "file": "src\\pages\\catalogue\\CatalogueSyncViewer.jsx",
+      "slug": "/src/pages/catalogue/cataloguesyncviewer",
+      "label": "CatalogueSyncViewer",
+      "group": "src/pages/catalogue"
+    },
+    {
+      "file": "src\\pages\\commandes\\CommandeDetail.jsx",
+      "slug": "/src/pages/commandes/commandedetail",
+      "label": "CommandeDetail",
+      "group": "src/pages/commandes"
+    },
+    {
+      "file": "src\\pages\\commandes\\CommandeForm.jsx",
+      "slug": "/src/pages/commandes/commandeform",
+      "label": "CommandeForm",
+      "group": "src/pages/commandes"
+    },
+    {
+      "file": "src\\pages\\commandes\\Commandes.jsx",
+      "slug": "/src/pages/commandes/commandes",
+      "label": "Commandes",
+      "group": "src/pages/commandes"
+    },
+    {
+      "file": "src\\pages\\commandes\\CommandesEnvoyees.jsx",
+      "slug": "/src/pages/commandes/commandesenvoyees",
+      "label": "CommandesEnvoyees",
+      "group": "src/pages/commandes"
+    },
+    {
+      "file": "src\\pages\\consolidation\\AccessMultiSites.jsx",
+      "slug": "/src/pages/consolidation/accessmultisites",
+      "label": "AccessMultiSites",
+      "group": "src/pages/consolidation"
+    },
+    {
+      "file": "src\\pages\\consolidation\\Consolidation.jsx",
+      "slug": "/src/pages/consolidation/consolidation",
+      "label": "Consolidation",
+      "group": "src/pages/consolidation"
+    },
+    {
+      "file": "src\\pages\\costboisson\\CostBoisson.jsx",
+      "slug": "/src/pages/costboisson/costboisson",
+      "label": "CostBoisson",
+      "group": "src/pages/costboisson"
+    },
+    {
+      "file": "src\\pages\\costing\\CostingCarte.jsx",
+      "slug": "/src/pages/costing/costingcarte",
+      "label": "CostingCarte",
+      "group": "src/pages/costing"
+    },
+    {
+      "file": "src\\pages\\cuisine\\MenuDuJour.jsx",
+      "slug": "/src/pages/cuisine/menudujour",
+      "label": "MenuDuJour",
+      "group": "src/pages/cuisine"
+    },
+    {
+      "file": "src\\pages\\dashboard\\DashboardBuilder.jsx",
+      "slug": "/src/pages/dashboard/dashboardbuilder",
+      "label": "DashboardBuilder",
+      "group": "src/pages/dashboard"
+    },
+    {
+      "file": "src\\pages\\debug\\AccessExample.jsx",
+      "slug": "/src/pages/debug/accessexample",
+      "label": "AccessExample",
+      "group": "src/pages/debug"
+    },
+    {
+      "file": "src\\pages\\debug\\Auth.tsx",
+      "slug": "/src/pages/debug/auth",
+      "label": "Auth",
+      "group": "src/pages/debug"
+    },
+    {
+      "file": "src\\pages\\debug\\AuthDebug.jsx",
+      "slug": "/src/pages/debug/authdebug",
+      "label": "AuthDebug",
+      "group": "src/pages/debug"
+    },
+    {
+      "file": "src\\pages\\debug\\Debug.jsx",
+      "slug": "/src/pages/debug/debug",
+      "label": "Debug",
+      "group": "src/pages/debug"
+    },
+    {
+      "file": "src\\pages\\debug\\DebugAuth.jsx",
+      "slug": "/src/pages/debug/debugauth",
+      "label": "DebugAuth",
+      "group": "src/pages/debug"
+    },
+    {
+      "file": "src\\pages\\debug\\DebugRights.jsx",
+      "slug": "/src/pages/debug/debugrights",
+      "label": "DebugRights",
+      "group": "src/pages/debug"
+    },
+    {
+      "file": "src\\pages\\debug\\DebugUser.jsx",
+      "slug": "/src/pages/debug/debuguser",
+      "label": "DebugUser",
+      "group": "src/pages/debug"
+    },
+    {
+      "file": "src\\pages\\documents\\DocumentForm.jsx",
+      "slug": "/src/pages/documents/documentform",
+      "label": "DocumentForm",
+      "group": "src/pages/documents"
+    },
+    {
+      "file": "src\\pages\\documents\\Documents.jsx",
+      "slug": "/src/pages/documents/documents",
+      "label": "Documents",
+      "group": "src/pages/documents"
+    },
+    {
+      "file": "src\\pages\\ecarts\\Ecarts.jsx",
+      "slug": "/src/pages/ecarts/ecarts",
+      "label": "Ecarts",
+      "group": "src/pages/ecarts"
+    },
+    {
+      "file": "src\\pages\\emails\\EmailsEnvoyes.jsx",
+      "slug": "/src/pages/emails/emailsenvoyes",
+      "label": "EmailsEnvoyes",
+      "group": "src/pages/emails"
+    },
+    {
+      "file": "src\\pages\\engineering\\MenuEngineering.jsx",
+      "slug": "/src/pages/engineering/menuengineering",
+      "label": "MenuEngineering",
+      "group": "src/pages/engineering"
+    },
+    {
+      "file": "src\\pages\\factures\\FactureCreate.jsx",
+      "slug": "/src/pages/factures/facturecreate",
+      "label": "FactureCreate",
+      "group": "src/pages/factures"
+    },
+    {
+      "file": "src\\pages\\factures\\FactureDetail.jsx",
+      "slug": "/src/pages/factures/facturedetail",
+      "label": "FactureDetail",
+      "group": "src/pages/factures"
+    },
+    {
+      "file": "src\\pages\\factures\\FactureForm.jsx",
+      "slug": "/src/pages/factures/factureform",
+      "label": "FactureForm",
+      "group": "src/pages/factures"
+    },
+    {
+      "file": "src\\pages\\factures\\Factures.jsx",
+      "slug": "/src/pages/factures/factures",
+      "label": "Factures",
+      "group": "src/pages/factures"
+    },
+    {
+      "file": "src\\pages\\factures\\ImportFactures.jsx",
+      "slug": "/src/pages/factures/importfactures",
+      "label": "ImportFactures",
+      "group": "src/pages/factures"
+    },
+    {
+      "file": "src\\pages\\fiches\\FicheDetail.jsx",
+      "slug": "/src/pages/fiches/fichedetail",
+      "label": "FicheDetail",
+      "group": "src/pages/fiches"
+    },
+    {
+      "file": "src\\pages\\fiches\\FicheForm.jsx",
+      "slug": "/src/pages/fiches/ficheform",
+      "label": "FicheForm",
+      "group": "src/pages/fiches"
+    },
+    {
+      "file": "src\\pages\\fiches\\Fiches.jsx",
+      "slug": "/src/pages/fiches/fiches",
+      "label": "Fiches",
+      "group": "src/pages/fiches"
+    },
+    {
+      "file": "src\\pages\\fournisseurs\\ApiFournisseurForm.jsx",
+      "slug": "/src/pages/fournisseurs/apifournisseurform",
+      "label": "ApiFournisseurForm",
+      "group": "src/pages/fournisseurs"
+    },
+    {
+      "file": "src\\pages\\fournisseurs\\ApiFournisseurs.jsx",
+      "slug": "/src/pages/fournisseurs/apifournisseurs",
+      "label": "ApiFournisseurs",
+      "group": "src/pages/fournisseurs"
+    },
+    {
+      "file": "src\\pages\\fournisseurs\\FournisseurApiSettingsForm.jsx",
+      "slug": "/src/pages/fournisseurs/fournisseurapisettingsform",
+      "label": "FournisseurApiSettingsForm",
+      "group": "src/pages/fournisseurs"
+    },
+    {
+      "file": "src\\pages\\fournisseurs\\FournisseurCreate.jsx",
+      "slug": "/src/pages/fournisseurs/fournisseurcreate",
+      "label": "FournisseurCreate",
+      "group": "src/pages/fournisseurs"
+    },
+    {
+      "file": "src\\pages\\fournisseurs\\FournisseurDetail.jsx",
+      "slug": "/src/pages/fournisseurs/fournisseurdetail",
+      "label": "FournisseurDetail",
+      "group": "src/pages/fournisseurs"
+    },
+    {
+      "file": "src\\pages\\fournisseurs\\FournisseurDetailPage.jsx",
+      "slug": "/src/pages/fournisseurs/fournisseurdetailpage",
+      "label": "FournisseurDetailPage",
+      "group": "src/pages/fournisseurs"
+    },
+    {
+      "file": "src\\pages\\fournisseurs\\FournisseurForm.jsx",
+      "slug": "/src/pages/fournisseurs/fournisseurform",
+      "label": "FournisseurForm",
+      "group": "src/pages/fournisseurs"
+    },
+    {
+      "file": "src\\pages\\fournisseurs\\Fournisseurs.jsx",
+      "slug": "/src/pages/fournisseurs/fournisseurs",
+      "label": "Fournisseurs",
+      "group": "src/pages/fournisseurs"
+    },
+    {
+      "file": "src\\pages\\fournisseurs\\comparatif\\ComparatifPrix.jsx",
+      "slug": "/src/pages/fournisseurs/comparatif/comparatifprix",
+      "label": "ComparatifPrix",
+      "group": "src/pages/fournisseurs/comparatif"
+    },
+    {
+      "file": "src\\pages\\fournisseurs\\comparatif\\PrixFournisseurs.jsx",
+      "slug": "/src/pages/fournisseurs/comparatif/prixfournisseurs",
+      "label": "PrixFournisseurs",
+      "group": "src/pages/fournisseurs/comparatif"
+    },
+    {
+      "file": "src\\pages\\inventaire\\EcartInventaire.jsx",
+      "slug": "/src/pages/inventaire/ecartinventaire",
+      "label": "EcartInventaire",
+      "group": "src/pages/inventaire"
+    },
+    {
+      "file": "src\\pages\\inventaire\\Inventaire.jsx",
+      "slug": "/src/pages/inventaire/inventaire",
+      "label": "Inventaire",
+      "group": "src/pages/inventaire"
+    },
+    {
+      "file": "src\\pages\\inventaire\\InventaireDetail.jsx",
+      "slug": "/src/pages/inventaire/inventairedetail",
+      "label": "InventaireDetail",
+      "group": "src/pages/inventaire"
+    },
+    {
+      "file": "src\\pages\\inventaire\\InventaireForm.jsx",
+      "slug": "/src/pages/inventaire/inventaireform",
+      "label": "InventaireForm",
+      "group": "src/pages/inventaire"
+    },
+    {
+      "file": "src\\pages\\inventaire\\InventaireZones.jsx",
+      "slug": "/src/pages/inventaire/inventairezones",
+      "label": "InventaireZones",
+      "group": "src/pages/inventaire"
+    },
+    {
+      "file": "src\\pages\\legal\\Cgu.jsx",
+      "slug": "/src/pages/legal/cgu",
+      "label": "Cgu",
+      "group": "src/pages/legal"
+    },
+    {
+      "file": "src\\pages\\legal\\Cgv.jsx",
+      "slug": "/src/pages/legal/cgv",
+      "label": "Cgv",
+      "group": "src/pages/legal"
+    },
+    {
+      "file": "src\\pages\\legal\\Confidentialite.jsx",
+      "slug": "/src/pages/legal/confidentialite",
+      "label": "Confidentialite",
+      "group": "src/pages/legal"
+    },
+    {
+      "file": "src\\pages\\legal\\Contact.jsx",
+      "slug": "/src/pages/legal/contact",
+      "label": "Contact",
+      "group": "src/pages/legal"
+    },
+    {
+      "file": "src\\pages\\legal\\Licence.jsx",
+      "slug": "/src/pages/legal/licence",
+      "label": "Licence",
+      "group": "src/pages/legal"
+    },
+    {
+      "file": "src\\pages\\legal\\MentionsLegales.jsx",
+      "slug": "/src/pages/legal/mentionslegales",
+      "label": "MentionsLegales",
+      "group": "src/pages/legal"
+    },
+    {
+      "file": "src\\pages\\menu\\MenuDuJour.jsx",
+      "slug": "/src/pages/menu/menudujour",
+      "label": "MenuDuJour",
+      "group": "src/pages/menu"
+    },
+    {
+      "file": "src\\pages\\menu\\MenuDuJourJour.jsx",
+      "slug": "/src/pages/menu/menudujourjour",
+      "label": "MenuDuJourJour",
+      "group": "src/pages/menu"
+    },
+    {
+      "file": "src\\pages\\menus\\MenuDetail.jsx",
+      "slug": "/src/pages/menus/menudetail",
+      "label": "MenuDetail",
+      "group": "src/pages/menus"
+    },
+    {
+      "file": "src\\pages\\menus\\MenuDuJour.jsx",
+      "slug": "/src/pages/menus/menudujour",
+      "label": "MenuDuJour",
+      "group": "src/pages/menus"
+    },
+    {
+      "file": "src\\pages\\menus\\MenuDuJourDetail.jsx",
+      "slug": "/src/pages/menus/menudujourdetail",
+      "label": "MenuDuJourDetail",
+      "group": "src/pages/menus"
+    },
+    {
+      "file": "src\\pages\\menus\\MenuDuJourForm.jsx",
+      "slug": "/src/pages/menus/menudujourform",
+      "label": "MenuDuJourForm",
+      "group": "src/pages/menus"
+    },
+    {
+      "file": "src\\pages\\menus\\MenuForm.jsx",
+      "slug": "/src/pages/menus/menuform",
+      "label": "MenuForm",
+      "group": "src/pages/menus"
+    },
+    {
+      "file": "src\\pages\\menus\\MenuGroupeDetail.jsx",
+      "slug": "/src/pages/menus/menugroupedetail",
+      "label": "MenuGroupeDetail",
+      "group": "src/pages/menus"
+    },
+    {
+      "file": "src\\pages\\menus\\MenuGroupeForm.jsx",
+      "slug": "/src/pages/menus/menugroupeform",
+      "label": "MenuGroupeForm",
+      "group": "src/pages/menus"
+    },
+    {
+      "file": "src\\pages\\menus\\MenuGroupes.jsx",
+      "slug": "/src/pages/menus/menugroupes",
+      "label": "MenuGroupes",
+      "group": "src/pages/menus"
+    },
+    {
+      "file": "src\\pages\\menus\\MenuPDF.jsx",
+      "slug": "/src/pages/menus/menupdf",
+      "label": "MenuPDF",
+      "group": "src/pages/menus"
+    },
+    {
+      "file": "src\\pages\\menus\\Menus.jsx",
+      "slug": "/src/pages/menus/menus",
+      "label": "Menus",
+      "group": "src/pages/menus"
+    },
+    {
+      "file": "src\\pages\\mobile\\MobileAccueil.jsx",
+      "slug": "/src/pages/mobile/mobileaccueil",
+      "label": "MobileAccueil",
+      "group": "src/pages/mobile"
+    },
+    {
+      "file": "src\\pages\\mobile\\MobileInventaire.jsx",
+      "slug": "/src/pages/mobile/mobileinventaire",
+      "label": "MobileInventaire",
+      "group": "src/pages/mobile"
+    },
+    {
+      "file": "src\\pages\\mobile\\MobileRequisition.jsx",
+      "slug": "/src/pages/mobile/mobilerequisition",
+      "label": "MobileRequisition",
+      "group": "src/pages/mobile"
+    },
+    {
+      "file": "src\\pages\\notifications\\NotificationSettingsForm.jsx",
+      "slug": "/src/pages/notifications/notificationsettingsform",
+      "label": "NotificationSettingsForm",
+      "group": "src/pages/notifications"
+    },
+    {
+      "file": "src\\pages\\notifications\\NotificationsInbox.jsx",
+      "slug": "/src/pages/notifications/notificationsinbox",
+      "label": "NotificationsInbox",
+      "group": "src/pages/notifications"
+    },
+    {
+      "file": "src\\pages\\onboarding\\OnboardingUtilisateur.jsx",
+      "slug": "/src/pages/onboarding/onboardingutilisateur",
+      "label": "OnboardingUtilisateur",
+      "group": "src/pages/onboarding"
+    },
+    {
+      "file": "src\\pages\\parametrage\\APIKeys.jsx",
+      "slug": "/src/pages/parametrage/apikeys",
+      "label": "APIKeys",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\AccessRights.jsx",
+      "slug": "/src/pages/parametrage/accessrights",
+      "label": "AccessRights",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\CentreCoutForm.jsx",
+      "slug": "/src/pages/parametrage/centrecoutform",
+      "label": "CentreCoutForm",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\DossierDonnees.tsx",
+      "slug": "/src/pages/parametrage/dossierdonnees",
+      "label": "DossierDonnees",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\ExportComptaPage.jsx",
+      "slug": "/src/pages/parametrage/exportcomptapage",
+      "label": "ExportComptaPage",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\ExportUserData.jsx",
+      "slug": "/src/pages/parametrage/exportuserdata",
+      "label": "ExportUserData",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\Familles.jsx",
+      "slug": "/src/pages/parametrage/familles",
+      "label": "Familles",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\Familles.tsx",
+      "slug": "/src/pages/parametrage/familles",
+      "label": "Familles",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\InvitationsEnAttente.jsx",
+      "slug": "/src/pages/parametrage/invitationsenattente",
+      "label": "InvitationsEnAttente",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\InviteUser.jsx",
+      "slug": "/src/pages/parametrage/inviteuser",
+      "label": "InviteUser",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\MamaForm.jsx",
+      "slug": "/src/pages/parametrage/mamaform",
+      "label": "MamaForm",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\MamaSettingsForm.jsx",
+      "slug": "/src/pages/parametrage/mamasettingsform",
+      "label": "MamaSettingsForm",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\Mamas.jsx",
+      "slug": "/src/pages/parametrage/mamas",
+      "label": "Mamas",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\Parametrage.jsx",
+      "slug": "/src/pages/parametrage/parametrage",
+      "label": "Parametrage",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\ParametresCommandes.jsx",
+      "slug": "/src/pages/parametrage/parametrescommandes",
+      "label": "ParametresCommandes",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\Periodes.jsx",
+      "slug": "/src/pages/parametrage/periodes",
+      "label": "Periodes",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\Permissions.jsx",
+      "slug": "/src/pages/parametrage/permissions",
+      "label": "Permissions",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\PermissionsAdmin.jsx",
+      "slug": "/src/pages/parametrage/permissionsadmin",
+      "label": "PermissionsAdmin",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\PermissionsForm.jsx",
+      "slug": "/src/pages/parametrage/permissionsform",
+      "label": "PermissionsForm",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\RGPDConsentForm.jsx",
+      "slug": "/src/pages/parametrage/rgpdconsentform",
+      "label": "RGPDConsentForm",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\RoleForm.jsx",
+      "slug": "/src/pages/parametrage/roleform",
+      "label": "RoleForm",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\Roles.jsx",
+      "slug": "/src/pages/parametrage/roles",
+      "label": "Roles",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\SousFamilles.jsx",
+      "slug": "/src/pages/parametrage/sousfamilles",
+      "label": "SousFamilles",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\SousFamilles.tsx",
+      "slug": "/src/pages/parametrage/sousfamilles",
+      "label": "SousFamilles",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\SystemTools.jsx",
+      "slug": "/src/pages/parametrage/systemtools",
+      "label": "SystemTools",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\TemplateCommandeForm.jsx",
+      "slug": "/src/pages/parametrage/templatecommandeform",
+      "label": "TemplateCommandeForm",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\TemplatesCommandes.jsx",
+      "slug": "/src/pages/parametrage/templatescommandes",
+      "label": "TemplatesCommandes",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\Unites.jsx",
+      "slug": "/src/pages/parametrage/unites",
+      "label": "Unites",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\Unites.tsx",
+      "slug": "/src/pages/parametrage/unites",
+      "label": "Unites",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\Utilisateurs.jsx",
+      "slug": "/src/pages/parametrage/utilisateurs",
+      "label": "Utilisateurs",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\ZoneAccess.jsx",
+      "slug": "/src/pages/parametrage/zoneaccess",
+      "label": "ZoneAccess",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\ZoneForm.jsx",
+      "slug": "/src/pages/parametrage/zoneform",
+      "label": "ZoneForm",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\parametrage\\Zones.jsx",
+      "slug": "/src/pages/parametrage/zones",
+      "label": "Zones",
+      "group": "src/pages/parametrage"
+    },
+    {
+      "file": "src\\pages\\planning\\SimulationPlanner.jsx",
+      "slug": "/src/pages/planning/simulationplanner",
+      "label": "SimulationPlanner",
+      "group": "src/pages/planning"
+    },
+    {
+      "file": "src\\pages\\produits\\ProduitDetail.jsx",
+      "slug": "/src/pages/produits/produitdetail",
+      "label": "ProduitDetail",
+      "group": "src/pages/produits"
+    },
+    {
+      "file": "src\\pages\\produits\\ProduitForm.jsx",
+      "slug": "/src/pages/produits/produitform",
+      "label": "ProduitForm",
+      "group": "src/pages/produits"
+    },
+    {
+      "file": "src\\pages\\produits\\Produits.jsx",
+      "slug": "/src/pages/produits/produits",
+      "label": "Produits",
+      "group": "src/pages/produits"
+    },
+    {
+      "file": "src\\pages\\promotions\\PromotionForm.jsx",
+      "slug": "/src/pages/promotions/promotionform",
+      "label": "PromotionForm",
+      "group": "src/pages/promotions"
+    },
+    {
+      "file": "src\\pages\\promotions\\Promotions.jsx",
+      "slug": "/src/pages/promotions/promotions",
+      "label": "Promotions",
+      "group": "src/pages/promotions"
+    },
+    {
+      "file": "src\\pages\\public\\LandingPage.jsx",
+      "slug": "/src/pages/public/landingpage",
+      "label": "LandingPage",
+      "group": "src/pages/public"
+    },
+    {
+      "file": "src\\pages\\public\\Onboarding.jsx",
+      "slug": "/src/pages/public/onboarding",
+      "label": "Onboarding",
+      "group": "src/pages/public"
+    },
+    {
+      "file": "src\\pages\\public\\Signup.jsx",
+      "slug": "/src/pages/public/signup",
+      "label": "Signup",
+      "group": "src/pages/public"
+    },
+    {
+      "file": "src\\pages\\receptions\\Receptions.jsx",
+      "slug": "/src/pages/receptions/receptions",
+      "label": "Receptions",
+      "group": "src/pages/receptions"
+    },
+    {
+      "file": "src\\pages\\recettes\\Recettes.jsx",
+      "slug": "/src/pages/recettes/recettes",
+      "label": "Recettes",
+      "group": "src/pages/recettes"
+    },
+    {
+      "file": "src\\pages\\reporting\\GraphCost.jsx",
+      "slug": "/src/pages/reporting/graphcost",
+      "label": "GraphCost",
+      "group": "src/pages/reporting"
+    },
+    {
+      "file": "src\\pages\\reporting\\Reporting.jsx",
+      "slug": "/src/pages/reporting/reporting",
+      "label": "Reporting",
+      "group": "src/pages/reporting"
+    },
+    {
+      "file": "src\\pages\\reporting\\ReportingPDF.jsx",
+      "slug": "/src/pages/reporting/reportingpdf",
+      "label": "ReportingPDF",
+      "group": "src/pages/reporting"
+    },
+    {
+      "file": "src\\pages\\requisitions\\RequisitionDetail.jsx",
+      "slug": "/src/pages/requisitions/requisitiondetail",
+      "label": "RequisitionDetail",
+      "group": "src/pages/requisitions"
+    },
+    {
+      "file": "src\\pages\\requisitions\\RequisitionForm.jsx",
+      "slug": "/src/pages/requisitions/requisitionform",
+      "label": "RequisitionForm",
+      "group": "src/pages/requisitions"
+    },
+    {
+      "file": "src\\pages\\requisitions\\Requisitions.jsx",
+      "slug": "/src/pages/requisitions/requisitions",
+      "label": "Requisitions",
+      "group": "src/pages/requisitions"
+    },
+    {
+      "file": "src\\pages\\signalements\\SignalementDetail.jsx",
+      "slug": "/src/pages/signalements/signalementdetail",
+      "label": "SignalementDetail",
+      "group": "src/pages/signalements"
+    },
+    {
+      "file": "src\\pages\\signalements\\SignalementForm.jsx",
+      "slug": "/src/pages/signalements/signalementform",
+      "label": "SignalementForm",
+      "group": "src/pages/signalements"
+    },
+    {
+      "file": "src\\pages\\signalements\\Signalements.jsx",
+      "slug": "/src/pages/signalements/signalements",
+      "label": "Signalements",
+      "group": "src/pages/signalements"
+    },
+    {
+      "file": "src\\pages\\simulation\\Simulation.jsx",
+      "slug": "/src/pages/simulation/simulation",
+      "label": "Simulation",
+      "group": "src/pages/simulation"
+    },
+    {
+      "file": "src\\pages\\simulation\\SimulationForm.jsx",
+      "slug": "/src/pages/simulation/simulationform",
+      "label": "SimulationForm",
+      "group": "src/pages/simulation"
+    },
+    {
+      "file": "src\\pages\\simulation\\SimulationMenu.jsx",
+      "slug": "/src/pages/simulation/simulationmenu",
+      "label": "SimulationMenu",
+      "group": "src/pages/simulation"
+    },
+    {
+      "file": "src\\pages\\simulation\\SimulationResult.jsx",
+      "slug": "/src/pages/simulation/simulationresult",
+      "label": "SimulationResult",
+      "group": "src/pages/simulation"
+    },
+    {
+      "file": "src\\pages\\stats\\Stats.jsx",
+      "slug": "/src/pages/stats/stats",
+      "label": "Stats",
+      "group": "src/pages/stats"
+    },
+    {
+      "file": "src\\pages\\stats\\StatsAdvanced.jsx",
+      "slug": "/src/pages/stats/statsadvanced",
+      "label": "StatsAdvanced",
+      "group": "src/pages/stats"
+    },
+    {
+      "file": "src\\pages\\stats\\StatsConsolidation.jsx",
+      "slug": "/src/pages/stats/statsconsolidation",
+      "label": "StatsConsolidation",
+      "group": "src/pages/stats"
+    },
+    {
+      "file": "src\\pages\\stats\\StatsCostCenters.jsx",
+      "slug": "/src/pages/stats/statscostcenters",
+      "label": "StatsCostCenters",
+      "group": "src/pages/stats"
+    },
+    {
+      "file": "src\\pages\\stats\\StatsCostCentersPivot.jsx",
+      "slug": "/src/pages/stats/statscostcenterspivot",
+      "label": "StatsCostCentersPivot",
+      "group": "src/pages/stats"
+    },
+    {
+      "file": "src\\pages\\stats\\StatsFiches.jsx",
+      "slug": "/src/pages/stats/statsfiches",
+      "label": "StatsFiches",
+      "group": "src/pages/stats"
+    },
+    {
+      "file": "src\\pages\\stats\\StatsStock.jsx",
+      "slug": "/src/pages/stats/statsstock",
+      "label": "StatsStock",
+      "group": "src/pages/stats"
+    },
+    {
+      "file": "src\\pages\\stock\\AlertesRupture.jsx",
+      "slug": "/src/pages/stock/alertesrupture",
+      "label": "AlertesRupture",
+      "group": "src/pages/stock"
+    },
+    {
+      "file": "src\\pages\\stock\\Inventaire.jsx",
+      "slug": "/src/pages/stock/inventaire",
+      "label": "Inventaire",
+      "group": "src/pages/stock"
+    },
+    {
+      "file": "src\\pages\\stock\\InventaireForm.jsx",
+      "slug": "/src/pages/stock/inventaireform",
+      "label": "InventaireForm",
+      "group": "src/pages/stock"
+    },
+    {
+      "file": "src\\pages\\stock\\Requisitions.jsx",
+      "slug": "/src/pages/stock/requisitions",
+      "label": "Requisitions",
+      "group": "src/pages/stock"
+    },
+    {
+      "file": "src\\pages\\stock\\TransfertForm.jsx",
+      "slug": "/src/pages/stock/transfertform",
+      "label": "TransfertForm",
+      "group": "src/pages/stock"
+    },
+    {
+      "file": "src\\pages\\stock\\Transferts.jsx",
+      "slug": "/src/pages/stock/transferts",
+      "label": "Transferts",
+      "group": "src/pages/stock"
+    },
+    {
+      "file": "src\\pages\\supervision\\ComparateurFiches.jsx",
+      "slug": "/src/pages/supervision/comparateurfiches",
+      "label": "ComparateurFiches",
+      "group": "src/pages/supervision"
+    },
+    {
+      "file": "src\\pages\\supervision\\GroupeParamForm.jsx",
+      "slug": "/src/pages/supervision/groupeparamform",
+      "label": "GroupeParamForm",
+      "group": "src/pages/supervision"
+    },
+    {
+      "file": "src\\pages\\supervision\\Logs.jsx",
+      "slug": "/src/pages/supervision/logs",
+      "label": "Logs",
+      "group": "src/pages/supervision"
+    },
+    {
+      "file": "src\\pages\\supervision\\Rapports.jsx",
+      "slug": "/src/pages/supervision/rapports",
+      "label": "Rapports",
+      "group": "src/pages/supervision"
+    },
+    {
+      "file": "src\\pages\\supervision\\SupervisionGroupe.jsx",
+      "slug": "/src/pages/supervision/supervisiongroupe",
+      "label": "SupervisionGroupe",
+      "group": "src/pages/supervision"
+    },
+    {
+      "file": "src\\pages\\surcouts\\Surcouts.jsx",
+      "slug": "/src/pages/surcouts/surcouts",
+      "label": "Surcouts",
+      "group": "src/pages/surcouts"
+    },
+    {
+      "file": "src\\pages\\taches\\Alertes.jsx",
+      "slug": "/src/pages/taches/alertes",
+      "label": "Alertes",
+      "group": "src/pages/taches"
+    },
+    {
+      "file": "src\\pages\\taches\\TacheDetail.jsx",
+      "slug": "/src/pages/taches/tachedetail",
+      "label": "TacheDetail",
+      "group": "src/pages/taches"
+    },
+    {
+      "file": "src\\pages\\taches\\TacheForm.jsx",
+      "slug": "/src/pages/taches/tacheform",
+      "label": "TacheForm",
+      "group": "src/pages/taches"
+    },
+    {
+      "file": "src\\pages\\taches\\TacheNew.jsx",
+      "slug": "/src/pages/taches/tachenew",
+      "label": "TacheNew",
+      "group": "src/pages/taches"
+    },
+    {
+      "file": "src\\pages\\taches\\Taches.jsx",
+      "slug": "/src/pages/taches/taches",
+      "label": "Taches",
+      "group": "src/pages/taches"
+    }
+  ],
+  "externals": [
+    {
+      "name": "react",
+      "count": 312
+    },
+    {
+      "name": "sonner",
+      "count": 88
+    },
+    {
+      "name": "react-router-dom",
+      "count": 72
+    },
+    {
+      "name": "xlsx",
+      "count": 40
+    },
+    {
+      "name": "framer-motion",
+      "count": 22
+    },
+    {
+      "name": "file-saver",
+      "count": 21
+    },
+    {
+      "name": "recharts",
+      "count": 14
+    },
+    {
+      "name": "lucide-react",
+      "count": 14
+    },
+    {
+      "name": "@tanstack/react-query",
+      "count": 12
+    },
+    {
+      "name": "@tauri-apps/api/path",
+      "count": 11
+    },
+    {
+      "name": "@tauri-apps/plugin-fs",
+      "count": 10
+    },
+    {
+      "name": "jspdf",
+      "count": 9
+    },
+    {
+      "name": "jspdf-autotable",
+      "count": 7
+    },
+    {
+      "name": "@radix-ui/react-dialog",
+      "count": 5
+    },
+    {
+      "name": "@react-pdf/renderer",
+      "count": 4
+    },
+    {
+      "name": "@tauri-apps/plugin-shell",
+      "count": 4
+    },
+    {
+      "name": "react-i18next",
+      "count": 4
+    },
+    {
+      "name": "html2canvas",
+      "count": 3
+    },
+    {
+      "name": "@tauri-apps/plugin-dialog",
+      "count": 3
+    },
+    {
+      "name": "nprogress",
+      "count": 2
+    },
+    {
+      "name": "/src/shims/selftest",
+      "count": 2
+    },
+    {
+      "name": "@tauri-apps/api/webviewWindow",
+      "count": 2
+    },
+    {
+      "name": "uuid",
+      "count": 2
+    },
+    {
+      "name": "bcryptjs",
+      "count": 1
+    },
+    {
+      "name": "qrcode.react",
+      "count": 1
+    },
+    {
+      "name": "@radix-ui/react-slot",
+      "count": 1
+    },
+    {
+      "name": "@radix-ui/react-dropdown-menu",
+      "count": 1
+    },
+    {
+      "name": "@radix-ui/react-select",
+      "count": 1
+    },
+    {
+      "name": "otplib",
+      "count": 1
+    },
+    {
+      "name": "i18next",
+      "count": 1
+    },
+    {
+      "name": "@tauri-apps/api/window",
+      "count": 1
+    },
+    {
+      "name": "@tauri-apps/plugin-sql",
+      "count": 1
+    },
+    {
+      "name": "js-yaml",
+      "count": 1
+    },
+    {
+      "name": "react-dom/client",
+      "count": 1
+    },
+    {
+      "name": "nprogress/nprogress.css",
+      "count": 1
+    },
+    {
+      "name": "react-hook-form",
+      "count": 1
+    },
+    {
+      "name": "date-fns",
+      "count": 1
+    },
+    {
+      "name": "react-toastify",
+      "count": 1
+    },
+    {
+      "name": "@tauri-apps/plugin-process",
+      "count": 1
+    },
+    {
+      "name": "@tauri-apps/api/tauri",
+      "count": 1
+    },
+    {
+      "name": "/src/shims/crypto",
+      "count": 1
+    },
+    {
+      "name": "@tauri-apps/plugin-log",
+      "count": 1
+    },
+    {
+      "name": "vitest",
+      "count": 1
+    }
+  ],
+  "orphans": [
+    "src\\App.jsx",
+    "src\\auth\\authAdapter.ts",
+    "src\\auth\\localAccount.ts",
+    "src\\auth\\sqlAccount.ts",
+    "src\\auth\\sqlAuth.ts",
+    "src\\auth\\sqliteAuth.ts",
+    "src\\components\\DeleteAccountButton.jsx",
+    "src\\components\\ErrorBoundary.jsx",
+    "src\\components\\FactureImportModal.jsx",
+    "src\\components\\FactureLigne.jsx",
+    "src\\components\\FactureTable.jsx",
+    "src\\components\\Footer.jsx",
+    "src\\components\\LiquidBackground\\BubblesParticles.jsx",
+    "src\\components\\LiquidBackground\\LiquidBackground.jsx",
+    "src\\components\\LiquidBackground\\MouseLight.jsx",
+    "src\\components\\LiquidBackground\\TouchLight.jsx",
+    "src\\components\\LiquidBackground\\WavesBackground.jsx",
+    "src\\components\\LiquidBackground\\index.js",
+    "src\\components\\ProtectedRoute.jsx",
+    "src\\components\\Reporting\\GraphMultiZone.jsx",
+    "src\\components\\achats\\AchatRow.jsx",
+    "src\\components\\analytics\\CostCenterAllocationModal.jsx",
+    "src\\components\\bons_livraison\\BonLivraisonRow.jsx",
+    "src\\components\\costing\\CostingCartePDF.jsx",
+    "src\\components\\dashboard\\DashboardCard.jsx",
+    "src\\components\\dashboard\\GadgetConfigForm.jsx",
+    "src\\components\\dashboard\\PeriodFilter.jsx",
+    "src\\components\\dashboard\\WidgetRenderer.jsx",
+    "src\\components\\dev\\ApiDiagnostic.jsx",
+    "src\\components\\documents\\DocumentPreview.jsx",
+    "src\\components\\documents\\DocumentUpload.jsx",
+    "src\\components\\engineering\\EngineeringChart.jsx",
+    "src\\components\\engineering\\EngineeringFilters.jsx",
+    "src\\components\\engineering\\ImportVentesExcel.jsx",
+    "src\\components\\export\\ExportManager.jsx",
+    "src\\components\\export\\FicheExportView.jsx",
+    "src\\components\\factures\\FactureRow.jsx",
+    "src\\components\\factures\\PriceDelta.jsx",
+    "src\\components\\factures\\ProduitSearchModal.jsx",
+    "src\\components\\factures\\SupplierBrowserModal.jsx",
+    "src\\components\\factures\\SupplierPicker.jsx",
+    "src\\components\\fiches\\FicheLigne.jsx",
+    "src\\components\\fiches\\FicheRentabiliteCard.jsx",
+    "src\\components\\fiches\\FicheRow.jsx",
+    "src\\components\\filters\\SupplierFilter.jsx",
+    "src\\components\\forms\\AutocompleteProduit.jsx",
+    "src\\components\\forms\\MoneyInputFR.jsx",
+    "src\\components\\forms\\NumericInput.jsx",
+    "src\\components\\forms\\NumericInputFR.jsx",
+    "src\\components\\forms\\ProductPickerModal.jsx",
+    "src\\components\\fournisseurs\\FournisseurFormModal.jsx",
+    "src\\components\\fournisseurs\\FournisseurRow.jsx",
+    "src\\components\\help\\DocumentationPanel.jsx",
+    "src\\components\\help\\FeedbackForm.jsx",
+    "src\\components\\help\\GuidedTour.jsx",
+    "src\\components\\help\\TooltipHelper.jsx",
+    "src\\components\\ia\\RecommandationsBox.jsx",
+    "src\\components\\inventaire\\InventaireLigneRow.jsx",
+    "src\\components\\inventaires\\InventaireDetail.jsx",
+    "src\\components\\inventaires\\InventaireForm.jsx",
+    "src\\components\\layout\\Sidebar.jsx",
+    "src\\components\\mouvements\\MouvementFormModal.jsx",
+    "src\\components\\parametrage\\FamilleRow.jsx",
+    "src\\components\\parametrage\\ParamAccess.jsx",
+    "src\\components\\parametrage\\ParamCostCenters.jsx",
+    "src\\components\\parametrage\\ParamFamilles.jsx",
+    "src\\components\\parametrage\\ParamMama.jsx",
+    "src\\components\\parametrage\\ParamRoles.jsx",
+    "src\\components\\parametrage\\ParamSecurity.jsx",
+    "src\\components\\parametrage\\ParamUnites.jsx",
+    "src\\components\\parametrage\\SousFamilleList.jsx",
+    "src\\components\\parametrage\\SousFamilleModal.jsx",
+    "src\\components\\parametrage\\SousFamilleRow.jsx",
+    "src\\components\\parametrage\\UniteRow.jsx",
+    "src\\components\\parametrage\\UtilisateurRow.jsx",
+    "src\\components\\parametrage\\ZoneFormProducts.jsx",
+    "src\\components\\parametrage\\ZoneRow.jsx",
+    "src\\components\\pdf\\CommandePDF.jsx",
+    "src\\components\\produits\\ModalImportProduits.jsx",
+    "src\\components\\produits\\ProduitDetail.jsx",
+    "src\\components\\produits\\ProduitForm.jsx",
+    "src\\components\\produits\\ProduitFormModal.jsx",
+    "src\\components\\produits\\ProduitRow.jsx",
+    "src\\components\\produits\\priceHelpers.js",
+    "src\\components\\promotions\\PromotionRow.jsx",
+    "src\\components\\requisitions\\RequisitionRow.jsx",
+    "src\\components\\security\\TwoFactorSetup.jsx",
+    "src\\components\\simulation\\SimulationDetailsModal.jsx",
+    "src\\components\\stock\\AlertBadge.jsx",
+    "src\\components\\stock\\StockDetail.jsx",
+    "src\\components\\taches\\TacheForm.jsx",
+    "src\\components\\taches\\TachesKanban.jsx",
+    "src\\components\\ui\\AutoCompleteField.jsx",
+    "src\\components\\ui\\AutoCompleteZoneField.jsx",
+    "src\\components\\ui\\Breadcrumbs.jsx",
+    "src\\components\\ui\\Form.jsx",
+    "src\\components\\ui\\FormActions.jsx",
+    "src\\components\\ui\\FormField.jsx",
+    "src\\components\\ui\\ImportPreviewTable.jsx",
+    "src\\components\\ui\\InputField.jsx",
+    "src\\components\\ui\\LanguageSelector.jsx",
+    "src\\components\\ui\\ListingContainer.jsx",
+    "src\\components\\ui\\LoadingScreen.jsx",
+    "src\\components\\ui\\MamaLogo.jsx",
+    "src\\components\\ui\\ModalGlass.jsx",
+    "src\\components\\ui\\PageIntro.jsx",
+    "src\\components\\ui\\PageSkeleton.jsx",
+    "src\\components\\ui\\PageWrapper.jsx",
+    "src\\components\\ui\\PaginationFooter.jsx",
+    "src\\components\\ui\\PreviewBanner.jsx",
+    "src\\components\\ui\\SecondaryButton.jsx",
+    "src\\components\\ui\\SmartDialog.jsx",
+    "src\\components\\ui\\StatCard.jsx",
+    "src\\components\\ui\\TableContainer.jsx",
+    "src\\components\\ui\\TableHeader.jsx",
+    "src\\components\\ui\\badge.jsx",
+    "src\\components\\ui\\card.jsx",
+    "src\\components\\ui\\checkbox.jsx",
+    "src\\components\\ui\\controls\\index.jsx",
+    "src\\components\\ui\\dialog.jsx",
+    "src\\components\\ui\\dropdown-menu.jsx",
+    "src\\components\\ui\\input.jsx",
+    "src\\components\\ui\\label.jsx",
+    "src\\components\\ui\\select.jsx",
+    "src\\components\\ui\\tabs.jsx",
+    "src\\components\\utilisateurs\\UtilisateurDetail.jsx",
+    "src\\components\\utilisateurs\\UtilisateurForm.jsx",
+    "src\\components\\utilisateurs\\UtilisateurRow.jsx",
+    "src\\config\\modules.js",
+    "src\\constants\\accessKeys.js",
+    "src\\constants\\factures.js",
+    "src\\constants\\tables.js",
+    "src\\crypto\\random.ts",
+    "src\\db\\client.ts",
+    "src\\db\\connection.ts",
+    "src\\db\\index.ts",
+    "src\\db\\migrate.ts",
+    "src\\db\\migrationsList.ts",
+    "src\\debug\\ErrorBoundary.jsx",
+    "src\\debug\\dbSmoke.ts",
+    "src\\debug\\devAuth.ts",
+    "src\\debug\\ensureLocalAdmin.ts",
+    "src\\features\\factures\\invoiceMappers.ts",
+    "src\\forms\\FamilleForm.jsx",
+    "src\\forms\\PeriodeForm.jsx",
+    "src\\forms\\SousFamilleForm.jsx",
+    "src\\forms\\UniteForm.jsx",
+    "src\\forms\\ZoneForm.jsx",
+    "src\\hooks\\data\\useFactures.js",
+    "src\\hooks\\gadgets\\useAchatsMensuels.js",
+    "src\\hooks\\useAccess.js",
+    "src\\hooks\\useAchats.js",
+    "src\\hooks\\useAdvancedStats.js",
+    "src\\hooks\\useAide.js",
+    "src\\hooks\\useAlerteStockFaible.js",
+    "src\\hooks\\useAlerts.js",
+    "src\\hooks\\useAnalyse.js",
+    "src\\hooks\\useAnalytique.js",
+    "src\\hooks\\useApiFournisseurs.js",
+    "src\\hooks\\useApiKeys.js",
+    "src\\hooks\\useAuditLog.js",
+    "src\\hooks\\useBonsLivraison.js",
+    "src\\hooks\\useCarte.js",
+    "src\\hooks\\useCommandes.js",
+    "src\\hooks\\useComparatif.js",
+    "src\\hooks\\useConsentements.js",
+    "src\\hooks\\useConsolidatedStats.js",
+    "src\\hooks\\useConsolidation.js",
+    "src\\hooks\\useCostCenterMonthlyStats.js",
+    "src\\hooks\\useCostCenterStats.js",
+    "src\\hooks\\useCostCenterSuggestions.js",
+    "src\\hooks\\useCostCenters.js",
+    "src\\hooks\\useCostingCarte.js",
+    "src\\hooks\\useDashboardStats.js",
+    "src\\hooks\\useDashboards.js",
+    "src\\hooks\\useDebounce.js",
+    "src\\hooks\\useDocuments.js",
+    "src\\hooks\\useEcartsInventaire.js",
+    "src\\hooks\\useEmailsEnvoyes.js",
+    "src\\hooks\\useEnrichedProducts.js",
+    "src\\hooks\\useExport.js",
+    "src\\hooks\\useExportCompta.js",
+    "src\\hooks\\useFactureForm.js",
+    "src\\hooks\\useFactures.js",
+    "src\\hooks\\useFacturesAutocomplete.js",
+    "src\\hooks\\useFamilles.js",
+    "src\\hooks\\useFamillesWithSousFamilles.js",
+    "src\\hooks\\useFeedback.js",
+    "src\\hooks\\useFicheCoutHistory.js",
+    "src\\hooks\\useFiches.js",
+    "src\\hooks\\useFichesAutocomplete.js",
+    "src\\hooks\\useFichesTechniques.js",
+    "src\\hooks\\useFormErrors.js",
+    "src\\hooks\\useFormatters.js",
+    "src\\hooks\\useFournisseurAPI.js",
+    "src\\hooks\\useFournisseurApiConfig.js",
+    "src\\hooks\\useFournisseurNotes.js",
+    "src\\hooks\\useFournisseurStats.js",
+    "src\\hooks\\useFournisseurs.js",
+    "src\\hooks\\useFournisseursAutocomplete.js",
+    "src\\hooks\\useFournisseursBrowse.js",
+    "src\\hooks\\useFournisseursInactifs.js",
+    "src\\hooks\\useFournisseursList.js",
+    "src\\hooks\\useFournisseursRecents.js",
+    "src\\hooks\\useGadgets.js",
+    "src\\hooks\\useGlobalSearch.js",
+    "src\\hooks\\useGraphiquesMultiZone.js",
+    "src\\hooks\\useHelpArticles.js",
+    "src\\hooks\\useInventaireLignes.js",
+    "src\\hooks\\useInventaireZones.js",
+    "src\\hooks\\useInventaires.js",
+    "src\\hooks\\useInvoice.ts",
+    "src\\hooks\\useInvoiceImport.js",
+    "src\\hooks\\useInvoiceItems.js",
+    "src\\hooks\\useInvoiceOcr.js",
+    "src\\hooks\\useInvoices.js",
+    "src\\hooks\\useLogs.js",
+    "src\\hooks\\useMama.js",
+    "src\\hooks\\useMamaSwitcher.js",
+    "src\\hooks\\useMamas.js",
+    "src\\hooks\\useMenuDuJour.js",
+    "src\\hooks\\useMenuEngineering.js",
+    "src\\hooks\\useMenuGroupe.js",
+    "src\\hooks\\useMenus.js",
+    "src\\hooks\\useMouvementCostCenters.js",
+    "src\\hooks\\useNotifications.js",
+    "src\\hooks\\useOnboarding.js",
+    "src\\hooks\\usePerformanceFiches.js",
+    "src\\hooks\\usePeriodes.js",
+    "src\\hooks\\usePermissions.js",
+    "src\\hooks\\usePertes.js",
+    "src\\hooks\\usePlanning.js",
+    "src\\hooks\\usePriceTrends.js",
+    "src\\hooks\\useProducts.js",
+    "src\\hooks\\useProduitLineDefaults.js",
+    "src\\hooks\\useProduitsAutocomplete.js",
+    "src\\hooks\\useProduitsFournisseur.js",
+    "src\\hooks\\useProduitsInventaire.js",
+    "src\\hooks\\useProduitsSearch.js",
+    "src\\hooks\\usePromotions.js",
+    "src\\hooks\\useRGPD.js",
+    "src\\hooks\\useRecommendations.js",
+    "src\\hooks\\useReportingFinancier.js",
+    "src\\hooks\\useRequisitions.js",
+    "src\\hooks\\useRoles.js",
+    "src\\hooks\\useRuptureAlerts.js",
+    "src\\hooks\\useSignalements.js",
+    "src\\hooks\\useSimulation.js",
+    "src\\hooks\\useSousFamilles.js",
+    "src\\hooks\\useStats.js",
+    "src\\hooks\\useStock.js",
+    "src\\hooks\\useStockRequisitionne.js",
+    "src\\hooks\\useStorage.js",
+    "src\\hooks\\useSwipe.js",
+    "src\\hooks\\useTacheAssignation.js",
+    "src\\hooks\\useTasks.js",
+    "src\\hooks\\useTemplatesCommandes.js",
+    "src\\hooks\\useTopProducts.js",
+    "src\\hooks\\useTransferts.js",
+    "src\\hooks\\useTwoFactorAuth.js",
+    "src\\hooks\\useUnites.js",
+    "src\\hooks\\useUsageStats.js",
+    "src\\hooks\\useUtilisateurs.js",
+    "src\\hooks\\useValidations.js",
+    "src\\hooks\\useZoneProducts.js",
+    "src\\hooks\\useZoneRights.js",
+    "src\\hooks\\useZones.js",
+    "src\\hooks\\useZonesStock.js",
+    "src\\i18n\\i18n.js",
+    "src\\layout\\AdminLayout.jsx",
+    "src\\layout\\Layout.jsx",
+    "src\\layout\\LegalLayout.jsx",
+    "src\\layout\\Navbar.jsx",
+    "src\\layout\\Sidebar.jsx",
+    "src\\layout\\ViewerLayout.jsx",
+    "src\\lib\\access.js",
+    "src\\lib\\dal\\fournisseurs.ts",
+    "src\\lib\\dal\\produits.ts",
+    "src\\lib\\export\\exportHelpers.js",
+    "src\\lib\\familles.ts",
+    "src\\lib\\lazyWithPreload.js",
+    "src\\lib\\lock.ts",
+    "src\\lib\\react-query.js",
+    "src\\lib\\roleUtils.js",
+    "src\\lib\\runtime.ts",
+    "src\\lib\\shutdown.ts",
+    "src\\lib\\sousFamilles.ts",
+    "src\\lib\\sql.ts",
+    "src\\lib\\types.ts",
+    "src\\lib\\utils.js",
+    "src\\lib\\xlsx\\safeImportXLSX.js",
+    "src\\license.js",
+    "src\\local\\achats.ts",
+    "src\\local\\apiKeys.ts",
+    "src\\local\\bonsLivraison.ts",
+    "src\\local\\commandes.ts",
+    "src\\local\\costCenters.ts",
+    "src\\local\\dao.ts",
+    "src\\local\\db.ts",
+    "src\\local\\documents.ts",
+    "src\\local\\logs.ts",
+    "src\\local\\menuGroupes.ts",
+    "src\\local\\notifications.ts",
+    "src\\local\\pertes.ts",
+    "src\\local\\promotions.ts",
+    "src\\local\\recommendations.ts",
+    "src\\local\\requisitions.ts",
+    "src\\local\\signalements.ts",
+    "src\\local\\stockRequisitionne.ts",
+    "src\\local\\templatesCommandes.ts",
+    "src\\local\\transferts.ts",
+    "src\\local\\twoFactor.ts",
+    "src\\local\\validations.ts",
+    "src\\onboarding\\steps.ts",
+    "src\\pages\\Accueil.jsx",
+    "src\\pages\\AideContextuelle.jsx",
+    "src\\pages\\Alertes.jsx",
+    "src\\pages\\BarManager.jsx",
+    "src\\pages\\CartePlats.jsx",
+    "src\\pages\\Consentements.jsx",
+    "src\\pages\\EngineeringMenu.jsx",
+    "src\\pages\\Feedback.jsx",
+    "src\\pages\\HelpCenter.jsx",
+    "src\\pages\\Journal.jsx",
+    "src\\pages\\Login.jsx",
+    "src\\pages\\NotFound.jsx",
+    "src\\pages\\Onboarding.tsx",
+    "src\\pages\\Parametres\\Familles.jsx",
+    "src\\pages\\Pertes.jsx",
+    "src\\pages\\Planning.jsx",
+    "src\\pages\\PlanningDetail.jsx",
+    "src\\pages\\PlanningForm.jsx",
+    "src\\pages\\PlanningModule.jsx",
+    "src\\pages\\Rgpd.jsx",
+    "src\\pages\\Stock.jsx",
+    "src\\pages\\Utilisateurs.jsx",
+    "src\\pages\\Validations.jsx",
+    "src\\pages\\achats\\AchatDetail.jsx",
+    "src\\pages\\achats\\AchatForm.jsx",
+    "src\\pages\\achats\\Achats.jsx",
+    "src\\pages\\aide\\Aide.jsx",
+    "src\\pages\\aide\\AideForm.jsx",
+    "src\\pages\\analyse\\Analyse.jsx",
+    "src\\pages\\analyse\\AnalyseCostCenter.jsx",
+    "src\\pages\\analyse\\MenuEngineering.jsx",
+    "src\\pages\\analyse\\TableauxDeBord.jsx",
+    "src\\pages\\analytique\\AnalytiqueDashboard.jsx",
+    "src\\pages\\auth\\Blocked.jsx",
+    "src\\pages\\auth\\CreateMama.jsx",
+    "src\\pages\\auth\\Logout.jsx",
+    "src\\pages\\auth\\Pending.jsx",
+    "src\\pages\\auth\\ResetPassword.jsx",
+    "src\\pages\\auth\\RoleError.jsx",
+    "src\\pages\\auth\\Unauthorized.jsx",
+    "src\\pages\\auth\\UpdatePassword.jsx",
+    "src\\pages\\bons_livraison\\BLCreate.jsx",
+    "src\\pages\\bons_livraison\\BLDetail.jsx",
+    "src\\pages\\bons_livraison\\BLForm.jsx",
+    "src\\pages\\bons_livraison\\BonsLivraison.jsx",
+    "src\\pages\\carte\\Carte.jsx",
+    "src\\pages\\catalogue\\CatalogueSyncViewer.jsx",
+    "src\\pages\\commandes\\CommandeDetail.jsx",
+    "src\\pages\\commandes\\CommandeForm.jsx",
+    "src\\pages\\commandes\\Commandes.jsx",
+    "src\\pages\\commandes\\CommandesEnvoyees.jsx",
+    "src\\pages\\consolidation\\AccessMultiSites.jsx",
+    "src\\pages\\consolidation\\Consolidation.jsx",
+    "src\\pages\\costboisson\\CostBoisson.jsx",
+    "src\\pages\\costing\\CostingCarte.jsx",
+    "src\\pages\\cuisine\\MenuDuJour.jsx",
+    "src\\pages\\dashboard\\DashboardBuilder.jsx",
+    "src\\pages\\debug\\AccessExample.jsx",
+    "src\\pages\\debug\\Auth.tsx",
+    "src\\pages\\debug\\Debug.jsx",
+    "src\\pages\\debug\\DebugAuth.jsx",
+    "src\\pages\\debug\\DebugRights.jsx",
+    "src\\pages\\debug\\DebugUser.jsx",
+    "src\\pages\\documents\\DocumentForm.jsx",
+    "src\\pages\\documents\\Documents.jsx",
+    "src\\pages\\ecarts\\Ecarts.jsx",
+    "src\\pages\\emails\\EmailsEnvoyes.jsx",
+    "src\\pages\\engineering\\MenuEngineering.jsx",
+    "src\\pages\\factures\\FactureCreate.jsx",
+    "src\\pages\\factures\\FactureDetail.jsx",
+    "src\\pages\\factures\\FactureForm.jsx",
+    "src\\pages\\factures\\Factures.jsx",
+    "src\\pages\\factures\\ImportFactures.jsx",
+    "src\\pages\\fiches\\FicheDetail.jsx",
+    "src\\pages\\fiches\\FicheForm.jsx",
+    "src\\pages\\fiches\\Fiches.jsx",
+    "src\\pages\\fournisseurs\\ApiFournisseurForm.jsx",
+    "src\\pages\\fournisseurs\\ApiFournisseurs.jsx",
+    "src\\pages\\fournisseurs\\FournisseurApiSettingsForm.jsx",
+    "src\\pages\\fournisseurs\\FournisseurCreate.jsx",
+    "src\\pages\\fournisseurs\\FournisseurDetail.jsx",
+    "src\\pages\\fournisseurs\\FournisseurDetailPage.jsx",
+    "src\\pages\\fournisseurs\\FournisseurForm.jsx",
+    "src\\pages\\fournisseurs\\Fournisseurs.jsx",
+    "src\\pages\\fournisseurs\\comparatif\\ComparatifPrix.jsx",
+    "src\\pages\\fournisseurs\\comparatif\\PrixFournisseurs.jsx",
+    "src\\pages\\inventaire\\EcartInventaire.jsx",
+    "src\\pages\\inventaire\\Inventaire.jsx",
+    "src\\pages\\inventaire\\InventaireDetail.jsx",
+    "src\\pages\\inventaire\\InventaireForm.jsx",
+    "src\\pages\\inventaire\\InventaireZones.jsx",
+    "src\\pages\\legal\\Cgu.jsx",
+    "src\\pages\\legal\\Cgv.jsx",
+    "src\\pages\\legal\\Confidentialite.jsx",
+    "src\\pages\\legal\\Contact.jsx",
+    "src\\pages\\legal\\Licence.jsx",
+    "src\\pages\\legal\\MentionsLegales.jsx",
+    "src\\pages\\menu\\MenuDuJour.jsx",
+    "src\\pages\\menu\\MenuDuJourJour.jsx",
+    "src\\pages\\menus\\MenuDetail.jsx",
+    "src\\pages\\menus\\MenuDuJour.jsx",
+    "src\\pages\\menus\\MenuDuJourDetail.jsx",
+    "src\\pages\\menus\\MenuDuJourForm.jsx",
+    "src\\pages\\menus\\MenuForm.jsx",
+    "src\\pages\\menus\\MenuGroupeDetail.jsx",
+    "src\\pages\\menus\\MenuGroupeForm.jsx",
+    "src\\pages\\menus\\MenuGroupes.jsx",
+    "src\\pages\\menus\\MenuPDF.jsx",
+    "src\\pages\\menus\\Menus.jsx",
+    "src\\pages\\mobile\\MobileAccueil.jsx",
+    "src\\pages\\mobile\\MobileInventaire.jsx",
+    "src\\pages\\mobile\\MobileRequisition.jsx",
+    "src\\pages\\notifications\\NotificationSettingsForm.jsx",
+    "src\\pages\\notifications\\NotificationsInbox.jsx",
+    "src\\pages\\onboarding\\OnboardingUtilisateur.jsx",
+    "src\\pages\\parametrage\\APIKeys.jsx",
+    "src\\pages\\parametrage\\AccessRights.jsx",
+    "src\\pages\\parametrage\\CentreCoutForm.jsx",
+    "src\\pages\\parametrage\\DossierDonnees.tsx",
+    "src\\pages\\parametrage\\ExportComptaPage.jsx",
+    "src\\pages\\parametrage\\ExportUserData.jsx",
+    "src\\pages\\parametrage\\Familles.jsx",
+    "src\\pages\\parametrage\\InvitationsEnAttente.jsx",
+    "src\\pages\\parametrage\\InviteUser.jsx",
+    "src\\pages\\parametrage\\MamaForm.jsx",
+    "src\\pages\\parametrage\\MamaSettingsForm.jsx",
+    "src\\pages\\parametrage\\Mamas.jsx",
+    "src\\pages\\parametrage\\Parametrage.jsx",
+    "src\\pages\\parametrage\\ParametresCommandes.jsx",
+    "src\\pages\\parametrage\\Periodes.jsx",
+    "src\\pages\\parametrage\\Permissions.jsx",
+    "src\\pages\\parametrage\\PermissionsAdmin.jsx",
+    "src\\pages\\parametrage\\PermissionsForm.jsx",
+    "src\\pages\\parametrage\\RGPDConsentForm.jsx",
+    "src\\pages\\parametrage\\RoleForm.jsx",
+    "src\\pages\\parametrage\\Roles.jsx",
+    "src\\pages\\parametrage\\SousFamilles.jsx",
+    "src\\pages\\parametrage\\SystemTools.jsx",
+    "src\\pages\\parametrage\\TemplateCommandeForm.jsx",
+    "src\\pages\\parametrage\\TemplatesCommandes.jsx",
+    "src\\pages\\parametrage\\Unites.jsx",
+    "src\\pages\\parametrage\\Utilisateurs.jsx",
+    "src\\pages\\parametrage\\ZoneAccess.jsx",
+    "src\\pages\\parametrage\\ZoneForm.jsx",
+    "src\\pages\\parametrage\\Zones.jsx",
+    "src\\pages\\planning\\SimulationPlanner.jsx",
+    "src\\pages\\produits\\ProduitDetail.jsx",
+    "src\\pages\\produits\\ProduitForm.jsx",
+    "src\\pages\\produits\\Produits.jsx",
+    "src\\pages\\promotions\\PromotionForm.jsx",
+    "src\\pages\\promotions\\Promotions.jsx",
+    "src\\pages\\public\\LandingPage.jsx",
+    "src\\pages\\public\\Onboarding.jsx",
+    "src\\pages\\public\\Signup.jsx",
+    "src\\pages\\receptions\\Receptions.jsx",
+    "src\\pages\\recettes\\Recettes.jsx",
+    "src\\pages\\reporting\\GraphCost.jsx",
+    "src\\pages\\reporting\\Reporting.jsx",
+    "src\\pages\\reporting\\ReportingPDF.jsx",
+    "src\\pages\\requisitions\\RequisitionDetail.jsx",
+    "src\\pages\\requisitions\\RequisitionForm.jsx",
+    "src\\pages\\requisitions\\Requisitions.jsx",
+    "src\\pages\\signalements\\SignalementDetail.jsx",
+    "src\\pages\\signalements\\SignalementForm.jsx",
+    "src\\pages\\signalements\\Signalements.jsx",
+    "src\\pages\\simulation\\Simulation.jsx",
+    "src\\pages\\simulation\\SimulationForm.jsx",
+    "src\\pages\\simulation\\SimulationMenu.jsx",
+    "src\\pages\\simulation\\SimulationResult.jsx",
+    "src\\pages\\stats\\Stats.jsx",
+    "src\\pages\\stats\\StatsAdvanced.jsx",
+    "src\\pages\\stats\\StatsConsolidation.jsx",
+    "src\\pages\\stats\\StatsCostCenters.jsx",
+    "src\\pages\\stats\\StatsCostCentersPivot.jsx",
+    "src\\pages\\stats\\StatsFiches.jsx",
+    "src\\pages\\stats\\StatsStock.jsx",
+    "src\\pages\\stock\\AlertesRupture.jsx",
+    "src\\pages\\stock\\Inventaire.jsx",
+    "src\\pages\\stock\\InventaireForm.jsx",
+    "src\\pages\\stock\\Requisitions.jsx",
+    "src\\pages\\stock\\TransfertForm.jsx",
+    "src\\pages\\stock\\Transferts.jsx",
+    "src\\pages\\supervision\\ComparateurFiches.jsx",
+    "src\\pages\\supervision\\GroupeParamForm.jsx",
+    "src\\pages\\supervision\\Logs.jsx",
+    "src\\pages\\supervision\\Rapports.jsx",
+    "src\\pages\\supervision\\SupervisionGroupe.jsx",
+    "src\\pages\\surcouts\\Surcouts.jsx",
+    "src\\pages\\taches\\Alertes.jsx",
+    "src\\pages\\taches\\TacheDetail.jsx",
+    "src\\pages\\taches\\TacheForm.jsx",
+    "src\\pages\\taches\\TacheNew.jsx",
+    "src\\pages\\taches\\Taches.jsx",
+    "src\\registerSW.js",
+    "src\\router\\PrivateOutlet.jsx",
+    "src\\services\\inventory.ts",
+    "src\\shims\\crypto.ts",
+    "src\\shims\\selftest.ts",
+    "src\\tauriEnv.ts",
+    "src\\tauriLog.ts",
+    "src\\tauri\\fsStore.ts",
+    "src\\tauri\\hmrGuard.ts",
+    "src\\tauri\\isTauri.ts",
+    "src\\types\\api.d.ts",
+    "src\\types\\requisitions.ts",
+    "src\\utils\\__tests__\\number.test.ts",
+    "src\\utils\\__tests__\\numberFormat.test.ts",
+    "src\\utils\\excelUtils.js",
+    "src\\utils\\exportExcelProduits.js",
+    "src\\utils\\factures\\mappers.js",
+    "src\\utils\\formIds.js",
+    "src\\utils\\formatNumberLive.ts",
+    "src\\utils\\importExcelProduits.js",
+    "src\\utils\\number.ts",
+    "src\\utils\\numberFormat.ts",
+    "src\\utils\\selectSafe.js",
+    "src\\utils\\watermark.js",
+    "src\\vite-env.d.ts",
+    "src\\workers\\NotificationServiceWorker.js"
+  ],
+  "missing": [],
+  "frontMap": null,
+  "notes": [
+    "Les 'orphans' sont des fichiers non atteints depuis main/router via la chaîne d'import.",
+    "La sidebar suggérée est heuristique; croisez avec routerPaths et front_map.json.",
+    "Les 'missing' sont des imports non résolus (chemin à corriger, extension manquante, alias?)."
+  ]
+}
