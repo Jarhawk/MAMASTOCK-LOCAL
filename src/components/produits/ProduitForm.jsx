@@ -32,7 +32,7 @@ export default function ProduitForm({
     loading: sousFamillesLoading,
     error: sousFamillesError,
   } = useSousFamilles();
-  const { data: unites = [], refetch: fetchUnites } = useUnites(mama_id);
+    const { data: unites = [], refetch: listUnites } = useUnites(mama_id);
   const { data: zonesData } = useZonesStock(mama_id);
   const zones = zonesData ?? [];
 
@@ -60,9 +60,9 @@ export default function ProduitForm({
     .sort((a, b) => (a.nom || "").localeCompare(b.nom || ""));
 
   useEffect(() => {
-    fetchFamilles();
-    fetchUnites();
-  }, [fetchFamilles, fetchUnites]);
+      fetchFamilles();
+      listUnites();
+    }, [fetchFamilles, listUnites]);
 
   const [familleHasSous, setFamilleHasSous] = useState(false);
 

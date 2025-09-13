@@ -1,26 +1,17 @@
 import Database from "@tauri-apps/plugin-sql";
-import { appDataDir, join } from "@tauri-apps/api/path";
 
 type Row = Record<string, unknown>;
 export type Changes = { changes: number; lastInsertId?: number | null };
 
 const isTauri = !!import.meta.env.TAURI_PLATFORM;
 let _db: any | null = null;
-let _dsn: string | null = null;
-
-async function dbPath(): Promise<string> {
-  const base = await appDataDir(); // e.g. C:\Users\<user>\AppData\Roaming\
-  return await join(base, "MamaStock", "data", "mamastock.db");
-}
 
 export async function getDb() {
   if (!isTauri) {
     throw new Error("Tauri required: run via `npx tauri dev` to access SQLite");
   }
   if (_db) return _db;
-  const p = await dbPath();
-  _dsn = `sqlite:${p}`;
-  _db = await Database.load(_dsn);
+  _db = await Database.load("sqlite:mamastock.db");
   return _db;
 }
 

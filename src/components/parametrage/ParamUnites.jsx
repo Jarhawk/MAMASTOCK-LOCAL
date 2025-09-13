@@ -11,16 +11,16 @@ import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 
 export default function ParamUnites() {
-  const { unites, fetchUnites, addUnite, updateUnite, deleteUnite } =
+  const { unites, listUnites, addUnite, updateUnite, deleteUnite } =
     useUnites();
   const { mama_id, loading: authLoading } = useAuth();
   const [form, setForm] = useState({ nom: '', id: null });
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (mama_id) fetchUnites();
-  }, [mama_id]);
+    useEffect(() => {
+      if (mama_id) listUnites();
+    }, [mama_id]);
 
   if (authLoading) return <LoadingSpinner message="Chargement..." />;
 
@@ -31,8 +31,8 @@ export default function ParamUnites() {
   const handleDelete = async (id) => {
     if (window.confirm('Désactiver l’unité ?')) {
       try {
-        await deleteUnite(id);
-        await fetchUnites();
+          await deleteUnite(id);
+          await listUnites();
         toast.success('Unité désactivée.');
       } catch (err) {
         console.error('Erreur suppression unité:', err);
@@ -56,7 +56,7 @@ export default function ParamUnites() {
       }
       setEditMode(false);
       setForm({ nom: '', id: null });
-      await fetchUnites();
+        await listUnites();
     } catch (err) {
       console.error('Erreur enregistrement unité:', err);
       toast.error('Échec enregistrement');

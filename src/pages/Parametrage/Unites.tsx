@@ -1,70 +1,50 @@
 import { useEffect, useState } from 'react';
-import Database from '@tauri-apps/plugin-sql';
-
-interface Unite {
-  id: number;
-  code: string;
-  libelle: string;
-}
+import { listUnites, createUnite, deleteUnite } from '@/lib/unites';
 
 export default function Unites() {
-  const [db, setDb] = useState<any>(null);
-  const [items, setItems] = useState<Unite[]>([]);
+  const [rows, setRows] = useState([]);
   const [code, setCode] = useState('');
   const [libelle, setLibelle] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    Database.load('sqlite:mamastock.db')
-      .then(setDb)
-      .catch(() => setError('Base de données indisponible'));
-  }, []);
-
-  useEffect(() => {
-    if (db) reload();
-  }, [db]);
-
-  async function reload() {
+  async function refresh() {
     try {
-      const rows = await db.select<Unite[]>(
-        'SELECT id, code, libelle FROM unites ORDER BY libelle'
-      );
-      setItems(rows);
-    } catch (e) {
+      setRows(await listUnites());
+    } catch {
       setError('Lecture impossible');
     }
   }
 
-  async function add() {
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  async function onAdd() {
     if (!code || !libelle) return;
     try {
-      await db.execute('INSERT INTO unites(code, libelle) VALUES (?, ?)', [
-        code,
-        libelle,
-      ]);
+      await createUnite(code, libelle);
       setCode('');
       setLibelle('');
-      reload();
+      refresh();
     } catch (e: any) {
       if (String(e).includes('UNIQUE')) {
         alert('Ce code existe déjà');
       } else {
-        alert('Erreur lors de l\'ajout');
+        alert("Erreur lors de l'ajout");
       }
     }
   }
 
-  async function remove(id: number) {
+  async function onDelete(id: number) {
     try {
-      await db.execute('DELETE FROM unites WHERE id = ?', [id]);
-      reload();
+      await deleteUnite(id);
+      refresh();
     } catch {
       alert('Suppression impossible');
     }
   }
 
   if (error) return <div>{error}</div>;
-  if (!db) return <div>Chargement...</div>;
 
   return (
     <div>
@@ -80,7 +60,7 @@ export default function Unites() {
           value={libelle}
           onChange={(e) => setLibelle(e.target.value)}
         />
-        <button onClick={add}>Ajouter</button>
+        <button onClick={onAdd}>Ajouter</button>
       </div>
       <table>
         <thead>
@@ -91,12 +71,12 @@ export default function Unites() {
           </tr>
         </thead>
         <tbody>
-          {items.map((u) => (
+          {rows.map((u: any) => (
             <tr key={u.id}>
               <td>{u.code}</td>
               <td>{u.libelle}</td>
               <td>
-                <button onClick={() => remove(u.id)}>Supprimer</button>
+                <button onClick={() => onDelete(u.id)}>Supprimer</button>
               </td>
             </tr>
           ))}
