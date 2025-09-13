@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import routes from "@/router.autogen";
+import { routes } from "@/router.autogen";
 
 const router = createBrowserRouter([...routes]);
 
