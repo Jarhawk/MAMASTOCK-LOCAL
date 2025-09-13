@@ -6,24 +6,29 @@ import { VitePWA as pwa } from "vite-plugin-pwa";
 const isTauri =
   !!process.env.TAURI_PLATFORM || process.env.VITE_TAURI === "1";
 
-const plugins = [
-  react(),
-  !isTauri &&
-    pwa({
-      registerType: "autoUpdate",
-    }),
-].filter(Boolean);
+export default defineConfig(({ mode }) => {
+  const plugins = [react()];
 
-export default defineConfig({
-  base: isTauri ? "./" : "/",
-  plugins,
-  resolve: {
-    alias: { "@": path.resolve(__dirname, "src") },
-  },
-  server: {
-    port: 5173,
-    strictPort: true,
-    host: true,
-    hmr: { overlay: true },
-  },
+  if (mode === "production" && !isTauri) {
+    plugins.push(
+      pwa({
+        registerType: "autoUpdate",
+      })
+    );
+  }
+
+  return {
+    base: isTauri ? "./" : "/",
+    plugins,
+    resolve: {
+      alias: { "@": path.resolve(__dirname, "src") },
+    },
+    server: {
+      port: 5173,
+      strictPort: true,
+      host: true,
+      hmr: { overlay: true },
+    },
+    appType: "spa",
+  };
 });

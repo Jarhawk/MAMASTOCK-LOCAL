@@ -14,19 +14,10 @@ import { testRandom } from "/src/shims/selftest";
 import "./globals.css";
 import "nprogress/nprogress.css";
 import { runSqlSelfTest } from "@/debug/sqlSelfTest";
+import { clearWebviewOnDev } from "@/debug/clearWebview";
 
+clearWebviewOnDev();
 setupPwaGuard();
-
-// Désactiver le service worker en DEV (évite les 500 et assets introuvables)
-if (!import.meta.env.PROD && 'serviceWorker' in navigator) {
-  navigator.serviceWorker
-    .getRegistrations()
-    .then((regs) => {
-      regs.forEach((r) => r.unregister());
-      console.info('[SW] unregistered in dev');
-    })
-    .catch(() => {});
-}
 
 if (import.meta.env.DEV && import.meta.env.TAURI_PLATFORM) {
   import("@/debug/check-capabilities-runtime");
@@ -110,6 +101,17 @@ function AppRoot() {
       <CookieConsent />
     </>
   );
+}
+
+// Dev: supprimer TOUT service worker (localhost & tauri.localhost le cas échéant)
+if (!import.meta.env.PROD && 'serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .getRegistrations()
+    .then((regs) => {
+      regs.forEach((r) => r.unregister());
+      console.info('[SW] unregistered in dev');
+    })
+    .catch(() => {});
 }
 
 createRoot(document.getElementById("root")).render(

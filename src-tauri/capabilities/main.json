@@ -17,6 +17,7 @@
     "fs:allow-mkdir",
     "fs:create-app-specific-dirs",
     "fs:allow-appdata-write",
-    "fs:allow-appdata-write-recursive"
+    "fs:allow-appdata-write-recursive",
+    "core:webview:allow-clear-all-browsing-data"
   ]
 }
