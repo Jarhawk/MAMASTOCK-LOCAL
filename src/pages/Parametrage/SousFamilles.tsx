@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getDb } from '@/lib/sql';
+import { getDb, isTauri } from '@/lib/db/sql';
 
 interface Famille { id: number; nom: string; }
 interface SousFamille { id: number; nom: string; famille_id: number; famille: string; }
@@ -13,6 +13,10 @@ export default function SousFamilles() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isTauri) {
+      setError('Base de données indisponible');
+      return;
+    }
     getDb()
       .then(setDb)
       .catch(() => setError('Base de données indisponible'));

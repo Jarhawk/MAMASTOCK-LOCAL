@@ -1,1 +1,1 @@
-export { isTauri } from "./tauri/isTauri";
+export { isTauri } from "@/lib/db/sql";

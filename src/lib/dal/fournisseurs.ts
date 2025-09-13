@@ -1,5 +1,4 @@
-import { getDb } from "@/lib/sql";
-import { isTauri } from "@/lib/runtime";
+import { getDb, isTauri } from "@/lib/db/sql";
 import type { Fournisseur } from "@/lib/types";
 
 export async function listFournisseurs(): Promise<Fournisseur[]> {

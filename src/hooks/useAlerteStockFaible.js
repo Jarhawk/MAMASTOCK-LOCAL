@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { getDb } from '@/lib/sql';
-import { isTauri } from '@/lib/runtime';
+import { getDb, isTauri } from '@/lib/db/sql';
 
 /**
  * Hook for low stock alerts based on v_alertes_rupture_api view.

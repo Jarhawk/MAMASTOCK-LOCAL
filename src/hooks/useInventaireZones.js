@@ -3,8 +3,7 @@ import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { zones_stock_list } from '@/lib/db';
-import { getDb } from '@/lib/sql';
-import { isTauri } from '@/lib/runtime';
+import { getDb, isTauri } from '@/lib/db/sql';
 import { toast } from 'sonner';
 
 export function useInventaireZones() {

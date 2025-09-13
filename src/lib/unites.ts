@@ -1,4 +1,4 @@
-import { getDb } from "@/lib/sql";
+import { getDb } from "@/lib/db/sql";
 
 export interface Unite {
   id: number;

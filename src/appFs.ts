@@ -1,12 +1,12 @@
 import { configPath } from "@/lib/paths";
-import { isTauri } from "@/tauriEnv";
+import { isTauri } from "@/lib/db/sql";
 import { exists, readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 
 export type Config = Record<string, any>;
 const LS_KEY = "config.json";
 
 export async function readConfig(): Promise<Config | null> {
-  if (!isTauri()) {
+  if (!isTauri) {
     const v = localStorage.getItem(LS_KEY);
     return v ? JSON.parse(v) : null;
   }
@@ -21,7 +21,7 @@ export async function readConfig(): Promise<Config | null> {
 }
 
 export async function writeConfig(cfg: Config): Promise<void> {
-  if (!isTauri()) {
+  if (!isTauri) {
     localStorage.setItem(LS_KEY, JSON.stringify(cfg));
     return;
   }
