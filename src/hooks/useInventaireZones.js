@@ -3,7 +3,8 @@ import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { zones_stock_list } from '@/lib/db';
-import { isTauri, getDb } from '@/lib/sql';
+import { getDb } from '@/lib/sql';
+import { isTauri } from '@/lib/runtime';
 import { toast } from 'sonner';
 
 export function useInventaireZones() {
@@ -12,11 +13,15 @@ export function useInventaireZones() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function getZones() {
-    if (!mama_id || !isTauri) return [];
-    setLoading(true);
-    setError(null);
-    try {
+    async function getZones() {
+      if (!isTauri) {
+        console.info('useInventaireZones: ignoré hors Tauri');
+        return [];
+      }
+      if (!mama_id) return [];
+      setLoading(true);
+      setError(null);
+      try {
       const data = await zones_stock_list(mama_id);
       setZones(Array.isArray(data) ? data : []);
       return data || [];
@@ -29,11 +34,15 @@ export function useInventaireZones() {
     }
   }
 
-  async function createZone(zone) {
-    if (!mama_id || !isTauri) return;
-    setLoading(true);
-    setError(null);
-    try {
+    async function createZone(zone) {
+      if (!isTauri) {
+        console.info('useInventaireZones: ignoré hors Tauri');
+        return;
+      }
+      if (!mama_id) return;
+      setLoading(true);
+      setError(null);
+      try {
       const db = await getDb();
       await db.execute(
         'INSERT INTO inventaire_zones(nom,mama_id,actif) VALUES(?,?,1)',
@@ -48,11 +57,15 @@ export function useInventaireZones() {
     }
   }
 
-  async function updateZone(id, fields) {
-    if (!mama_id || !id || !isTauri) return;
-    setLoading(true);
-    setError(null);
-    try {
+    async function updateZone(id, fields) {
+      if (!isTauri) {
+        console.info('useInventaireZones: ignoré hors Tauri');
+        return;
+      }
+      if (!mama_id || !id) return;
+      setLoading(true);
+      setError(null);
+      try {
       const entries = Object.entries(fields);
       if (!entries.length) return;
       const sets = entries.map(([k]) => `${k} = ?`).join(', ');
@@ -72,11 +85,15 @@ export function useInventaireZones() {
     }
   }
 
-  async function deleteZone(id) {
-    if (!mama_id || !id || !isTauri) return;
-    setLoading(true);
-    setError(null);
-    try {
+    async function deleteZone(id) {
+      if (!isTauri) {
+        console.info('useInventaireZones: ignoré hors Tauri');
+        return;
+      }
+      if (!mama_id || !id) return;
+      setLoading(true);
+      setError(null);
+      try {
       const db = await getDb();
       await db.execute(
         'UPDATE inventaire_zones SET actif = 0 WHERE id = ? AND mama_id = ?',
@@ -91,9 +108,13 @@ export function useInventaireZones() {
     }
   }
 
-  async function reactivateZone(id) {
-    if (!mama_id || !id || !isTauri) return;
-    const db = await getDb();
+    async function reactivateZone(id) {
+      if (!isTauri) {
+        console.info('useInventaireZones: ignoré hors Tauri');
+        return;
+      }
+      if (!mama_id || !id) return;
+      const db = await getDb();
     await db.execute(
       'UPDATE inventaire_zones SET actif = 1 WHERE id = ? AND mama_id = ?',
       [id, mama_id]

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { isTauri, getDb } from '@/lib/sql';
+import { getDb } from '@/lib/sql';
+import { isTauri } from '@/lib/runtime';
 
 export default function useAlerteStockFaible() {
   const { mama_id } = useAuth();
@@ -9,10 +10,14 @@ export default function useAlerteStockFaible() {
   const [error, setError] = useState(null);
 
   const fetchData = useCallback(
-    async (signal) => {
-      if (!mama_id || !isTauri) return [];
-      setLoading(true);
-      setError(null);
+      async (signal) => {
+        if (!isTauri) {
+          console.info('useAlerteStockFaible: ignoré hors Tauri');
+          return [];
+        }
+        if (!mama_id) return [];
+        setLoading(true);
+        setError(null);
       try {
         const db = await getDb();
         const rows = await db.select(
@@ -43,12 +48,12 @@ export default function useAlerteStockFaible() {
     [mama_id]
   );
 
-  useEffect(() => {
-    if (!isTauri) return;
-    const controller = new AbortController();
-    fetchData(controller.signal);
-    return () => controller.abort();
-  }, [fetchData]);
+    useEffect(() => {
+      if (!isTauri) return;
+      const controller = new AbortController();
+      fetchData(controller.signal);
+      return () => controller.abort();
+    }, [fetchData]);
 
   const refresh = useCallback(() => {
     const controller = new AbortController();
