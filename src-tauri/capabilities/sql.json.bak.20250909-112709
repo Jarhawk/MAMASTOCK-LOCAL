@@ -1,7 +1,0 @@
-{
-  "$schema": "../gen/schemas/plugin-sql.json",
-  "identifier": "sql",
-  "description": "Permissions for SQL plugin",
-  "windows": ["main"],
-  "permissions": ["sql:default"]
-}
