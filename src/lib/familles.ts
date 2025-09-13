@@ -1,18 +1,48 @@
-import { selectAll, selectOne, exec } from "@/lib/db/sql";
-export type Famille = { id:number; nom:string; actif:number };
+import { getDb } from "@/lib/db/sql";
+
+export type Famille = {
+  id: number;
+  code: string;
+  libelle: string;
+  created_at?: string;
+};
 
 export async function listFamilles(): Promise<Famille[]> {
-  return await selectAll<Famille>("SELECT id, nom, actif FROM familles ORDER BY nom ASC");
+  const db = await getDb();
+  return await db.select(
+    "SELECT id, code, libelle, created_at FROM familles ORDER BY libelle"
+  );
 }
-export async function createFamille(nom:string){
-  await exec("INSERT INTO familles(nom, actif) VALUES(?,1)", [nom.trim()]);
+
+export async function createFamille({
+  code,
+  libelle,
+}: {
+  code: string;
+  libelle: string;
+}): Promise<Famille> {
+  const db = await getDb();
+  const rows: Famille[] = await db.select(
+    "INSERT INTO familles(code, libelle) VALUES (?, ?) RETURNING *",
+    [code, libelle]
+  );
+  return rows[0];
 }
-export async function renameFamille(id:number, nom:string){
-  await exec("UPDATE familles SET nom=? WHERE id=?", [nom.trim(), id]);
+
+export async function updateFamille(
+  id: number,
+  { code, libelle }: { code: string; libelle: string }
+): Promise<void> {
+  const db = await getDb();
+  await db.execute("UPDATE familles SET code=?, libelle=? WHERE id=?", [
+    code,
+    libelle,
+    id,
+  ]);
 }
-export async function setFamilleActif(id:number, actif:boolean){
-  await exec("UPDATE familles SET actif=? WHERE id=?", [actif?1:0, id]);
+
+export async function deleteFamille(id: number): Promise<void> {
+  const db = await getDb();
+  await db.execute("DELETE FROM familles WHERE id=?", [id]);
 }
-export async function deleteFamille(id:number){
-  await exec("DELETE FROM familles WHERE id=?", [id]);
-}
+
