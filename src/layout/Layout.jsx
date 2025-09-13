@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { Outlet, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/sidebar.autogen";
 import { useAuth } from "@/hooks/useAuth";
 
 import useNotifications from "@/hooks/useNotifications";
