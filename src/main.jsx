@@ -17,11 +17,15 @@ import { runSqlSelfTest } from "@/debug/sqlSelfTest";
 
 setupPwaGuard();
 
-// DEV only: unregister any service workers to avoid PWA caching in Tauri/Vite dev
-if (import.meta.env.DEV && 'serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(regs => {
-    for (const r of regs) r.unregister().catch(() => {});
-  }).catch(() => {});
+// Désactiver le service worker en DEV (évite les 500 et assets introuvables)
+if (!import.meta.env.PROD && 'serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .getRegistrations()
+    .then((regs) => {
+      regs.forEach((r) => r.unregister());
+      console.info('[SW] unregistered in dev');
+    })
+    .catch(() => {});
 }
 
 if (import.meta.env.DEV && import.meta.env.TAURI_PLATFORM) {
