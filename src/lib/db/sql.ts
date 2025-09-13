@@ -3,6 +3,15 @@
 
 import Database from "@tauri-apps/plugin-sql";
 
+export const isTauri = !!import.meta.env.TAURI_PLATFORM;
+export { isTauri as IS_TAURI };
+
+if (typeof window !== "undefined" && !isTauri) {
+  console.warn(
+    "Vous êtes dans le navigateur. Ouvrez l’app dans la fenêtre Tauri pour activer SQLite."
+  );
+}
+
 const forceTauri = (() => {
   if (typeof window === "undefined") return false;
   try {
@@ -15,10 +24,7 @@ const forceTauri = (() => {
 const hasTauriEnv =
   (typeof window !== "undefined" &&
     ((window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__)) ||
-  !!import.meta.env?.TAURI_PLATFORM;
-
-export const isTauri = !!(hasTauriEnv || forceTauri);
-export { isTauri as IS_TAURI };
+  isTauri;
 
 let _db: any | null = null;
 let _loading: Promise<any> | null = null;
