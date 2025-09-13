@@ -91,6 +91,8 @@
     "autoprefixer": "^10.4.21",
     "bcryptjs": "^3.0.2",
     "better-sqlite3": "^12.2.0",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.0.0",
     "dotenv": "^17.2.1",
     "es-module-lexer": "^1.7.0",
     "eslint": "^8.57.0",
