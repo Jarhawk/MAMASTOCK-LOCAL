@@ -11,8 +11,8 @@ import {
   inventaire_reactivate,
   inventaire_cloture,
   inventaire_last_closed,
-  getDb,
 } from '@/lib/db';
+import { isTauri, getDb } from '@/lib/sql';
 
 export function useInventaires() {
   const { mama_id } = useAuth();
@@ -136,7 +136,7 @@ export function useInventaires() {
   }
 
   async function validateInventaireStock(inventaireId) {
-    if (!mama_id || !inventaireId) return false;
+    if (!mama_id || !inventaireId || !isTauri) return false;
     const inv = await inventaire_get(inventaireId, mama_id);
     if (!inv) return false;
     const db = await getDb();

@@ -1,11 +1,12 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState, useCallback } from "react";
-import { getDb } from '@/lib/db';
+import { isTauri, getDb } from '@/lib/sql';
 
 export function useProduitsFournisseur() {
   const [cache, setCache] = useState({});
 
   async function query(fournisseur_id) {
+    if (!isTauri) return [];
     const db = await getDb();
     return await db.select(
       `SELECT fl.produit_id, p.nom AS produit_nom,
@@ -25,7 +26,7 @@ export function useProduitsFournisseur() {
     const [error, setError] = useState(null);
 
     async function fetch() {
-      if (!fournisseur_id) {
+      if (!fournisseur_id || !isTauri) {
         setProducts([]);
         return [];
       }
@@ -49,7 +50,7 @@ export function useProduitsFournisseur() {
 
   const getProduitsDuFournisseur = useCallback(
     async (fournisseur_id) => {
-      if (!fournisseur_id) return [];
+      if (!fournisseur_id || !isTauri) return [];
       if (cache[fournisseur_id]) return cache[fournisseur_id];
       const rows = await query(fournisseur_id);
       setCache((c) => ({ ...c, [fournisseur_id]: rows }));

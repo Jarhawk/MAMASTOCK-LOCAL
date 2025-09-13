@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { createAsyncState } from '../_shared/createAsyncState';
-import { getDb } from '@/lib/db';
+import { isTauri, getDb } from '@/lib/sql';
 
 export default function useEvolutionAchats() {
   const { mama_id, loading: authLoading } = useAuth() || {};
@@ -9,7 +9,7 @@ export default function useEvolutionAchats() {
 
   const fetchData = useCallback(
     async (signal) => {
-      if (!mama_id) return [];
+      if (!mama_id || !isTauri) return [];
       setState((s) => ({ ...s, loading: true, error: null }));
       const start = new Date();
       start.setMonth(start.getMonth() - 12);
@@ -33,7 +33,7 @@ export default function useEvolutionAchats() {
   );
 
   useEffect(() => {
-    if (authLoading) return;
+    if (authLoading || !isTauri) return;
     const controller = new AbortController();
     fetchData(controller.signal);
     return () => controller.abort();
