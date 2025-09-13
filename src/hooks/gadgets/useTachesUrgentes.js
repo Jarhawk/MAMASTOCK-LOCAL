@@ -47,7 +47,6 @@ export default function useTachesUrgentes() {
   );
 
     useEffect(() => {
-      if (!isTauri) return;
       const controller = new AbortController();
       fetchData(controller.signal);
       return () => controller.abort();

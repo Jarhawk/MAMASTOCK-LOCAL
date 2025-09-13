@@ -50,7 +50,7 @@ export function useAlerteStockFaible({ page = 1, pageSize = 20 } = {}) {
     );
 
     useEffect(() => {
-      if (!mama_id || !isTauri) return;
+      if (!mama_id) return;
       const controller = new AbortController();
       fetchData(controller.signal);
       return () => controller.abort();

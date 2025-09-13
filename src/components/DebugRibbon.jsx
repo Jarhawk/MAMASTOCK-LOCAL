@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";
+import { isTauri, getDb } from "@/lib/db/sql";
 
 export default function DebugRibbon() {
   const show = import.meta.env.DEV || window.DEBUG;

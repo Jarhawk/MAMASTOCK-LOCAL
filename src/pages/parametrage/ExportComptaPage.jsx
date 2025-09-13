@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import TableContainer from '@/components/ui/TableContainer';
 import useExportCompta from '@/hooks/useExportCompta';
-import { isTauri } from '@/lib/db/sql';
+import { isTauri, getDb } from '@/lib/db/sql';
 
 export default function ExportComptaPage() {
   const { generateJournalCsv, exportToERP, loading } = useExportCompta();

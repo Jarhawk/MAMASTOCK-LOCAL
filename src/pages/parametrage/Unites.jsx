@@ -8,19 +8,9 @@ import TableHeader from '@/components/ui/TableHeader';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
-import { isTauri } from '@/lib/db/sql';
+import { isTauri, getDb } from '@/lib/db/sql';
 
 export default function Unites() {
-  if (!isTauri) {
-    return (
-      <div className="p-6 text-sm">
-        <h2 className="font-semibold mb-2">Fonction disponible uniquement dans l’application Tauri</h2>
-        <p>
-          Ferme l’onglet navigateur et utilise la fenêtre <b>MamaStock</b> (lancée via <code>npx tauri dev</code>).
-        </p>
-      </div>
-    );
-  }
   const { hasAccess, loading: authLoading } = useAuth();
   const canEdit = hasAccess('parametrage', 'peut_modifier');
   const [unites, setUnites] = useState([]);
@@ -30,7 +20,7 @@ export default function Unites() {
   const refresh = async () => {
     setLoading(true);
     try {
-      const data = await listUnites();
+      const data = isTauri ? await listUnites() : [];
       setUnites(data);
     } catch (err) {
       console.error(err);

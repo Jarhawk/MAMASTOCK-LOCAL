@@ -1,35 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { isTauri } from '@/lib/db/sql';
+import { isTauri, getDb } from '@/lib/db/sql';
 
 export default function DossierDonnees() {
-  if (!isTauri) {
-    return (
-      <div className="p-6 text-sm">
-        <h2 className="font-semibold mb-2">Fonction disponible uniquement dans l’application Tauri</h2>
-        <p>
-          Ferme l’onglet navigateur et utilise la fenêtre <b>MamaStock</b> (lancée via <code>npx tauri dev</code>).
-        </p>
-      </div>
-    );
-  }
   const [baseDir, setBaseDir] = useState('');
   const [dbPath, setDbPath] = useState('');
   const [dbExists, setDbExists] = useState(false);
 
   const refresh = async () => {
-    if (!isTauri) return;
-    const { appDataDir, join } = await import('@tauri-apps/api/path');
-    const { exists, mkdir } = await import('@tauri-apps/plugin-fs');
-    const root = await appDataDir();
-    const appDir = await join(root, 'MamaStock');
-    setBaseDir(appDir);
-    const dbDir = await join(appDir, 'databases');
-    const file = await join(dbDir, 'mamastock.db');
-    setDbPath(file);
-    setDbExists(await exists(file));
-    // ensure directories exist when checking
-    await mkdir(appDir, { recursive: true }).catch(() => {});
+    if (isTauri) {
+      const { appDataDir, join } = await import('@tauri-apps/api/path');
+      const { exists, mkdir } = await import('@tauri-apps/plugin-fs');
+      const root = await appDataDir();
+      const appDir = await join(root, 'MamaStock');
+      setBaseDir(appDir);
+      const dbDir = await join(appDir, 'databases');
+      const file = await join(dbDir, 'mamastock.db');
+      setDbPath(file);
+      setDbExists(await exists(file));
+      // ensure directories exist when checking
+      await mkdir(appDir, { recursive: true }).catch(() => {});
+    }
   };
 
   useEffect(() => {
@@ -37,19 +28,21 @@ export default function DossierDonnees() {
   }, []);
 
   const openDir = async () => {
-    if (!isTauri) return;
-    const { open } = await import('@tauri-apps/plugin-shell');
-    await open(baseDir);
+    if (isTauri) {
+      const { open } = await import('@tauri-apps/plugin-shell');
+      await open(baseDir);
+    }
   };
 
   const ensureDir = async () => {
-    if (!isTauri) return;
-    const { mkdir, exists } = await import('@tauri-apps/plugin-fs');
-    const { join } = await import('@tauri-apps/api/path');
-    await mkdir(baseDir, { recursive: true });
-    const dbDir = await join(baseDir, 'databases');
-    await mkdir(dbDir, { recursive: true });
-    setDbExists(await exists(dbPath));
+    if (isTauri) {
+      const { mkdir, exists } = await import('@tauri-apps/plugin-fs');
+      const { join } = await import('@tauri-apps/api/path');
+      await mkdir(baseDir, { recursive: true });
+      const dbDir = await join(baseDir, 'databases');
+      await mkdir(dbDir, { recursive: true });
+      setDbExists(await exists(dbPath));
+    }
   };
 
   return (
@@ -64,8 +57,8 @@ export default function DossierDonnees() {
         )}
       </div>
       <div className="flex gap-2">
-        <Button onClick={openDir} disabled={!isTauri}>Ouvrir le dossier</Button>
-        <Button onClick={ensureDir} disabled={!isTauri}>Créer si manquant</Button>
+        <Button onClick={openDir}>Ouvrir le dossier</Button>
+        <Button onClick={ensureDir}>Créer si manquant</Button>
       </div>
     </div>
   );

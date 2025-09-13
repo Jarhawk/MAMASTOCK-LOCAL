@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Menu } from 'lucide-react';
 import useExport from '@/hooks/useExport';
-import { isTauri } from '@/lib/db/sql';
+import { isTauri, getDb } from '@/lib/db/sql';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import TableHeader from '@/components/ui/TableHeader';
 import GlassCard from '@/components/ui/GlassCard';

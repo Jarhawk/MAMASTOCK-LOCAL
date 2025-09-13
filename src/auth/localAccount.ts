@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";
+import { isTauri, getDb } from "@/lib/db/sql";
 const APP_DIR = "MamaStock";
 const USERS_FILE = "users.json";
 

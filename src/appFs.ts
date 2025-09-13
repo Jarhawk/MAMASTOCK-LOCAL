@@ -1,5 +1,5 @@
 import { configPath } from "@/lib/paths";
-import { isTauri } from "@/lib/db/sql";
+import { isTauri, getDb } from "@/lib/db/sql";
 import { exists, readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 
 export type Config = Record<string, any>;
