@@ -1,98 +1,45 @@
-// src/lib/db/sql.ts
-import Database from "@tauri-apps/plugin-sql"; // ⚠️ default export
-import { appDataDir, join } from "@tauri-apps/api/path";
+import Database from "@tauri-apps/plugin-sql";
 
-/** Détection runtime fiable (marche en dev via TAURI_DEV_URL dans la fenêtre Tauri) */
-export const isTauri: boolean = (() => {
-  try {
-    return typeof window !== "undefined" && !!(window as any).__TAURI_INTERNALS__;
-  } catch {
-    return false;
-  }
-})();
+const isTauri = !!import.meta.env.TAURI_PLATFORM;
 
-export function requireTauri() {
-  if (!isTauri) throw new Error("Tauri requis: lance via `npx tauri dev`.");
-}
+let _db: any;
 
-let _dbPromise: Promise<any> | null = null;
-let _db: any | null = null;
-
-/** Ouvre (ou réutilise) la connexion SQLite située dans AppData\Roaming\com.mamastock.local\MamaStock\mamastock.db */
 export async function getDb() {
-  requireTauri();
-  if (_db) return _db;
-  if (!_dbPromise) {
-    _dbPromise = (async () => {
-      const base = await appDataDir();
-      const file = await join(base, "MamaStock", "mamastock.db");
-      const db = await Database.load(`sqlite:${file}`); // nécessite sql:allow-load
-      _db = db;
-      return db;
-    })();
+  if (!_db) {
+    _db = await Database.load("sqlite:mamastock.db");
   }
-  return _dbPromise;
+  return _db;
 }
 
-/** Ferme la connexion si possible et purge le cache (best-effort) */
 export async function closeDb() {
-  try {
-    if (_db && typeof _db.close === "function") {
+  if (_db) {
+    try {
       await _db.close();
+    } finally {
+      _db = undefined;
     }
-  } catch {
-    // certains backends n'exposent pas close(); on ignore
-  } finally {
-    _db = null;
-    _dbPromise = null;
   }
 }
 
-// ---------- Helpers Dashboard / util ----------
-
-function _assertIdent(name: string): string {
-  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(name)) {
-    throw new Error(`Invalid identifier: ${name}`);
-  }
-  return name;
-}
-
-/** Compte les lignes d'une table */
-export async function tableCount(table: string): Promise<number> {
+export async function selectOne<T>(sql: string, params?: any[]): Promise<T | null> {
   const db = await getDb();
-  const t = _assertIdent(table);
-  const rows = await db.select(`SELECT COUNT(*) AS c FROM ${t}`);
-  return Number(rows?.[0]?.c ?? 0);
+  const rows = (await db.select(sql, params)) as T[];
+  return rows[0] ?? null;
 }
 
-/** Compte plusieurs tables d'un coup */
-export async function tableCounts(tables: string[]): Promise<Record<string, number>> {
+export async function selectAll<T>(sql: string, params?: any[]): Promise<T[]> {
   const db = await getDb();
-  const out: Record<string, number> = {};
-  for (const tname of tables) {
-    const t = _assertIdent(tname);
-    const r = await db.select(`SELECT COUNT(*) AS c FROM ${t}`);
-    out[tname] = Number(r?.[0]?.c ?? 0);
-  }
-  return out;
+  return (await db.select(sql, params)) as T[];
 }
 
-/** KPI depuis la vue (si existante) */
-export async function getDashboardKPI(): Promise<any[]> {
+export async function exec(sql: string, params?: any[]): Promise<void> {
   const db = await getDb();
-  try {
-    return await db.select("SELECT * FROM v_dashboard_kpi");
-  } catch {
-    return [];
-  }
+  await db.execute(sql, params);
 }
 
-export default {
-  isTauri,
-  requireTauri,
-  getDb,
-  closeDb,
-  tableCount,
-  tableCounts,
-  getDashboardKPI,
-};
+export async function tableCount(name: string): Promise<number> {
+  const row = await selectOne<{ count: number }>(`SELECT COUNT(*) as count FROM ${name}`);
+  return row?.count ?? 0;
+}
+
+export { isTauri };
