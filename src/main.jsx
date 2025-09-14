@@ -1,3 +1,5 @@
+import "@/debug/kill-sw";
+
 import { setupPwaGuard } from "@/pwa/guard";
 import React, { useEffect } from "react";
 import { createRoot } from "react-dom/client";
