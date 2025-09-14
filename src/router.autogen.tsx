@@ -6,400 +6,386 @@ const Page_0 = lazy(() => import("@/pages/Accueil"));
 const Page_1 = lazy(() => import("@/pages/achats/AchatDetail"));
 const Page_2 = lazy(() => import("@/pages/achats/AchatForm"));
 const Page_3 = lazy(() => import("@/pages/achats/Achats"));
-const Page_4 = lazy(() => import("@/pages/aide/Aide"));
-const Page_5 = lazy(() => import("@/pages/aide/AideForm"));
-const Page_6 = lazy(() => import("@/pages/AideContextuelle"));
-const Page_7 = lazy(() => import("@/pages/Alertes"));
-const Page_8 = lazy(() => import("@/pages/analyse/Analyse"));
-const Page_9 = lazy(() => import("@/pages/analyse/AnalyseCostCenter"));
-const Page_10 = lazy(() => import("@/pages/analyse/MenuEngineering"));
-const Page_11 = lazy(() => import("@/pages/analyse/TableauxDeBord"));
-const Page_12 = lazy(() => import("@/pages/analytique/AnalytiqueDashboard"));
-const Page_13 = lazy(() => import("@/pages/auth/Blocked"));
-const Page_14 = lazy(() => import("@/pages/auth/CreateMama"));
-const Page_15 = lazy(() => import("@/pages/auth/Logout"));
-const Page_16 = lazy(() => import("@/pages/auth/Pending"));
-const Page_17 = lazy(() => import("@/pages/auth/ResetPassword"));
-const Page_18 = lazy(() => import("@/pages/auth/RoleError"));
-const Page_19 = lazy(() => import("@/pages/auth/Unauthorized"));
-const Page_20 = lazy(() => import("@/pages/auth/UpdatePassword"));
-const Page_21 = lazy(() => import("@/pages/BarManager"));
-const Page_22 = lazy(() => import("@/pages/bons_livraison/BLCreate"));
-const Page_23 = lazy(() => import("@/pages/bons_livraison/BLDetail"));
-const Page_24 = lazy(() => import("@/pages/bons_livraison/BLForm"));
-const Page_25 = lazy(() => import("@/pages/bons_livraison/BonsLivraison"));
-const Page_26 = lazy(() => import("@/pages/carte/Carte"));
-const Page_27 = lazy(() => import("@/pages/CartePlats"));
-const Page_28 = lazy(() => import("@/pages/catalogue/CatalogueSyncViewer"));
-const Page_29 = lazy(() => import("@/pages/commandes/CommandeDetail"));
-const Page_30 = lazy(() => import("@/pages/commandes/CommandeForm"));
-const Page_31 = lazy(() => import("@/pages/commandes/Commandes"));
-const Page_32 = lazy(() => import("@/pages/commandes/CommandesEnvoyees"));
-const Page_33 = lazy(() => import("@/pages/Consentements"));
-const Page_34 = lazy(() => import("@/pages/consolidation/AccessMultiSites"));
-const Page_35 = lazy(() => import("@/pages/consolidation/Consolidation"));
-const Page_36 = lazy(() => import("@/pages/costboisson/CostBoisson"));
-const Page_37 = lazy(() => import("@/pages/costing/CostingCarte"));
-const Page_38 = lazy(() => import("@/pages/cuisine/MenuDuJour"));
-const Page_39 = lazy(() => import("@/pages/Dashboard"));
-const Page_40 = lazy(() => import("@/pages/dashboard/DashboardBuilder"));
-const Page_41 = lazy(() => import("@/pages/debug/AccessExample"));
-const Page_42 = lazy(() => import("@/pages/debug/Auth"));
-const Page_43 = lazy(() => import("@/pages/debug/AuthDebug"));
-const Page_44 = lazy(() => import("@/pages/debug/Debug"));
-const Page_45 = lazy(() => import("@/pages/debug/DebugAuth"));
-const Page_46 = lazy(() => import("@/pages/debug/DebugRights"));
-const Page_47 = lazy(() => import("@/pages/debug/DebugUser"));
-const Page_48 = lazy(() => import("@/pages/documents/DocumentForm"));
-const Page_49 = lazy(() => import("@/pages/documents/Documents"));
-const Page_50 = lazy(() => import("@/pages/DossierDonnees"));
-const Page_51 = lazy(() => import("@/pages/ecarts/Ecarts"));
-const Page_52 = lazy(() => import("@/pages/emails/EmailsEnvoyes"));
-const Page_53 = lazy(() => import("@/pages/engineering/MenuEngineering"));
-const Page_54 = lazy(() => import("@/pages/EngineeringMenu"));
-const Page_55 = lazy(() => import("@/pages/factures/FactureCreate"));
-const Page_56 = lazy(() => import("@/pages/factures/FactureDetail"));
-const Page_57 = lazy(() => import("@/pages/factures/FactureForm"));
-const Page_58 = lazy(() => import("@/pages/factures/Factures"));
-const Page_59 = lazy(() => import("@/pages/factures/ImportFactures"));
-const Page_60 = lazy(() => import("@/pages/Feedback"));
-const Page_61 = lazy(() => import("@/pages/fiches/FicheDetail"));
-const Page_62 = lazy(() => import("@/pages/fiches/FicheForm"));
-const Page_63 = lazy(() => import("@/pages/fiches/Fiches"));
-const Page_64 = lazy(() => import("@/pages/fournisseurs/ApiFournisseurForm"));
-const Page_65 = lazy(() => import("@/pages/fournisseurs/ApiFournisseurs"));
-const Page_66 = lazy(() => import("@/pages/fournisseurs/comparatif/ComparatifPrix"));
-const Page_67 = lazy(() => import("@/pages/fournisseurs/comparatif/PrixFournisseurs"));
-const Page_68 = lazy(() => import("@/pages/fournisseurs/FournisseurApiSettingsForm"));
-const Page_69 = lazy(() => import("@/pages/fournisseurs/FournisseurCreate"));
-const Page_70 = lazy(() => import("@/pages/fournisseurs/FournisseurDetail"));
-const Page_71 = lazy(() => import("@/pages/fournisseurs/FournisseurDetailPage"));
-const Page_72 = lazy(() => import("@/pages/fournisseurs/FournisseurForm"));
-const Page_73 = lazy(() => import("@/pages/fournisseurs/Fournisseurs"));
-const Page_74 = lazy(() => import("@/pages/HelpCenter"));
-const Page_75 = lazy(() => import("@/pages/inventaire/EcartInventaire"));
-const Page_76 = lazy(() => import("@/pages/inventaire/Inventaire"));
-const Page_77 = lazy(() => import("@/pages/inventaire/InventaireDetail"));
-const Page_78 = lazy(() => import("@/pages/inventaire/InventaireForm"));
-const Page_79 = lazy(() => import("@/pages/inventaire/InventaireZones"));
-const Page_80 = lazy(() => import("@/pages/Journal"));
-const Page_81 = lazy(() => import("@/pages/legal/Cgu"));
-const Page_82 = lazy(() => import("@/pages/legal/Cgv"));
-const Page_83 = lazy(() => import("@/pages/legal/Confidentialite"));
-const Page_84 = lazy(() => import("@/pages/legal/Contact"));
-const Page_85 = lazy(() => import("@/pages/legal/Licence"));
-const Page_86 = lazy(() => import("@/pages/legal/MentionsLegales"));
-const Page_87 = lazy(() => import("@/pages/Login"));
-const Page_88 = lazy(() => import("@/pages/menu/MenuDuJour"));
-const Page_89 = lazy(() => import("@/pages/menu/MenuDuJourJour"));
-const Page_90 = lazy(() => import("@/pages/menus/MenuDetail"));
-const Page_91 = lazy(() => import("@/pages/menus/MenuDuJour"));
-const Page_92 = lazy(() => import("@/pages/menus/MenuDuJourDetail"));
-const Page_93 = lazy(() => import("@/pages/menus/MenuDuJourForm"));
-const Page_94 = lazy(() => import("@/pages/menus/MenuForm"));
-const Page_95 = lazy(() => import("@/pages/menus/MenuGroupeDetail"));
-const Page_96 = lazy(() => import("@/pages/menus/MenuGroupeForm"));
-const Page_97 = lazy(() => import("@/pages/menus/MenuGroupes"));
-const Page_98 = lazy(() => import("@/pages/menus/MenuPDF"));
-const Page_99 = lazy(() => import("@/pages/menus/Menus"));
-const Page_100 = lazy(() => import("@/pages/mobile/MobileAccueil"));
-const Page_101 = lazy(() => import("@/pages/mobile/MobileInventaire"));
-const Page_102 = lazy(() => import("@/pages/mobile/MobileRequisition"));
-const Page_103 = lazy(() => import("@/pages/NotFound"));
-const Page_104 = lazy(() => import("@/pages/notifications/NotificationSettingsForm"));
-const Page_105 = lazy(() => import("@/pages/notifications/NotificationsInbox"));
-const Page_106 = lazy(() => import("@/pages/Onboarding"));
-const Page_107 = lazy(() => import("@/pages/onboarding/OnboardingUtilisateur"));
-const Page_108 = lazy(() => import("@/pages/parametrage/AccessRights"));
-const Page_109 = lazy(() => import("@/pages/parametrage/APIKeys"));
-const Page_110 = lazy(() => import("@/pages/parametrage/CentreCoutForm"));
-const Page_111 = lazy(() => import("@/pages/parametrage/DossierDonnees"));
-const Page_112 = lazy(() => import("@/pages/parametrage/ExportComptaPage"));
-const Page_113 = lazy(() => import("@/pages/parametrage/ExportUserData"));
-const Page_114 = lazy(() => import("@/pages/parametrage/Familles"));
-const Page_115 = lazy(() => import("@/pages/parametrage/Familles"));
-const Page_116 = lazy(() => import("@/pages/parametrage/InvitationsEnAttente"));
-const Page_117 = lazy(() => import("@/pages/parametrage/InviteUser"));
-const Page_118 = lazy(() => import("@/pages/parametrage/MamaForm"));
-const Page_119 = lazy(() => import("@/pages/parametrage/Mamas"));
-const Page_120 = lazy(() => import("@/pages/parametrage/MamaSettingsForm"));
-const Page_121 = lazy(() => import("@/pages/parametrage/Parametrage"));
-const Page_122 = lazy(() => import("@/pages/parametrage/ParametresCommandes"));
-const Page_123 = lazy(() => import("@/pages/parametrage/Periodes"));
-const Page_124 = lazy(() => import("@/pages/parametrage/Permissions"));
-const Page_125 = lazy(() => import("@/pages/parametrage/PermissionsAdmin"));
-const Page_126 = lazy(() => import("@/pages/parametrage/PermissionsForm"));
-const Page_127 = lazy(() => import("@/pages/parametrage/RGPDConsentForm"));
-const Page_128 = lazy(() => import("@/pages/parametrage/RoleForm"));
-const Page_129 = lazy(() => import("@/pages/parametrage/Roles"));
-const Page_130 = lazy(() => import("@/pages/parametrage/SousFamilles"));
-const Page_131 = lazy(() => import("@/pages/parametrage/SousFamilles"));
-const Page_132 = lazy(() => import("@/pages/parametrage/SystemTools"));
-const Page_133 = lazy(() => import("@/pages/parametrage/TemplateCommandeForm"));
-const Page_134 = lazy(() => import("@/pages/parametrage/TemplatesCommandes"));
-const Page_135 = lazy(() => import("@/pages/parametrage/Unites"));
-const Page_136 = lazy(() => import("@/pages/parametrage/Unites"));
-const Page_137 = lazy(() => import("@/pages/parametrage/Utilisateurs"));
-const Page_138 = lazy(() => import("@/pages/parametrage/ZoneAccess"));
-const Page_139 = lazy(() => import("@/pages/parametrage/ZoneForm"));
-const Page_140 = lazy(() => import("@/pages/parametrage/Zones"));
-const Page_141 = lazy(() => import("@/pages/Parametres/Familles"));
-const Page_142 = lazy(() => import("@/pages/Pertes"));
-const Page_143 = lazy(() => import("@/pages/Planning"));
-const Page_144 = lazy(() => import("@/pages/planning/SimulationPlanner"));
-const Page_145 = lazy(() => import("@/pages/PlanningDetail"));
-const Page_146 = lazy(() => import("@/pages/PlanningForm"));
-const Page_147 = lazy(() => import("@/pages/PlanningModule"));
-const Page_148 = lazy(() => import("@/pages/produits/ProduitDetail"));
-const Page_149 = lazy(() => import("@/pages/produits/ProduitForm"));
-const Page_150 = lazy(() => import("@/pages/produits/Produits"));
-const Page_151 = lazy(() => import("@/pages/promotions/PromotionForm"));
-const Page_152 = lazy(() => import("@/pages/promotions/Promotions"));
-const Page_153 = lazy(() => import("@/pages/public/LandingPage"));
-const Page_154 = lazy(() => import("@/pages/public/Onboarding"));
-const Page_155 = lazy(() => import("@/pages/public/Signup"));
-const Page_156 = lazy(() => import("@/pages/receptions/Receptions"));
-const Page_157 = lazy(() => import("@/pages/recettes/Recettes"));
-const Page_158 = lazy(() => import("@/pages/reporting/GraphCost"));
-const Page_159 = lazy(() => import("@/pages/reporting/Reporting"));
-const Page_160 = lazy(() => import("@/pages/reporting/ReportingPDF"));
-const Page_161 = lazy(() => import("@/pages/requisitions/RequisitionDetail"));
-const Page_162 = lazy(() => import("@/pages/requisitions/RequisitionForm"));
-const Page_163 = lazy(() => import("@/pages/requisitions/Requisitions"));
-const Page_164 = lazy(() => import("@/pages/Rgpd"));
-const Page_165 = lazy(() => import("@/pages/signalements/SignalementDetail"));
-const Page_166 = lazy(() => import("@/pages/signalements/SignalementForm"));
-const Page_167 = lazy(() => import("@/pages/signalements/Signalements"));
-const Page_168 = lazy(() => import("@/pages/simulation/Simulation"));
-const Page_169 = lazy(() => import("@/pages/simulation/SimulationForm"));
-const Page_170 = lazy(() => import("@/pages/simulation/SimulationMenu"));
-const Page_171 = lazy(() => import("@/pages/simulation/SimulationResult"));
-const Page_172 = lazy(() => import("@/pages/stats/Stats"));
-const Page_173 = lazy(() => import("@/pages/stats/StatsAdvanced"));
-const Page_174 = lazy(() => import("@/pages/stats/StatsConsolidation"));
-const Page_175 = lazy(() => import("@/pages/stats/StatsCostCenters"));
-const Page_176 = lazy(() => import("@/pages/stats/StatsCostCentersPivot"));
-const Page_177 = lazy(() => import("@/pages/stats/StatsFiches"));
-const Page_178 = lazy(() => import("@/pages/stats/StatsStock"));
-const Page_179 = lazy(() => import("@/pages/Stock"));
-const Page_180 = lazy(() => import("@/pages/stock/AlertesRupture"));
-const Page_181 = lazy(() => import("@/pages/stock/Inventaire"));
-const Page_182 = lazy(() => import("@/pages/stock/InventaireForm"));
-const Page_183 = lazy(() => import("@/pages/stock/Requisitions"));
-const Page_184 = lazy(() => import("@/pages/stock/TransfertForm"));
-const Page_185 = lazy(() => import("@/pages/stock/Transferts"));
-const Page_186 = lazy(() => import("@/pages/supervision/ComparateurFiches"));
-const Page_187 = lazy(() => import("@/pages/supervision/GroupeParamForm"));
-const Page_188 = lazy(() => import("@/pages/supervision/Logs"));
-const Page_189 = lazy(() => import("@/pages/supervision/Rapports"));
-const Page_190 = lazy(() => import("@/pages/supervision/SupervisionGroupe"));
-const Page_191 = lazy(() => import("@/pages/surcouts/Surcouts"));
-const Page_192 = lazy(() => import("@/pages/taches/Alertes"));
-const Page_193 = lazy(() => import("@/pages/taches/TacheDetail"));
-const Page_194 = lazy(() => import("@/pages/taches/TacheForm"));
-const Page_195 = lazy(() => import("@/pages/taches/TacheNew"));
-const Page_196 = lazy(() => import("@/pages/taches/Taches"));
-const Page_197 = lazy(() => import("@/pages/Utilisateurs"));
-const Page_198 = lazy(() => import("@/pages/Validations"));
+const Page_4 = lazy(() => import("@/pages/Alertes"));
+const Page_5 = lazy(() => import("@/pages/analyse/Analyse"));
+const Page_6 = lazy(() => import("@/pages/analyse/AnalyseCostCenter"));
+const Page_7 = lazy(() => import("@/pages/analyse/MenuEngineering"));
+const Page_8 = lazy(() => import("@/pages/analyse/TableauxDeBord"));
+const Page_9 = lazy(() => import("@/pages/analytique/AnalytiqueDashboard"));
+const Page_10 = lazy(() => import("@/pages/auth/Blocked"));
+const Page_11 = lazy(() => import("@/pages/auth/CreateMama"));
+const Page_12 = lazy(() => import("@/pages/auth/Logout"));
+const Page_13 = lazy(() => import("@/pages/auth/Pending"));
+const Page_14 = lazy(() => import("@/pages/auth/ResetPassword"));
+const Page_15 = lazy(() => import("@/pages/auth/RoleError"));
+const Page_16 = lazy(() => import("@/pages/auth/Unauthorized"));
+const Page_17 = lazy(() => import("@/pages/auth/UpdatePassword"));
+const Page_18 = lazy(() => import("@/pages/BarManager"));
+const Page_19 = lazy(() => import("@/pages/bons_livraison/BLCreate"));
+const Page_20 = lazy(() => import("@/pages/bons_livraison/BLDetail"));
+const Page_21 = lazy(() => import("@/pages/bons_livraison/BLForm"));
+const Page_22 = lazy(() => import("@/pages/bons_livraison/BonsLivraison"));
+const Page_23 = lazy(() => import("@/pages/carte/Carte"));
+const Page_24 = lazy(() => import("@/pages/CartePlats"));
+const Page_25 = lazy(() => import("@/pages/catalogue/CatalogueSyncViewer"));
+const Page_26 = lazy(() => import("@/pages/commandes/CommandeDetail"));
+const Page_27 = lazy(() => import("@/pages/commandes/CommandeForm"));
+const Page_28 = lazy(() => import("@/pages/commandes/Commandes"));
+const Page_29 = lazy(() => import("@/pages/commandes/CommandesEnvoyees"));
+const Page_30 = lazy(() => import("@/pages/Consentements"));
+const Page_31 = lazy(() => import("@/pages/consolidation/AccessMultiSites"));
+const Page_32 = lazy(() => import("@/pages/consolidation/Consolidation"));
+const Page_33 = lazy(() => import("@/pages/costboisson/CostBoisson"));
+const Page_34 = lazy(() => import("@/pages/costing/CostingCarte"));
+const Page_35 = lazy(() => import("@/pages/cuisine/MenuDuJour"));
+const Page_36 = lazy(() => import("@/pages/Dashboard"));
+const Page_37 = lazy(() => import("@/pages/dashboard/DashboardBuilder"));
+const Page_38 = lazy(() => import("@/pages/debug/AccessExample"));
+const Page_39 = lazy(() => import("@/pages/Debug/Auth"));
+const Page_40 = lazy(() => import("@/pages/debug/AuthDebug"));
+const Page_41 = lazy(() => import("@/pages/debug/Debug"));
+const Page_42 = lazy(() => import("@/pages/debug/DebugAuth"));
+const Page_43 = lazy(() => import("@/pages/debug/DebugRights"));
+const Page_44 = lazy(() => import("@/pages/debug/DebugUser"));
+const Page_45 = lazy(() => import("@/pages/documents/DocumentForm"));
+const Page_46 = lazy(() => import("@/pages/documents/Documents"));
+const Page_47 = lazy(() => import("@/pages/DossierDonnees"));
+const Page_48 = lazy(() => import("@/pages/ecarts/Ecarts"));
+const Page_49 = lazy(() => import("@/pages/emails/EmailsEnvoyes"));
+const Page_50 = lazy(() => import("@/pages/engineering/MenuEngineering"));
+const Page_51 = lazy(() => import("@/pages/EngineeringMenu"));
+const Page_52 = lazy(() => import("@/pages/factures/FactureCreate"));
+const Page_53 = lazy(() => import("@/pages/factures/FactureDetail"));
+const Page_54 = lazy(() => import("@/pages/factures/FactureForm"));
+const Page_55 = lazy(() => import("@/pages/factures/Factures"));
+const Page_56 = lazy(() => import("@/pages/factures/ImportFactures"));
+const Page_57 = lazy(() => import("@/pages/Feedback"));
+const Page_58 = lazy(() => import("@/pages/fiches/FicheDetail"));
+const Page_59 = lazy(() => import("@/pages/fiches/FicheForm"));
+const Page_60 = lazy(() => import("@/pages/fiches/Fiches"));
+const Page_61 = lazy(() => import("@/pages/fournisseurs/ApiFournisseurForm"));
+const Page_62 = lazy(() => import("@/pages/fournisseurs/ApiFournisseurs"));
+const Page_63 = lazy(() => import("@/pages/fournisseurs/comparatif/ComparatifPrix"));
+const Page_64 = lazy(() => import("@/pages/fournisseurs/comparatif/PrixFournisseurs"));
+const Page_65 = lazy(() => import("@/pages/fournisseurs/FournisseurApiSettingsForm"));
+const Page_66 = lazy(() => import("@/pages/fournisseurs/FournisseurCreate"));
+const Page_67 = lazy(() => import("@/pages/fournisseurs/FournisseurDetail"));
+const Page_68 = lazy(() => import("@/pages/fournisseurs/FournisseurDetailPage"));
+const Page_69 = lazy(() => import("@/pages/fournisseurs/FournisseurForm"));
+const Page_70 = lazy(() => import("@/pages/fournisseurs/Fournisseurs"));
+const Page_71 = lazy(() => import("@/pages/inventaire/EcartInventaire"));
+const Page_72 = lazy(() => import("@/pages/inventaire/Inventaire"));
+const Page_73 = lazy(() => import("@/pages/inventaire/InventaireDetail"));
+const Page_74 = lazy(() => import("@/pages/inventaire/InventaireForm"));
+const Page_75 = lazy(() => import("@/pages/inventaire/InventaireZones"));
+const Page_76 = lazy(() => import("@/pages/Journal"));
+const Page_77 = lazy(() => import("@/pages/legal/Cgu"));
+const Page_78 = lazy(() => import("@/pages/legal/Cgv"));
+const Page_79 = lazy(() => import("@/pages/legal/Confidentialite"));
+const Page_80 = lazy(() => import("@/pages/legal/Contact"));
+const Page_81 = lazy(() => import("@/pages/legal/Licence"));
+const Page_82 = lazy(() => import("@/pages/legal/MentionsLegales"));
+const Page_83 = lazy(() => import("@/pages/Login"));
+const Page_84 = lazy(() => import("@/pages/menu/MenuDuJour"));
+const Page_85 = lazy(() => import("@/pages/menu/MenuDuJourJour"));
+const Page_86 = lazy(() => import("@/pages/menus/MenuDetail"));
+const Page_87 = lazy(() => import("@/pages/menus/MenuDuJour"));
+const Page_88 = lazy(() => import("@/pages/menus/MenuDuJourDetail"));
+const Page_89 = lazy(() => import("@/pages/menus/MenuDuJourForm"));
+const Page_90 = lazy(() => import("@/pages/menus/MenuForm"));
+const Page_91 = lazy(() => import("@/pages/menus/MenuGroupeDetail"));
+const Page_92 = lazy(() => import("@/pages/menus/MenuGroupeForm"));
+const Page_93 = lazy(() => import("@/pages/menus/MenuGroupes"));
+const Page_94 = lazy(() => import("@/pages/menus/MenuPDF"));
+const Page_95 = lazy(() => import("@/pages/menus/Menus"));
+const Page_96 = lazy(() => import("@/pages/mobile/MobileAccueil"));
+const Page_97 = lazy(() => import("@/pages/mobile/MobileInventaire"));
+const Page_98 = lazy(() => import("@/pages/mobile/MobileRequisition"));
+const Page_99 = lazy(() => import("@/pages/NotFound"));
+const Page_100 = lazy(() => import("@/pages/notifications/NotificationSettingsForm"));
+const Page_101 = lazy(() => import("@/pages/notifications/NotificationsInbox"));
+const Page_102 = lazy(() => import("@/pages/parametrage/AccessRights"));
+const Page_103 = lazy(() => import("@/pages/parametrage/APIKeys"));
+const Page_104 = lazy(() => import("@/pages/parametrage/CentreCoutForm"));
+const Page_105 = lazy(() => import("@/pages/Parametrage/DossierDonnees"));
+const Page_106 = lazy(() => import("@/pages/parametrage/ExportComptaPage"));
+const Page_107 = lazy(() => import("@/pages/parametrage/ExportUserData"));
+const Page_108 = lazy(() => import("@/pages/Parametrage/Familles"));
+const Page_109 = lazy(() => import("@/pages/parametrage/Familles"));
+const Page_110 = lazy(() => import("@/pages/parametrage/InvitationsEnAttente"));
+const Page_111 = lazy(() => import("@/pages/parametrage/InviteUser"));
+const Page_112 = lazy(() => import("@/pages/parametrage/MamaForm"));
+const Page_113 = lazy(() => import("@/pages/parametrage/Mamas"));
+const Page_114 = lazy(() => import("@/pages/parametrage/MamaSettingsForm"));
+const Page_115 = lazy(() => import("@/pages/parametrage/Parametrage"));
+const Page_116 = lazy(() => import("@/pages/parametrage/ParametresCommandes"));
+const Page_117 = lazy(() => import("@/pages/parametrage/Periodes"));
+const Page_118 = lazy(() => import("@/pages/parametrage/Permissions"));
+const Page_119 = lazy(() => import("@/pages/parametrage/PermissionsAdmin"));
+const Page_120 = lazy(() => import("@/pages/parametrage/PermissionsForm"));
+const Page_121 = lazy(() => import("@/pages/parametrage/RGPDConsentForm"));
+const Page_122 = lazy(() => import("@/pages/parametrage/RoleForm"));
+const Page_123 = lazy(() => import("@/pages/parametrage/Roles"));
+const Page_124 = lazy(() => import("@/pages/Parametrage/SousFamilles"));
+const Page_125 = lazy(() => import("@/pages/parametrage/SousFamilles"));
+const Page_126 = lazy(() => import("@/pages/parametrage/SystemTools"));
+const Page_127 = lazy(() => import("@/pages/parametrage/TemplateCommandeForm"));
+const Page_128 = lazy(() => import("@/pages/parametrage/TemplatesCommandes"));
+const Page_129 = lazy(() => import("@/pages/Parametrage/Unites"));
+const Page_130 = lazy(() => import("@/pages/parametrage/Unites"));
+const Page_131 = lazy(() => import("@/pages/parametrage/Utilisateurs"));
+const Page_132 = lazy(() => import("@/pages/parametrage/ZoneAccess"));
+const Page_133 = lazy(() => import("@/pages/parametrage/ZoneForm"));
+const Page_134 = lazy(() => import("@/pages/parametrage/Zones"));
+const Page_135 = lazy(() => import("@/pages/Parametres/Familles"));
+const Page_136 = lazy(() => import("@/pages/Pertes"));
+const Page_137 = lazy(() => import("@/pages/Planning"));
+const Page_138 = lazy(() => import("@/pages/planning/SimulationPlanner"));
+const Page_139 = lazy(() => import("@/pages/PlanningDetail"));
+const Page_140 = lazy(() => import("@/pages/PlanningForm"));
+const Page_141 = lazy(() => import("@/pages/PlanningModule"));
+const Page_142 = lazy(() => import("@/pages/produits/ProduitDetail"));
+const Page_143 = lazy(() => import("@/pages/produits/ProduitForm"));
+const Page_144 = lazy(() => import("@/pages/produits/Produits"));
+const Page_145 = lazy(() => import("@/pages/promotions/PromotionForm"));
+const Page_146 = lazy(() => import("@/pages/promotions/Promotions"));
+const Page_147 = lazy(() => import("@/pages/public/LandingPage"));
+const Page_148 = lazy(() => import("@/pages/public/Signup"));
+const Page_149 = lazy(() => import("@/pages/receptions/Receptions"));
+const Page_150 = lazy(() => import("@/pages/recettes/Recettes"));
+const Page_151 = lazy(() => import("@/pages/reporting/GraphCost"));
+const Page_152 = lazy(() => import("@/pages/reporting/Reporting"));
+const Page_153 = lazy(() => import("@/pages/reporting/ReportingPDF"));
+const Page_154 = lazy(() => import("@/pages/requisitions/RequisitionDetail"));
+const Page_155 = lazy(() => import("@/pages/requisitions/RequisitionForm"));
+const Page_156 = lazy(() => import("@/pages/requisitions/Requisitions"));
+const Page_157 = lazy(() => import("@/pages/Rgpd"));
+const Page_158 = lazy(() => import("@/pages/signalements/SignalementDetail"));
+const Page_159 = lazy(() => import("@/pages/signalements/SignalementForm"));
+const Page_160 = lazy(() => import("@/pages/signalements/Signalements"));
+const Page_161 = lazy(() => import("@/pages/simulation/Simulation"));
+const Page_162 = lazy(() => import("@/pages/simulation/SimulationForm"));
+const Page_163 = lazy(() => import("@/pages/simulation/SimulationMenu"));
+const Page_164 = lazy(() => import("@/pages/simulation/SimulationResult"));
+const Page_165 = lazy(() => import("@/pages/stats/Stats"));
+const Page_166 = lazy(() => import("@/pages/stats/StatsAdvanced"));
+const Page_167 = lazy(() => import("@/pages/stats/StatsConsolidation"));
+const Page_168 = lazy(() => import("@/pages/stats/StatsCostCenters"));
+const Page_169 = lazy(() => import("@/pages/stats/StatsCostCentersPivot"));
+const Page_170 = lazy(() => import("@/pages/stats/StatsFiches"));
+const Page_171 = lazy(() => import("@/pages/stats/StatsStock"));
+const Page_172 = lazy(() => import("@/pages/Stock"));
+const Page_173 = lazy(() => import("@/pages/stock/AlertesRupture"));
+const Page_174 = lazy(() => import("@/pages/stock/Inventaire"));
+const Page_175 = lazy(() => import("@/pages/stock/InventaireForm"));
+const Page_176 = lazy(() => import("@/pages/stock/Requisitions"));
+const Page_177 = lazy(() => import("@/pages/stock/TransfertForm"));
+const Page_178 = lazy(() => import("@/pages/stock/Transferts"));
+const Page_179 = lazy(() => import("@/pages/supervision/ComparateurFiches"));
+const Page_180 = lazy(() => import("@/pages/supervision/GroupeParamForm"));
+const Page_181 = lazy(() => import("@/pages/supervision/Logs"));
+const Page_182 = lazy(() => import("@/pages/supervision/Rapports"));
+const Page_183 = lazy(() => import("@/pages/supervision/SupervisionGroupe"));
+const Page_184 = lazy(() => import("@/pages/surcouts/Surcouts"));
+const Page_185 = lazy(() => import("@/pages/taches/Alertes"));
+const Page_186 = lazy(() => import("@/pages/taches/TacheDetail"));
+const Page_187 = lazy(() => import("@/pages/taches/TacheForm"));
+const Page_188 = lazy(() => import("@/pages/taches/TacheNew"));
+const Page_189 = lazy(() => import("@/pages/taches/Taches"));
+const Page_190 = lazy(() => import("@/pages/Utilisateurs"));
+const Page_191 = lazy(() => import("@/pages/Validations"));
 
 export const routes = [
   { path: "/accueil", element: <Page_0 /> },
   { path: "/achats/achatdetail", element: <Page_1 /> },
   { path: "/achats/achatform", element: <Page_2 /> },
   { path: "/achats/achats", element: <Page_3 /> },
-  { path: "/aide/aide", element: <Page_4 /> },
-  { path: "/aide/aideform", element: <Page_5 /> },
-  { path: "/aidecontextuelle", element: <Page_6 /> },
-  { path: "/alertes", element: <Page_7 /> },
-  { path: "/analyse/analyse", element: <Page_8 /> },
-  { path: "/analyse/analysecostcenter", element: <Page_9 /> },
-  { path: "/analyse/menuengineering", element: <Page_10 /> },
-  { path: "/analyse/tableauxdebord", element: <Page_11 /> },
-  { path: "/analytique/analytiquedashboard", element: <Page_12 /> },
-  { path: "/auth/blocked", element: <Page_13 /> },
-  { path: "/auth/createmama", element: <Page_14 /> },
-  { path: "/auth/logout", element: <Page_15 /> },
-  { path: "/auth/pending", element: <Page_16 /> },
-  { path: "/auth/resetpassword", element: <Page_17 /> },
-  { path: "/auth/roleerror", element: <Page_18 /> },
-  { path: "/auth/unauthorized", element: <Page_19 /> },
-  { path: "/auth/updatepassword", element: <Page_20 /> },
-  { path: "/barmanager", element: <Page_21 /> },
-  { path: "/bons_livraison/blcreate", element: <Page_22 /> },
-  { path: "/bons_livraison/bldetail", element: <Page_23 /> },
-  { path: "/bons_livraison/blform", element: <Page_24 /> },
-  { path: "/bons_livraison/bonslivraison", element: <Page_25 /> },
-  { path: "/carte/carte", element: <Page_26 /> },
-  { path: "/carteplats", element: <Page_27 /> },
-  { path: "/catalogue/cataloguesyncviewer", element: <Page_28 /> },
-  { path: "/commandes/commandedetail", element: <Page_29 /> },
-  { path: "/commandes/commandeform", element: <Page_30 /> },
-  { path: "/commandes/commandes", element: <Page_31 /> },
-  { path: "/commandes/commandesenvoyees", element: <Page_32 /> },
-  { path: "/consentements", element: <Page_33 /> },
-  { path: "/consolidation/accessmultisites", element: <Page_34 /> },
-  { path: "/consolidation/consolidation", element: <Page_35 /> },
-  { path: "/costboisson/costboisson", element: <Page_36 /> },
-  { path: "/costing/costingcarte", element: <Page_37 /> },
-  { path: "/cuisine/menudujour", element: <Page_38 /> },
-  { path: "/dashboard", element: <Page_39 /> },
-  { path: "/dashboard/dashboardbuilder", element: <Page_40 /> },
-  { path: "/debug/accessexample", element: <Page_41 /> },
-  { path: "/debug/auth", element: <Page_42 /> },
-  { path: "/debug/authdebug", element: <Page_43 /> },
-  { path: "/debug/debug", element: <Page_44 /> },
-  { path: "/debug/debugauth", element: <Page_45 /> },
-  { path: "/debug/debugrights", element: <Page_46 /> },
-  { path: "/debug/debuguser", element: <Page_47 /> },
-  { path: "/documents/documentform", element: <Page_48 /> },
-  { path: "/documents/documents", element: <Page_49 /> },
-  { path: "/dossierdonnees", element: <Page_50 /> },
-  { path: "/ecarts/ecarts", element: <Page_51 /> },
-  { path: "/emails/emailsenvoyes", element: <Page_52 /> },
-  { path: "/engineering/menuengineering", element: <Page_53 /> },
-  { path: "/engineeringmenu", element: <Page_54 /> },
-  { path: "/factures/facturecreate", element: <Page_55 /> },
-  { path: "/factures/facturedetail", element: <Page_56 /> },
-  { path: "/factures/factureform", element: <Page_57 /> },
-  { path: "/factures/factures", element: <Page_58 /> },
-  { path: "/factures/importfactures", element: <Page_59 /> },
-  { path: "/feedback", element: <Page_60 /> },
-  { path: "/fiches/fichedetail", element: <Page_61 /> },
-  { path: "/fiches/ficheform", element: <Page_62 /> },
-  { path: "/fiches/fiches", element: <Page_63 /> },
-  { path: "/fournisseurs/apifournisseurform", element: <Page_64 /> },
-  { path: "/fournisseurs/apifournisseurs", element: <Page_65 /> },
-  { path: "/fournisseurs/comparatif/comparatifprix", element: <Page_66 /> },
-  { path: "/fournisseurs/comparatif/prixfournisseurs", element: <Page_67 /> },
-  { path: "/fournisseurs/fournisseurapisettingsform", element: <Page_68 /> },
-  { path: "/fournisseurs/fournisseurcreate", element: <Page_69 /> },
-  { path: "/fournisseurs/fournisseurdetail", element: <Page_70 /> },
-  { path: "/fournisseurs/fournisseurdetailpage", element: <Page_71 /> },
-  { path: "/fournisseurs/fournisseurform", element: <Page_72 /> },
-  { path: "/fournisseurs/fournisseurs", element: <Page_73 /> },
-  { path: "/helpcenter", element: <Page_74 /> },
-  { path: "/inventaire/ecartinventaire", element: <Page_75 /> },
-  { path: "/inventaire/inventaire", element: <Page_76 /> },
-  { path: "/inventaire/inventairedetail", element: <Page_77 /> },
-  { path: "/inventaire/inventaireform", element: <Page_78 /> },
-  { path: "/inventaire/inventairezones", element: <Page_79 /> },
-  { path: "/journal", element: <Page_80 /> },
-  { path: "/legal/cgu", element: <Page_81 /> },
-  { path: "/legal/cgv", element: <Page_82 /> },
-  { path: "/legal/confidentialite", element: <Page_83 /> },
-  { path: "/legal/contact", element: <Page_84 /> },
-  { path: "/legal/licence", element: <Page_85 /> },
-  { path: "/legal/mentionslegales", element: <Page_86 /> },
-  { path: "/login", element: <Page_87 /> },
-  { path: "/menu/menudujour", element: <Page_88 /> },
-  { path: "/menu/menudujourjour", element: <Page_89 /> },
-  { path: "/menus/menudetail", element: <Page_90 /> },
-  { path: "/menus/menudujour", element: <Page_91 /> },
-  { path: "/menus/menudujourdetail", element: <Page_92 /> },
-  { path: "/menus/menudujourform", element: <Page_93 /> },
-  { path: "/menus/menuform", element: <Page_94 /> },
-  { path: "/menus/menugroupedetail", element: <Page_95 /> },
-  { path: "/menus/menugroupeform", element: <Page_96 /> },
-  { path: "/menus/menugroupes", element: <Page_97 /> },
-  { path: "/menus/menupdf", element: <Page_98 /> },
-  { path: "/menus/menus", element: <Page_99 /> },
-  { path: "/mobile/mobileaccueil", element: <Page_100 /> },
-  { path: "/mobile/mobileinventaire", element: <Page_101 /> },
-  { path: "/mobile/mobilerequisition", element: <Page_102 /> },
-  { path: "/notfound", element: <Page_103 /> },
-  { path: "/notifications/notificationsettingsform", element: <Page_104 /> },
-  { path: "/notifications/notificationsinbox", element: <Page_105 /> },
-  { path: "/onboarding", element: <Page_106 /> },
-  { path: "/onboarding/onboardingutilisateur", element: <Page_107 /> },
-  { path: "/parametrage/accessrights", element: <Page_108 /> },
-  { path: "/parametrage/apikeys", element: <Page_109 /> },
-  { path: "/parametrage/centrecoutform", element: <Page_110 /> },
-  { path: "/parametrage/dossierdonnees", element: <Page_111 /> },
-  { path: "/parametrage/exportcomptapage", element: <Page_112 /> },
-  { path: "/parametrage/exportuserdata", element: <Page_113 /> },
-  { path: "/parametrage/familles", element: <Page_114 /> },
-  { path: "/parametrage/familles", element: <Page_115 /> },
-  { path: "/parametrage/invitationsenattente", element: <Page_116 /> },
-  { path: "/parametrage/inviteuser", element: <Page_117 /> },
-  { path: "/parametrage/mamaform", element: <Page_118 /> },
-  { path: "/parametrage/mamas", element: <Page_119 /> },
-  { path: "/parametrage/mamasettingsform", element: <Page_120 /> },
-  { path: "/parametrage/parametrage", element: <Page_121 /> },
-  { path: "/parametrage/parametrescommandes", element: <Page_122 /> },
-  { path: "/parametrage/periodes", element: <Page_123 /> },
-  { path: "/parametrage/permissions", element: <Page_124 /> },
-  { path: "/parametrage/permissionsadmin", element: <Page_125 /> },
-  { path: "/parametrage/permissionsform", element: <Page_126 /> },
-  { path: "/parametrage/rgpdconsentform", element: <Page_127 /> },
-  { path: "/parametrage/roleform", element: <Page_128 /> },
-  { path: "/parametrage/roles", element: <Page_129 /> },
-  { path: "/parametrage/sousfamilles", element: <Page_130 /> },
-  { path: "/parametrage/sousfamilles", element: <Page_131 /> },
-  { path: "/parametrage/systemtools", element: <Page_132 /> },
-  { path: "/parametrage/templatecommandeform", element: <Page_133 /> },
-  { path: "/parametrage/templatescommandes", element: <Page_134 /> },
-  { path: "/parametrage/unites", element: <Page_135 /> },
-  { path: "/parametrage/unites", element: <Page_136 /> },
-  { path: "/parametrage/utilisateurs", element: <Page_137 /> },
-  { path: "/parametrage/zoneaccess", element: <Page_138 /> },
-  { path: "/parametrage/zoneform", element: <Page_139 /> },
-  { path: "/parametrage/zones", element: <Page_140 /> },
-  { path: "/parametres/familles", element: <Page_141 /> },
-  { path: "/pertes", element: <Page_142 /> },
-  { path: "/planning", element: <Page_143 /> },
-  { path: "/planning/simulationplanner", element: <Page_144 /> },
-  { path: "/planningdetail", element: <Page_145 /> },
-  { path: "/planningform", element: <Page_146 /> },
-  { path: "/planningmodule", element: <Page_147 /> },
-  { path: "/produits/produitdetail", element: <Page_148 /> },
-  { path: "/produits/produitform", element: <Page_149 /> },
-  { path: "/produits/produits", element: <Page_150 /> },
-  { path: "/promotions/promotionform", element: <Page_151 /> },
-  { path: "/promotions/promotions", element: <Page_152 /> },
-  { path: "/public/landingpage", element: <Page_153 /> },
-  { path: "/public/onboarding", element: <Page_154 /> },
-  { path: "/public/signup", element: <Page_155 /> },
-  { path: "/receptions/receptions", element: <Page_156 /> },
-  { path: "/recettes/recettes", element: <Page_157 /> },
-  { path: "/reporting/graphcost", element: <Page_158 /> },
-  { path: "/reporting/reporting", element: <Page_159 /> },
-  { path: "/reporting/reportingpdf", element: <Page_160 /> },
-  { path: "/requisitions/requisitiondetail", element: <Page_161 /> },
-  { path: "/requisitions/requisitionform", element: <Page_162 /> },
-  { path: "/requisitions/requisitions", element: <Page_163 /> },
-  { path: "/rgpd", element: <Page_164 /> },
-  { path: "/signalements/signalementdetail", element: <Page_165 /> },
-  { path: "/signalements/signalementform", element: <Page_166 /> },
-  { path: "/signalements/signalements", element: <Page_167 /> },
-  { path: "/simulation/simulation", element: <Page_168 /> },
-  { path: "/simulation/simulationform", element: <Page_169 /> },
-  { path: "/simulation/simulationmenu", element: <Page_170 /> },
-  { path: "/simulation/simulationresult", element: <Page_171 /> },
-  { path: "/stats/stats", element: <Page_172 /> },
-  { path: "/stats/statsadvanced", element: <Page_173 /> },
-  { path: "/stats/statsconsolidation", element: <Page_174 /> },
-  { path: "/stats/statscostcenters", element: <Page_175 /> },
-  { path: "/stats/statscostcenterspivot", element: <Page_176 /> },
-  { path: "/stats/statsfiches", element: <Page_177 /> },
-  { path: "/stats/statsstock", element: <Page_178 /> },
-  { path: "/stock", element: <Page_179 /> },
-  { path: "/stock/alertesrupture", element: <Page_180 /> },
-  { path: "/stock/inventaire", element: <Page_181 /> },
-  { path: "/stock/inventaireform", element: <Page_182 /> },
-  { path: "/stock/requisitions", element: <Page_183 /> },
-  { path: "/stock/transfertform", element: <Page_184 /> },
-  { path: "/stock/transferts", element: <Page_185 /> },
-  { path: "/supervision/comparateurfiches", element: <Page_186 /> },
-  { path: "/supervision/groupeparamform", element: <Page_187 /> },
-  { path: "/supervision/logs", element: <Page_188 /> },
-  { path: "/supervision/rapports", element: <Page_189 /> },
-  { path: "/supervision/supervisiongroupe", element: <Page_190 /> },
-  { path: "/surcouts/surcouts", element: <Page_191 /> },
-  { path: "/taches/alertes", element: <Page_192 /> },
-  { path: "/taches/tachedetail", element: <Page_193 /> },
-  { path: "/taches/tacheform", element: <Page_194 /> },
-  { path: "/taches/tachenew", element: <Page_195 /> },
-  { path: "/taches/taches", element: <Page_196 /> },
-  { path: "/utilisateurs", element: <Page_197 /> },
-  { path: "/validations", element: <Page_198 /> }
+  { path: "/alertes", element: <Page_4 /> },
+  { path: "/analyse/analyse", element: <Page_5 /> },
+  { path: "/analyse/analysecostcenter", element: <Page_6 /> },
+  { path: "/analyse/menuengineering", element: <Page_7 /> },
+  { path: "/analyse/tableauxdebord", element: <Page_8 /> },
+  { path: "/analytique/analytiquedashboard", element: <Page_9 /> },
+  { path: "/auth/blocked", element: <Page_10 /> },
+  { path: "/auth/createmama", element: <Page_11 /> },
+  { path: "/auth/logout", element: <Page_12 /> },
+  { path: "/auth/pending", element: <Page_13 /> },
+  { path: "/auth/resetpassword", element: <Page_14 /> },
+  { path: "/auth/roleerror", element: <Page_15 /> },
+  { path: "/auth/unauthorized", element: <Page_16 /> },
+  { path: "/auth/updatepassword", element: <Page_17 /> },
+  { path: "/barmanager", element: <Page_18 /> },
+  { path: "/bons_livraison/blcreate", element: <Page_19 /> },
+  { path: "/bons_livraison/bldetail", element: <Page_20 /> },
+  { path: "/bons_livraison/blform", element: <Page_21 /> },
+  { path: "/bons_livraison/bonslivraison", element: <Page_22 /> },
+  { path: "/carte/carte", element: <Page_23 /> },
+  { path: "/carteplats", element: <Page_24 /> },
+  { path: "/catalogue/cataloguesyncviewer", element: <Page_25 /> },
+  { path: "/commandes/commandedetail", element: <Page_26 /> },
+  { path: "/commandes/commandeform", element: <Page_27 /> },
+  { path: "/commandes/commandes", element: <Page_28 /> },
+  { path: "/commandes/commandesenvoyees", element: <Page_29 /> },
+  { path: "/consentements", element: <Page_30 /> },
+  { path: "/consolidation/accessmultisites", element: <Page_31 /> },
+  { path: "/consolidation/consolidation", element: <Page_32 /> },
+  { path: "/costboisson/costboisson", element: <Page_33 /> },
+  { path: "/costing/costingcarte", element: <Page_34 /> },
+  { path: "/cuisine/menudujour", element: <Page_35 /> },
+  { path: "/dashboard", element: <Page_36 /> },
+  { path: "/dashboard/dashboardbuilder", element: <Page_37 /> },
+  { path: "/debug/accessexample", element: <Page_38 /> },
+  { path: "/debug/auth", element: <Page_39 /> },
+  { path: "/debug/authdebug", element: <Page_40 /> },
+  { path: "/debug/debug", element: <Page_41 /> },
+  { path: "/debug/debugauth", element: <Page_42 /> },
+  { path: "/debug/debugrights", element: <Page_43 /> },
+  { path: "/debug/debuguser", element: <Page_44 /> },
+  { path: "/documents/documentform", element: <Page_45 /> },
+  { path: "/documents/documents", element: <Page_46 /> },
+  { path: "/dossierdonnees", element: <Page_47 /> },
+  { path: "/ecarts/ecarts", element: <Page_48 /> },
+  { path: "/emails/emailsenvoyes", element: <Page_49 /> },
+  { path: "/engineering/menuengineering", element: <Page_50 /> },
+  { path: "/engineeringmenu", element: <Page_51 /> },
+  { path: "/factures/facturecreate", element: <Page_52 /> },
+  { path: "/factures/facturedetail", element: <Page_53 /> },
+  { path: "/factures/factureform", element: <Page_54 /> },
+  { path: "/factures/factures", element: <Page_55 /> },
+  { path: "/factures/importfactures", element: <Page_56 /> },
+  { path: "/feedback", element: <Page_57 /> },
+  { path: "/fiches/fichedetail", element: <Page_58 /> },
+  { path: "/fiches/ficheform", element: <Page_59 /> },
+  { path: "/fiches/fiches", element: <Page_60 /> },
+  { path: "/fournisseurs/apifournisseurform", element: <Page_61 /> },
+  { path: "/fournisseurs/apifournisseurs", element: <Page_62 /> },
+  { path: "/fournisseurs/comparatif/comparatifprix", element: <Page_63 /> },
+  { path: "/fournisseurs/comparatif/prixfournisseurs", element: <Page_64 /> },
+  { path: "/fournisseurs/fournisseurapisettingsform", element: <Page_65 /> },
+  { path: "/fournisseurs/fournisseurcreate", element: <Page_66 /> },
+  { path: "/fournisseurs/fournisseurdetail", element: <Page_67 /> },
+  { path: "/fournisseurs/fournisseurdetailpage", element: <Page_68 /> },
+  { path: "/fournisseurs/fournisseurform", element: <Page_69 /> },
+  { path: "/fournisseurs/fournisseurs", element: <Page_70 /> },
+  { path: "/inventaire/ecartinventaire", element: <Page_71 /> },
+  { path: "/inventaire/inventaire", element: <Page_72 /> },
+  { path: "/inventaire/inventairedetail", element: <Page_73 /> },
+  { path: "/inventaire/inventaireform", element: <Page_74 /> },
+  { path: "/inventaire/inventairezones", element: <Page_75 /> },
+  { path: "/journal", element: <Page_76 /> },
+  { path: "/legal/cgu", element: <Page_77 /> },
+  { path: "/legal/cgv", element: <Page_78 /> },
+  { path: "/legal/confidentialite", element: <Page_79 /> },
+  { path: "/legal/contact", element: <Page_80 /> },
+  { path: "/legal/licence", element: <Page_81 /> },
+  { path: "/legal/mentionslegales", element: <Page_82 /> },
+  { path: "/login", element: <Page_83 /> },
+  { path: "/menu/menudujour", element: <Page_84 /> },
+  { path: "/menu/menudujourjour", element: <Page_85 /> },
+  { path: "/menus/menudetail", element: <Page_86 /> },
+  { path: "/menus/menudujour", element: <Page_87 /> },
+  { path: "/menus/menudujourdetail", element: <Page_88 /> },
+  { path: "/menus/menudujourform", element: <Page_89 /> },
+  { path: "/menus/menuform", element: <Page_90 /> },
+  { path: "/menus/menugroupedetail", element: <Page_91 /> },
+  { path: "/menus/menugroupeform", element: <Page_92 /> },
+  { path: "/menus/menugroupes", element: <Page_93 /> },
+  { path: "/menus/menupdf", element: <Page_94 /> },
+  { path: "/menus/menus", element: <Page_95 /> },
+  { path: "/mobile/mobileaccueil", element: <Page_96 /> },
+  { path: "/mobile/mobileinventaire", element: <Page_97 /> },
+  { path: "/mobile/mobilerequisition", element: <Page_98 /> },
+  { path: "/notfound", element: <Page_99 /> },
+  { path: "/notifications/notificationsettingsform", element: <Page_100 /> },
+  { path: "/notifications/notificationsinbox", element: <Page_101 /> },
+  { path: "/parametrage/accessrights", element: <Page_102 /> },
+  { path: "/parametrage/apikeys", element: <Page_103 /> },
+  { path: "/parametrage/centrecoutform", element: <Page_104 /> },
+  { path: "/parametrage/dossierdonnees", element: <Page_105 /> },
+  { path: "/parametrage/exportcomptapage", element: <Page_106 /> },
+  { path: "/parametrage/exportuserdata", element: <Page_107 /> },
+  { path: "/parametrage/familles", element: <Page_108 /> },
+  { path: "/parametrage/familles", element: <Page_109 /> },
+  { path: "/parametrage/invitationsenattente", element: <Page_110 /> },
+  { path: "/parametrage/inviteuser", element: <Page_111 /> },
+  { path: "/parametrage/mamaform", element: <Page_112 /> },
+  { path: "/parametrage/mamas", element: <Page_113 /> },
+  { path: "/parametrage/mamasettingsform", element: <Page_114 /> },
+  { path: "/parametrage/parametrage", element: <Page_115 /> },
+  { path: "/parametrage/parametrescommandes", element: <Page_116 /> },
+  { path: "/parametrage/periodes", element: <Page_117 /> },
+  { path: "/parametrage/permissions", element: <Page_118 /> },
+  { path: "/parametrage/permissionsadmin", element: <Page_119 /> },
+  { path: "/parametrage/permissionsform", element: <Page_120 /> },
+  { path: "/parametrage/rgpdconsentform", element: <Page_121 /> },
+  { path: "/parametrage/roleform", element: <Page_122 /> },
+  { path: "/parametrage/roles", element: <Page_123 /> },
+  { path: "/parametrage/sousfamilles", element: <Page_124 /> },
+  { path: "/parametrage/sousfamilles", element: <Page_125 /> },
+  { path: "/parametrage/systemtools", element: <Page_126 /> },
+  { path: "/parametrage/templatecommandeform", element: <Page_127 /> },
+  { path: "/parametrage/templatescommandes", element: <Page_128 /> },
+  { path: "/parametrage/unites", element: <Page_129 /> },
+  { path: "/parametrage/unites", element: <Page_130 /> },
+  { path: "/parametrage/utilisateurs", element: <Page_131 /> },
+  { path: "/parametrage/zoneaccess", element: <Page_132 /> },
+  { path: "/parametrage/zoneform", element: <Page_133 /> },
+  { path: "/parametrage/zones", element: <Page_134 /> },
+  { path: "/parametres/familles", element: <Page_135 /> },
+  { path: "/pertes", element: <Page_136 /> },
+  { path: "/planning", element: <Page_137 /> },
+  { path: "/planning/simulationplanner", element: <Page_138 /> },
+  { path: "/planningdetail", element: <Page_139 /> },
+  { path: "/planningform", element: <Page_140 /> },
+  { path: "/planningmodule", element: <Page_141 /> },
+  { path: "/produits/produitdetail", element: <Page_142 /> },
+  { path: "/produits/produitform", element: <Page_143 /> },
+  { path: "/produits/produits", element: <Page_144 /> },
+  { path: "/promotions/promotionform", element: <Page_145 /> },
+  { path: "/promotions/promotions", element: <Page_146 /> },
+  { path: "/public/landingpage", element: <Page_147 /> },
+  { path: "/public/signup", element: <Page_148 /> },
+  { path: "/receptions/receptions", element: <Page_149 /> },
+  { path: "/recettes/recettes", element: <Page_150 /> },
+  { path: "/reporting/graphcost", element: <Page_151 /> },
+  { path: "/reporting/reporting", element: <Page_152 /> },
+  { path: "/reporting/reportingpdf", element: <Page_153 /> },
+  { path: "/requisitions/requisitiondetail", element: <Page_154 /> },
+  { path: "/requisitions/requisitionform", element: <Page_155 /> },
+  { path: "/requisitions/requisitions", element: <Page_156 /> },
+  { path: "/rgpd", element: <Page_157 /> },
+  { path: "/signalements/signalementdetail", element: <Page_158 /> },
+  { path: "/signalements/signalementform", element: <Page_159 /> },
+  { path: "/signalements/signalements", element: <Page_160 /> },
+  { path: "/simulation/simulation", element: <Page_161 /> },
+  { path: "/simulation/simulationform", element: <Page_162 /> },
+  { path: "/simulation/simulationmenu", element: <Page_163 /> },
+  { path: "/simulation/simulationresult", element: <Page_164 /> },
+  { path: "/stats/stats", element: <Page_165 /> },
+  { path: "/stats/statsadvanced", element: <Page_166 /> },
+  { path: "/stats/statsconsolidation", element: <Page_167 /> },
+  { path: "/stats/statscostcenters", element: <Page_168 /> },
+  { path: "/stats/statscostcenterspivot", element: <Page_169 /> },
+  { path: "/stats/statsfiches", element: <Page_170 /> },
+  { path: "/stats/statsstock", element: <Page_171 /> },
+  { path: "/stock", element: <Page_172 /> },
+  { path: "/stock/alertesrupture", element: <Page_173 /> },
+  { path: "/stock/inventaire", element: <Page_174 /> },
+  { path: "/stock/inventaireform", element: <Page_175 /> },
+  { path: "/stock/requisitions", element: <Page_176 /> },
+  { path: "/stock/transfertform", element: <Page_177 /> },
+  { path: "/stock/transferts", element: <Page_178 /> },
+  { path: "/supervision/comparateurfiches", element: <Page_179 /> },
+  { path: "/supervision/groupeparamform", element: <Page_180 /> },
+  { path: "/supervision/logs", element: <Page_181 /> },
+  { path: "/supervision/rapports", element: <Page_182 /> },
+  { path: "/supervision/supervisiongroupe", element: <Page_183 /> },
+  { path: "/surcouts/surcouts", element: <Page_184 /> },
+  { path: "/taches/alertes", element: <Page_185 /> },
+  { path: "/taches/tachedetail", element: <Page_186 /> },
+  { path: "/taches/tacheform", element: <Page_187 /> },
+  { path: "/taches/tachenew", element: <Page_188 /> },
+  { path: "/taches/taches", element: <Page_189 /> },
+  { path: "/utilisateurs", element: <Page_190 /> },
+  { path: "/validations", element: <Page_191 /> }
 ];
