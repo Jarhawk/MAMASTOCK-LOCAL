@@ -25,7 +25,8 @@
     "fix:cap": "node scripts/normalize-capabilities.js",
     "sync:cap:window": "node scripts/sync-sql-cap-window.js",
     "nav:gen": "node scripts/generate-navigation.cjs",
-    "pwa:reset": "node scripts/pwa-reset.js"
+    "pwa:reset": "node scripts/pwa-reset.js",
+    "webview:reset": "powershell -ExecutionPolicy Bypass -File scripts/reset-webview-cache.ps1"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
