@@ -44,11 +44,6 @@
       "why": "non trouvé dans le routeur"
     },
     {
-      "label": "AideContextuelle",
-      "file": "src/pages/AideContextuelle.jsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
       "label": "Alertes",
       "file": "src/pages/Alertes.jsx",
       "why": "non trouvé dans le routeur"
@@ -79,11 +74,6 @@
       "why": "non trouvé dans le routeur"
     },
     {
-      "label": "HelpCenter",
-      "file": "src/pages/HelpCenter.jsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
       "label": "Journal",
       "file": "src/pages/Journal.jsx",
       "why": "non trouvé dans le routeur"
@@ -96,11 +86,6 @@
     {
       "label": "NotFound",
       "file": "src/pages/NotFound.jsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
-      "label": "Onboarding",
-      "file": "src/pages/Onboarding.tsx",
       "why": "non trouvé dans le routeur"
     },
     {
@@ -166,16 +151,6 @@
     {
       "label": "Achats",
       "file": "src/pages/achats/Achats.jsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
-      "label": "Aide",
-      "file": "src/pages/aide/Aide.jsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
-      "label": "AideForm",
-      "file": "src/pages/aide/AideForm.jsx",
       "why": "non trouvé dans le routeur"
     },
     {
@@ -609,11 +584,6 @@
       "why": "non trouvé dans le routeur"
     },
     {
-      "label": "OnboardingUtilisateur",
-      "file": "src/pages/onboarding/OnboardingUtilisateur.jsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
       "label": "APIKeys",
       "file": "src/pages/parametrage/APIKeys.jsx",
       "why": "non trouvé dans le routeur"
@@ -796,11 +766,6 @@
     {
       "label": "LandingPage",
       "file": "src/pages/public/LandingPage.jsx",
-      "why": "non trouvé dans le routeur"
-    },
-    {
-      "label": "Onboarding",
-      "file": "src/pages/public/Onboarding.jsx",
       "why": "non trouvé dans le routeur"
     },
     {
