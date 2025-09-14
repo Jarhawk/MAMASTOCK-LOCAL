@@ -44,6 +44,7 @@ export default function DossierDonnees() {
       setDbExists(await exists(dbPath));
     }
   };
+  if (!isTauri) return <p>Cette fonction nécessite Tauri (application desktop).</p>;
 
   return (
     <div className="p-6 space-y-4">

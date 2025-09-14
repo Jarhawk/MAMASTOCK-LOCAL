@@ -1,8 +1,6 @@
 // src/debug/check-capabilities-runtime.ts
 // Testeur runtime des permissions SQL (à exécuter DANS Tauri WebView)
-import Database from "@tauri-apps/plugin-sql";
-import { getName, getVersion } from "@tauri-apps/api/app";
-import { getCurrentWindow } from "@tauri-apps/api/window";
+import { isTauri } from "@/lib/db/sql";
 
 type Step = { ok: boolean; error?: string };
 type Report = {
@@ -52,8 +50,8 @@ function permissionHintFrom(err: string): string[] {
 export async function runCapCheck(): Promise<Report> {
   const report: Report = {
     env: {
-      tauri: !!(import.meta as any).env.TAURI_PLATFORM,
-      platform: (import.meta as any).env.TAURI_PLATFORM ?? null,
+      tauri: isTauri,
+      platform: isTauri ? (import.meta as any).env.TAURI_PLATFORM ?? null : null,
       appName: null,
       appVersion: null,
       windowLabel: null,
@@ -77,11 +75,13 @@ export async function runCapCheck(): Promise<Report> {
   }
 
   try {
+    const { getName, getVersion } = await import("@tauri-apps/api/app");
     report.env.appName = await getName();
     report.env.appVersion = await getVersion();
   } catch {}
 
   try {
+    const { getCurrentWindow } = await import("@tauri-apps/api/window");
     const win = getCurrentWindow();
     report.env.windowLabel = win.label;
   } catch {}
@@ -90,6 +90,7 @@ export async function runCapCheck(): Promise<Report> {
 
   // 1) load
   try {
+    const Database = (await import("@tauri-apps/plugin-sql")).default;
     db = await Database.load("sqlite:mamastock.db");
     report.tests.load.ok = true;
   } catch (e) {

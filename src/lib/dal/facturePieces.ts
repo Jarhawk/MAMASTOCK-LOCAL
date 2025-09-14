@@ -1,9 +1,3 @@
-import { appDataDir, join } from "@tauri-apps/api/path";
-import { open as dialogOpen } from "@tauri-apps/plugin-dialog";
-import {
-  exists, mkdir, copyFile, remove, readFile, writeFile, stat
-} from "@tauri-apps/plugin-fs";
-import { shell } from "@tauri-apps/plugin-shell";
 import { getDb, isTauri } from "@/lib/db/sql";
 
 export type FacturePiece = {
@@ -33,6 +27,9 @@ function guessMime(e?: string | null) {
 }
 
 async function piecesDirForFacture(factureId: string) {
+  if (!isTauri) throw new Error("Tauri requis");
+  const { appDataDir, join } = await import("@tauri-apps/api/path");
+  const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
   const base = await appDataDir();
   const dir = await join(base, "MamaStock", "pieces", "factures", factureId);
   if (!(await exists(dir))) await mkdir(dir, { recursive: true });
@@ -40,6 +37,7 @@ async function piecesDirForFacture(factureId: string) {
 }
 
 async function safeCopy(src: string, dst: string) {
+  const { copyFile, readFile, writeFile } = await import("@tauri-apps/plugin-fs");
   try {
     await copyFile(src, dst); // rapide si autorisé
   } catch {
@@ -61,6 +59,7 @@ export async function listPieces(factureId: string): Promise<FacturePiece[]> {
 
 export async function attachFromPicker(factureId: string): Promise<FacturePiece[]> {
   if (!isTauri) throw new Error("Tauri requis");
+  const { open: dialogOpen } = await import("@tauri-apps/plugin-dialog");
   const sel = await dialogOpen({
     multiple: true,
     filters: [
@@ -86,6 +85,7 @@ export async function attachFiles(factureId: string, paths: string[]): Promise<F
     const mime = guessMime(ex);
     const id = crypto.randomUUID();
     const targetName = `${id}-${base}`;
+    const { join } = await import("@tauri-apps/api/path");
     const dst = await join(dir, targetName);
 
     // copie physique dans AppData
@@ -93,6 +93,7 @@ export async function attachFiles(factureId: string, paths: string[]): Promise<F
 
     // taille
     let size: number | null = null;
+    const { stat } = await import("@tauri-apps/plugin-fs");
     try { size = (await stat(dst))?.size ?? null; } catch {}
 
     // enregistrement SQL
@@ -120,12 +121,18 @@ export async function removePiece(id: string): Promise<void> {
   const path = rows[0]?.stored_path;
   await db.execute("DELETE FROM facture_pieces WHERE id = ?", [id]);
 
-  if (path) { try { await remove(path); } catch {} }
+  if (path) {
+    try {
+      const { remove } = await import("@tauri-apps/plugin-fs");
+      await remove(path);
+    } catch {}
+  }
 }
 
 export async function openPiece(path: string) {
   if (!isTauri) throw new Error("Tauri requis");
   try {
+    const { shell } = await import("@tauri-apps/plugin-shell");
     await shell.open(path);
   } catch (e) {
     console.error("Ouverture impossible:", e);
