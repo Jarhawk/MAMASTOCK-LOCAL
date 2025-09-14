@@ -12,10 +12,15 @@
         "height": 800,
         "resizable": true,
         "fullscreen": false,
-        "visible": true,
-        "url": "tauri://localhost"
+        "visible": true
       }
     ],
-    "security": { "csp": null }
+    "security": {
+      "csp": null
+    }
+  },
+  "build": {
+    "devUrl": "http://localhost:5173/",
+    "frontendDist": "../dist"
   }
 }
