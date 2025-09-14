@@ -1,12 +1,12 @@
-import Database from "@tauri-apps/plugin-sql";
+import { isTauri } from "@/lib/db/sql";
 
 export async function runSqlSelfTest() {
-  const inTauri = !!import.meta.env.TAURI_PLATFORM;
-  if (!inTauri) {
+  if (!isTauri) {
     console.info("[SQL SelfTest] hors Tauri -> ok (skip)");
     return;
   }
   try {
+    const Database = (await import("@tauri-apps/plugin-sql")).default;
     const db = await Database.load("sqlite:mamastock.db"); // nécessite sql:allow-load
     const rows = await db.select("SELECT 1 AS ok");
     console.info("[SQL SelfTest] OK, permissions actives:", rows);

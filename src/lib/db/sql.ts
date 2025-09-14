@@ -1,9 +1,7 @@
 // src/lib/db/sql.ts
 /// <reference types="vite/client" />
 
-import { Database } from "@tauri-apps/plugin-sql";
-import { appDataDir, join } from "@tauri-apps/api/path";
-import { exists, mkdir } from "@tauri-apps/plugin-fs";
+import type { Database } from "@tauri-apps/plugin-sql";
 
 export const isTauri = !!import.meta.env.TAURI_PLATFORM;
 export { isTauri as IS_TAURI };
@@ -32,6 +30,9 @@ let _db: Database | null = null;
 let _loading: Promise<Database> | null = null;
 
 export async function locateDb(): Promise<string> {
+  if (!isTauri) throw new Error("Tauri required");
+  const { appDataDir, join } = await import("@tauri-apps/api/path");
+  const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
   const base = await appDataDir();
   const dir = await join(base, "MamaStock");
   if (!(await exists(dir))) {
@@ -45,6 +46,7 @@ export async function openDb(): Promise<Database> {
   if (_db) return _db;
   if (_loading) return _loading;
   const path = await locateDb();
+  const { Database } = await import("@tauri-apps/plugin-sql");
   _loading = Database.load(`sqlite:${path}`)
     .then((db) => {
       _db = db;

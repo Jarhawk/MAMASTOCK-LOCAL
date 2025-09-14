@@ -1,7 +1,7 @@
 import { getDb } from "./client";
 import { migrations } from "./migrationsList";
 import { inAppDir } from "@/lib/paths";
-import { exists, readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
+import { isTauri } from "@/lib/db/sql";
 
 /** Splitter SQL qui respecte CREATE TRIGGER ... BEGIN ... END; */
 function splitSql(script: string): string[] {
@@ -42,6 +42,8 @@ type MigState = { applied: string[] };
 
 async function readState(): Promise<MigState> {
   const path = await inAppDir("migrations.json");
+  if (!isTauri) return { applied: [] };
+  const { exists, readTextFile } = await import("@tauri-apps/plugin-fs");
   if (!(await exists(path))) return { applied: [] };
   try {
     const txt = await readTextFile(path);
@@ -54,10 +56,19 @@ async function readState(): Promise<MigState> {
 
 async function writeState(state: MigState) {
   const path = await inAppDir("migrations.json");
+  if (!isTauri) {
+    console.warn("Cette action nécessite Tauri");
+    return;
+  }
+  const { writeTextFile } = await import("@tauri-apps/plugin-fs");
   await writeTextFile(path, JSON.stringify(state, null, 2));
 }
 
 export async function applyMigrations(): Promise<void> {
+  if (!isTauri) {
+    console.warn("Cette action nécessite Tauri");
+    return;
+  }
   const db = await getDb();
   const state = await readState();
 

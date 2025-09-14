@@ -1,11 +1,10 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { useTemplatesCommandes } from "@/hooks/useTemplatesCommandes";
 import { Button } from "@/components/ui/button";
 import { saveBinary } from "@/local/files";
-import { appDataDir, join } from "@tauri-apps/api/path";
-import { convertFileSrc } from "@tauri-apps/api/core";
+import { isTauri } from "@/lib/db/sql";
 
 export default function TemplateCommandeForm({ template = {}, onClose, fournisseurs = [] }) {
   const { createTemplate, updateTemplate } = useTemplatesCommandes();
@@ -23,6 +22,18 @@ export default function TemplateCommandeForm({ template = {}, onClose, fournisse
     template.champs_visibles || { ref_commande: true, date_livraison: true }
   );
   const [actif, setActif] = useState(template.actif ?? true);
+  const [convertFileSrcFn, setConvertFileSrcFn] = useState((p) => p);
+
+  useEffect(() => {
+    if (isTauri) {
+      import("@tauri-apps/api/core").then((m) =>
+        setConvertFileSrcFn(() => m.convertFileSrc)
+      );
+    }
+  }, []);
+
+  if (!isTauri)
+    return <p>Cette fonction nécessite Tauri (application desktop).</p>;
 
   const handleLogoUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -30,6 +41,7 @@ export default function TemplateCommandeForm({ template = {}, onClose, fournisse
     const array = new Uint8Array(await file.arrayBuffer());
     const rel = `templates/${Date.now()}-${file.name}`;
     await saveBinary(rel, array);
+    const { appDataDir, join } = await import("@tauri-apps/api/path");
     const base = await appDataDir();
     const full = await join(base, "MamaStock", rel);
     setLogoUrl(full);
@@ -90,7 +102,7 @@ export default function TemplateCommandeForm({ template = {}, onClose, fournisse
         <div>
           <label className="block text-sm font-medium">Logo</label>
           <input type="file" onChange={handleLogoUpload} className="mb-1" />
-          {logoUrl && <img src={convertFileSrc(logoUrl)} alt="logo" className="h-16" />}
+          {logoUrl && <img src={convertFileSrcFn(logoUrl)} alt="logo" className="h-16" />}
         </div>
 
         <div>

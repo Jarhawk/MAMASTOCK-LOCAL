@@ -1,6 +1,5 @@
 import { configPath } from "@/lib/paths";
-import { isTauri, getDb } from "@/lib/db/sql";
-import { exists, readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
+import { isTauri } from "@/lib/db/sql";
 
 export type Config = Record<string, any>;
 const LS_KEY = "config.json";
@@ -11,6 +10,7 @@ export async function readConfig(): Promise<Config | null> {
     return v ? JSON.parse(v) : null;
   }
   const path = await configPath();
+  const { exists, readTextFile } = await import("@tauri-apps/plugin-fs");
   if (!(await exists(path))) return null;
   try {
     const txt = await readTextFile(path);
@@ -26,5 +26,6 @@ export async function writeConfig(cfg: Config): Promise<void> {
     return;
   }
   const path = await configPath();
+  const { writeTextFile } = await import("@tauri-apps/plugin-fs");
   await writeTextFile(path, JSON.stringify(cfg, null, 2));
 }

@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { appDataDir, join } from '@tauri-apps/api/path';
-import { open } from '@tauri-apps/plugin-shell';
+import { isTauri } from '@/lib/db/sql';
 
 export default function DossierDonnees() {
   const [path, setPath] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isTauri) return;
     (async () => {
       try {
+        const { appDataDir, join } = await import('@tauri-apps/api/path');
         const base = await appDataDir();
         const p = await join(base, 'MamaStock', 'data');
         setPath(p);
@@ -19,13 +20,19 @@ export default function DossierDonnees() {
   }, []);
 
   async function handleOpen() {
+    if (!isTauri) {
+      alert('Cette action nécessite Tauri');
+      return;
+    }
     try {
+      const { open } = await import('@tauri-apps/plugin-shell');
       await open(path);
     } catch {
       alert('Ouverture impossible');
     }
   }
 
+  if (!isTauri) return <p>Cette fonction nécessite Tauri (application desktop).</p>;
   if (error) return <div>{error}</div>;
 
   return (
