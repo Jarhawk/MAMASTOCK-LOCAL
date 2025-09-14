@@ -1,21 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "node:path";
-import { VitePWA as pwa } from "vite-plugin-pwa";
 
 const isTauri =
   !!process.env.TAURI_PLATFORM || process.env.VITE_TAURI === "1";
 
 export default defineConfig(({ mode }) => {
   const plugins = [react()];
-
-  if (mode === "production" && !isTauri) {
-    plugins.push(
-      pwa({
-        registerType: "autoUpdate",
-      })
-    );
-  }
 
   return {
     base: isTauri ? "./" : "/",

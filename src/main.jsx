@@ -1,5 +1,3 @@
-import "@/debug/kill-sw";
-
 import { setupPwaGuard } from "@/pwa/guard";
 import React, { useEffect } from "react";
 import { createRoot } from "react-dom/client";
@@ -103,17 +101,6 @@ function AppRoot() {
       <CookieConsent />
     </>
   );
-}
-
-// Dev: supprimer TOUT service worker (localhost & tauri.localhost le cas échéant)
-if (!import.meta.env.PROD && 'serviceWorker' in navigator) {
-  navigator.serviceWorker
-    .getRegistrations()
-    .then((regs) => {
-      regs.forEach((r) => r.unregister());
-      console.info('[SW] unregistered in dev');
-    })
-    .catch(() => {});
 }
 
 createRoot(document.getElementById("root")).render(
