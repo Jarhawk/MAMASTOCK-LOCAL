@@ -21,7 +21,7 @@
     "check:tauri-plugins": "node scripts/check-tauri-plugins.js",
     "check:cap": "node scripts/check-capabilities.js",
     "scan:src": "node scripts/scan-src.js",
-    "check:cap:runtime": "set TAURI_DEV_URL=http://localhost:5173/?capcheck=1 && npx tauri dev",
+    "check:cap:runtime": "node --loader ts-node/esm --no-warnings scripts/check-capabilities-runtime.ts",
     "fix:cap": "node scripts/normalize-capabilities.js",
     "sync:cap:window": "node scripts/sync-sql-cap-window.js",
     "nav:gen": "node scripts/generate-navigation.cjs",
