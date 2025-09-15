@@ -1,5 +1,8 @@
 import type { Database } from "@tauri-apps/plugin-sql";
 
+const NOT_TAURI_HINT =
+  "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
+
 export const isTauri =
   typeof window !== "undefined" &&
   (location.protocol === "tauri:" || !!import.meta.env.TAURI_PLATFORM);
@@ -10,7 +13,8 @@ const DB_URI = "sqlite:" + DB_PATH;
 
 export async function getDb(): Promise<Database> {
   if (!isTauri) {
-    throw new Error("Tauri required: open the native window");
+    console.warn(NOT_TAURI_HINT);
+    return Promise.reject(new Error("SQLite indisponible hors Tauri"));
   }
   if (_db) return _db;
   const { Database } = await import("@tauri-apps/plugin-sql");

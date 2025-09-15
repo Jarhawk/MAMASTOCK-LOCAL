@@ -1,9 +1,15 @@
 import { isTauri } from "@/lib/db/sql";
 
+const NOT_TAURI_HINT =
+  "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
+
 const APP_DIR = "MamaStock";
 
 async function baseDir() {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return "";
+  }
   const { appDataDir, join } = await import("@tauri-apps/api/path");
   const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
   const base = await appDataDir();
@@ -13,13 +19,20 @@ async function baseDir() {
 }
 
 async function resolve(path: string) {
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return path;
+  }
   const root = await baseDir();
   const { join } = await import("@tauri-apps/api/path");
   return await join(root, path);
 }
 
 export async function saveText(relPath: string, content: string) {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return;
+  }
   const file = await resolve(relPath);
   const { dirname } = await import("@tauri-apps/api/path");
   const { exists, mkdir, writeTextFile } = await import("@tauri-apps/plugin-fs");
@@ -29,28 +42,40 @@ export async function saveText(relPath: string, content: string) {
 }
 
 export async function readText(relPath: string) {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return "";
+  }
   const file = await resolve(relPath);
   const { readTextFile } = await import("@tauri-apps/plugin-fs");
   return await readTextFile(file);
 }
 
 export async function existsFile(relPath: string) {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return false;
+  }
   const file = await resolve(relPath);
   const { exists } = await import("@tauri-apps/plugin-fs");
   return await exists(file);
 }
 
 export async function mkdirp(relDir: string) {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return;
+  }
   const dir = await resolve(relDir);
   const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
   if (!(await exists(dir))) await mkdir(dir, { recursive: true });
 }
 
 export async function saveBinary(relPath: string, data: Uint8Array) {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return;
+  }
   const file = await resolve(relPath);
   const { dirname } = await import("@tauri-apps/api/path");
   const { exists, mkdir, writeFile } = await import("@tauri-apps/plugin-fs");
@@ -60,14 +85,20 @@ export async function saveBinary(relPath: string, data: Uint8Array) {
 }
 
 export async function readBinary(relPath: string) {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return new Uint8Array();
+  }
   const file = await resolve(relPath);
   const { readFile } = await import("@tauri-apps/plugin-fs");
   return await readFile(file);
 }
 
 export async function deleteFile(relPath: string) {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return;
+  }
   const file = await resolve(relPath);
   const { exists, remove } = await import("@tauri-apps/plugin-fs");
   if (await exists(file)) await remove(file);

@@ -1,14 +1,23 @@
 // src/lib/paths.ts
 import { isTauri } from "@/lib/db/sql";
+
+const NOT_TAURI_HINT =
+  "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
 export const APP_DIR = "MamaStock";
 export async function getAppDir() {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return "";
+  }
   const { appDataDir, join } = await import("@tauri-apps/api/path");
   const base = await appDataDir();
   return join(base, APP_DIR);
 }
 export async function inAppDir(...parts: string[]) {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return "";
+  }
   const root = await getAppDir();
   const { join } = await import("@tauri-apps/api/path");
   let p = root;
