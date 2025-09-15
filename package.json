@@ -27,7 +27,8 @@
     "sync:cap:window": "node scripts/sync-sql-cap-window.js",
     "nav:gen": "node scripts/generate-navigation.cjs",
     "pwa:reset": "node scripts/pwa-reset.js",
-    "webview:reset": "powershell -ExecutionPolicy Bypass -File scripts/reset-webview-cache.ps1"
+    "webview:reset": "powershell -ExecutionPolicy Bypass -File scripts/reset-webview-cache.ps1",
+    "codemod:isTauri": "node scripts/codemod-unify-isTauri.cjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
