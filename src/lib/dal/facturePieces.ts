@@ -1,5 +1,8 @@
 import { getDb, isTauri } from "@/lib/db/sql";
 
+const NOT_TAURI_HINT =
+  "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
+
 export type FacturePiece = {
   id: string;
   facture_id: string;
@@ -27,7 +30,10 @@ function guessMime(e?: string | null) {
 }
 
 async function piecesDirForFacture(factureId: string) {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return "";
+  }
   const { appDataDir, join } = await import("@tauri-apps/api/path");
   const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
   const base = await appDataDir();
@@ -48,7 +54,10 @@ async function safeCopy(src: string, dst: string) {
 }
 
 export async function listPieces(factureId: string): Promise<FacturePiece[]> {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return [];
+  }
   const db = await getDb();
   const rows = await db.select<FacturePiece[]>(
     "SELECT * FROM facture_pieces WHERE facture_id = ? ORDER BY created_at DESC",
@@ -58,7 +67,10 @@ export async function listPieces(factureId: string): Promise<FacturePiece[]> {
 }
 
 export async function attachFromPicker(factureId: string): Promise<FacturePiece[]> {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return [];
+  }
   const { open: dialogOpen } = await import("@tauri-apps/plugin-dialog");
   const sel = await dialogOpen({
     multiple: true,
@@ -73,8 +85,14 @@ export async function attachFromPicker(factureId: string): Promise<FacturePiece[
   return await attachFiles(factureId, paths);
 }
 
-export async function attachFiles(factureId: string, paths: string[]): Promise<FacturePiece[]> {
-  if (!isTauri) throw new Error("Tauri requis");
+export async function attachFiles(
+  factureId: string,
+  paths: string[]
+): Promise<FacturePiece[]> {
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return [];
+  }
   const dir = await piecesDirForFacture(factureId);
   const db = await getDb();
 
@@ -112,7 +130,10 @@ export async function attachFiles(factureId: string, paths: string[]): Promise<F
 }
 
 export async function removePiece(id: string): Promise<void> {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return;
+  }
   const db = await getDb();
 
   const rows = await db.select<FacturePiece[]>(
@@ -130,7 +151,10 @@ export async function removePiece(id: string): Promise<void> {
 }
 
 export async function openPiece(path: string) {
-  if (!isTauri) throw new Error("Tauri requis");
+  if (!isTauri) {
+    console.warn(NOT_TAURI_HINT);
+    return;
+  }
   try {
     const { shell } = await import("@tauri-apps/plugin-shell");
     await shell.open(path);
