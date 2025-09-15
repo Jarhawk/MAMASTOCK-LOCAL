@@ -1,16 +1,15 @@
-#!/usr/bin/env node
-try {
-  require.resolve("tsx");
-} catch {
-  console.error(
-    "Missing dependency 'tsx'. Install it with: npm i -D tsx @babel/parser @babel/traverse @babel/generator glob",
-  );
-  process.exit(1);
+"use strict";
+const path = require("node:path");
+const { spawnSync } = require("node:child_process");
+const tsFile = path.join(__dirname, "codemod-unify-isTauri.ts");
+
+// Prefer `tsx` runner to avoid ESM loader headaches on Windows
+const cmd = process.platform === "win32" ? "npx.cmd" : "npx";
+const args = ["-y", "tsx", tsFile];
+const res = spawnSync(cmd, args, { stdio: "inherit" });
+
+if (res.status !== 0) {
+  console.error("\nFailed to run codemod with `tsx`.");
+  console.error("Try installing dev deps: npm i -D tsx @babel/parser @babel/traverse @babel/generator glob");
+  process.exit(res.status || 1);
 }
-const { spawnSync } = require("child_process");
-const result = spawnSync(
-  process.execPath,
-  ["--import", "tsx", "scripts/codemod-unify-isTauri.ts"],
-  { stdio: "inherit" }
-);
-process.exit(result.status ?? 1);

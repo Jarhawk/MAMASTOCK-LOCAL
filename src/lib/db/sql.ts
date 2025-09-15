@@ -3,9 +3,7 @@ import type { Database } from "@tauri-apps/plugin-sql";
 const NOT_TAURI_HINT =
   "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
 
-export const isTauri =
-  typeof window !== "undefined" &&
-  (location.protocol === "tauri:" || !!import.meta.env.TAURI_PLATFORM);
+export const isTauri = (typeof window !== "undefined" && !!(window as any).__TAURI__) || !!import.meta.env.TAURI_PLATFORM;
 
 let _db: Database | null = null;
 const DB_PATH = "C:/Users/dark_/MamaStock/data/mamastock.db";
