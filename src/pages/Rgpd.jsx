@@ -4,7 +4,7 @@ import { motion as Motion } from "framer-motion";
 import GlassCard from "@/components/ui/GlassCard";
 import ExportUserData from "@/pages/parametrage/ExportUserData";
 import DeleteAccountButton from "@/components/DeleteAccountButton";
-import LegalLayout from "@/layout/LegalLayout";
+import LegalLayout from "@/layout/LegalLayout";import { isTauri } from "@/lib/db/sql";
 
 export default function Rgpd() {
   return (
@@ -13,27 +13,27 @@ export default function Rgpd() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-3xl"
-      >
+        className="w-full max-w-3xl">
+        
         <GlassCard className="space-y-6 text-white">
           <h1 className="text-3xl font-bold text-center">Données &amp; Confidentialité</h1>
             <Motion.section
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}>
+            
               <p className="leading-relaxed">
                 MamaStock attache une grande importance à la protection de vos données personnelles.
               </p>
             </Motion.section>
             <Motion.section
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="space-y-2"
-            >
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="space-y-2">
+            
               <h2 className="text-xl font-semibold">Traitement des données</h2>
               <p>
                 Les données collectées (emails, identifiants, informations de gestion F&amp;B) servent uniquement à
@@ -41,12 +41,12 @@ export default function Rgpd() {
               </p>
             </Motion.section>
             <Motion.section
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="space-y-2"
-            >
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="space-y-2">
+            
               <h2 className="text-xl font-semibold">Confidentialité</h2>
               <p>
                 Les données ne sont ni vendues, ni partagées à des tiers extérieurs à l’application. Seules les personnes
@@ -54,12 +54,12 @@ export default function Rgpd() {
               </p>
             </Motion.section>
             <Motion.section
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="space-y-2"
-            >
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="space-y-2">
+            
               <h2 className="text-xl font-semibold">Droits des utilisateurs</h2>
               <p>
                 À tout moment, vous pouvez demander la consultation, la modification ou la suppression de vos données en
@@ -77,15 +77,15 @@ export default function Rgpd() {
             <div className="text-center pt-2">
               <Motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
-                  to="/"
-                  className="inline-block px-6 py-2 rounded-xl bg-white/10 border border-white/20 hover:bg-white/20 transition backdrop-blur-xl"
-                >
+                to="/"
+                className="inline-block px-6 py-2 rounded-xl bg-white/10 border border-white/20 hover:bg-white/20 transition backdrop-blur-xl">
+                
                   Retour à l’accueil
                 </Link>
               </Motion.div>
             </div>
           </GlassCard>
         </Motion.div>
-    </LegalLayout>
-  );
+    </LegalLayout>);
+
 }

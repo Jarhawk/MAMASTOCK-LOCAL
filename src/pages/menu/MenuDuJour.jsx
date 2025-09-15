@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useMenuDuJour } from "@/hooks/useMenuDuJour";
+import { useMenuDuJour } from "@/hooks/useMenuDuJour";import { isTauri } from "@/lib/db/sql";
 
 function getMonday(date) {
   const d = new Date(date);
@@ -42,13 +42,13 @@ export default function MenuDuJour() {
         <button onClick={() => changeWeek(1)}>&gt;</button>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-        {days.map(({ date, info }) => (
-          <Link key={date} to={`/menu/${date}`} className="border p-2 rounded hover:bg-gray-50">
+        {days.map(({ date, info }) =>
+        <Link key={date} to={`/menu/${date}`} className="border p-2 rounded hover:bg-gray-50">
             <div className="font-semibold">{date}</div>
             <div className="text-sm mt-1">Coût: {info.cout_total ? info.cout_total.toFixed(2) : "-"} €</div>
           </Link>
-        ))}
+        )}
       </div>
-    </div>
-  );
+    </div>);
+
 }

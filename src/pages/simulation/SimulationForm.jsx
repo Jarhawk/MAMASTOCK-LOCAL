@@ -1,5 +1,5 @@
-﻿/* @ts-nocheck */
-import React, { useState } from 'react';
+/* @ts-nocheck */
+import React, { useState } from 'react';import { isTauri } from "@/lib/db/sql";
 
 export default function SimulationForm() {
   // TODO: implémentation réelle (entrées, calculs)
@@ -10,6 +10,6 @@ export default function SimulationForm() {
       <p className="text-sm text-gray-600">
         Formulaire de simulation — à implémenter ({state.ready ? 'prêt' : 'en préparation'}).
       </p>
-    </div>
-  );
+    </div>);
+
 }

@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { createContext, useContext, useEffect } from "react";
 import useMamaSettings from "@/hooks/useMamaSettings";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 const ThemeContext = createContext({});
 
@@ -34,12 +34,12 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     if (typeof settings.dark_mode === "boolean") {
-      if (settings.dark_mode) document.documentElement.classList.add("dark");
-      else document.documentElement.classList.remove("dark");
+      if (settings.dark_mode) document.documentElement.classList.add("dark");else
+      document.documentElement.classList.remove("dark");
     } else {
       const prefers = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      if (prefers) document.documentElement.classList.add("dark");
-      else document.documentElement.classList.remove("dark");
+      if (prefers) document.documentElement.classList.add("dark");else
+      document.documentElement.classList.remove("dark");
     }
   }, [settings.dark_mode]);
 
@@ -47,12 +47,12 @@ export function ThemeProvider({ children }) {
     logo: settings.logo_url,
     primaryColor: settings.primary_color,
     secondaryColor: settings.secondary_color,
-    darkMode: settings.dark_mode,
+    darkMode: settings.dark_mode
   };
 
   return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-  );
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>);
+
 }
 
 export function useTheme() {

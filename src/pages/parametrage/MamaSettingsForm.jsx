@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
 import useMamaSettings from "@/hooks/useMamaSettings";
 import { uploadFile, deleteFile, pathFromUrl } from "@/hooks/useStorage";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export default function MamaSettingsForm() {
   const { mama_id } = useAuth();
@@ -61,68 +61,68 @@ export default function MamaSettingsForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
             <div>
         <label className="block text-sm mb-1">Logo</label>
-        {form.logo_url && (
+        {form.logo_url &&
           <img src={form.logo_url} alt="logo" className="h-16 mb-2" />
-        )}
+          }
         <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setLogoFile(e.target.files[0])}
-        />
+            type="file"
+            accept="image/*"
+            onChange={(e) => setLogoFile(e.target.files[0])} />
+          
       </div>
       <div>
         <label className="block text-sm mb-1">Couleur principale</label>
         <input
-          type="color"
-          name="primary_color"
-          value={form.primary_color || "#bfa14d"}
-          onChange={handleChange}
-        />
+            type="color"
+            name="primary_color"
+            value={form.primary_color || "#bfa14d"}
+            onChange={handleChange} />
+          
       </div>
       <div>
         <label className="block text-sm mb-1">Email expéditeur</label>
         <Input
-          className="w-full"
-          name="email_envoi"
-          value={form.email_envoi || ""}
-          onChange={handleChange}
-        />
+            className="w-full"
+            name="email_envoi"
+            value={form.email_envoi || ""}
+            onChange={handleChange} />
+          
       </div>
       <div>
         <label className="block text-sm mb-1">Email alertes</label>
         <Input
-          className="w-full"
-          name="email_alertes"
-          value={form.email_alertes || ""}
-          onChange={handleChange}
-        />
+            className="w-full"
+            name="email_alertes"
+            value={form.email_alertes || ""}
+            onChange={handleChange} />
+          
       </div>
       <div>
         <label className="block text-sm mb-1">Mode sombre</label>
         <input
-          type="checkbox"
-          name="dark_mode"
-          checked={!!form.dark_mode}
-          onChange={handleChange}
-        />
+            type="checkbox"
+            name="dark_mode"
+            checked={!!form.dark_mode}
+            onChange={handleChange} />
+          
       </div>
       <div>
         <label className="block text-sm mb-1">RGPD</label>
         <textarea
-          className="input w-full h-32"
-          name="rgpd_text"
-          value={form.rgpd_text || ""}
-          onChange={handleChange}
-        />
+            className="input w-full h-32"
+            name="rgpd_text"
+            value={form.rgpd_text || ""}
+            onChange={handleChange} />
+          
       </div>
       <div>
         <label className="block text-sm mb-1">Mentions légales</label>
         <textarea
-          className="input w-full h-32"
-          name="mentions_legales"
-          value={form.mentions_legales || ""}
-          onChange={handleChange}
-        />
+            className="input w-full h-32"
+            name="mentions_legales"
+            value={form.mentions_legales || ""}
+            onChange={handleChange} />
+          
       </div>
       <div className="flex gap-4">
         <PrimaryButton type="submit" disabled={saving}>
@@ -130,6 +130,6 @@ export default function MamaSettingsForm() {
         </PrimaryButton>
       </div>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

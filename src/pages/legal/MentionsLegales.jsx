@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect, useState } from "react";
 import LegalLayout from "@/layout/LegalLayout";
-import useMamaSettings from "@/hooks/useMamaSettings";
+import useMamaSettings from "@/hooks/useMamaSettings";import { isTauri } from "@/lib/db/sql";
 
 export default function MentionsLegales() {
   const { settings } = useMamaSettings();
@@ -22,6 +22,6 @@ export default function MentionsLegales() {
   return (
     <LegalLayout title="Mentions légales" description="Informations légales MamaStock">
       <div className="p-8 max-w-3xl mx-auto prose prose-invert whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: text }} />
-    </LegalLayout>
-  );
+    </LegalLayout>);
+
 }

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import GlassCard from "@/components/ui/GlassCard";
 import AchatRow from "@/components/achats/AchatRow.jsx";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export default function Achats() {
   const { achats, total, getAchats, deleteAchat } = useAchats();
@@ -37,11 +37,11 @@ export default function Achats() {
       fin,
       actif: actifFilter === "all" ? null : actifFilter === "true",
       page,
-      pageSize: PAGE_SIZE,
+      pageSize: PAGE_SIZE
     });
   }, [getAchats, produit, fournisseur, month, actifFilter, page]);
 
-  useEffect(() => { searchProduits(""); }, [searchProduits]);
+  useEffect(() => {searchProduits("");}, [searchProduits]);
 
   useEffect(() => {
     refreshList();
@@ -50,49 +50,49 @@ export default function Achats() {
   return (
     <div className="p-6 container mx-auto text-shadow space-y-4">
             <GlassCard className="flex flex-wrap gap-2 items-end">
-        <select className="form-input" value={fournisseur} onChange={e => { setFournisseur(e.target.value); setPage(1); }}>
+        <select className="form-input" value={fournisseur} onChange={(e) => {setFournisseur(e.target.value);setPage(1);}}>
           <option value="">Tous fournisseurs</option>
-          {fournisseurs.map(s => <option key={s.id} value={s.id}>{s.nom}</option>)}
+          {fournisseurs.map((s) => <option key={s.id} value={s.id}>{s.nom}</option>)}
         </select>
         <input
           list="produits-list"
           className="form-input"
           value={produit}
-          onChange={e => { setProduit(e.target.value); setPage(1); if (e.target.value.length >= 2) searchProduits(e.target.value); }}
-          placeholder="Produit"
-        />
-        <datalist id="produits-list">{produitOptions.map(p => <option key={p.id} value={p.nom} />)}</datalist>
+          onChange={(e) => {setProduit(e.target.value);setPage(1);if (e.target.value.length >= 2) searchProduits(e.target.value);}}
+          placeholder="Produit" />
+        
+        <datalist id="produits-list">{produitOptions.map((p) => <option key={p.id} value={p.nom} />)}</datalist>
         <input
           type="month"
           className="form-input"
           value={month}
-          onChange={e => {
+          onChange={(e) => {
             setMonth(e.target.value);
             setPage(1);
-          }}
-        />
+          }} />
+        
         <select
           className="form-input"
           value={actifFilter}
-          onChange={e => {
+          onChange={(e) => {
             setActifFilter(e.target.value);
             setPage(1);
-          }}
-        >
+          }}>
+          
           <option value="true">Actifs</option>
           <option value="false">Inactifs</option>
           <option value="all">Tous</option>
         </select>
-        {canEdit && (
-          <Button
-            onClick={() => {
-              setSelected(null);
-              setShowForm(true);
-            }}
-          >
+        {canEdit &&
+        <Button
+          onClick={() => {
+            setSelected(null);
+            setShowForm(true);
+          }}>
+          
             Ajouter
           </Button>
-        )}
+        }
       </GlassCard>
       <TableContainer>
         <table className="min-w-full text-sm text-white">
@@ -107,55 +107,55 @@ export default function Achats() {
             </tr>
           </thead>
           <tbody>
-            {achats.map((a) => (
-              <AchatRow
-                key={a.id}
-                achat={a}
-                canEdit={canEdit}
-                onEdit={(ac) => {
-                  setSelected(ac);
-                  setShowForm(true);
-                }}
-                onDetail={(ac) => {
-                  setSelected(ac);
-                  setShowDetail(true);
-                }}
-                onArchive={async (id) => {
-                  if (window.confirm("Archiver cet achat ?")) {
-                    await deleteAchat(id);
-                    refreshList();
-                  }
-                }}
-              />
-            ))}
+            {achats.map((a) =>
+            <AchatRow
+              key={a.id}
+              achat={a}
+              canEdit={canEdit}
+              onEdit={(ac) => {
+                setSelected(ac);
+                setShowForm(true);
+              }}
+              onDetail={(ac) => {
+                setSelected(ac);
+                setShowDetail(true);
+              }}
+              onArchive={async (id) => {
+                if (window.confirm("Archiver cet achat ?")) {
+                  await deleteAchat(id);
+                  refreshList();
+                }
+              }} />
+
+            )}
           </tbody>
         </table>
       </TableContainer>
       <div className="flex justify-between items-center">
-        <Button variant="outline" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Précédent</Button>
+        <Button variant="outline" disabled={page === 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>Précédent</Button>
         <span>Page {page}</span>
-        <Button variant="outline" disabled={page * PAGE_SIZE >= total} onClick={() => setPage(p => p + 1)}>Suivant</Button>
+        <Button variant="outline" disabled={page * PAGE_SIZE >= total} onClick={() => setPage((p) => p + 1)}>Suivant</Button>
       </div>
-      {showForm && (
-        <AchatForm
-          achat={selected}
-          fournisseurs={fournisseurs}
-          onClose={() => {
-            setShowForm(false);
-            setSelected(null);
-            refreshList();
-          }}
-        />
-      )}
-      {showDetail && selected && (
-        <AchatDetail
-          achat={selected}
-          onClose={() => {
-            setShowDetail(false);
-            setSelected(null);
-          }}
-        />
-      )}
-    </div>
-  );
+      {showForm &&
+      <AchatForm
+        achat={selected}
+        fournisseurs={fournisseurs}
+        onClose={() => {
+          setShowForm(false);
+          setSelected(null);
+          refreshList();
+        }} />
+
+      }
+      {showDetail && selected &&
+      <AchatDetail
+        achat={selected}
+        onClose={() => {
+          setShowDetail(false);
+          setSelected(null);
+        }} />
+
+      }
+    </div>);
+
 }

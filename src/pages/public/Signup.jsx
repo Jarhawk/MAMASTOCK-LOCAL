@@ -8,7 +8,7 @@ import PageWrapper from "@/components/ui/PageWrapper";
 import GlassCard from "@/components/ui/GlassCard";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import PrimaryButton from "@/components/ui/PrimaryButton";
+import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/db/sql";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -28,8 +28,8 @@ export default function Signup() {
       if (error) throw new Error(error);
       navigate("/pending");
     } catch (err) {
-      if (err?.message) toast.error(err.message);
-      else toast.error("Échec de l'inscription");
+      if (err?.message) toast.error(err.message);else
+      toast.error("Échec de l'inscription");
     } finally {
       setLoading(false);
     }
@@ -45,30 +45,30 @@ export default function Signup() {
         <div>
           <Label htmlFor="signup-email" className="text-white mb-1">Email</Label>
           <Input
-            id="signup-email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full"
-          />
+              id="signup-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full" />
+            
         </div>
         <div>
           <Label htmlFor="signup-pass" className="text-white mb-1">Mot de passe</Label>
           <Input
-            id="signup-pass"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full"
-          />
+              id="signup-pass"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full" />
+            
         </div>
         <PrimaryButton type="submit" className="w-full" disabled={loading}>
           {loading ? "Création..." : "S'inscrire"}
         </PrimaryButton>
         </form>
       </GlassCard>
-    </PageWrapper>
-  );
+    </PageWrapper>);
+
 }

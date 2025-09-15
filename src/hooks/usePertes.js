@@ -6,8 +6,8 @@ import {
   pertes_list,
   pertes_add,
   pertes_update,
-  pertes_delete,
-} from "@/local/pertes";
+  pertes_delete } from
+"@/local/pertes";import { isTauri } from "@/lib/db/sql";
 
 export function usePertes() {
   const { mama_id } = useAuth();

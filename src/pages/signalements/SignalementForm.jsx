@@ -4,7 +4,7 @@ import { useSignalements } from "@/hooks/useSignalements";
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import GlassCard from "@/components/ui/GlassCard";
-import PrimaryButton from "@/components/ui/PrimaryButton";
+import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/db/sql";
 
 export default function SignalementForm({ onCreated }) {
   const { loading: authLoading } = useAuth();
@@ -41,24 +41,24 @@ export default function SignalementForm({ onCreated }) {
     <GlassCard title="Nouveau signalement" className="mb-4">
       <form onSubmit={handleSubmit} className="space-y-2">
       <input
-        type="text"
-        placeholder="Titre"
-        className="input w-full"
-        value={titre}
-        onChange={(e) => setTitre(e.target.value)}
-      />
+          type="text"
+          placeholder="Titre"
+          className="input w-full"
+          value={titre}
+          onChange={(e) => setTitre(e.target.value)} />
+        
       <textarea
-        placeholder="Description"
-        className="input w-full"
-        rows={3}
-        value={commentaire}
-        onChange={(e) => setCommentaire(e.target.value)}
-      />
+          placeholder="Description"
+          className="input w-full"
+          rows={3}
+          value={commentaire}
+          onChange={(e) => setCommentaire(e.target.value)} />
+        
       <select
-        value={statut}
-        onChange={(e) => setStatut(e.target.value)}
-        className="input w-full"
-      >
+          value={statut}
+          onChange={(e) => setStatut(e.target.value)}
+          className="input w-full">
+          
         <option value="ouvert">Ouvert</option>
         <option value="en cours">En cours</option>
         <option value="résolu">Résolu</option>
@@ -67,6 +67,6 @@ export default function SignalementForm({ onCreated }) {
         Ajouter
       </PrimaryButton>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

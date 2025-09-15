@@ -5,14 +5,14 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useState,
-} from "react";
+  useState } from
+"react";
 import { readConfig, writeConfig } from "@/appFs";
 import { normalizeAccessKey } from "@/lib/access";
 import { can } from "@/utils/permissions";
-import { DEFAULT_ROLES } from "@/constants/roles";
+import { DEFAULT_ROLES } from "@/constants/roles";import { isTauri } from "@/lib/db/sql";
 
-export type User = { id: string; email: string; mama_id: string; role: string } | null;
+export type User = {id: string;email: string;mama_id: string;role: string;} | null;
 
 type Ctx = {
   id: string | null;
@@ -39,12 +39,12 @@ const defaultCtx: Ctx = {
   loading: true,
   signIn: () => {},
   signOut: () => {},
-  hasAccess: () => false,
+  hasAccess: () => false
 };
 
 const AuthContext = createContext<Ctx>(defaultCtx);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }: {children: React.ReactNode;}) {
   const [user, setUser] = useState<User>(null);
   const [userData, setUserData] = useState<any>(null);
   const [roles, setRoles] = useState<string[]>([]);
@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(u);
     setUserData({ ...u, access_rights });
     setRoles(aliases);
-    try { localStorage.setItem("auth.user", JSON.stringify(u)); } catch {}
+    try {localStorage.setItem("auth.user", JSON.stringify(u));} catch {}
   }, []);
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     setUserData(null);
     setRoles([]);
-    try { localStorage.removeItem("auth.user"); } catch {}
+    try {localStorage.removeItem("auth.user");} catch {}
   }, []);
 
   const hasAccess = useCallback(
@@ -111,7 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading,
     signIn,
     signOut,
-    hasAccess,
+    hasAccess
   }), [user, userData, roles, loading, signIn, signOut, hasAccess]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

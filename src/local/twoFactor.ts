@@ -1,8 +1,8 @@
-import { readText, saveText, existsFile } from "@/local/files";
+import { readText, saveText, existsFile } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "twofactor.json";
 
-type Entry = { secret: string | null; enabled: boolean };
+type Entry = {secret: string | null;enabled: boolean;};
 
 type Store = Record<string, Entry>;
 

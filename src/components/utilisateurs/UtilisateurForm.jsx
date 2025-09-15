@@ -12,7 +12,7 @@ import PrimaryButton from "@/components/ui/PrimaryButton";
 import SecondaryButton from "@/components/ui/SecondaryButton";
 import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
-import { MODULES } from "@/config/modules";
+import { MODULES } from "@/config/modules";import { isTauri } from "@/lib/db/sql";
 
 export default function UtilisateurForm({ utilisateur, onClose }) {
   const { addUser, updateUser } = useUtilisateurs();
@@ -52,7 +52,7 @@ export default function UtilisateurForm({ utilisateur, onClose }) {
         } catch {
           return {};
         }
-      })(),
+      })()
     };
     try {
       if (utilisateur?.id) {
@@ -75,70 +75,70 @@ export default function UtilisateurForm({ utilisateur, onClose }) {
       <form onSubmit={handleSubmit} className="space-y-2">
       <Label htmlFor="nom">Nom</Label>
       <Input
-        id="nom"
-        className="mb-2"
-        type="text"
-        value={nom}
-        onChange={e => setNom(e.target.value)}
-        required
-      />
+          id="nom"
+          className="mb-2"
+          type="text"
+          value={nom}
+          onChange={(e) => setNom(e.target.value)}
+          required />
+        
       <Label htmlFor="email">Email</Label>
       <Input
-        id="email"
-        className="mb-2"
-        type="email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        required
-        readOnly={!!utilisateur?.id}
-      />
+          id="email"
+          className="mb-2"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          readOnly={!!utilisateur?.id} />
+        
       <Label htmlFor="role">Rôle</Label>
       <Select
-        id="role"
-        className="mb-2"
-        value={roleId}
-        onChange={e => setRoleId(e.target.value)}
-        required
-      >
-        {roles
-          .filter(r => myRole === "superadmin" || r.nom !== "superadmin")
-          .map(r => (
-            <option key={r.id} value={r.id}>{r.nom}</option>
-          ))}
+          id="role"
+          className="mb-2"
+          value={roleId}
+          onChange={(e) => setRoleId(e.target.value)}
+          required>
+          
+        {roles.
+          filter((r) => myRole === "superadmin" || r.nom !== "superadmin").
+          map((r) =>
+          <option key={r.id} value={r.id}>{r.nom}</option>
+          )}
       </Select>
-      {myRole === "superadmin" && (
+      {myRole === "superadmin" &&
         <>
           <Label htmlFor="mama">Établissement</Label>
           <Select
             id="mama"
             className="mb-2"
             value={mama}
-            onChange={e => setMama(e.target.value)}
-            required
-          >
-            {mamas.map(m => (
-              <option key={m.id} value={m.id}>{m.nom}</option>
-            ))}
+            onChange={(e) => setMama(e.target.value)}
+            required>
+            
+            {mamas.map((m) =>
+            <option key={m.id} value={m.id}>{m.nom}</option>
+            )}
           </Select>
         </>
-      )}
+        }
       <label className="flex items-center gap-2 mb-2">
-        <input id="actif" type="checkbox" checked={actif} onChange={e => setActif(e.target.checked)} />
+        <input id="actif" type="checkbox" checked={actif} onChange={(e) => setActif(e.target.checked)} />
         <Label htmlFor="actif" className="!mb-0">Actif</Label>
       </label>
       <Label htmlFor="rights">Droits personnalisés (JSON)</Label>
       <textarea
-        id="rights"
-        className="input w-full font-mono mb-2"
-        value={rightsText}
-        onChange={e => setRightsText(e.target.value)}
-        rows={MODULES.length / 2}
-      />
+          id="rights"
+          className="input w-full font-mono mb-2"
+          value={rightsText}
+          onChange={(e) => setRightsText(e.target.value)}
+          rows={MODULES.length / 2} />
+        
         <div className="flex gap-2 mt-4">
           <PrimaryButton type="submit" disabled={loading}>{utilisateur ? "Modifier" : "Ajouter"}</PrimaryButton>
           <SecondaryButton type="button" onClick={onClose}>Annuler</SecondaryButton>
         </div>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

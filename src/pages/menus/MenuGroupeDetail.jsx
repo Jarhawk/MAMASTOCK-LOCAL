@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import useMenuGroupe from '@/hooks/useMenuGroupe';
+import useMenuGroupe from '@/hooks/useMenuGroupe';import { isTauri } from "@/lib/db/sql";
 
 export default function MenuGroupeDetail() {
   const { id } = useParams();
@@ -21,11 +21,11 @@ export default function MenuGroupeDetail() {
     <div>
       <h1>{menu.nom}</h1>
       <ul>
-        {lignes.map((l) => (
-          <li key={l.id}>
+        {lignes.map((l) =>
+        <li key={l.id}>
             {l.categorie} - {l.fiche?.nom} ({l.portions_par_personne})
           </li>
-        ))}
+        )}
       </ul>
       <div>
         Coût/personne: {Number(resume?.cout_par_personne || 0).toFixed(2)}€
@@ -36,6 +36,6 @@ export default function MenuGroupeDetail() {
       </div>
       <button onClick={() => exportPdf(id)}>PDF</button>
       <button onClick={() => exportExcel(id)}>Excel</button>
-    </div>
-  );
+    </div>);
+
 }

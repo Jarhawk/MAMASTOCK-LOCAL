@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import GlassCard from "@/components/ui/GlassCard";
 import { LiquidBackground } from "@/components/LiquidBackground";
-import FournisseurDetail from "./FournisseurDetail";
+import FournisseurDetail from "./FournisseurDetail";import { isTauri } from "@/lib/db/sql";
 
 export default function FournisseurDetailPage() {
   const { id } = useParams();
@@ -12,6 +12,6 @@ export default function FournisseurDetailPage() {
       <GlassCard className="relative z-10 w-full max-w-4xl">
         <FournisseurDetail id={id} />
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

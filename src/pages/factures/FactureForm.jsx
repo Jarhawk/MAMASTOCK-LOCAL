@@ -20,7 +20,7 @@ import useProduitLineDefaults from '@/hooks/useProduitLineDefaults';
 import { useZonesStock } from '@/hooks/useZonesStock';
 import { formatMoneyFR } from '@/utils/numberFormat';
 import { facture_create, facture_add_ligne } from '@/lib/db';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';import { isTauri } from "@/lib/db/sql";
 
 const FN_UPDATE_FACTURE_EXISTS = false;
 
@@ -157,14 +157,14 @@ export default function FactureForm({ facture = null, onSaved } = {}) {
         setError('fournisseur_id', { type: 'required' });
         return;
       }
-      const payloadLignes = (lignes || [])
-        .filter((l) => l.produit_id)
-        .map((l) => ({
-          id: l.id || crypto.randomUUID(),
-          produit_id: l.produit_id,
-          quantite: Number(l.quantite || 0),
-          prix: Number(l.pu_ht || 0),
-        }));
+      const payloadLignes = (lignes || []).
+      filter((l) => l.produit_id).
+      map((l) => ({
+        id: l.id || crypto.randomUUID(),
+        produit_id: l.produit_id,
+        quantite: Number(l.quantite || 0),
+        prix: Number(l.pu_ht || 0)
+      }));
       if (payloadLignes.length === 0) {
         toast.error('Ajoutez au moins une ligne produit.');
         (lignes || []).forEach((l, i) => {
@@ -180,14 +180,14 @@ export default function FactureForm({ facture = null, onSaved } = {}) {
 
       const factureId = await facture_create({
         fournisseur_id: values.fournisseur_id,
-        date_iso: values.date_facture,
+        date_iso: values.date_facture
       });
       for (const l of payloadLignes) {
         await facture_add_ligne({
           facture_id: factureId,
           produit_id: l.produit_id,
           quantite: l.quantite,
-          prix_unitaire: l.prix,
+          prix_unitaire: l.prix
         });
       }
 

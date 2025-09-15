@@ -6,8 +6,8 @@ import usePeriodes from '@/hooks/usePeriodes';
 import {
   transferts_list,
   transfert_create,
-  transfert_get,
-} from "@/local/transferts";
+  transfert_get } from
+"@/local/transferts";import { isTauri } from "@/lib/db/sql";
 
 export function useTransferts() {
   const { mama_id, user_id } = useAuth();
@@ -36,7 +36,7 @@ export function useTransferts() {
           fin,
           zone_source_id,
           zone_dest_id,
-          produit_id,
+          produit_id
         });
         setTransferts(data);
         return data;
@@ -66,7 +66,7 @@ export function useTransferts() {
           motif: header.motif || "",
           date_transfert: date,
           utilisateur_id: user_id,
-          commentaire: header.commentaire || "",
+          commentaire: header.commentaire || ""
         },
         lignes
       );

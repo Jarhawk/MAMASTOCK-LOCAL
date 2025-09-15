@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Input from '@/components/ui/input.jsx';
-import { formatMoneyFR, parseMoneyToNumberFR } from '@/utils/numberFormat';
+import { formatMoneyFR, parseMoneyToNumberFR } from '@/utils/numberFormat';import { isTauri } from "@/lib/db/sql";
 
 function isTrailing(raw) {
   const t = (raw ?? '').trim();
@@ -110,8 +110,7 @@ export default function MoneyInputFR({
       autoFocus={autoFocus}
       lang="fr"
       autoComplete="off"
-      {...props}
-    />
-  );
-}
+      {...props} />);
 
+
+}

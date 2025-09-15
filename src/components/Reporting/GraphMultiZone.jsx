@@ -8,27 +8,27 @@ import {
   Tooltip,
   CartesianGrid,
   Legend,
-  ResponsiveContainer,
-} from "recharts";
+  ResponsiveContainer } from
+"recharts";
 import { useRef, useState, useMemo } from "react";
 import html2canvas from "html2canvas";
-import { makeId } from "@/utils/formIds";
+import { makeId } from "@/utils/formIds";import { isTauri } from "@/lib/db/sql";
 
 const allZones = [
-  { key: "cost_cuisine", label: "Cuisine", color: "#bfa14d" },
-  { key: "cost_bar", label: "Bar", color: "#8884d8" },
-  { key: "cost_frigo", label: "Frigo", color: "#82ca9d" },
-  { key: "cost_cave", label: "Cave", color: "#ff7f50" },
-];
+{ key: "cost_cuisine", label: "Cuisine", color: "#bfa14d" },
+{ key: "cost_bar", label: "Bar", color: "#8884d8" },
+{ key: "cost_frigo", label: "Frigo", color: "#82ca9d" },
+{ key: "cost_cave", label: "Cave", color: "#ff7f50" }];
+
 
 export default function GraphMultiZone({ data }) {
   const chartRef = useRef(null);
-  const [selectedZones, setSelectedZones] = useState(allZones.map(z => z.key));
-  const checkboxIds = useMemo(() => Object.fromEntries(allZones.map(z => [z.key, makeId('fld')])), []);
+  const [selectedZones, setSelectedZones] = useState(allZones.map((z) => z.key));
+  const checkboxIds = useMemo(() => Object.fromEntries(allZones.map((z) => [z.key, makeId('fld')])), []);
 
   const toggleZone = (key) => {
     setSelectedZones((prev) =>
-      prev.includes(key) ? prev.filter((z) => z !== key) : [...prev, key]
+    prev.includes(key) ? prev.filter((z) => z !== key) : [...prev, key]
     );
   };
 
@@ -48,8 +48,8 @@ export default function GraphMultiZone({ data }) {
         <h3 className="text-lg font-semibold">Comparatif par zone</h3>
         <button
           onClick={exportImage}
-          className="text-sm px-3 py-1 bg-mamastock-gold text-white rounded hover:bg-mamastock-gold-hover"
-        >
+          className="text-sm px-3 py-1 bg-mamastock-gold text-white rounded hover:bg-mamastock-gold-hover">
+          
           Exporter en PNG
         </button>
       </div>
@@ -63,11 +63,11 @@ export default function GraphMultiZone({ data }) {
                 id={id}
                 type="checkbox"
                 checked={selectedZones.includes(zone.key)}
-                onChange={() => toggleZone(zone.key)}
-              />
+                onChange={() => toggleZone(zone.key)} />
+              
               {zone.label}
-            </label>
-          );
+            </label>);
+
         })}
       </div>
 
@@ -79,22 +79,22 @@ export default function GraphMultiZone({ data }) {
             <YAxis />
             <Tooltip />
             <Legend />
-            {allZones
-              .filter((z) => selectedZones.includes(z.key))
-              .map((zone) => (
-                <Line
-                  key={zone.key}
-                  type="monotone"
-                  dataKey={zone.key}
-                  name={zone.label}
-                  stroke={zone.color}
-                  strokeWidth={2}
-                  dot={false}
-                />
-              ))}
+            {allZones.
+            filter((z) => selectedZones.includes(z.key)).
+            map((zone) =>
+            <Line
+              key={zone.key}
+              type="monotone"
+              dataKey={zone.key}
+              name={zone.label}
+              stroke={zone.color}
+              strokeWidth={2}
+              dot={false} />
+
+            )}
           </LineChart>
         </ResponsiveContainer>
       </div>
-    </div>
-  );
+    </div>);
+
 }

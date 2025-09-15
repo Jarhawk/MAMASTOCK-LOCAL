@@ -8,7 +8,7 @@ import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import * as XLSX from "xlsx";
 import JSPDF from "jspdf";
 import "jspdf-autotable";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export default function InventaireDetail() {
   const { id } = useParams();
@@ -28,7 +28,7 @@ export default function InventaireDetail() {
   if (!inventaire) return <LoadingSpinner message="Chargement..." />;
 
   const exportExcel = () => {
-    const rows = (inventaire.lignes || []).map(l => {
+    const rows = (inventaire.lignes || []).map((l) => {
       const ecart = l.quantite_reelle - (l.product?.stock_theorique || 0);
       const valeurEcart = ecart * (l.product?.pmp || 0);
       const conso = l.conso_calculee || 0;
@@ -48,7 +48,7 @@ export default function InventaireDetail() {
         Requisition: requisition,
         EcartRequisition: ecartReq,
         Mois_1: l.mois_m1,
-        Mois_2: l.mois_m2,
+        Mois_2: l.mois_m2
       };
     });
     const wb = XLSX.utils.book_new();
@@ -66,17 +66,17 @@ export default function InventaireDetail() {
     doc.autoTable({
       startY: 20,
       head: [["Produit", "Unité", "Physique", "Théorique", "Prix", "Valeur", "Écart", "Valeur écart"]],
-      body: (inventaire.lignes || []).map(l => [
-        l.product?.nom,
-        l.product?.unite?.nom,
-        l.quantite_reelle,
-        l.product?.stock_theorique,
-        l.product?.pmp,
-        (l.quantite_reelle * (l.product?.pmp || 0)).toFixed(2),
-        (l.quantite_reelle - (l.product?.stock_theorique || 0)).toFixed(2),
-        ((l.quantite_reelle - (l.product?.stock_theorique || 0)) * (l.product?.pmp || 0)).toFixed(2),
-      ]),
-      styles: { fontSize: 9 },
+      body: (inventaire.lignes || []).map((l) => [
+      l.product?.nom,
+      l.product?.unite?.nom,
+      l.quantite_reelle,
+      l.product?.stock_theorique,
+      l.product?.pmp,
+      (l.quantite_reelle * (l.product?.pmp || 0)).toFixed(2),
+      (l.quantite_reelle - (l.product?.stock_theorique || 0)).toFixed(2),
+      ((l.quantite_reelle - (l.product?.stock_theorique || 0)) * (l.product?.pmp || 0)).toFixed(2)]
+      ),
+      styles: { fontSize: 9 }
     });
     doc.save(`inventaire_${id}.pdf`);
   };
@@ -87,7 +87,7 @@ export default function InventaireDetail() {
   );
   const totalEcart = (inventaire.lignes || []).reduce(
     (s, l) =>
-      s + (Number(l.quantite_reelle || 0) - Number(l.product?.stock_theorique || 0)) * Number(l.product?.pmp || 0),
+    s + (Number(l.quantite_reelle || 0) - Number(l.product?.stock_theorique || 0)) * Number(l.product?.pmp || 0),
     0
   );
 
@@ -124,9 +124,9 @@ export default function InventaireDetail() {
                   <td className="p-2">{l.product?.pmp}</td>
                   <td className="p-2">{valeur.toFixed(2)}</td>
                   <td className={`p-2 ${ecart < 0 ? 'text-red-600' : ecart > 0 ? 'text-green-600' : ''}`}>{ecart.toFixed(2)}</td>
-                  <td className={`p-2 ${(ecart * (l.product?.pmp || 0)) < 0 ? 'text-red-600' : (ecart * (l.product?.pmp || 0)) > 0 ? 'text-green-600' : ''}`}>{(ecart * (l.product?.pmp || 0)).toFixed(2)}</td>
-                </tr>
-              );
+                  <td className={`p-2 ${ecart * (l.product?.pmp || 0) < 0 ? 'text-red-600' : ecart * (l.product?.pmp || 0) > 0 ? 'text-green-600' : ''}`}>{(ecart * (l.product?.pmp || 0)).toFixed(2)}</td>
+                </tr>);
+
             })}
           </tbody>
         </table>
@@ -140,6 +140,6 @@ export default function InventaireDetail() {
         <Button variant="outline" onClick={exportExcel}>Exporter Excel</Button>
         <Button variant="outline" onClick={exportPDF}>Export PDF</Button>
       </div>
-    </div>
-  );
+    </div>);
+
 }

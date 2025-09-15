@@ -1,13 +1,13 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // src/components/ui/label.jsx
 
 export function Label({ htmlFor, children, className = "" }) {
   return (
     <label
       htmlFor={htmlFor}
-      className={`block text-sm font-medium text-mamastock-text mb-1 ${className}`}
-    >
+      className={`block text-sm font-medium text-mamastock-text mb-1 ${className}`}>
+      
       {children}
-    </label>
-  );
+    </label>);
+
 }

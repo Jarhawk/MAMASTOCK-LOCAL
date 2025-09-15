@@ -5,8 +5,8 @@ import {
   requisition_get,
   requisition_create,
   requisition_update,
-  requisition_delete,
-} from "@/local/requisitions";
+  requisition_delete } from
+"@/local/requisitions";import { isTauri } from "@/lib/db/sql";
 
 export function useRequisitions() {
   const { mama_id } = useAuth();
@@ -17,7 +17,7 @@ export function useRequisitions() {
       mama_id,
       search,
       page,
-      limit,
+      limit
     });
     return { data, count };
   }
@@ -40,7 +40,7 @@ export function useRequisitions() {
       fin,
       produit,
       page,
-      limit,
+      limit
     });
   }
 
@@ -63,7 +63,7 @@ export function useRequisitions() {
       commentaire,
       statut,
       mama_id,
-      lignes,
+      lignes
     });
     return { data: await requisition_get(mama_id, id) };
   }

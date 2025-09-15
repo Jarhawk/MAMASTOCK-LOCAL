@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRuptureAlerts } from "@/hooks/useRuptureAlerts";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
 
 export default function AlertesRupture() {
   const { fetchAlerts, generateSuggestions } = useRuptureAlerts();
@@ -12,7 +12,7 @@ export default function AlertesRupture() {
     setAlerts(data);
   }, [fetchAlerts, type]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {load();}, [load]);
 
   return (
     <div className="p-6">
@@ -28,18 +28,18 @@ export default function AlertesRupture() {
           <tr><th>Produit</th><th>Actuel</th><th>Proj.</th></tr>
         </thead>
         <tbody>
-          {alerts.map(a => (
-            <tr key={a.id} className="border-t">
+          {alerts.map((a) =>
+          <tr key={a.id} className="border-t">
               <td className="px-2 py-1">{a.nom}</td>
               <td className="px-2 py-1">{a.stock_actuel}</td>
               <td className="px-2 py-1">{a.stock_projete}</td>
             </tr>
-          ))}
-          {alerts.length === 0 && (
-            <tr><td colSpan={3} className="text-center p-2">Aucune alerte</td></tr>
           )}
+          {alerts.length === 0 &&
+          <tr><td colSpan={3} className="text-center p-2">Aucune alerte</td></tr>
+          }
         </tbody>
       </table>
-    </div>
-  );
+    </div>);
+
 }

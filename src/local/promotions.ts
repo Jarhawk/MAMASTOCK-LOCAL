@@ -1,4 +1,4 @@
-import { existsFile, readText, saveText } from "@/local/files";
+import { existsFile, readText, saveText } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "promotions.json";
 
@@ -31,18 +31,18 @@ export async function promotions_list({
   search = "",
   actif = null,
   page = 1,
-  limit = 20,
-}: {
-  mama_id: string;
-  search?: string;
-  actif?: boolean | null;
-  page?: number;
-  limit?: number;
-}) {
+  limit = 20
+
+
+
+
+
+
+}: {mama_id: string;search?: string;actif?: boolean | null;page?: number;limit?: number;}) {
   let list = await readAll();
-  if (mama_id) list = list.filter(p => p.mama_id === mama_id);
-  if (search) list = list.filter(p => p.nom?.toLowerCase().includes(search.toLowerCase()));
-  if (typeof actif === "boolean") list = list.filter(p => !!p.actif === actif);
+  if (mama_id) list = list.filter((p) => p.mama_id === mama_id);
+  if (search) list = list.filter((p) => p.nom?.toLowerCase().includes(search.toLowerCase()));
+  if (typeof actif === "boolean") list = list.filter((p) => !!p.actif === actif);
   const total = list.length;
   const start = (page - 1) * limit;
   return { data: list.slice(start, start + limit), total };
@@ -53,7 +53,7 @@ export async function promotions_add(values: Promotion) {
   const item: Promotion = {
     id: crypto.randomUUID(),
     actif: true,
-    ...values,
+    ...values
   };
   list.push(item);
   await writeAll(list);
@@ -62,7 +62,7 @@ export async function promotions_add(values: Promotion) {
 
 export async function promotions_update(id: string, values: Partial<Promotion>) {
   const list = await readAll();
-  const idx = list.findIndex(p => p.id === id);
+  const idx = list.findIndex((p) => p.id === id);
   if (idx === -1) return;
   list[idx] = { ...list[idx], ...values };
   await writeAll(list);

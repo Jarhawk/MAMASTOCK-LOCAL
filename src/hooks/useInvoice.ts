@@ -1,5 +1,5 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
-import { facture_get } from '@/lib/db';
+import { facture_get } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export type FactureLigne = {
   id: number;
@@ -24,6 +24,6 @@ export function useInvoice(id: number | string | undefined): UseQueryResult<Fact
       return await facture_get(id);
     },
     staleTime: 0,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false
   });
 }

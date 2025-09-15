@@ -1,4 +1,4 @@
-import { getDb } from "@/lib/db/sql";
+import { getDb, isTauri } from "@/lib/db/sql";
 
 function b64url(buf: Uint8Array) {
   // base64url sans padding
@@ -9,9 +9,9 @@ function b64url(buf: Uint8Array) {
 async function sha256Hex(input: string) {
   const enc = new TextEncoder();
   const digest = await crypto.subtle.digest("SHA-256", enc.encode(input));
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+  return Array.from(new Uint8Array(digest)).
+  map((b) => b.toString(16).padStart(2, "0")).
+  join("");
 }
 
 function makeSalt(len = 16) {
@@ -20,7 +20,7 @@ function makeSalt(len = 16) {
   return b64url(u8);
 }
 
-export type LocalUser = { id: number; email: string; mama_id: string };
+export type LocalUser = {id: number;email: string;mama_id: string;};
 
 async function ensureTables() {
   const db = await getDb();
@@ -50,13 +50,13 @@ function unpackHash(stored: string) {
 }
 
 export async function registerLocal(
-  email: string,
-  password: string
-): Promise<LocalUser> {
+email: string,
+password: string)
+: Promise<LocalUser> {
   email = email.trim().toLowerCase();
   await ensureTables();
   const db = await getDb();
-  const exists = await db.select<{ count: number }[]>(
+  const exists = await db.select<{count: number;}[]>(
     "SELECT COUNT(*) as count FROM utilisateurs WHERE email = ?",
     [email]
   );
@@ -73,16 +73,16 @@ export async function registerLocal(
 
   // retourne profil minimal attendu par useAuth()
   return {
-    id: (await db.select<{ id: number }[]>("SELECT last_insert_rowid() as id"))[0].id,
+    id: (await db.select<{id: number;}[]>("SELECT last_insert_rowid() as id"))[0].id,
     email,
-    mama_id: "local",
+    mama_id: "local"
   };
 }
 
 export async function loginLocal(
-  email: string,
-  password: string
-): Promise<LocalUser> {
+email: string,
+password: string)
+: Promise<LocalUser> {
   email = email.trim().toLowerCase();
   await ensureTables();
   const db = await getDb();
@@ -104,4 +104,3 @@ export async function loginLocal(
 
   return { id: u.id, email: u.email, mama_id: "local" };
 }
-

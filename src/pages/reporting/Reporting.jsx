@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useReportingFinancier } from '@/hooks/useReportingFinancier';
 import StatCard from '@/components/ui/StatCard';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/db/sql";
 
 export default function Reporting() {
   const month = new Date().toISOString().slice(0, 7);
@@ -22,8 +22,8 @@ export default function Reporting() {
             type="date"
             className="form-input"
             value={period.start}
-            onChange={(e) => setPeriod((p) => ({ ...p, start: e.target.value }))}
-          />
+            onChange={(e) => setPeriod((p) => ({ ...p, start: e.target.value }))} />
+          
         </div>
         <div>
           <label className="text-xs mr-2">Fin</label>
@@ -31,13 +31,13 @@ export default function Reporting() {
             type="date"
             className="form-input"
             value={period.end}
-            onChange={(e) => setPeriod((p) => ({ ...p, end: e.target.value }))}
-          />
+            onChange={(e) => setPeriod((p) => ({ ...p, end: e.target.value }))} />
+          
         </div>
         <button
           className="btn"
-          onClick={() => exportCsv(`exports/compta_${period.start}_${period.end}.csv`)}
-        >
+          onClick={() => exportCsv(`exports/compta_${period.start}_${period.end}.csv`)}>
+          
           Export ERP
         </button>
       </div>
@@ -45,21 +45,21 @@ export default function Reporting() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <StatCard
           label="Chiffre d'affaires"
-          value={data ? data.total_ventes.toLocaleString() + ' €' : '-'}
-        />
+          value={data ? data.total_ventes.toLocaleString() + ' €' : '-'} />
+        
         <StatCard
           label="Achats"
-          value={data ? data.total_achats.toLocaleString() + ' €' : '-'}
-        />
+          value={data ? data.total_achats.toLocaleString() + ' €' : '-'} />
+        
         <StatCard
           label="Marge brute"
-          value={data ? data.marge.toLocaleString() + ' €' : '-'}
-        />
+          value={data ? data.marge.toLocaleString() + ' €' : '-'} />
+        
         <StatCard
           label="Valeur du stock"
-          value={data ? data.valeur_stock.toLocaleString() + ' €' : '-'}
-        />
+          value={data ? data.valeur_stock.toLocaleString() + ' €' : '-'} />
+        
       </div>
-    </div>
-  );
+    </div>);
+
 }

@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { alertes_list, alertes_add, alertes_update, alertes_delete } from "@/lib/db";
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export function useAlerts() {
   const { mama_id } = useAuth();

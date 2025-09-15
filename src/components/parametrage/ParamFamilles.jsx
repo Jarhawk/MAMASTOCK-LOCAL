@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { toast } from 'sonner';
 import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx';import { isTauri } from "@/lib/db/sql";
 
 export default function ParamFamilles() {
   const {
@@ -16,7 +16,7 @@ export default function ParamFamilles() {
     fetchFamilles,
     addFamille,
     updateFamille,
-    batchDeleteFamilles,
+    batchDeleteFamilles
   } = useFamilles();
   const { mama_id, loading: authLoading } = useAuth();
   const [search, setSearch] = useState('');
@@ -92,36 +92,36 @@ export default function ParamFamilles() {
           placeholder="Nom de la famille"
           value={form.nom}
           onChange={(e) => setForm((f) => ({ ...f, nom: e.target.value }))}
-          required
-        />
+          required />
+        
         <Button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-2"
-        >
+          className="flex items-center gap-2">
+          
           {loading && <span className="loader-glass" />}
           {editMode ? 'Modifier' : 'Ajouter'}
         </Button>
-        {editMode && (
-          <Button
-            variant="outline"
-            type="button"
-            onClick={() => {
-              setEditMode(false);
-              setForm({ nom: '', id: null });
-            }}
-            disabled={loading}
-          >
+        {editMode &&
+        <Button
+          variant="outline"
+          type="button"
+          onClick={() => {
+            setEditMode(false);
+            setForm({ nom: '', id: null });
+          }}
+          disabled={loading}>
+          
             Annuler
           </Button>
-        )}
+        }
       </form>
       <input
         className="form-input mb-2"
         placeholder="Recherche"
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+        onChange={(e) => setSearch(e.target.value)} />
+      
       <Button variant="outline" className="mb-2" onClick={exportExcel}>
         Export Excel
       </Button>
@@ -134,30 +134,30 @@ export default function ParamFamilles() {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((f) => (
-              <tr key={f.id}>
+            {filtered.map((f) =>
+            <tr key={f.id}>
                 <td>{f.nom}</td>
                 <td>
                   <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleEdit(f)}
-                  >
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleEdit(f)}>
+                  
                     Modifier
                   </Button>
                   <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleDelete(f.id)}
-                  >
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleDelete(f.id)}>
+                  
                     Archiver
                   </Button>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

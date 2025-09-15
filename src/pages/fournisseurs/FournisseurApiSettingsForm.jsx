@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { useFournisseurApiConfig } from "@/hooks/useFournisseurApiConfig";
+import { useFournisseurApiConfig } from "@/hooks/useFournisseurApiConfig";import { isTauri } from "@/lib/db/sql";
 
 export default function FournisseurApiSettingsForm({ fournisseur_id }) {
   const { mama_id } = useAuth();
@@ -16,25 +16,25 @@ export default function FournisseurApiSettingsForm({ fournisseur_id }) {
     type_api: "rest",
     token: "",
     format_facture: "json",
-    actif: true,
+    actif: true
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!mama_id || !fournisseur_id) return;
-    fetchConfig(fournisseur_id).then(data => {
-      if (data) setConfig(c => ({ ...c, ...data }));
+    fetchConfig(fournisseur_id).then((data) => {
+      if (data) setConfig((c) => ({ ...c, ...data }));
       setLoading(false);
     });
   }, [mama_id, fournisseur_id, fetchConfig]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setConfig(c => ({ ...c, [name]: type === "checkbox" ? checked : value }));
+    setConfig((c) => ({ ...c, [name]: type === "checkbox" ? checked : value }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!mama_id || !fournisseur_id || saving) return;
     try {
@@ -58,21 +58,21 @@ export default function FournisseurApiSettingsForm({ fournisseur_id }) {
       <div>
         <label className="block font-medium mb-1">URL API</label>
         <Input
-          className="w-full"
-          name="url"
-          value={config.url || ""}
-          onChange={handleChange}
-          required
-        />
+            className="w-full"
+            name="url"
+            value={config.url || ""}
+            onChange={handleChange}
+            required />
+          
       </div>
       <div>
         <label className="block font-medium mb-1">Type</label>
         <select
-          className="input w-full"
-          name="type_api"
-          value={config.type_api || "rest"}
-          onChange={handleChange}
-        >
+            className="input w-full"
+            name="type_api"
+            value={config.type_api || "rest"}
+            onChange={handleChange}>
+            
           <option value="rest">REST</option>
           <option value="edi">EDI</option>
           <option value="ftp">FTP</option>
@@ -81,20 +81,20 @@ export default function FournisseurApiSettingsForm({ fournisseur_id }) {
       <div>
         <label className="block font-medium mb-1">Token / Credentials</label>
         <Input
-          className="w-full"
-          name="token"
-          value={config.token || ""}
-          onChange={handleChange}
-        />
+            className="w-full"
+            name="token"
+            value={config.token || ""}
+            onChange={handleChange} />
+          
       </div>
       <div>
         <label className="block font-medium mb-1">Format factures</label>
         <select
-          className="input w-full"
-          name="format_facture"
-          value={config.format_facture || "json"}
-          onChange={handleChange}
-        >
+            className="input w-full"
+            name="format_facture"
+            value={config.format_facture || "json"}
+            onChange={handleChange}>
+            
           <option value="pdf">PDF</option>
           <option value="xml">XML</option>
           <option value="json">JSON</option>
@@ -103,18 +103,18 @@ export default function FournisseurApiSettingsForm({ fournisseur_id }) {
       </div>
       <label className="block">
         <input
-          type="checkbox"
-          name="actif"
-          checked={!!config.actif}
-          onChange={handleChange}
-          className="mr-2"
-        />
+            type="checkbox"
+            name="actif"
+            checked={!!config.actif}
+            onChange={handleChange}
+            className="mr-2" />
+          
         Actif
       </label>
       <PrimaryButton type="submit" disabled={saving} className="mt-2 min-w-[120px]">
         {saving ? "Enregistrement…" : "Enregistrer"}
       </PrimaryButton>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

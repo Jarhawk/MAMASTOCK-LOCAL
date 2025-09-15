@@ -1,5 +1,5 @@
 import { factures_list } from "@/lib/db";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";import { isTauri } from "@/lib/db/sql";
 
 export function useFactures(filters = {}) {
   const { page = 1, pageSize = 20, search = "", fournisseur, statut } = filters;
@@ -11,10 +11,10 @@ export function useFactures(filters = {}) {
         fournisseur_id: fournisseur?.id,
         statut,
         page,
-        pageSize,
+        pageSize
       });
       return { factures, total };
-    },
+    }
   });
 }
 

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
-import { motion as Motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/db/sql";
 
 const PAGE_SIZE = 20;
 
@@ -22,8 +22,8 @@ export default function Stock() {
     }
   }, [authLoading, mama_id, fetchStocks]);
 
-  const filtered = stocks.filter(s =>
-    !search || s.nom.toLowerCase().includes(search.toLowerCase())
+  const filtered = stocks.filter((s) =>
+  !search || s.nom.toLowerCase().includes(search.toLowerCase())
   );
   const nbPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -42,18 +42,18 @@ export default function Stock() {
         <input
           type="search"
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
           className="form-input"
-          placeholder="Recherche produit"
-        />
+          placeholder="Recherche produit" />
+        
         <Button variant="outline" onClick={exportExcel}>Export Excel</Button>
       </div>
       <TableContainer className="mt-4">
         <Motion.table
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="min-w-full text-sm"
-        >
+          className="min-w-full text-sm">
+          
         <thead>
           <tr>
             <th className="px-4 py-2">Produit</th>
@@ -64,7 +64,7 @@ export default function Stock() {
           </tr>
         </thead>
         <tbody>
-          {paged.map(s => (
+          {paged.map((s) =>
             <tr key={s.id}>
               <td className="border px-4 py-2">{s.nom}</td>
               <td className="border px-4 py-2">{s.stock_reel}</td>
@@ -72,20 +72,20 @@ export default function Stock() {
               <td className="border px-4 py-2">{s.pmp?.toFixed(2)}</td>
               <td className="border px-4 py-2">{(s.pmp * s.stock_reel).toFixed(2)} €</td>
             </tr>
-          ))}
+            )}
         </tbody>
         </Motion.table>
       </TableContainer>
       <div className="mt-4 flex gap-2">
         {Array.from({ length: nbPages }, (_, i) =>
-          <Button
-            key={i + 1}
-            size="sm"
-            variant={page === i + 1 ? "default" : "outline"}
-            onClick={() => setPage(i + 1)}
-          >{i + 1}</Button>
+        <Button
+          key={i + 1}
+          size="sm"
+          variant={page === i + 1 ? "default" : "outline"}
+          onClick={() => setPage(i + 1)}>
+          {i + 1}</Button>
         )}
       </div>
-    </div>
-  );
+    </div>);
+
 }

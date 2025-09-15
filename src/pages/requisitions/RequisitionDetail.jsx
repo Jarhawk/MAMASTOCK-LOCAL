@@ -4,7 +4,7 @@ import { useRequisitions } from "@/hooks/useRequisitions";
 import { useEffect, useState } from "react";
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import GlassCard from "@/components/ui/GlassCard";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
 
 function RequisitionDetailPage() {
   const { id } = useParams();
@@ -41,27 +41,27 @@ function RequisitionDetailPage() {
         <div>
           <strong>Lignes :</strong>
           <ul className="list-disc ml-5 space-y-1">
-            {(requisition.lignes || []).map((l) => (
-              <li key={l.id} className="flex items-center gap-2">
+            {(requisition.lignes || []).map((l) =>
+            <li key={l.id} className="flex items-center gap-2">
                 <img
-                  src="/icons/icon-128x128.png"
-                  alt=""
-                  className="w-6 h-6 rounded object-cover"
-                />
+                src="/icons/icon-128x128.png"
+                alt=""
+                className="w-6 h-6 rounded object-cover" />
+              
               <span>
                   {l.produit?.nom || l.produit_id} - {l.quantite} {l.unite || ""}
                 </span>
               </li>
-            ))}
+            )}
           </ul>
         </div>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }
 
 export default function RequisitionDetail() {
   return (
-    <RequisitionDetailPage />
-  );
+    <RequisitionDetailPage />);
+
 }

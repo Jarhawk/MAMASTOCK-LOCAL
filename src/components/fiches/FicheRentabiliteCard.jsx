@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import Card from '@/components/ui/Card'
+import Card from '@/components/ui/Card';import { isTauri } from "@/lib/db/sql";
 
 export default function FicheRentabiliteCard({ fiche }) {
   const {
@@ -9,8 +9,8 @@ export default function FicheRentabiliteCard({ fiche }) {
     ventes,
     marge,
     score_calc,
-    classement,
-  } = fiche
+    classement
+  } = fiche;
   return (
     <Card>
       <div className="font-semibold mb-1">{nom}</div>
@@ -20,6 +20,6 @@ export default function FicheRentabiliteCard({ fiche }) {
       <div className="text-sm">Marge: {marge?.toFixed(1)}%</div>
       <div className="text-sm">Score: {score_calc}</div>
       <div className="text-xs italic">{classement}</div>
-    </Card>
-  )
+    </Card>);
+
 }

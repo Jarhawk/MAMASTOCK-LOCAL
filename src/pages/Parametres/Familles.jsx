@@ -9,7 +9,7 @@ import FamilleForm from '@/forms/FamilleForm';
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
-import { useFamillesWithSousFamilles } from '@/hooks/useFamillesWithSousFamilles';
+import { useFamillesWithSousFamilles } from '@/hooks/useFamillesWithSousFamilles';import { isTauri } from "@/lib/db/sql";
 
 
 export default function Familles() {
@@ -24,7 +24,7 @@ export default function Familles() {
     toggleFamille,
     toggleSousFamille,
     deleteFamille,
-    deleteSousFamille,
+    deleteSousFamille
   } = useFamillesWithSousFamilles();
   const { mama_id, hasAccess, loading: authLoading } = useAuth();
   const canEdit = hasAccess('parametrage', 'peut_modifier');
@@ -54,8 +54,8 @@ export default function Familles() {
   const handleDelete = async (id) => {
     setActionLoading(true);
     const { error } = await deleteFamille(id);
-    if (error) toast.error('Suppression échouée.');
-    else toast.success('Élément supprimé !');
+    if (error) toast.error('Suppression échouée.');else
+    toast.success('Élément supprimé !');
     setActionLoading(false);
   };
 
@@ -80,8 +80,8 @@ export default function Familles() {
 
   const handleDeleteSous = async (id) => {
     const { error } = await deleteSousFamille(id);
-    if (error) toast.error('Suppression échouée.');
-    else toast.success('Élément supprimé !');
+    if (error) toast.error('Suppression échouée.');else
+    toast.success('Élément supprimé !');
   };
 
   const handleToggleSous = async (sf) => {

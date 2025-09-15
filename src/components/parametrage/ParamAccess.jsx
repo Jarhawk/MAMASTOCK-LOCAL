@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { MODULES as MODULE_LIST } from '@/config/modules';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function ParamAccess() {
   const { permissions, fetchPermissions, updatePermission } = usePermissions();
@@ -46,34 +46,34 @@ export default function ParamAccess() {
           <thead>
             <tr>
               <th>Rôle</th>
-              {modules.map((m) => (
-                <th key={m}>{m}</th>
-              ))}
+              {modules.map((m) =>
+              <th key={m}>{m}</th>
+              )}
             </tr>
           </thead>
           <tbody>
-            {roles.map((r) => (
-              <tr key={r.id}>
+            {roles.map((r) =>
+            <tr key={r.id}>
                 <td>{r.nom}</td>
                 {modules.map((m) => {
-                  const current = permissions.find(
-                    (p) => p.role_id === r.id && p.module === m
-                  );
-                  return (
-                    <td key={m}>
+                const current = permissions.find(
+                  (p) => p.role_id === r.id && p.module === m
+                );
+                return (
+                  <td key={m}>
                       <input
-                        type="checkbox"
-                        checked={!!current?.actif}
-                        onChange={() => handleChange(r.id, m)}
-                      />
-                    </td>
-                  );
-                })}
+                      type="checkbox"
+                      checked={!!current?.actif}
+                      onChange={() => handleChange(r.id, m)} />
+                    
+                    </td>);
+
+              })}
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

@@ -8,7 +8,7 @@ import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { toast } from 'sonner';
-import GlassCard from "@/components/ui/GlassCard";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
 
 export default function TacheForm({ task }) {
   const { addTask, updateTask } = useTasks();
@@ -22,17 +22,17 @@ export default function TacheForm({ task }) {
     date_fin: task?.date_fin || "",
     next_echeance: task?.next_echeance || "",
     assigned_to: task?.assigned_to || "",
-    statut: task?.statut || "a_faire",
+    statut: task?.statut || "a_faire"
   });
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     fetchUsers({ actif: true });
   }, [fetchUsers]);
 
-  const handleChange = e =>
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = (e) =>
+  setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
     if (!form.titre.trim()) {
@@ -63,30 +63,30 @@ export default function TacheForm({ task }) {
       <label className="block">
         <span>Titre</span>
         <Input
-          className="w-full"
-          name="titre"
-          value={form.titre}
-          onChange={handleChange}
-          required
-        />
+            className="w-full"
+            name="titre"
+            value={form.titre}
+            onChange={handleChange}
+            required />
+          
       </label>
       <label className="block">
         <span>Description</span>
         <textarea
-          className="form-textarea"
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-        />
+            className="form-textarea"
+            name="description"
+            value={form.description}
+            onChange={handleChange} />
+          
       </label>
       <label className="block">
         <span>Type</span>
         <Select
-          className="w-full"
-          name="type"
-          value={form.type}
-          onChange={handleChange}
-        >
+            className="w-full"
+            name="type"
+            value={form.type}
+            onChange={handleChange}>
+            
           <option value="unique">Unique</option>
           <option value="quotidienne">Quotidienne</option>
           <option value="hebdomadaire">Hebdomadaire</option>
@@ -96,56 +96,56 @@ export default function TacheForm({ task }) {
       <label className="block">
         <span>Date début</span>
         <Input
-          className="w-full"
-          type="date"
-          name="date_debut"
-          value={form.date_debut}
-          onChange={handleChange}
-          required
-        />
+            className="w-full"
+            type="date"
+            name="date_debut"
+            value={form.date_debut}
+            onChange={handleChange}
+            required />
+          
       </label>
       <label className="block">
         <span>Date fin</span>
         <Input
-          className="w-full"
-          type="date"
-          name="date_fin"
-          value={form.date_fin}
-          onChange={handleChange}
-        />
+            className="w-full"
+            type="date"
+            name="date_fin"
+            value={form.date_fin}
+            onChange={handleChange} />
+          
       </label>
       <label className="block">
         <span>Prochaine échéance</span>
         <Input
-          className="w-full"
-          type="date"
-          name="next_echeance"
-          value={form.next_echeance}
-          onChange={handleChange}
-        />
+            className="w-full"
+            type="date"
+            name="next_echeance"
+            value={form.next_echeance}
+            onChange={handleChange} />
+          
       </label>
       <label className="block">
         <span>Assignée à</span>
         <Select
-          className="w-full"
-          name="assigned_to"
-          value={form.assigned_to}
-          onChange={handleChange}
-        >
+            className="w-full"
+            name="assigned_to"
+            value={form.assigned_to}
+            onChange={handleChange}>
+            
           <option value="">--</option>
-          {users.map(u => (
+          {users.map((u) =>
             <option key={u.id} value={u.id}>{u.nom}</option>
-          ))}
+            )}
         </Select>
       </label>
       <label className="block">
         <span>Statut</span>
         <Select
-          className="w-full"
-          name="statut"
-          value={form.statut}
-          onChange={handleChange}
-        >
+            className="w-full"
+            name="statut"
+            value={form.statut}
+            onChange={handleChange}>
+            
           <option value="a_faire">À faire</option>
           <option value="en_cours">En cours</option>
           <option value="fait">Fait</option>
@@ -158,6 +158,6 @@ export default function TacheForm({ task }) {
         {task ? "Mettre à jour" : "Ajouter"}
       </PrimaryButton>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

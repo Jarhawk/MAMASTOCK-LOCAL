@@ -1,4 +1,4 @@
-export function mapDbLineToUI(row: any) {
+import { isTauri } from "@/lib/db/sql";export function mapDbLineToUI(row: any) {
   const qte = Number(row.quantite ?? 0);
   const pu = Number(row.prix_unitaire_ht ?? 0);
   const total_ht = Number(row.montant_ht ?? qte * pu);
@@ -12,7 +12,7 @@ export function mapDbLineToUI(row: any) {
     pu_ht: qte > 0 ? total_ht / qte : 0,
     pmp: Number(row.produit?.pmp ?? row.pmp ?? 0),
     tva: Number(row.tva ?? row.produit?.tva ?? 0),
-    zone_id: row.zone_id ?? null,
+    zone_id: row.zone_id ?? null
   };
 }
 
@@ -22,6 +22,6 @@ export function mapUILineToPayload(l: any) {
     quantite: Number(l.quantite || 0),
     prix_unitaire_ht: Number(l.pu_ht || 0),
     tva: Number(l.tva || 0),
-    zone_id: l.zone_id ?? null,
+    zone_id: l.zone_id ?? null
   };
 }

@@ -2,8 +2,8 @@ import {
   formatMoneyFR,
   parseMoneyToNumberFR,
   normalizeDecimalFR,
-  roundTo,
-} from '@/utils/numberFormat';
+  roundTo } from
+'@/utils/numberFormat';import { isTauri } from "@/lib/db/sql";
 
 describe('numberFormat', () => {
   test('formatMoneyFR', () => {

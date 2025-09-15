@@ -2,7 +2,7 @@
 import { query, exec, one } from "./db";
 
 // Exemples : adapte aux tables de ton schéma SQLite
-export async function listProducts() {
+import { isTauri } from "@/lib/db/sql";export async function listProducts() {
   return await query("SELECT * FROM produits ORDER BY nom");
 }
 export async function getProduct(id: string) {
@@ -17,9 +17,9 @@ export async function upsertProduct(p: any) {
     return p.id;
   }
 }
-export async function recordStockMove({ produit_id, qte, prix_unitaire }:{
-  produit_id: string; qte: number; prix_unitaire: number;
-}) {
+export async function recordStockMove({ produit_id, qte, prix_unitaire
+
+}: {produit_id: string;qte: number;prix_unitaire: number;}) {
   await exec("INSERT INTO mouvements (produit_id, qte, prix_unitaire) VALUES (?, ?, ?)", [produit_id, qte, prix_unitaire]);
   // Si tu as des triggers/ vues pour PMP, ils s’actualiseront
 }

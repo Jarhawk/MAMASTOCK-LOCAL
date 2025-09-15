@@ -1,4 +1,4 @@
-import { readText, saveText, existsFile } from "@/local/files";
+import { readText, saveText, existsFile } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "signalements.json";
 
@@ -17,7 +17,7 @@ async function writeAll(list: any[]) {
   await saveText(FILE, JSON.stringify(list, null, 2));
 }
 
-export async function signalements_list({ mama_id }: { mama_id: string }) {
+export async function signalements_list({ mama_id }: {mama_id: string;}) {
   const list = await readAll();
   return list.filter((s) => !mama_id || s.mama_id === mama_id);
 }
@@ -33,6 +33,6 @@ export async function signalement_insert(sig: any) {
 export async function signalement_get(mama_id: string, id: string) {
   const list = await readAll();
   return (
-    list.find((s) => s.id === id && (!mama_id || s.mama_id === mama_id)) || null
-  );
+    list.find((s) => s.id === id && (!mama_id || s.mama_id === mama_id)) || null);
+
 }

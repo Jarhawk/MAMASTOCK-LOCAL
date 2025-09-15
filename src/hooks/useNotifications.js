@@ -12,8 +12,8 @@ import {
   notifications_unreadCount,
   notifications_get,
   preferences_get,
-  preferences_update,
-} from '@/local/notifications';
+  preferences_update } from
+'@/local/notifications';import { isTauri } from "@/lib/db/sql";
 
 export default function useNotifications() {
   const { mama_id, user_id } = useAuthContext();
@@ -22,9 +22,9 @@ export default function useNotifications() {
   const [error, setError] = useState(null);
 
   const sendToast = useCallback((message, type = "info") => {
-    if (type === "success") toast.success(message);
-    else if (type === "error") toast.error(message);
-    else toast(message);
+    if (type === "success") toast.success(message);else
+    if (type === "error") toast.error(message);else
+    toast(message);
   }, []);
 
   const createNotification = useCallback(
@@ -36,7 +36,7 @@ export default function useNotifications() {
         titre,
         texte,
         lien,
-        type,
+        type
       });
       return { data: id };
     },
@@ -75,7 +75,7 @@ export default function useNotifications() {
     async (id) => {
       if (!mama_id || !user_id || !id) return;
       await notifications_update(id, { lu: true });
-      setItems((ns) => ns.map((n) => (n.id === id ? { ...n, lu: true } : n)));
+      setItems((ns) => ns.map((n) => n.id === id ? { ...n, lu: true } : n));
     },
     [mama_id, user_id]
   );
@@ -118,7 +118,7 @@ export default function useNotifications() {
     async (id, values = {}) => {
       if (!id) return { error: 'missing id' };
       await notifications_update(id, values);
-      setItems((ns) => ns.map((n) => (n.id === id ? { ...n, ...values } : n)));
+      setItems((ns) => ns.map((n) => n.id === id ? { ...n, ...values } : n));
       return { data: true };
     },
     []
@@ -165,6 +165,6 @@ export default function useNotifications() {
     sendToast,
     createNotification,
     sendEmailNotification,
-    sendWebhook,
+    sendWebhook
   };
 }

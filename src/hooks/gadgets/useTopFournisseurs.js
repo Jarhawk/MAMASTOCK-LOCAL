@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from '@/hooks/useAuth';
-import { top_fournisseurs_list } from '@/lib/db';
+import { top_fournisseurs_list } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export default function useTopFournisseurs() {
   const { mama_id, loading: authLoading } = useAuth() || {};
@@ -20,7 +20,7 @@ export default function useTopFournisseurs() {
           (rows || []).map((r) => ({
             id: r.id,
             montant: Number(r.montant || 0),
-            mois: r.mois,
+            mois: r.mois
           }))
         );
       } catch (e) {

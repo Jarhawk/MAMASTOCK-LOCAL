@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useConsolidation } from "@/hooks/useConsolidation";
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/db/sql";
 
 export default function Consolidation() {
   const {
@@ -14,7 +14,7 @@ export default function Consolidation() {
     fetchConsoMensuelle,
     exportExcel,
     exportPdf,
-    getKpis,
+    getKpis
   } = useConsolidation();
   const [selected, setSelected] = useState([]);
   const [period, setPeriod] = useState({ start: "", end: "" });
@@ -42,26 +42,26 @@ export default function Consolidation() {
           multiple
           value={selected}
           onChange={handleSelect}
-          className="border p-1 flex-1 min-h-[5rem]"
-        >
-          {sites.map((s) => (
-            <option key={s.mama_id} value={s.mama_id}>
+          className="border p-1 flex-1 min-h-[5rem]">
+          
+          {sites.map((s) =>
+          <option key={s.mama_id} value={s.mama_id}>
               {s.mama_id}
             </option>
-          ))}
+          )}
         </select>
         <input
           type="month"
           value={period.start}
           onChange={(e) => setPeriod((p) => ({ ...p, start: e.target.value }))}
-          className="border p-1"
-        />
+          className="border p-1" />
+        
         <input
           type="month"
           value={period.end}
           onChange={(e) => setPeriod((p) => ({ ...p, end: e.target.value }))}
-          className="border p-1"
-        />
+          className="border p-1" />
+        
         <Button onClick={load}>Charger</Button>
         <Button variant="outline" onClick={() => exportExcel(rows)}>
           Excel
@@ -76,10 +76,10 @@ export default function Consolidation() {
         <div>Marge: {kpis.marge}</div>
         <div>Stock: {kpis.stock}</div>
       </div>
-      {loading ? (
-        <LoadingSpinner message="Chargement..." />
-      ) : (
-        <TableContainer>
+      {loading ?
+      <LoadingSpinner message="Chargement..." /> :
+
+      <TableContainer>
           <table className="min-w-full text-xs">
             <thead>
               <tr>
@@ -91,19 +91,19 @@ export default function Consolidation() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
-                <tr key={r.mama_id}>
+              {rows.map((r) =>
+            <tr key={r.mama_id}>
                   <td>{r.mama_id}</td>
                   <td>{r.total_ventes}</td>
                   <td>{r.total_achats}</td>
                   <td>{r.marge}</td>
                   <td>{r.valeur_stock}</td>
                 </tr>
-              ))}
+            )}
             </tbody>
           </table>
         </TableContainer>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

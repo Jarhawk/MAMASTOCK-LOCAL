@@ -1,4 +1,4 @@
-import { readText, existsFile } from "@/local/files";
+import { readText, existsFile } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "stock_requisitionne.json";
 

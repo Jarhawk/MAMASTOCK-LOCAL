@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import QRCode from 'qrcode.react';
 import { useTwoFactorAuth } from '@/hooks/useTwoFactorAuth';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';import { isTauri } from "@/lib/db/sql";
 
 export default function TwoFactorSetup() {
   const {
@@ -13,7 +13,7 @@ export default function TwoFactorSetup() {
     startSetup,
     finalizeSetup,
     disable,
-    verify,
+    verify
   } = useTwoFactorAuth();
   const [code, setCode] = useState('');
   const [verified, setVerified] = useState(false);
@@ -39,38 +39,38 @@ export default function TwoFactorSetup() {
 
   if (!enabled && !secret) {
     return (
-      <Button onClick={handleEnable}>Activer la double authentification</Button>
-    );
+      <Button onClick={handleEnable}>Activer la double authentification</Button>);
+
   }
 
   return (
     <div className="space-y-4">
-      {!enabled && secret && (
-        <div className="p-4 bg-white/10 border border-white/20 backdrop-blur-xl rounded-2xl shadow">
+      {!enabled && secret &&
+      <div className="p-4 bg-white/10 border border-white/20 backdrop-blur-xl rounded-2xl shadow">
           <p>
             Scannez ce QR code dans votre application d'authentification puis
             entrez le code :
           </p>
-          {secret && (
-            <QRCode value={`otpauth://totp/MamaStock?secret=${secret}`} />
-          )}
+          {secret &&
+        <QRCode value={`otpauth://totp/MamaStock?secret=${secret}`} />
+        }
           <input
-            className="form-input mt-2"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder="123456"
-          />
+          className="form-input mt-2"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          placeholder="123456" />
+        
           <Button onClick={handleVerify}>Vérifier</Button>
         </div>
-      )}
-      {verified && (
-        <div className="text-green-600">Double authentification activée !</div>
-      )}
-      {enabled && (
-        <Button variant="outline" onClick={disable}>
+      }
+      {verified &&
+      <div className="text-green-600">Double authentification activée !</div>
+      }
+      {enabled &&
+      <Button variant="outline" onClick={disable}>
           Désactiver la double authentification
         </Button>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

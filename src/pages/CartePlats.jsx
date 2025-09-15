@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { fiches_actives_list, familles_list } from "@/lib/db";
 
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import TableContainer from "@/components/ui/TableContainer";
+import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/db/sql";
 
 const FOOD_COST_SEUIL = 35;
 
@@ -19,9 +19,9 @@ export default function CartePlats() {
   useEffect(() => {
     if (!mama_id || authLoading) return;
     Promise.all([
-      fiches_actives_list(mama_id),
-      familles_list(mama_id)
-    ]).then(([fichesRows, famillesRows]) => {
+    fiches_actives_list(mama_id),
+    familles_list(mama_id)]
+    ).then(([fichesRows, famillesRows]) => {
       setFiches(fichesRows || []);
       setFamilles((famillesRows || []).map((f) => f.nom));
     });

@@ -6,8 +6,8 @@ import {
   inventaire_lignes_list,
   inventaire_ligne_add,
   inventaire_ligne_update,
-  inventaire_ligne_delete,
-} from '@/lib/db';
+  inventaire_ligne_delete } from
+'@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export function useInventaireLignes() {
   const { mama_id } = useAuth();

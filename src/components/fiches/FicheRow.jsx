@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
 
 export default function FicheRow({ fiche, onEdit, onDetail, onDuplicate, onDelete, canEdit }) {
   return (
@@ -7,8 +7,8 @@ export default function FicheRow({ fiche, onEdit, onDetail, onDuplicate, onDelet
         <Button
           variant="link"
           className="font-semibold text-white"
-          onClick={() => onDetail(fiche)}
-        >
+          onClick={() => onDetail(fiche)}>
+          
           {fiche.nom}
         </Button>
       </td>
@@ -16,52 +16,52 @@ export default function FicheRow({ fiche, onEdit, onDetail, onDuplicate, onDelet
       <td className="border px-4 py-2 text-right">
         {Number(fiche.cout_par_portion).toLocaleString("fr-FR", {
           style: "currency",
-          currency: "EUR",
+          currency: "EUR"
         })}
       </td>
       <td className="border px-4 py-2 text-right">{fiche.lignes?.length || 0}</td>
       <td className="border px-4 py-2">{fiche.actif ? "✅" : "❌"}</td>
       <td className="border px-4 py-2">
-        {canEdit && (
-          <>
+        {canEdit &&
+        <>
             <Button
-              size="sm"
-              variant="outline"
-              className="mr-2"
-              onClick={() => onEdit(fiche)}
-            >
+            size="sm"
+            variant="outline"
+            className="mr-2"
+            onClick={() => onEdit(fiche)}>
+            
               Modifier
             </Button>
           </>
-        )}
+        }
         <Button
           size="sm"
           variant="outline"
           className="mr-2"
-          onClick={() => onDetail(fiche)}
-        >
+          onClick={() => onDetail(fiche)}>
+          
           Voir
         </Button>
-        {canEdit && (
-          <>
+        {canEdit &&
+        <>
             <Button
-              size="sm"
-              variant="outline"
-              className="mr-2"
-              onClick={() => onDuplicate(fiche.id)}
-            >
+            size="sm"
+            variant="outline"
+            className="mr-2"
+            onClick={() => onDuplicate(fiche.id)}>
+            
               Dupliquer
             </Button>
             <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => onDelete(fiche.id)}
-            >
+            size="sm"
+            variant="destructive"
+            onClick={() => onDelete(fiche.id)}>
+            
               Désactiver
             </Button>
           </>
-        )}
+        }
       </td>
-    </tr>
-  );
+    </tr>);
+
 }

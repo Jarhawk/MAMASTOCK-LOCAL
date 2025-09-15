@@ -6,7 +6,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { LiquidBackground } from "@/components/LiquidBackground";
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import Unauthorized from "@/pages/auth/Unauthorized";
+import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/db/sql";
 
 export default function BLCreate() {
   const navigate = useNavigate();
@@ -22,6 +22,6 @@ export default function BLCreate() {
       <GlassCard className="relative z-10">
         <BLForm fournisseurs={fournisseurs} onClose={() => navigate(-1)} />
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

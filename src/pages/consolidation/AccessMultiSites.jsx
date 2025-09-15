@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { readConfig } from "@/appFs";
+import { readConfig } from "@/appFs";import { isTauri } from "@/lib/db/sql";
 
 export default function AccessMultiSites() {
   const [rows, setRows] = useState([]);
@@ -12,7 +12,7 @@ export default function AccessMultiSites() {
   useEffect(() => {
     setLoading(true);
     readConfig().then((cfg) => {
-      const list = (cfg && cfg.user_mama_access) || [];
+      const list = cfg && cfg.user_mama_access || [];
       setRows(list);
       setLoading(false);
     });

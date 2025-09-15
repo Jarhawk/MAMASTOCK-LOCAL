@@ -1,4 +1,4 @@
-export type MamaSettings = {
+import { isTauri } from "@/lib/db/sql";export type MamaSettings = {
   logo_url: string | null;
   primary_color: string | null;
   secondary_color: string | null;
@@ -12,7 +12,7 @@ export type MamaSettings = {
   mentions_legales: string | null;
 };
 
-export type Fournisseur = { id: string; nom: string; actif: boolean };
+export type Fournisseur = {id: string;nom: string;actif: boolean;};
 export type FournisseurContact = {
   id: string;
   fournisseur_id: string;

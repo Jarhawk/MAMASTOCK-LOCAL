@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useFournisseurs } from "@/hooks/useFournisseurs";
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
-import { motion as Motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/db/sql";
 
 export default function FournisseurFormModal({ fournisseur, onClose }) {
   const { createFournisseur, updateFournisseur } = useFournisseurs();
@@ -12,15 +12,15 @@ export default function FournisseurFormModal({ fournisseur, onClose }) {
     tel: fournisseur?.contact?.tel || "",
     contact: fournisseur?.contact?.nom || "",
     email: fournisseur?.contact?.email || "",
-    actif: fournisseur?.actif ?? true,
+    actif: fournisseur?.actif ?? true
   });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = e => setForm(f => ({
+  const handleChange = (e) => setForm((f) => ({
     ...f, [e.target.name]: e.target.value
   }));
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
     setLoading(true);
@@ -57,8 +57,8 @@ export default function FournisseurFormModal({ fournisseur, onClose }) {
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.98, opacity: 0 }}
       onSubmit={handleSubmit}
-      className="min-w-[340px] space-y-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-lg p-6 text-white"
-   >
+      className="min-w-[340px] space-y-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-lg p-6 text-white">
+      
       <h3 className="text-xl font-bold mb-2">{fournisseur ? "Modifier" : "Ajouter"} un fournisseur</h3>
       <div>
         <label htmlFor="nom">Nom</label>
@@ -81,14 +81,14 @@ export default function FournisseurFormModal({ fournisseur, onClose }) {
           id="actif"
           type="checkbox"
           checked={form.actif}
-          onChange={e => setForm(f => ({ ...f, actif: e.target.checked }))}
-        />
+          onChange={(e) => setForm((f) => ({ ...f, actif: e.target.checked }))} />
+        
         <label htmlFor="actif">Actif</label>
       </div>
       <div className="flex gap-2 justify-end">
         <Button type="button" variant="outline" onClick={onClose} disabled={loading}>Annuler</Button>
         <Button type="submit" disabled={loading}>{fournisseur ? "Enregistrer" : "Ajouter"}</Button>
       </div>
-    </Motion.form>
-  );
+    </Motion.form>);
+
 }

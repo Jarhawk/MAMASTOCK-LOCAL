@@ -5,17 +5,17 @@ import {
   DialogContent,
   DialogTitle,
   DialogDescription,
-  DialogClose,
-} from "@/components/ui/SmartDialog";
+  DialogClose } from
+"@/components/ui/SmartDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/db/sql";
 
 export default function FactureImportModal({ open, onClose, onImport }) {
   const [rows, setRows] = useState([]);
   const [fileName, setFileName] = useState("");
 
-  const handleFile = async e => {
+  const handleFile = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setFileName(file.name);
@@ -23,17 +23,17 @@ export default function FactureImportModal({ open, onClose, onImport }) {
     const wb = XLSX.read(data, { type: "array" });
     const ws = wb.Sheets[wb.SheetNames[0]];
     const json = XLSX.utils.sheet_to_json(ws, { defval: "" });
-    setRows(json.map(r => ({ ...r })));
+    setRows(json.map((r) => ({ ...r })));
   };
 
   const handleChange = (idx, field, value) => {
-    setRows(rs => rs.map((r, i) => (i === idx ? { ...r, [field]: value } : r)));
+    setRows((rs) => rs.map((r, i) => i === idx ? { ...r, [field]: value } : r));
   };
 
-  const invalid = row => !row.produit || !row.quantite;
+  const invalid = (row) => !row.produit || !row.quantite;
 
   return (
-    <Dialog open={open} onOpenChange={isOpen => !isOpen && onClose?.()}>
+    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose?.()}>
       <DialogContent className="space-y-4">
         <DialogTitle>Import Excel</DialogTitle>
         <DialogDescription className="sr-only">
@@ -44,8 +44,8 @@ export default function FactureImportModal({ open, onClose, onImport }) {
           <a
             href="/factures_template.xlsx"
             download
-            className="text-sm text-mamastockGold underline"
-          >
+            className="text-sm text-mamastockGold underline">
+            
             Télécharger le template Excel
           </a>
         </div>
@@ -54,27 +54,27 @@ export default function FactureImportModal({ open, onClose, onImport }) {
           <table className="w-full text-xs">
             <thead>
               <tr>
-                {rows[0] && Object.keys(rows[0]).map(k => (
-                  <th key={k} className="px-2 py-1 text-left sticky top-0 bg-black/30">
+                {rows[0] && Object.keys(rows[0]).map((k) =>
+                <th key={k} className="px-2 py-1 text-left sticky top-0 bg-black/30">
                     {k}
                   </th>
-                ))}
+                )}
               </tr>
             </thead>
             <tbody>
-              {rows.map((r, idx) => (
-                <tr key={idx} className={invalid(r) ? "bg-red-200/20" : ""}>
-                  {Object.keys(r).map(k => (
-                    <td key={k} className="p-1">
+              {rows.map((r, idx) =>
+              <tr key={idx} className={invalid(r) ? "bg-red-200/20" : ""}>
+                  {Object.keys(r).map((k) =>
+                <td key={k} className="p-1">
                       <Input
-                        value={r[k]}
-                        onChange={e => handleChange(idx, k, e.target.value)}
-                        className="text-xs bg-transparent"
-                      />
+                    value={r[k]}
+                    onChange={(e) => handleChange(idx, k, e.target.value)}
+                    className="text-xs bg-transparent" />
+                  
                     </td>
-                  ))}
+                )}
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -82,8 +82,8 @@ export default function FactureImportModal({ open, onClose, onImport }) {
           <Button
             type="button"
             disabled={!rows.length || rows.some(invalid)}
-            onClick={() => onImport?.(rows)}
-          >
+            onClick={() => onImport?.(rows)}>
+            
             Importer
           </Button>
           <DialogClose asChild>
@@ -93,6 +93,6 @@ export default function FactureImportModal({ open, onClose, onImport }) {
           </DialogClose>
         </div>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>);
+
 }

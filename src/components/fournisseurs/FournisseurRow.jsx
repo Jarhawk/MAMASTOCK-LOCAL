@@ -1,5 +1,5 @@
 import { Eye, Edit, Trash2, Check } from "lucide-react";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
 
 export default function FournisseurRow({ fournisseur, productCount, onDetail, onEdit, onToggleActive, canEdit }) {
   return (
@@ -13,34 +13,34 @@ export default function FournisseurRow({ fournisseur, productCount, onDetail, on
         <Button
           className="w-auto flex items-center gap-1"
           onClick={() => onDetail(fournisseur.id)}
-          aria-label="Voir"
-        >
+          aria-label="Voir">
+          
           <Eye size={16} />
           <span className="hidden sm:inline">Voir</span>
         </Button>
       </td>
       <td className="py-2 px-3">
-        {canEdit && (
-          <div className="flex gap-2">
+        {canEdit &&
+        <div className="flex gap-2">
             <Button
-              className="w-auto flex items-center gap-1"
-              onClick={() => onEdit(fournisseur)}
-              aria-label="Modifier"
-            >
+            className="w-auto flex items-center gap-1"
+            onClick={() => onEdit(fournisseur)}
+            aria-label="Modifier">
+            
               <Edit size={16} />
               <span className="hidden sm:inline">Modifier</span>
             </Button>
             <Button
-              className="w-auto flex items-center gap-1"
-              onClick={() => onToggleActive(fournisseur.id, !fournisseur.actif)}
-              aria-label={fournisseur.actif ? "Désactiver" : "Activer"}
-            >
+            className="w-auto flex items-center gap-1"
+            onClick={() => onToggleActive(fournisseur.id, !fournisseur.actif)}
+            aria-label={fournisseur.actif ? "Désactiver" : "Activer"}>
+            
               {fournisseur.actif ? <Trash2 size={16} /> : <Check size={16} />}
               <span className="hidden sm:inline">{fournisseur.actif ? "Désactiver" : "Activer"}</span>
             </Button>
           </div>
-        )}
+        }
       </td>
-    </tr>
-  );
+    </tr>);
+
 }

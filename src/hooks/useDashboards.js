@@ -6,8 +6,8 @@ import {
   dashboard_create,
   gadget_add,
   gadget_update,
-  gadget_delete,
-} from "@/lib/db";
+  gadget_delete } from
+"@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export function useDashboards() {
   const { id: user_id, mama_id } = useAuth();
@@ -55,11 +55,11 @@ export function useDashboards() {
     try {
       const data = await gadget_add({ tableau_id: dashboardId, config, mama_id });
       setDashboards((ds) =>
-        ds.map((db) =>
-          db.id === dashboardId
-            ? { ...db, widgets: [...(db.widgets || []), data] }
-            : db
-        )
+      ds.map((db) =>
+      db.id === dashboardId ?
+      { ...db, widgets: [...(db.widgets || []), data] } :
+      db
+      )
       );
       return data;
     } catch (e) {
@@ -77,10 +77,10 @@ export function useDashboards() {
     try {
       const data = await gadget_update(id, values);
       setDashboards((ds) =>
-        ds.map((db) => ({
-          ...db,
-          widgets: db.widgets?.map((w) => (w.id === id ? data : w)) || [],
-        }))
+      ds.map((db) => ({
+        ...db,
+        widgets: db.widgets?.map((w) => w.id === id ? data : w) || []
+      }))
       );
       return data;
     } catch (e) {
@@ -98,10 +98,10 @@ export function useDashboards() {
     try {
       await gadget_delete(id);
       setDashboards((ds) =>
-        ds.map((db) => ({
-          ...db,
-          widgets: db.widgets?.filter((w) => w.id !== id) || [],
-        }))
+      ds.map((db) => ({
+        ...db,
+        widgets: db.widgets?.filter((w) => w.id !== id) || []
+      }))
       );
     } catch (e) {
       setError(e.message || e);

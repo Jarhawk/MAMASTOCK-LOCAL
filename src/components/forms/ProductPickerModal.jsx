@@ -2,21 +2,21 @@ import { useState, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useProduitsSearch } from "@/hooks/useProduitsSearch";
+import { useProduitsSearch } from "@/hooks/useProduitsSearch";import { isTauri } from "@/lib/db/sql";
 
 export default function ProductPickerModal({
   open,
   onClose,
   onSelect: onPick,
   excludeIdsSameZone: _excludeIdsSameZone,
-  currentLineProductId: _currentLineProductId,
+  currentLineProductId: _currentLineProductId
 }) {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 20;
   const { data: results = [], total } = useProduitsSearch(query, null, {
     page,
-    pageSize,
+    pageSize
   });
 
   const [active, setActive] = useState(-1);
@@ -63,8 +63,8 @@ export default function ProductPickerModal({
         <Dialog.Overlay className="fixed inset-0 z-50 bg-[#0B1220]/60 backdrop-blur-sm" />
         <Dialog.Content
           aria-describedby="product-search-desc"
-          className="fixed left-1/2 top-1/2 z-50 w-[min(900px,95vw)] max-h-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
-        >
+          className="fixed left-1/2 top-1/2 z-50 w-[min(900px,95vw)] max-h-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden">
+          
           <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/40">
             <Dialog.Title className="text-sm font-semibold">Rechercher un produit</Dialog.Title>
             <Dialog.Close asChild>
@@ -85,39 +85,39 @@ export default function ProductPickerModal({
               autoCapitalize="none"
               spellCheck={false}
               aria-describedby="product-search-desc"
-              className="w-full px-4 py-2 font-semibold text-white placeholder-white/50 bg-white/10 backdrop-blur rounded-md shadow-lg border border-white/20 ring-1 ring-white/20 focus:outline-none hover:bg-white/10"
-            />
+              className="w-full px-4 py-2 font-semibold text-white placeholder-white/50 bg-white/10 backdrop-blur rounded-md shadow-lg border border-white/20 ring-1 ring-white/20 focus:outline-none hover:bg-white/10" />
+            
             <p id="product-search-desc" className="sr-only">
               Recherche par nom de produit (ILIKE sur produits.nom)
             </p>
             <div className="border border-border rounded-lg max-h-60 overflow-y-auto">
-              {results.length === 0 ? (
-                <div className="p-4 text-sm text-muted-foreground">Aucun résultat</div>
-              ) : (
-                results.map((p, idx) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => {
-                      onPick?.(p);
-                      onClose?.();
-                    }}
-                    className={`w-full text-left px-3 py-2 hover:bg-white/5 rounded ${
-                      idx === active ? "bg-white/10" : ""
-                    }`}
-                  >
+              {results.length === 0 ?
+              <div className="p-4 text-sm text-muted-foreground">Aucun résultat</div> :
+
+              results.map((p, idx) =>
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => {
+                  onPick?.(p);
+                  onClose?.();
+                }}
+                className={`w-full text-left px-3 py-2 hover:bg-white/5 rounded ${
+                idx === active ? "bg-white/10" : ""}`
+                }>
+                
                     {p.nom}
                   </button>
-                ))
-              )}
+              )
+              }
             </div>
             <div className="flex justify-between items-center pt-2">
               <Button
                 variant="outline"
                 size="sm"
                 disabled={page === 1}
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-              >
+                onClick={() => setPage((p) => Math.max(1, p - 1))}>
+                
                 Préc.
               </Button>
               <span className="text-xs text-muted-foreground">
@@ -128,8 +128,8 @@ export default function ProductPickerModal({
                 variant="outline"
                 size="sm"
                 disabled={page * pageSize >= total}
-                onClick={() => setPage((p) => p + 1)}
-              >
+                onClick={() => setPage((p) => p + 1)}>
+                
                 Suiv.
               </Button>
             </div>
@@ -142,7 +142,6 @@ export default function ProductPickerModal({
           </div>
         </Dialog.Content>
       </Dialog.Portal>
-    </Dialog.Root>
-  );
-}
+    </Dialog.Root>);
 
+}

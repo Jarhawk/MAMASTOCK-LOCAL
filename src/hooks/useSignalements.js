@@ -4,8 +4,8 @@ import { useAuth } from '@/hooks/useAuth';
 import {
   signalements_list,
   signalement_insert,
-  signalement_get,
-} from "@/local/signalements";
+  signalement_get } from
+"@/local/signalements";import { isTauri } from "@/lib/db/sql";
 
 export function useSignalements() {
   const { mama_id, user_id, loading: authLoading } = useAuth();
@@ -41,7 +41,7 @@ export function useSignalements() {
       ...newSignalement,
       mama_id,
       created_by: user_id,
-      date: new Date().toISOString(),
+      date: new Date().toISOString()
     });
     await fetchSignalements();
   };

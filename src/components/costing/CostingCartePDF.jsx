@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';import { isTauri } from "@/lib/db/sql";
 
 const styles = StyleSheet.create({
   page: { padding: 24, fontSize: 12 },
@@ -7,11 +7,11 @@ const styles = StyleSheet.create({
   kpis: { marginBottom: 12 },
   row: { flexDirection: 'row', borderBottom: '1px solid #ccc', padding: 2 },
   cell: { flex: 1 },
-  footer: { position: 'absolute', bottom: 24, left: 24, fontSize: 10 },
-})
+  footer: { position: 'absolute', bottom: 24, left: 24, fontSize: 10 }
+});
 
 export default function CostingCartePDF({ data = [], kpis = {}, mamaName = '' }) {
-  const date = new Date().toLocaleDateString()
+  const date = new Date().toLocaleDateString();
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -22,8 +22,8 @@ export default function CostingCartePDF({ data = [], kpis = {}, mamaName = '' })
           <Text>Fiches sous objectif: {kpis.under ?? 0}</Text>
         </View>
         <View>
-          {data.map((f, idx) => (
-            <View key={idx} style={styles.row}>
+          {data.map((f, idx) =>
+          <View key={idx} style={styles.row}>
               <Text style={styles.cell}>{f.nom}</Text>
               <Text style={styles.cell}>{f.type}</Text>
               <Text style={styles.cell}>{f.cout_par_portion}</Text>
@@ -32,13 +32,12 @@ export default function CostingCartePDF({ data = [], kpis = {}, mamaName = '' })
               <Text style={styles.cell}>{f.marge_pct}</Text>
               <Text style={styles.cell}>{f.food_cost_pct}</Text>
             </View>
-          ))}
+          )}
         </View>
         <Text style={styles.footer}>
           {mamaName} - {date}
         </Text>
       </Page>
-    </Document>
-  )
-}
+    </Document>);
 
+}

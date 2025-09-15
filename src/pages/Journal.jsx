@@ -8,7 +8,7 @@ import SecondaryButton from "@/components/ui/SecondaryButton";
 import { Input } from "@/components/ui/input";
 import TableContainer from "@/components/ui/TableContainer";
 import GlassCard from "@/components/ui/GlassCard";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/db/sql";
 
 export default function Journal() {
   const { mama_id, loading: authLoading } = useAuth();
@@ -24,7 +24,7 @@ export default function Journal() {
   if (authLoading) return <LoadingSpinner message="Chargement..." />;
   if (!mama_id) return null;
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     await fetchLogs({ search, startDate: startDate || null, endDate: endDate || null });
   };
@@ -34,23 +34,23 @@ export default function Journal() {
             <GlassCard title="Filtrer" className="mb-4">
         <form onSubmit={handleSubmit} className="flex flex-wrap gap-2 items-end">
         <Input
-          placeholder="Recherche action"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="w-40"
-        />
+            placeholder="Recherche action"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-40" />
+          
         <Input
-          type="date"
-          value={startDate}
-          onChange={e => setStartDate(e.target.value)}
-          aria-label="Date début"
-        />
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            aria-label="Date début" />
+          
         <Input
-          type="date"
-          value={endDate}
-          onChange={e => setEndDate(e.target.value)}
-          aria-label="Date fin"
-        />
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            aria-label="Date fin" />
+          
         <PrimaryButton type="submit">Filtrer</PrimaryButton>
         <SecondaryButton type="button" onClick={exportLogsToExcel}>
           Export Excel
@@ -67,18 +67,18 @@ export default function Journal() {
             </tr>
           </thead>
           <tbody>
-            {logs.map(l => (
-              <tr key={l.id}>
+            {logs.map((l) =>
+            <tr key={l.id}>
                 <td className="border px-2 py-1">
                   {new Date(l.created_at).toLocaleString()}
                 </td>
                 <td className="border px-2 py-1">{l.action}</td>
                 <td className="border px-2 py-1">{l.utilisateurs?.nom || l.done_by}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

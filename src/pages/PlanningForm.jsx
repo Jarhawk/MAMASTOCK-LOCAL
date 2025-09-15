@@ -9,7 +9,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { useAuth } from '@/hooks/useAuth';
-import Unauthorized from "@/pages/auth/Unauthorized";
+import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/db/sql";
 
 export default function PlanningForm() {
   const navigate = useNavigate();
@@ -37,11 +37,11 @@ export default function PlanningForm() {
   }
 
   const updateLine = (idx, field, val) => {
-    setLignes(l => l.map((li, i) => (i === idx ? { ...li, [field]: val } : li)));
+    setLignes((l) => l.map((li, i) => i === idx ? { ...li, [field]: val } : li));
   };
-  const addLine = () => setLignes(l => [...l, { produit_id: "", quantite: 1, observation: "" }]);
+  const addLine = () => setLignes((l) => [...l, { produit_id: "", quantite: 1, observation: "" }]);
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!date_prevue || !nom) {
       toast.error("Nom et date requis");
@@ -50,8 +50,8 @@ export default function PlanningForm() {
     setLoading(true);
     const { error } = await createPlanning({ nom, date_prevue, commentaire, statut, lignes });
     setLoading(false);
-    if (error) toast.error(error.message);
-    else {
+    if (error) toast.error(error.message);else
+    {
       toast.success("Planning enregistré");
       navigate("/planning");
     }
@@ -61,14 +61,14 @@ export default function PlanningForm() {
     <GlassCard title="Nouveau planning">
       <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex gap-4">
-        <input className="input flex-1" placeholder="Nom" value={nom} onChange={e => setNom(e.target.value)} required />
-        <input type="date" className="form-input" value={date_prevue} onChange={e => setDatePrevue(e.target.value)} required />
-        <select className="form-input" value={statut} onChange={e => setStatut(e.target.value)}>
+        <input className="input flex-1" placeholder="Nom" value={nom} onChange={(e) => setNom(e.target.value)} required />
+        <input type="date" className="form-input" value={date_prevue} onChange={(e) => setDatePrevue(e.target.value)} required />
+        <select className="form-input" value={statut} onChange={(e) => setStatut(e.target.value)}>
           <option value="prévu">Prévu</option>
           <option value="confirmé">Confirmé</option>
         </select>
       </div>
-      <input className="input w-full" placeholder="Commentaire" value={commentaire} onChange={e => setCommentaire(e.target.value)} />
+      <input className="input w-full" placeholder="Commentaire" value={commentaire} onChange={(e) => setCommentaire(e.target.value)} />
       <h2 className="font-semibold">Produits</h2>
       <TableContainer>
         <table className="min-w-full text-sm">
@@ -80,24 +80,24 @@ export default function PlanningForm() {
             </tr>
           </thead>
           <tbody>
-            {lignes.map((l, idx) => (
+            {lignes.map((l, idx) =>
               <tr key={idx}>
                 <td className="px-2 py-1">
-                  <select className="form-input" value={l.produit_id} onChange={e => updateLine(idx, "produit_id", e.target.value)} required>
+                  <select className="form-input" value={l.produit_id} onChange={(e) => updateLine(idx, "produit_id", e.target.value)} required>
                     <option value="">-- produit --</option>
-                    {products.map(p => (
-                      <option key={p.id} value={p.id}>{p.nom}</option>
-                    ))}
+                    {products.map((p) =>
+                    <option key={p.id} value={p.id}>{p.nom}</option>
+                    )}
                   </select>
                 </td>
                 <td className="px-2 py-1">
-                  <input type="number" min="0" className="input w-24" value={l.quantite} onChange={e => updateLine(idx, "quantite", e.target.value)} required />
+                  <input type="number" min="0" className="input w-24" value={l.quantite} onChange={(e) => updateLine(idx, "quantite", e.target.value)} required />
                 </td>
                 <td className="px-2 py-1">
-                  <input className="form-input" value={l.observation} onChange={e => updateLine(idx, "observation", e.target.value)} />
+                  <input className="form-input" value={l.observation} onChange={(e) => updateLine(idx, "observation", e.target.value)} />
                 </td>
               </tr>
-            ))}
+              )}
           </tbody>
         </table>
       </TableContainer>
@@ -107,6 +107,6 @@ export default function PlanningForm() {
       </div>
       {loading && <LoadingSpinner message="Enregistrement..." />}
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

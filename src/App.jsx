@@ -9,7 +9,7 @@ import { ThemeProvider } from "@/context/ThemeProvider";
 import CookieConsent from "@/components/CookieConsent";
 import ToastRoot from "@/components/ToastRoot";
 import DebugRibbon from "@/components/DebugRibbon";
-import { testRandom } from "/src/shims/selftest";
+import { testRandom } from "/src/shims/selftest";import { isTauri } from "@/lib/db/sql";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,15 +20,15 @@ const queryClient = new QueryClient({
       refetchOnReconnect: false,
       refetchOnMount: false,
       retry: 1,
-      keepPreviousData: true,
-    },
-  },
+      keepPreviousData: true
+    }
+  }
 });
 
 export default function App() {
   console.log('[debug] App mounted');
   useEffect(() => {
-    testRandom().catch(err => console.error("crypto shim selftest failed", err));
+    testRandom().catch((err) => console.error("crypto shim selftest failed", err));
   }, []);
   useEffect(() => {
     nprogress.configure({ showSpinner: false });
@@ -51,12 +51,12 @@ export default function App() {
     document.querySelectorAll('input[type="number"]').forEach(applyAttrs);
     const observer = new MutationObserver((muts) => {
       muts.forEach((m) =>
-        m.addedNodes.forEach((node) => {
-          if (node instanceof HTMLElement) {
-            if (node.matches('input[type="number"]')) applyAttrs(node);
-            node.querySelectorAll?.('input[type="number"]').forEach(applyAttrs);
-          }
-        })
+      m.addedNodes.forEach((node) => {
+        if (node instanceof HTMLElement) {
+          if (node.matches('input[type="number"]')) applyAttrs(node);
+          node.querySelectorAll?.('input[type="number"]').forEach(applyAttrs);
+        }
+      })
       );
     });
     observer.observe(document.body, { childList: true, subtree: true });
@@ -76,7 +76,6 @@ export default function App() {
           <CookieConsent />
         </ThemeProvider>
       </MultiMamaProvider>
-    </QueryClientProvider>
-  );
-}
+    </QueryClientProvider>);
 
+}

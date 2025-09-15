@@ -5,7 +5,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { useAchats } from "@/hooks/useAchats";
 import { useAuth } from '@/hooks/useAuth';
-import Unauthorized from "@/pages/auth/Unauthorized";
+import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/db/sql";
 
 export default function AchatDetail({ achat: achatProp, onClose }) {
   const { fetchAchatById } = useAchats();
@@ -37,6 +37,6 @@ export default function AchatDetail({ achat: achatProp, onClose }) {
         <div><b>Quantité :</b> {achat.quantite}</div>
         <div><b>Prix :</b> {Number(achat.prix || 0).toFixed(2)} €</div>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

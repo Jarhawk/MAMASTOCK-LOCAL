@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import MamaLogo from "@/components/ui/MamaLogo";
+import MamaLogo from "@/components/ui/MamaLogo";import { isTauri } from "@/lib/db/sql";
 
 export default function PageIntro() {
   return (
@@ -10,6 +10,6 @@ export default function PageIntro() {
         MamaStock centralise vos fournisseurs, vos produits et vos factures pour
         un suivi des coûts en toute simplicité.
       </p>
-    </div>
-  );
+    </div>);
+
 }

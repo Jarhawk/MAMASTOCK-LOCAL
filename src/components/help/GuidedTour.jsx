@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
-import { useHelp } from '@/context/HelpProvider';
+import { useHelp } from '@/context/HelpProvider';import { isTauri } from "@/lib/db/sql";
 
 export default function GuidedTour({ steps = [], module }) {
   const { markGuideSeen } = useHelp();
@@ -21,7 +21,7 @@ export default function GuidedTour({ steps = [], module }) {
       const rect = el.getBoundingClientRect();
       setCoords({
         top: rect.bottom + window.scrollY + 8,
-        left: rect.left + window.scrollX,
+        left: rect.left + window.scrollX
       });
     }
   }, [current, steps]);
@@ -32,23 +32,23 @@ export default function GuidedTour({ steps = [], module }) {
 
   return (
     <AnimatePresence>
-      {coords && (
-        <Motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed z-50 bg-white/10 border border-white/20 backdrop-blur-xl text-white p-4 rounded-xl shadow-xl"
-          style={{ top: coords.top, left: coords.left }}
-        >
+      {coords &&
+      <Motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed z-50 bg-white/10 border border-white/20 backdrop-blur-xl text-white p-4 rounded-xl shadow-xl"
+        style={{ top: coords.top, left: coords.left }}>
+        
           <p className="mb-2 text-sm">{step.content}</p>
           <button
-            className="btn btn-primary btn-sm"
-            onClick={() => setCurrent((c) => c + 1)}
-          >
+          className="btn btn-primary btn-sm"
+          onClick={() => setCurrent((c) => c + 1)}>
+          
             Suivant
           </button>
         </Motion.div>
-      )}
-    </AnimatePresence>
-  );
+      }
+    </AnimatePresence>);
+
 }

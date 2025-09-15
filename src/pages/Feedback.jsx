@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import TableContainer from "@/components/ui/TableContainer";
 import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/db/sql";
 
 export default function Feedback() {
   const { mama_id, loading: authLoading } = useAuth();
@@ -22,8 +22,8 @@ export default function Feedback() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { error } = await addFeedback(form);
-    if (error) toast.error(error.message || error);
-    else toast.success("Feedback envoyé !");
+    if (error) toast.error(error.message || error);else
+    toast.success("Feedback envoyé !");
     setForm({ module: "", message: "", urgence: "normal" });
   };
 
@@ -39,23 +39,23 @@ export default function Feedback() {
             placeholder="Module concerné"
             value={form.module}
             onChange={(e) => setForm((f) => ({ ...f, module: e.target.value }))}
-            required
-          />
+            required />
+          
         <textarea
-          className="input w-full h-24"
-          placeholder="Votre message"
-          value={form.message}
-          onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
-          required
-        />
+            className="input w-full h-24"
+            placeholder="Votre message"
+            value={form.message}
+            onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+            required />
+          
         <label htmlFor="urgence" className="label">Urgence</label>
         <select
-          id="urgence"
-          aria-label="Urgence"
-          className="input bg-white text-gray-900 w-full"
-          value={form.urgence}
-          onChange={(e) => setForm((f) => ({ ...f, urgence: e.target.value }))}
-        >
+            id="urgence"
+            aria-label="Urgence"
+            className="input bg-white text-gray-900 w-full"
+            value={form.urgence}
+            onChange={(e) => setForm((f) => ({ ...f, urgence: e.target.value }))}>
+            
           <option value="faible">Faible</option>
           <option value="normal">Normal</option>
           <option value="elevee">Élevée</option>
@@ -77,8 +77,8 @@ export default function Feedback() {
             </tr>
           </thead>
           <tbody>
-            {items.map((fb) => (
-              <tr key={fb.id} className="border-t">
+            {items.map((fb) =>
+            <tr key={fb.id} className="border-t">
                 <td className="px-2 py-1 whitespace-nowrap">
                   {new Date(fb.created_at).toLocaleDateString()}
                 </td>
@@ -86,18 +86,17 @@ export default function Feedback() {
                 <td className="px-2 py-1">{fb.urgence}</td>
                 <td className="px-2 py-1">{fb.message}</td>
               </tr>
-            ))}
-            {items.length === 0 && (
-              <tr>
+            )}
+            {items.length === 0 &&
+            <tr>
                 <td colSpan="4" className="py-4 text-center text-gray-500">
                   Aucun feedback pour le moment
                 </td>
               </tr>
-            )}
+            }
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
-}
+    </div>);
 
+}

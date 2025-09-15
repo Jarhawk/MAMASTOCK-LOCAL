@@ -1,4 +1,4 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 export default function SignalementDetail({ signalement }) {
   if (!signalement) return null;
 
@@ -7,6 +7,6 @@ export default function SignalementDetail({ signalement }) {
       <div className="font-bold text-mamastock-gold">{signalement.titre}</div>
       <div className="text-sm text-gray-700">{signalement.description}</div>
       <div className="text-xs mt-1 text-gray-500 italic">Statut : {signalement.statut}</div>
-    </div>
-  );
+    </div>);
+
 }

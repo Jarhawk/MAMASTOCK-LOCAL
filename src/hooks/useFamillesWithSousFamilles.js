@@ -9,8 +9,8 @@ import {
   sous_familles_list,
   sous_familles_insert,
   sous_familles_update,
-  sous_familles_delete,
-} from '@/lib/db';
+  sous_familles_delete } from
+'@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export function useFamillesWithSousFamilles() {
   const { mama_id } = useAuth();
@@ -24,12 +24,12 @@ export function useFamillesWithSousFamilles() {
     setError(null);
     try {
       const [famRes, sousRes] = await Promise.all([
-        familles_list(mama_id),
-        sous_familles_list(mama_id),
-      ]);
+      familles_list(mama_id),
+      sous_familles_list(mama_id)]
+      );
       const grouped = famRes.map((f) => ({
         ...f,
-        sous_familles: sousRes.filter((sf) => sf.famille_id === f.id),
+        sous_familles: sousRes.filter((sf) => sf.famille_id === f.id)
       }));
       setFamilles(grouped);
     } catch (e) {

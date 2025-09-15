@@ -1,5 +1,5 @@
 // src/auth/sqliteAuth.ts
-import { getDb } from "@/lib/db/sql";
+import { getDb, isTauri } from "@/lib/db/sql";
 import bcrypt from "bcryptjs";
 
 export type DbUser = {
@@ -33,7 +33,7 @@ export async function loginSqlite(email: string, password: string) {
 export async function registerSqlite(email: string, password: string) {
   email = email.trim().toLowerCase();
   const db = await getDb();
-  const exists = await db.select<{ cnt: number }[]>(
+  const exists = await db.select<{cnt: number;}[]>(
     "SELECT COUNT(*) as cnt FROM users WHERE email = ?",
     [email]
   );
@@ -50,4 +50,3 @@ export async function registerSqlite(email: string, password: string) {
 
   return { id, email, mama_id };
 }
-

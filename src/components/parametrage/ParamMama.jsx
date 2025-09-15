@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function ParamMama() {
   const { mama, fetchMama, updateMama } = useMama();
@@ -43,8 +43,8 @@ export default function ParamMama() {
   return (
     <div>
             <h2 className="font-bold text-xl mb-4">Établissement</h2>
-      {!edit ? (
-        <div>
+      {!edit ?
+      <div>
           <div>
             <b>Nom :</b> {mama?.nom}
           </div>
@@ -56,59 +56,59 @@ export default function ParamMama() {
           </div>
           <div>
             <b>Logo :</b>{' '}
-            {mama?.logo ? (
-              <img src={mama.logo} alt="logo" className="h-8" />
-            ) : (
-              '-'
-            )}
+            {mama?.logo ?
+          <img src={mama.logo} alt="logo" className="h-8" /> :
+
+          '-'
+          }
           </div>
           <Button className="mt-4" onClick={() => setEdit(true)}>
             Modifier
           </Button>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit}>
+        </div> :
+
+      <form onSubmit={handleSubmit}>
           <input
-            className="form-input mb-2"
-            value={form.nom || ''}
-            onChange={(e) => setForm((f) => ({ ...f, nom: e.target.value }))}
-            placeholder="Nom"
-            required
-          />
+          className="form-input mb-2"
+          value={form.nom || ''}
+          onChange={(e) => setForm((f) => ({ ...f, nom: e.target.value }))}
+          placeholder="Nom"
+          required />
+        
           <input
-            className="form-input mb-2"
-            value={form.email || ''}
-            onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-            placeholder="Email"
-          />
+          className="form-input mb-2"
+          value={form.email || ''}
+          onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+          placeholder="Email" />
+        
           <input
-            className="form-input mb-2"
-            value={form.telephone || ''}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, telephone: e.target.value }))
-            }
-            placeholder="Téléphone"
-          />
+          className="form-input mb-2"
+          value={form.telephone || ''}
+          onChange={(e) =>
+          setForm((f) => ({ ...f, telephone: e.target.value }))
+          }
+          placeholder="Téléphone" />
+        
           {/* Ajout d'un upload logo possible ici */}
           <Button
-            type="submit"
-            disabled={loading}
-            className="flex items-center gap-2"
-          >
+          type="submit"
+          disabled={loading}
+          className="flex items-center gap-2">
+          
             {loading && <span className="loader-glass" />}
             Valider
           </Button>
           <Button
-            variant="outline"
-            type="button"
-            className="ml-2"
-            onClick={() => setEdit(false)}
-            disabled={loading}
-          >
+          variant="outline"
+          type="button"
+          className="ml-2"
+          onClick={() => setEdit(false)}
+          disabled={loading}>
+          
             Annuler
           </Button>
         </form>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

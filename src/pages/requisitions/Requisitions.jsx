@@ -12,7 +12,7 @@ import JSPDF from 'jspdf';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import 'jspdf-autotable';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';import { isTauri } from "@/lib/db/sql";
 
 export default function Requisitions() {
   const { mama_id, loading: authLoading } = useAuth();
@@ -43,7 +43,7 @@ export default function Requisitions() {
 
   useEffect(() => {
     if (!mama_id || authLoading || !periode.debut || !periode.fin || !caveZone)
-      return;
+    return;
     getRequisitions({
       zone: caveZone,
       statut,
@@ -51,21 +51,21 @@ export default function Requisitions() {
       fin: periode.fin,
       utilisateur,
       produit,
-      page,
+      page
     }).then(({ data, count }) => {
       setRequisitions(data);
       setTotal(count);
     });
   }, [
-    mama_id,
-    authLoading,
-    periode,
-    statut,
-    utilisateur,
-    produit,
-    page,
-    caveZone,
-  ]);
+  mama_id,
+  authLoading,
+  periode,
+  statut,
+  utilisateur,
+  produit,
+  page,
+  caveZone]
+  );
 
   const filtered = requisitions;
 
@@ -76,7 +76,7 @@ export default function Requisitions() {
         Numero: r.id,
         Date: r.date_requisition,
         Statut: r.statut,
-        Zone: zones.find((z) => z.id === r.zone_id)?.nom || '-',
+        Zone: zones.find((z) => z.id === r.zone_id)?.nom || '-'
       }))
     );
     const wb = XLSX.utils.book_new();
@@ -93,12 +93,12 @@ export default function Requisitions() {
       startY: 20,
       head: [['ID', 'Date', 'Statut', 'Zone']],
       body: filtered.map((r) => [
-        r.id,
-        r.date_requisition,
-        r.statut,
-        zones.find((z) => z.id === r.zone_id)?.nom || '-',
-      ]),
-      styles: { fontSize: 9 },
+      r.id,
+      r.date_requisition,
+      r.statut,
+      zones.find((z) => z.id === r.zone_id)?.nom || '-']
+      ),
+      styles: { fontSize: 9 }
     });
     doc.save('Requisitions.pdf');
     toast.success('Export PDF généré !');
@@ -122,9 +122,9 @@ export default function Requisitions() {
             className="input input-bordered"
             value={periode.debut}
             onChange={(e) =>
-              setPeriode((p) => ({ ...p, debut: e.target.value }))
-            }
-          />
+            setPeriode((p) => ({ ...p, debut: e.target.value }))
+            } />
+          
         </div>
         <div>
           <label className="block font-medium">Fin période</label>
@@ -133,16 +133,16 @@ export default function Requisitions() {
             className="input input-bordered"
             value={periode.fin}
             onChange={(e) => setPeriode((p) => ({ ...p, fin: e.target.value }))}
-            max={today}
-          />
+            max={today} />
+          
         </div>
         <div>
           <label className="block font-medium">Statut</label>
           <select
             className="input input-bordered"
             value={statut}
-            onChange={(e) => setStatut(e.target.value)}
-          >
+            onChange={(e) => setStatut(e.target.value)}>
+            
             <option value="">Tous</option>
             <option value="brouillon">Brouillon</option>
             <option value="faite">Faite</option>
@@ -154,14 +154,14 @@ export default function Requisitions() {
           <select
             className="input input-bordered"
             value={produit}
-            onChange={(e) => setProduit(e.target.value)}
-          >
+            onChange={(e) => setProduit(e.target.value)}>
+            
             <option value="">Tous</option>
-            {products.map((p) => (
-              <option key={p.id} value={p.id}>
+            {products.map((p) =>
+            <option key={p.id} value={p.id}>
                 {p.nom}
               </option>
-            ))}
+            )}
           </select>
         </div>
         <div>
@@ -169,14 +169,14 @@ export default function Requisitions() {
           <select
             className="input input-bordered"
             value={utilisateur}
-            onChange={(e) => setUtilisateur(e.target.value)}
-          >
+            onChange={(e) => setUtilisateur(e.target.value)}>
+            
             <option value="">Tous</option>
-            {users.map((u) => (
-              <option key={u.id} value={u.id}>
+            {users.map((u) =>
+            <option key={u.id} value={u.id}>
                 {u.nom}
               </option>
-            ))}
+            )}
           </select>
         </div>
         <Button onClick={handleExportExcel}>Export Excel</Button>
@@ -196,8 +196,8 @@ export default function Requisitions() {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((r) => (
-              <tr key={r.id}>
+            {filtered.map((r) =>
+            <tr key={r.id}>
                 <td className="px-2 py-1">{r.id}</td>
                 <td className="px-2 py-1">{r.date_requisition}</td>
                 <td className="px-2 py-1">{r.statut}</td>
@@ -205,25 +205,25 @@ export default function Requisitions() {
                   {zones.find((z) => z.id === r.zone_id)?.nom || '-'}
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
       <div className="flex justify-between items-center mt-4">
         <Button
           disabled={page === 1}
-          onClick={() => setPage((p) => Math.max(1, p - 1))}
-        >
+          onClick={() => setPage((p) => Math.max(1, p - 1))}>
+          
           Précédent
         </Button>
         <span>Page {page}</span>
         <Button
           disabled={page * 10 >= total}
-          onClick={() => setPage((p) => p + 1)}
-        >
+          onClick={() => setPage((p) => p + 1)}>
+          
           Suivant
         </Button>
       </div>
-    </div>
-  );
+    </div>);
+
 }

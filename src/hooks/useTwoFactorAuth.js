@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { authenticator } from "otplib";
 import { useAuth } from "@/hooks/useAuth";
-import { getTwoFactor, setTwoFactor } from "@/local/twoFactor";
+import { getTwoFactor, setTwoFactor } from "@/local/twoFactor";import { isTauri } from "@/lib/db/sql";
 
 export function useTwoFactorAuth() {
   const [secret, setSecret] = useState(null);

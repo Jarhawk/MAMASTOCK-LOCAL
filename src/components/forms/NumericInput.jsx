@@ -1,11 +1,11 @@
 // NumericInput.jsx — saisie FR tolérante, sans milliers, pas de reformatage en cours de frappe
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';import { isTauri } from "@/lib/db/sql";
 
 function normalize(raw) {
-  return raw
-    .replace(/\u00A0/g, ' ') // nbsp -> space
-    .replace(/\s+/g, '')     // remove spaces
-    .replace(/,/g, '.');     // comma -> dot
+  return raw.
+  replace(/\u00A0/g, ' ') // nbsp -> space
+  .replace(/\s+/g, '') // remove spaces
+  .replace(/,/g, '.'); // comma -> dot
 }
 function isTrailingSep(raw) {
   const t = (raw ?? '').trim();
@@ -27,15 +27,15 @@ function formatFrNoGroup(n, decimals) {
 }
 
 export default function NumericInput({
-  value,                 // number | null
-  onValueChange,         // (n: number|null) => void
-  decimals,              // ex: 2
+  value, // number | null
+  onValueChange, // (n: number|null) => void
+  decimals, // ex: 2
   min, max,
   allowNegative = false,
   placeholder,
   disabled,
   name,
-  className = 'input input-bordered w-full',
+  className = 'input input-bordered w-full'
 }) {
   const [text, setText] = useState(value == null ? '' : String(value).replace('.', ','));
   const focused = useRef(false);
@@ -101,8 +101,7 @@ export default function NumericInput({
       disabled={disabled}
       className={className}
       lang="fr"
-      autoComplete="off"
-    />
-  );
-}
+      autoComplete="off" />);
 
+
+}

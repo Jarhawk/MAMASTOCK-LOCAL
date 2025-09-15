@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useMenuDuJour } from "@/hooks/useMenuDuJour";
 import { useFiches } from "@/hooks/useFiches";
 import { Button } from "@/components/ui/button";
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/db/sql";
 
 const CATEGORIES = ["entrée", "plat", "dessert"];
 const COST_THRESHOLD = 5;
@@ -13,7 +13,7 @@ export default function MenuDuJour() {
   const [date, setDate] = useState(today);
   const [menu, setMenu] = useState({});
   const { fetchMenuForDate, setFicheForCategorie, setPortions, removeFicheFromMenu, reloadSavedFiches } =
-    useMenuDuJour();
+  useMenuDuJour();
   const { fiches = [], fetchFiches } = useFiches();
 
   useEffect(() => {
@@ -34,15 +34,15 @@ export default function MenuDuJour() {
         fiche_id: ficheId,
         nom: fiche?.nom,
         cout_unitaire,
-        portions: m[cat]?.portions || 1,
-      },
+        portions: m[cat]?.portions || 1
+      }
     }));
   };
 
   const handlePortionsChange = (cat, portions) => {
     setMenu((m) => ({
       ...m,
-      [cat]: { ...m[cat], portions: Number(portions) },
+      [cat]: { ...m[cat], portions: Number(portions) }
     }));
   };
 
@@ -72,7 +72,7 @@ export default function MenuDuJour() {
         fiche: item.nom || "",
         portions: item.portions || 0,
         cout_par_portion: item.cout_unitaire || 0,
-        total,
+        total
       };
     });
     const wb = XLSX.utils.book_new();
@@ -93,8 +93,8 @@ export default function MenuDuJour() {
         type="date"
         value={date}
         onChange={(e) => setDate(e.target.value)}
-        className="border p-1"
-      />
+        className="border p-1" />
+      
       <table className="mt-4 w-full border text-sm">
         <thead>
           <tr>
@@ -116,14 +116,14 @@ export default function MenuDuJour() {
                 <td>
                   <select
                     value={item.fiche_id || ""}
-                    onChange={(e) => handleFicheChange(cat, e.target.value)}
-                  >
+                    onChange={(e) => handleFicheChange(cat, e.target.value)}>
+                    
                     <option value="">Choisir</option>
-                    {fiches.map((f) => (
-                      <option key={f.id} value={f.id}>
+                    {fiches.map((f) =>
+                    <option key={f.id} value={f.id}>
                         {f.nom}
                       </option>
-                    ))}
+                    )}
                   </select>
                 </td>
                 <td>
@@ -131,8 +131,8 @@ export default function MenuDuJour() {
                     type="number"
                     value={item.portions || 0}
                     onChange={(e) => handlePortionsChange(cat, e.target.value)}
-                    className="w-16 border"
-                  />
+                    className="w-16 border" />
+                  
                 </td>
                 <td>{item.cout_unitaire != null ? item.cout_unitaire.toFixed(2) : "-"}</td>
                 <td>{total.toFixed(2)}</td>
@@ -144,21 +144,21 @@ export default function MenuDuJour() {
                     X
                   </Button>
                 </td>
-              </tr>
-            );
+              </tr>);
+
           })}
         </tbody>
       </table>
       <div className="mt-2 font-semibold">Total global: {globalCostPerPortion.toFixed(2)} €</div>
-      {globalCostPerPortion > COST_THRESHOLD && (
-        <div role="alert" className="text-red-600">
+      {globalCostPerPortion > COST_THRESHOLD &&
+      <div role="alert" className="text-red-600">
           Coût global élevé
         </div>
-      )}
+      }
       <div className="mt-4 flex gap-2">
         <Button onClick={reload}>Recharger fiches</Button>
         <Button onClick={exportExcel}>Exporter Excel</Button>
       </div>
-    </div>
-  );
+    </div>);
+
 }

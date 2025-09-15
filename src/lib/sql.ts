@@ -1,1 +1,1 @@
-export { getDb, closeDb, tableCount, isTauri } from "./db/sql";
+import { isTauri } from "@/lib/db/sql";export { getDb, closeDb, tableCount, isTauri } from "./db/sql";

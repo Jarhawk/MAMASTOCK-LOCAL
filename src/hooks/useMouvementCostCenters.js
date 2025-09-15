@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from '@/hooks/useAuth';
 import { useAuditLog } from "@/hooks/useAuditLog";
 import { readText, saveText, existsFile } from "@/local/files";
-import { readCostCenters } from "@/local/costCenters";
+import { readCostCenters } from "@/local/costCenters";import { isTauri } from "@/lib/db/sql";
 
 const FILE_PATH = "config/cost_center_allocations.json";
 
@@ -41,7 +41,7 @@ export function useMouvementCostCenters() {
       const nameMap = new Map(centres.map((c) => [c.id, c.nom]));
       const enriched = rows.map((r) => ({
         ...r,
-        centres_de_cout: { nom: nameMap.get(r.cost_center_id) || "" },
+        centres_de_cout: { nom: nameMap.get(r.cost_center_id) || "" }
       }));
       setAllocations(enriched);
       return enriched;
@@ -67,7 +67,7 @@ export function useMouvementCostCenters() {
         cost_center_id: r.cost_center_id,
         quantite: Number(r.quantite) || 0,
         valeur: r.valeur ? Number(r.valeur) : null,
-        mama_id,
+        mama_id
       }));
       const next = [...filtered, ...prepared];
       await writeAllocations(next);

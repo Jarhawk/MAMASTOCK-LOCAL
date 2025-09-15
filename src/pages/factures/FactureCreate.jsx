@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import FactureForm from "./FactureForm.jsx";
 import GlassCard from "@/components/ui/GlassCard";
-import { LiquidBackground } from "@/components/LiquidBackground";
+import { LiquidBackground } from "@/components/LiquidBackground";import { isTauri } from "@/lib/db/sql";
 
 export default function FactureCreate() {
   const navigate = useNavigate();
@@ -11,6 +11,6 @@ export default function FactureCreate() {
       <GlassCard className="relative z-10">
         <FactureForm onClose={() => navigate(-1)} />
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

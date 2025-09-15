@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { createAsyncState } from './_shared/createAsyncState';
-import { emails_envoyes_list } from '@/lib/db';
+import { emails_envoyes_list } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export function useEmailsEnvoyes() {
   const { mama_id } = useAuth();
@@ -14,7 +14,7 @@ export function useEmailsEnvoyes() {
     date_start,
     date_end,
     page = 1,
-    limit = 50,
+    limit = 50
   } = {}) {
     setState((s) => ({ ...s, loading: true, error: null }));
     try {
@@ -32,7 +32,7 @@ export function useEmailsEnvoyes() {
         date_start,
         date_end,
         limit: l,
-        offset,
+        offset
       });
       setState({ data: rows || [], loading: false, error: null });
       return { count };
@@ -51,7 +51,7 @@ export function useEmailsEnvoyes() {
     emails: state.data,
     loading: state.loading,
     error: state.error,
-    resendEmail,
+    resendEmail
   };
 }
 

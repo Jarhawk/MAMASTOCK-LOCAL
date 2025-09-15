@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react";import { isTauri } from "@/lib/db/sql";
 
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -20,8 +20,8 @@ export default class ErrorBoundary extends React.Component {
           <pre style={{ whiteSpace: "pre-wrap" }}>
             {String(this.state.error)}
           </pre>
-        </div>
-      );
+        </div>);
+
     }
     return this.props.children;
   }

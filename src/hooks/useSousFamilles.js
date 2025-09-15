@@ -5,8 +5,8 @@ import { useAuth } from '@/hooks/useAuth';
 import {
   sous_familles_list,
   sous_familles_insert,
-  sous_familles_update,
-} from "@/lib/db";
+  sous_familles_update } from
+"@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export function useSousFamilles() {
   const { mama_id } = useAuth();
@@ -22,7 +22,7 @@ export function useSousFamilles() {
         const data = await sous_familles_list(mama_id, {
           search,
           actif,
-          famille_id: familleId,
+          famille_id: familleId
         });
         setSousFamilles(data || []);
         setLoading(false);
@@ -42,7 +42,7 @@ export function useSousFamilles() {
         nom,
         famille_id,
         mama_id,
-        actif: true,
+        actif: true
       });
       setSousFamilles((prev) => [row, ...prev]);
       return row;
@@ -54,7 +54,7 @@ export function useSousFamilles() {
     async (id, value) => {
       await sous_familles_update(id, mama_id, { actif: value ? 1 : 0 });
       setSousFamilles((prev) =>
-        prev.map((s) => (s.id === id ? { ...s, actif: value } : s))
+      prev.map((s) => s.id === id ? { ...s, actif: value } : s)
       );
     },
     [mama_id]

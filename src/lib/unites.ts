@@ -1,4 +1,4 @@
-import { getDb } from "@/lib/db/sql";
+import { getDb, isTauri } from "@/lib/db/sql";
 
 export type Unite = {
   id: number;
@@ -16,11 +16,11 @@ export async function listUnites(): Promise<Unite[]> {
 
 export async function createUnite({
   code,
-  libelle,
-}: {
-  code: string;
-  libelle: string;
-}): Promise<Unite> {
+  libelle
+
+
+
+}: {code: string;libelle: string;}): Promise<Unite> {
   const db = await getDb();
   const rows: Unite[] = await db.select(
     "INSERT INTO unites(code, libelle) VALUES (?, ?) RETURNING *",
@@ -30,19 +30,18 @@ export async function createUnite({
 }
 
 export async function updateUnite(
-  id: number,
-  { code, libelle }: { code: string; libelle: string }
-): Promise<void> {
+id: number,
+{ code, libelle }: {code: string;libelle: string;})
+: Promise<void> {
   const db = await getDb();
   await db.execute("UPDATE unites SET code=?, libelle=? WHERE id=?", [
-    code,
-    libelle,
-    id,
-  ]);
+  code,
+  libelle,
+  id]
+  );
 }
 
 export async function deleteUnite(id: number): Promise<void> {
   const db = await getDb();
   await db.execute("DELETE FROM unites WHERE id=?", [id]);
 }
-

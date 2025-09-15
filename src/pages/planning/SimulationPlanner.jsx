@@ -7,7 +7,7 @@ import { useSimulation } from '@/hooks/useSimulation';
 import SimulationDetailsModal from '@/components/simulation/SimulationDetailsModal';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import TableContainer from '@/components/ui/TableContainer';
+import TableContainer from '@/components/ui/TableContainer';import { isTauri } from "@/lib/db/sql";
 
 export default function SimulationPlanner() {
   const { mama_id, loading: authLoading } = useAuth();
@@ -48,34 +48,34 @@ export default function SimulationPlanner() {
           type="date"
           className="form-input"
           value={periode.start}
-          onChange={(e) => setPeriode((p) => ({ ...p, start: e.target.value }))}
-        />
+          onChange={(e) => setPeriode((p) => ({ ...p, start: e.target.value }))} />
+        
         <input
           type="date"
           className="form-input"
           value={periode.end}
-          onChange={(e) => setPeriode((p) => ({ ...p, end: e.target.value }))}
-        />
+          onChange={(e) => setPeriode((p) => ({ ...p, end: e.target.value }))} />
+        
         <Button onClick={handleSimulate} disabled={loading}>
           Simuler
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
-        {menus.map((m) => (
-          <label key={m.id} className="flex items-center gap-2">
+        {menus.map((m) =>
+        <label key={m.id} className="flex items-center gap-2">
             <input
-              type="checkbox"
-              checked={!!scenario.find((s) => s.menu_id === m.id)}
-              onChange={() => toggleMenu(m.id)}
-            />
+            type="checkbox"
+            checked={!!scenario.find((s) => s.menu_id === m.id)}
+            onChange={() => toggleMenu(m.id)} />
+          
             <span>
               {m.nom} ({m.date})
             </span>
           </label>
-        ))}
+        )}
       </div>
-      {result && (
-        <div className="mt-4">
+      {result &&
+      <div className="mt-4">
           <TableContainer>
             <table className="min-w-full text-sm">
               <thead>
@@ -86,13 +86,13 @@ export default function SimulationPlanner() {
                 </tr>
               </thead>
               <tbody>
-                {result.produits.map((p, idx) => (
-                  <tr key={idx}>
+                {result.produits.map((p, idx) =>
+              <tr key={idx}>
                     <td className="px-2">{p.produit_nom || p.produit_id}</td>
                     <td className="px-2">{p.quantite}</td>
                     <td className="px-2">{p.valeur}</td>
                   </tr>
-                ))}
+              )}
               </tbody>
             </table>
           </TableContainer>
@@ -101,12 +101,12 @@ export default function SimulationPlanner() {
             Détails
           </Button>
         </div>
-      )}
+      }
       <SimulationDetailsModal
         open={open}
         onClose={() => setOpen(false)}
-        result={result}
-      />
-    </div>
-  );
+        result={result} />
+      
+    </div>);
+
 }

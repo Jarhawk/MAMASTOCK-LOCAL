@@ -1,4 +1,4 @@
-import { existsFile, readText, saveText } from "@/local/files";
+import { existsFile, readText, saveText } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "templates_commandes.json";
 
@@ -29,23 +29,23 @@ async function writeAll(list: TemplateCommande[]) {
 export async function templates_commandes_list({
   mama_id,
   fournisseur_id,
-  actif,
-}: {
-  mama_id?: string;
-  fournisseur_id?: string;
-  actif?: boolean;
-} = {}) {
+  actif
+
+
+
+
+}: {mama_id?: string;fournisseur_id?: string;actif?: boolean;} = {}) {
   let list = await readAll();
-  if (mama_id) list = list.filter(t => t.mama_id === mama_id);
-  if (fournisseur_id) list = list.filter(t => t.fournisseur_id === fournisseur_id);
-  if (typeof actif === "boolean") list = list.filter(t => !!t.actif === actif);
-  list.sort((a,b) => (a.nom || "").localeCompare(b.nom || ""));
+  if (mama_id) list = list.filter((t) => t.mama_id === mama_id);
+  if (fournisseur_id) list = list.filter((t) => t.fournisseur_id === fournisseur_id);
+  if (typeof actif === "boolean") list = list.filter((t) => !!t.actif === actif);
+  list.sort((a, b) => (a.nom || "").localeCompare(b.nom || ""));
   return list;
 }
 
 export async function templates_commandes_get(id: string, mama_id: string) {
   const list = await templates_commandes_list({ mama_id });
-  return list.find(t => t.id === id) || null;
+  return list.find((t) => t.id === id) || null;
 }
 
 export async function templates_commandes_create(values: TemplateCommande) {
@@ -53,7 +53,7 @@ export async function templates_commandes_create(values: TemplateCommande) {
   const item: TemplateCommande = {
     id: crypto.randomUUID(),
     actif: true,
-    ...values,
+    ...values
   };
   list.push(item);
   await writeAll(list);
@@ -61,12 +61,12 @@ export async function templates_commandes_create(values: TemplateCommande) {
 }
 
 export async function templates_commandes_update(
-  id: string,
-  mama_id: string,
-  values: Partial<TemplateCommande>
-) {
+id: string,
+mama_id: string,
+values: Partial<TemplateCommande>)
+{
   const list = await readAll();
-  const idx = list.findIndex(t => t.id === id && t.mama_id === mama_id);
+  const idx = list.findIndex((t) => t.id === id && t.mama_id === mama_id);
   if (idx === -1) return null;
   list[idx] = { ...list[idx], ...values };
   await writeAll(list);
@@ -75,17 +75,16 @@ export async function templates_commandes_update(
 
 export async function templates_commandes_delete(id: string, mama_id: string) {
   const list = await readAll();
-  const idx = list.findIndex(t => t.id === id && t.mama_id === mama_id);
+  const idx = list.findIndex((t) => t.id === id && t.mama_id === mama_id);
   if (idx === -1) return;
   list.splice(idx, 1);
   await writeAll(list);
 }
 
 export async function templates_commandes_get_for_fournisseur(
-  mama_id: string,
-  fournisseur_id: string
-) {
+mama_id: string,
+fournisseur_id: string)
+{
   const list = await templates_commandes_list({ mama_id, fournisseur_id, actif: true });
   return list[0] || null;
 }
-

@@ -1,4 +1,4 @@
-export interface User {
+import { isTauri } from "@/lib/db/sql";export interface User {
   id: number;
   email: string;
   mot_de_passe_hash: string;

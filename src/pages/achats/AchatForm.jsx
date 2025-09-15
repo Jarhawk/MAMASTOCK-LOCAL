@@ -8,7 +8,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import Unauthorized from "@/pages/auth/Unauthorized";
+import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/db/sql";
 
 export default function AchatForm({ achat, fournisseurs = [], onClose }) {
   const { createAchat, updateAchat } = useAchats();
@@ -43,35 +43,35 @@ export default function AchatForm({ achat, fournisseurs = [], onClose }) {
       onClose?.();
     } catch (err) {
       toast.error(err.message);
-    } finally { setLoading(false); }
+    } finally {setLoading(false);}
   };
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
       <GlassCard title={achat ? "Modifier l'achat" : "Nouvel achat"} className="p-6 space-y-2 min-w-[300px]">
         <form onSubmit={handleSubmit} className="space-y-2">
-          <input type="date" className="form-input" value={date_achat} onChange={e => setDateAchat(e.target.value)} required />
+          <input type="date" className="form-input" value={date_achat} onChange={(e) => setDateAchat(e.target.value)} required />
           <AutoCompleteField
             label=""
             value={produit_id}
-            onChange={obj => {
+            onChange={(obj) => {
               setProduitId(obj?.id || "");
               if ((obj?.nom || "").length >= 2) searchProduits(obj.nom);
             }}
-            options={produitOptions.map(p => ({ id: p.id, nom: p.nom }))}
-          />
-          <select className="form-input" value={fournisseur_id} onChange={e => setFournisseurId(e.target.value)} required>
+            options={produitOptions.map((p) => ({ id: p.id, nom: p.nom }))} />
+          
+          <select className="form-input" value={fournisseur_id} onChange={(e) => setFournisseurId(e.target.value)} required>
             <option value="">Fournisseur</option>
-            {fournisseurs.map(s => <option key={s.id} value={s.id}>{s.nom}</option>)}
+            {fournisseurs.map((s) => <option key={s.id} value={s.id}>{s.nom}</option>)}
           </select>
-          <input type="number" className="form-input" value={quantite} onChange={e => setQuantite(Number(e.target.value))} />
-          <input type="number" className="form-input" value={prix} onChange={e => setPrix(Number(e.target.value))} />
+          <input type="number" className="form-input" value={quantite} onChange={(e) => setQuantite(Number(e.target.value))} />
+          <input type="number" className="form-input" value={prix} onChange={(e) => setPrix(Number(e.target.value))} />
           <div className="flex gap-2 justify-end">
             <Button type="submit" disabled={loading}>{achat ? "Modifier" : "Ajouter"}</Button>
             <Button type="button" variant="outline" onClick={onClose}>Annuler</Button>
           </div>
         </form>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

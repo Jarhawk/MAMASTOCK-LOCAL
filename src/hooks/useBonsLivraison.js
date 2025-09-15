@@ -4,10 +4,10 @@ import {
   bonsLivraison_list,
   bonLivraison_get,
   bonLivraison_insert,
-  bonLivraison_update,
-} from "@/local/bonsLivraison";
+  bonLivraison_update } from
+"@/local/bonsLivraison";
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export function useBonsLivraison() {
   const { mama_id } = useAuth();
@@ -22,7 +22,7 @@ export function useBonsLivraison() {
     fin = "",
     actif = true,
     page = 1,
-    pageSize = 50,
+    pageSize = 50
   } = {}) {
     if (!mama_id) return [];
     setLoading(true);
@@ -33,7 +33,7 @@ export function useBonsLivraison() {
         fournisseur,
         debut,
         fin,
-        actif,
+        actif
       });
       setTotal(rows.length);
       const start = (page - 1) * pageSize;

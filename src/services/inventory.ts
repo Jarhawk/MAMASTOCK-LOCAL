@@ -1,8 +1,8 @@
-import { openDb, sumStock } from "@/db/index";
+import { openDb, sumStock } from "@/db/index";import { isTauri } from "@/lib/db/sql";
 
-export type Item = { id: string; sku: string; name: string; category?: string|null; created_at: string; };
+export type Item = {id: string;sku: string;name: string;category?: string | null;created_at: string;};
 
-export async function createItem(sku: string, name: string, category?: string|null): Promise<Item> {
+export async function createItem(sku: string, name: string, category?: string | null): Promise<Item> {
   const db = await openDb();
   const id = crypto.randomUUID();
   const created_at = new Date().toISOString();
@@ -13,16 +13,16 @@ export async function createItem(sku: string, name: string, category?: string|nu
   return { id, sku: sku.trim(), name: name.trim(), category: category ?? null, created_at };
 }
 
-export async function getItemBySku(sku: string): Promise<Item|null> {
+export async function getItemBySku(sku: string): Promise<Item | null> {
   const db = await openDb();
   const rows = await db.select("SELECT * FROM items WHERE sku = $1", [sku.trim()]);
-  return rows.length ? (rows[0] as Item) : null;
+  return rows.length ? rows[0] as Item : null;
 }
 
-export async function listItems(): Promise<Array<Item & { stock: number }>> {
+export async function listItems(): Promise<Array<Item & {stock: number;}>> {
   const db = await openDb();
   const rows = await db.select("SELECT * FROM items ORDER BY created_at DESC");
-  const out: Array<Item & { stock: number }> = [];
+  const out: Array<Item & {stock: number;}> = [];
   for (const r of rows as Item[]) {
     out.push({ ...r, stock: await sumStock(r.id) });
   }

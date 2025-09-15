@@ -1,4 +1,4 @@
-import { existsFile, readText, saveText } from "@/local/files";
+import { existsFile, readText, saveText } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "validation_requests.json";
 
@@ -31,9 +31,9 @@ async function writeAll(list: ValidationRequest[]) {
 
 export async function validation_requests_list(mama_id: string) {
   const list = await readAll();
-  return list
-    .filter(r => r.mama_id === mama_id && r.actif !== false)
-    .sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""));
+  return list.
+  filter((r) => r.mama_id === mama_id && r.actif !== false).
+  sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""));
 }
 
 export async function validation_requests_add(values: Omit<ValidationRequest, "id" | "created_at">) {
@@ -41,7 +41,7 @@ export async function validation_requests_add(values: Omit<ValidationRequest, "i
   const item: ValidationRequest = {
     id: crypto.randomUUID(),
     created_at: new Date().toISOString(),
-    ...values,
+    ...values
   };
   list.push(item);
   await writeAll(list);
@@ -50,7 +50,7 @@ export async function validation_requests_add(values: Omit<ValidationRequest, "i
 
 export async function validation_requests_update(id: string, values: Partial<ValidationRequest>) {
   const list = await readAll();
-  const idx = list.findIndex(r => r.id === id);
+  const idx = list.findIndex((r) => r.id === id);
   if (idx === -1) return;
   list[idx] = { ...list[idx], ...values };
   await writeAll(list);

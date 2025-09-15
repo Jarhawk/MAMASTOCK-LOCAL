@@ -5,13 +5,13 @@ import {
   LiquidBackground,
   WavesBackground,
   MouseLight,
-  TouchLight,
-} from "@/components/LiquidBackground";
+  TouchLight } from
+"@/components/LiquidBackground";
 
 /**
  * Layout général pour les pages accessibles aux admins/managers.
  * Inclut la Sidebar à gauche, et la Navbar en haut.
- */
+ */import { isTauri } from "@/lib/db/sql";
 export default function AdminLayout({ children }) {
   return (
     <div className="relative flex min-h-screen text-white text-shadow overflow-hidden">
@@ -24,6 +24,6 @@ export default function AdminLayout({ children }) {
         <Navbar />
         <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>
-    </div>
-  );
+    </div>);
+
 }

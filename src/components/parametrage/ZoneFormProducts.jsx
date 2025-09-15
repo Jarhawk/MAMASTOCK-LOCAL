@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useZoneProducts } from '@/hooks/useZoneProducts';
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function ZoneFormProducts({ zoneId }) {
   const { list, move, setDefault } = useZoneProducts();
@@ -23,8 +23,8 @@ export default function ZoneFormProducts({ zoneId }) {
     return (
       <p className="text-sm">
         Enregistrer la zone avant de gérer les produits.
-      </p>
-    );
+      </p>);
+
   }
 
   async function handleMove() {
@@ -58,41 +58,41 @@ export default function ZoneFormProducts({ zoneId }) {
           </tr>
         </thead>
         <tbody>
-          {rows.map((p) => (
-            <tr key={p.id} className="border-t border-white/10">
+          {rows.map((p) =>
+          <tr key={p.id} className="border-t border-white/10">
               <td className="px-2 py-1">{p.produit_nom}</td>
               <td className="px-2 py-1">{p.unite_id}</td>
               <td className="px-2 py-1 text-right">{p.stock_reel}</td>
               <td className="px-2 py-1 text-right">{p.stock_min}</td>
               <td className="px-2 py-1 space-x-2">
                 <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleDefault(p.produit_id)}
-                  data-testid="default-btn"
-                >
+                size="sm"
+                variant="outline"
+                onClick={() => handleDefault(p.produit_id)}
+                data-testid="default-btn">
+                
                   Défaut
                 </Button>
                 <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={handleMove}
-                  data-testid="move-btn"
-                >
+                size="sm"
+                variant="outline"
+                onClick={handleMove}
+                data-testid="move-btn">
+                
                   Déplacer
                 </Button>
               </td>
             </tr>
-          ))}
-          {rows.length === 0 && (
-            <tr>
+          )}
+          {rows.length === 0 &&
+          <tr>
               <td colSpan="5" className="text-center py-2">
                 Aucun produit
               </td>
             </tr>
-          )}
+          }
         </tbody>
       </table>
-    </div>
-  );
+    </div>);
+
 }

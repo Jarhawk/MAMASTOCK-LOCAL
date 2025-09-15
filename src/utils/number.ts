@@ -1,4 +1,4 @@
-export function normalizeNumberString(value: string): string {
+import { isTauri } from "@/lib/db/sql";export function normalizeNumberString(value: string): string {
   if (typeof value !== 'string') return '';
   return value.replace(/\s+/g, '').replace(',', '.');
 }
@@ -16,8 +16,8 @@ export function formatNumberFR(value: number | null | undefined, decimals = 2): 
   if (value === null || value === undefined || Number.isNaN(value)) return '';
   return new Intl.NumberFormat('fr-FR', {
     minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  })
-    .format(value)
-    .replace(/[\u202F\u00A0]/g, ' ');
+    maximumFractionDigits: decimals
+  }).
+  format(value).
+  replace(/[\u202F\u00A0]/g, ' ');
 }

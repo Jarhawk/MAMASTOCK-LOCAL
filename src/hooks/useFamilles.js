@@ -5,8 +5,8 @@ import {
   familles_insert,
   familles_update,
   familles_delete,
-  familles_batch_delete,
-} from '@/lib/db';
+  familles_batch_delete } from
+'@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export async function fetchFamilles(mamaId) {
   const data = await familles_list(mamaId);
@@ -74,11 +74,10 @@ export function useFamilles() {
     updateFamille,
     deleteFamille,
     batchDeleteFamilles,
-    loading,
+    loading
   };
 }
 
 export const fetchFamillesForValidation = fetchFamilles;
 
 export default useFamilles;
-

@@ -5,7 +5,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { exportToCSV } from "@/lib/export/exportHelpers";
 import { DEFAULT_ROLES } from "@/constants/roles";
-import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";
+import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";import { isTauri } from "@/lib/db/sql";
 
 export function useUtilisateurs() {
   const [users, setUsers] = useState([]);
@@ -108,6 +108,6 @@ export function useUtilisateurs() {
     resetPassword,
     exportUsersToExcel,
     exportUsersToCSV,
-    importUsersFromExcel,
+    importUsersFromExcel
   };
 }

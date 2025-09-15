@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { query } from '@/local/db';
+import { query } from '@/local/db';import { isTauri } from "@/lib/db/sql";
 
 
 export function useGlobalSearch() {
@@ -26,9 +26,9 @@ export function useGlobalSearch() {
     const [produits, fiches] = await Promise.all([prodReq, ficheReq]);
 
     const merged = [
-      ...(produits || []).map((p) => ({ type: 'produit', id: p.id, nom: p.nom })),
-      ...(fiches || []).map((f) => ({ type: 'fiche', id: f.id, nom: f.nom }))
-    ].slice(0, 2);
+    ...(produits || []).map((p) => ({ type: 'produit', id: p.id, nom: p.nom })),
+    ...(fiches || []).map((f) => ({ type: 'fiche', id: f.id, nom: f.nom }))].
+    slice(0, 2);
 
     setResults(merged);
     return merged;

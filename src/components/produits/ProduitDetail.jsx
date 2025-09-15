@@ -7,11 +7,11 @@ import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { buildPriceData } from "./priceHelpers";
+import { buildPriceData } from "./priceHelpers";import { isTauri } from "@/lib/db/sql";
 
 export default function ProduitDetail({ produitId, produit, open, onClose }) {
   const { fetchProductPrices, fetchProductMouvements, fetchProductStock } =
-    useProducts();
+  useProducts();
   const [historique, setHistorique] = useState([]);
   const [mouvements, setMouvements] = useState([]);
   const [stock, setStock] = useState(null);
@@ -24,10 +24,10 @@ export default function ProduitDetail({ produitId, produit, open, onClose }) {
     if (open && produitId) {
       setLoading(true);
       Promise.all([
-        fetchProductPrices(produitId),
-        fetchProductMouvements(produitId),
-        fetchProductStock(produitId),
-      ]).then(([h, m, s]) => {
+      fetchProductPrices(produitId),
+      fetchProductMouvements(produitId),
+      fetchProductStock(produitId)]
+      ).then(([h, m, s]) => {
         if (!active) return;
         setHistorique(h || []);
         setMouvements(m || []);
@@ -52,7 +52,7 @@ export default function ProduitDetail({ produitId, produit, open, onClose }) {
           count: 0,
           total: 0,
           lastPrice: null,
-          lastDate: null,
+          lastDate: null
         };
       }
       const cur = acc[idF];
@@ -68,7 +68,7 @@ export default function ProduitDetail({ produitId, produit, open, onClose }) {
     }, {})
   ).map((s) => ({
     ...s,
-    prix_moyen: s.count ? s.total / s.count : null,
+    prix_moyen: s.count ? s.total / s.count : null
   }));
 
   const exportExcel = () => {
@@ -81,18 +81,18 @@ export default function ProduitDetail({ produitId, produit, open, onClose }) {
   return (
     <ModalGlass open={open} onClose={onClose}>
       <h2 className="text-lg font-bold text-mamastockGold mb-3">Détails produit</h2>
-      {produit && (
-        <div className="mb-2 text-sm">
+      {produit &&
+      <div className="mb-2 text-sm">
           <p>Unité : {uniteLabel || '-'}</p>
           <p>Famille : {familleLabel || '-'}</p>
         </div>
-      )}
-      {loading ? (
-        <div className="flex justify-center py-6">
+      }
+      {loading ?
+      <div className="flex justify-center py-6">
           <LoadingSpinner message="Chargement..." />
-        </div>
-      ) : (
-        <>
+        </div> :
+
+      <>
           <p className="mb-4 text-sm">Quantité théorique : {stock ?? "-"}</p>
           <h3 className="font-semibold mb-2">Fournisseurs</h3>
           <table className="min-w-full text-sm mb-4">
@@ -106,23 +106,23 @@ export default function ProduitDetail({ produitId, produit, open, onClose }) {
               </tr>
             </thead>
             <tbody>
-              {summary.length === 0 ? (
-                <tr>
+              {summary.length === 0 ?
+            <tr>
                   <td colSpan={5} className="py-4 text-center">
                     Aucun historique
                   </td>
-                </tr>
-              ) : (
-                summary.map((s, i) => (
-                  <tr key={i}>
+                </tr> :
+
+            summary.map((s, i) =>
+            <tr key={i}>
                     <td>{s.nom}</td>
                     <td>{s.count}</td>
                     <td>{s.prix_moyen ? s.prix_moyen.toFixed(2) : "-"}</td>
                     <td>{s.lastPrice != null ? s.lastPrice.toFixed(2) : "-"}</td>
                     <td>{s.lastDate ? s.lastDate.slice(0, 10) : "-"}</td>
                   </tr>
-                ))
-              )}
+            )
+            }
             </tbody>
           </table>
           <h3 className="font-semibold mb-2">Historique des prix d’achat</h3>
@@ -136,44 +136,44 @@ export default function ProduitDetail({ produitId, produit, open, onClose }) {
               </tr>
             </thead>
             <tbody>
-              {histData.length === 0 ? (
-                <tr>
+              {histData.length === 0 ?
+            <tr>
                   <td colSpan={4} className="text-center py-4">
                     Aucune donnée
                   </td>
-                </tr>
-              ) : (
-                histData.map((h, i) => (
-                  <tr key={i}>
+                </tr> :
+
+            histData.map((h, i) =>
+            <tr key={i}>
                     <td>{h.created_at?.slice(0, 10) || "-"}</td>
                     <td>{h.fournisseur?.nom || "-"}</td>
                     <td>{h.prix_achat ?? "-"}</td>
                     <td>{h.derniere_livraison?.slice(0, 10) || "-"}</td>
                   </tr>
-                ))
-              )}
+            )
+            }
             </tbody>
           </table>
-          {chartData.length > 0 && (
-            <div className="mt-6">
+          {chartData.length > 0 &&
+        <div className="mt-6">
               <ResponsiveContainer width="100%" height={200}>
                 <LineChart
-                  data={chartData}
-                  margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-                >
+              data={chartData}
+              margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+              
                   <XAxis dataKey="date" fontSize={11} />
                   <YAxis fontSize={11} />
                   <Tooltip />
                   <Legend />
-                  {Object.keys(chartData[0])
-                    .filter((k) => k !== "date")
-                    .map((key) => (
-                      <Line key={key} type="monotone" dataKey={key} stroke="#bfa14d" />
-                    ))}
+                  {Object.keys(chartData[0]).
+              filter((k) => k !== "date").
+              map((key) =>
+              <Line key={key} type="monotone" dataKey={key} stroke="#bfa14d" />
+              )}
                 </LineChart>
               </ResponsiveContainer>
             </div>
-          )}
+        }
           <h3 className="font-semibold mt-6 mb-2">Historique des mouvements</h3>
           <table className="min-w-full text-sm">
             <thead>
@@ -186,27 +186,27 @@ export default function ProduitDetail({ produitId, produit, open, onClose }) {
               </tr>
             </thead>
             <tbody>
-              {mouvData.length === 0 ? (
-                <tr>
+              {mouvData.length === 0 ?
+            <tr>
                   <td colSpan={5} className="text-center py-4">
                     Aucun mouvement
                   </td>
-                </tr>
-              ) : (
-                mouvData.map((m) => (
-                  <tr key={m.id}>
+                </tr> :
+
+            mouvData.map((m) =>
+            <tr key={m.id}>
                     <td>{m.date?.slice(0, 10) || "-"}</td>
                     <td>{m.type}</td>
                     <td>{m.quantite}</td>
                     <td>{m.zone_source?.nom || "-"}</td>
                     <td>{m.zone_dest?.nom || "-"}</td>
                   </tr>
-                ))
-              )}
+            )
+            }
             </tbody>
           </table>
         </>
-      )}
+      }
       <div className="flex justify-end gap-2 mt-4">
         <button onClick={exportExcel} className="btn btn-secondary">
           Export Excel
@@ -215,6 +215,6 @@ export default function ProduitDetail({ produitId, produit, open, onClose }) {
           Fermer
         </button>
       </div>
-    </ModalGlass>
-  );
+    </ModalGlass>);
+
 }

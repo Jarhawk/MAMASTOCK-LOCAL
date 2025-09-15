@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { readText, saveText, existsFile } from "@/local/files";
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 const FILE_PATH = "feedback.json";
 
@@ -58,7 +58,7 @@ export function useFeedback() {
           user_id,
           actif: true,
           created_at: new Date().toISOString(),
-          ...values,
+          ...values
         };
         arr.unshift(fb);
         await writeAll(arr);

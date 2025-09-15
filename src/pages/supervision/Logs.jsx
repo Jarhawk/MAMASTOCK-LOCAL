@@ -12,10 +12,10 @@ import Checkbox from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
-} from "@/components/ui/SmartDialog";
+  DialogTitle } from
+"@/components/ui/SmartDialog";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";import { isTauri } from "@/lib/db/sql";
 
 const TYPES = ["login", "update_produit", "delete_facture", "export_pdf"];
 const MODULES = ["produits", "factures", "inventaire"];
@@ -32,7 +32,7 @@ export default function Logs() {
       module: filters.module || undefined,
       start: filters.start || undefined,
       end: filters.end || undefined,
-      critique: filters.critique ? true : undefined,
+      critique: filters.critique ? true : undefined
     });
   }, [fetchLogs, filters]);
 
@@ -57,25 +57,25 @@ export default function Logs() {
           <Input type="date" value={filters.end} onChange={(e) => setFilters({ ...filters, end: e.target.value })} />
           <Select value={filters.type} onChange={(e) => setFilters({ ...filters, type: e.target.value })}>
             <option value="">Type</option>
-            {TYPES.map((t) => (
-              <option key={t} value={t}>
+            {TYPES.map((t) =>
+            <option key={t} value={t}>
                 {t}
               </option>
-            ))}
+            )}
           </Select>
           <Select value={filters.module} onChange={(e) => setFilters({ ...filters, module: e.target.value })}>
             <option value="">Module</option>
-            {MODULES.map((m) => (
-              <option key={m} value={m}>
+            {MODULES.map((m) =>
+            <option key={m} value={m}>
                 {m}
               </option>
-            ))}
+            )}
           </Select>
           <label className="flex items-center gap-1">
             <Checkbox
               checked={filters.critique}
-              onChange={(e) => setFilters({ ...filters, critique: e.target.checked })}
-            />
+              onChange={(e) => setFilters({ ...filters, critique: e.target.checked })} />
+            
             Critique
           </label>
           <PrimaryButton type="submit">Filtrer</PrimaryButton>
@@ -84,10 +84,10 @@ export default function Logs() {
           <Button type="button" onClick={() => exportLogs("pdf")}>PDF</Button>
         </form>
       </GlassCard>
-      {loading ? (
-        <LoadingSpinner message="Chargement..." />
-      ) : (
-        <TableContainer>
+      {loading ?
+      <LoadingSpinner message="Chargement..." /> :
+
+      <TableContainer>
           <table className="min-w-full text-xs">
             <thead>
               <tr>
@@ -101,8 +101,8 @@ export default function Logs() {
               </tr>
             </thead>
             <tbody>
-              {logs.map((l) => (
-                <tr key={l.id} className="align-top">
+              {logs.map((l) =>
+            <tr key={l.id} className="align-top">
                   <td className="border px-2 py-1 whitespace-nowrap">
                     {new Date(l.date_log).toLocaleString()}
                   </td>
@@ -119,11 +119,11 @@ export default function Logs() {
                     </Button>
                   </td>
                 </tr>
-              ))}
+            )}
             </tbody>
           </table>
         </TableContainer>
-      )}
+      }
       <Dialog open={!!detail} onOpenChange={() => setDetail(null)}>
         <DialogContent>
           <div className="p-4 border-b">
@@ -134,6 +134,6 @@ export default function Logs() {
           </pre>
         </DialogContent>
       </Dialog>
-    </div>
-  );
+    </div>);
+
 }

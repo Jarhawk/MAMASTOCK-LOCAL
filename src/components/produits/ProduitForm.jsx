@@ -13,12 +13,12 @@ import GlassCard from "@/components/ui/GlassCard";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import AutoCompleteField from "@/components/ui/AutoCompleteField";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";import { isTauri } from "@/lib/db/sql";
 
 export default function ProduitForm({
   produit,
   onSuccess,
-  onClose,
+  onClose
 }) {
   const editing = !!produit;
   const { mama_id } = useAuth();
@@ -30,20 +30,20 @@ export default function ProduitForm({
     sousFamilles,
     list: listSousFamilles,
     loading: sousFamillesLoading,
-    error: sousFamillesError,
+    error: sousFamillesError
   } = useSousFamilles();
-    const { data: unites = [], refetch: listUnites } = useUnites(mama_id);
+  const { data: unites = [], refetch: listUnites } = useUnites(mama_id);
   const { data: zonesData } = useZonesStock(mama_id);
   const zones = zonesData ?? [];
 
   const [nom, setNom] = useState(produit?.nom || "");
   const [familleId, setFamilleId] = useState(produit?.famille_id || "");
   const [sousFamilleId, setSousFamilleId] = useState(
-    produit?.sous_famille_id || "",
+    produit?.sous_famille_id || ""
   );
   const [uniteId, setUniteId] = useState(produit?.unite_id || "");
   const [fournisseurId, setFournisseurId] = useState(
-    produit?.fournisseur_id || "",
+    produit?.fournisseur_id || ""
   );
   const [zoneStockId, setZoneStockId] = useState(produit?.zone_stock_id || "");
   const [stockMin, setStockMin] = useState(produit?.stock_min || 0);
@@ -55,14 +55,14 @@ export default function ProduitForm({
   const { addProduct, updateProduct, loading } = useProducts();
   const [saving, setSaving] = useState(false);
 
-  const uniteOptions = [...unites]
-    .filter((u, idx, arr) => arr.findIndex((uu) => uu.id === u.id) === idx)
-    .sort((a, b) => (a.nom || "").localeCompare(b.nom || ""));
+  const uniteOptions = [...unites].
+  filter((u, idx, arr) => arr.findIndex((uu) => uu.id === u.id) === idx).
+  sort((a, b) => (a.nom || "").localeCompare(b.nom || ""));
 
   useEffect(() => {
-      fetchFamilles();
-      listUnites();
-    }, [fetchFamilles, listUnites]);
+    fetchFamilles();
+    listUnites();
+  }, [fetchFamilles, listUnites]);
 
   const [familleHasSous, setFamilleHasSous] = useState(false);
 
@@ -124,7 +124,7 @@ export default function ProduitForm({
       stock_min: Number(stockMin),
       tva: tva === "" ? null : Number(tva),
       actif,
-      allergenes,
+      allergenes
     };
     let toastId;
     try {
@@ -132,7 +132,7 @@ export default function ProduitForm({
       toastId = toast.loading(editing ? "Mise à jour..." : "Enregistrement...");
       if (editing) {
         const res = await updateProduct(produit.id, newProd, {
-          refresh: false,
+          refresh: false
         });
         if (res?.error) throw res.error;
         toast.success("Produit mis à jour !", { id: toastId });
@@ -168,8 +168,8 @@ export default function ProduitForm({
             value={nom}
             onChange={(e) => setNom(e.target.value)}
             placeholder="Nom du produit"
-            required
-          />
+            required />
+          
           {errors.nom && <p className="text-red-500 text-sm">{errors.nom}</p>}
         </div>
 
@@ -182,24 +182,24 @@ export default function ProduitForm({
             className="input bg-white text-gray-900"
             value={familleId}
             onChange={(e) => setFamilleId(e.target.value)}
-            required
-          >
+            required>
+            
             <option value="">-- Choisir --</option>
-            {familles.map((f) => (
-              <option key={f.id} value={f.id}>
+            {familles.map((f) =>
+            <option key={f.id} value={f.id}>
                 {f.nom}
               </option>
-            ))}
+            )}
           </select>
-          {errors.famille && (
-            <p className="text-red-500 text-sm">{errors.famille}</p>
-          )}
-          {famillesError && (
-            <p className="text-red-500 text-sm">Erreur chargement familles</p>
-          )}
-          {!famillesError && familles.length === 0 && (
-            <p className="text-red-500 text-sm">Aucune famille disponible</p>
-          )}
+          {errors.famille &&
+          <p className="text-red-500 text-sm">{errors.famille}</p>
+          }
+          {famillesError &&
+          <p className="text-red-500 text-sm">Erreur chargement familles</p>
+          }
+          {!famillesError && familles.length === 0 &&
+          <p className="text-red-500 text-sm">Aucune famille disponible</p>
+          }
         </div>
 
         <div className="flex flex-col gap-1 p-2 rounded-xl">
@@ -211,45 +211,45 @@ export default function ProduitForm({
             className="input bg-white text-gray-900"
             value={sousFamilleId}
             onChange={(e) => setSousFamilleId(e.target.value)}
-            disabled={!familleId || sousFamillesLoading || !familleHasSous}
-          >
+            disabled={!familleId || sousFamillesLoading || !familleHasSous}>
+            
             <option value="">
               {sousFamillesLoading ? "Chargement..." : "-- Choisir --"}
             </option>
-            {sousFamilles.map((sf) => (
-              <option key={sf.id} value={sf.id}>
+            {sousFamilles.map((sf) =>
+            <option key={sf.id} value={sf.id}>
                 {sf.nom}
               </option>
-            ))}
+            )}
           </select>
-          {errors.sousFamille && (
-            <p role="alert" className="text-red-500 text-xs mt-1">
+          {errors.sousFamille &&
+          <p role="alert" className="text-red-500 text-xs mt-1">
               {errors.sousFamille}
             </p>
-          )}
-          {sousFamillesError && (
-            <p className="text-red-500 text-sm">Erreur chargement sous-familles</p>
-          )}
+          }
+          {sousFamillesError &&
+          <p className="text-red-500 text-sm">Erreur chargement sous-familles</p>
+          }
           {!sousFamillesError &&
-            familleId &&
-            !sousFamillesLoading &&
-            sousFamilles.length === 0 && (
-              <p className="text-red-500 text-sm">Aucune sous-famille</p>
-            )}
+          familleId &&
+          !sousFamillesLoading &&
+          sousFamilles.length === 0 &&
+          <p className="text-red-500 text-sm">Aucune sous-famille</p>
+          }
         </div>
 
-        {familleId && (
-          <div className="flex gap-2 p-2 rounded-xl">
+        {familleId &&
+        <div className="flex gap-2 p-2 rounded-xl">
             <Badge>
               {familles.find((f) => f.id === familleId)?.nom || ''}
             </Badge>
-            {sousFamilleId && (
-              <Badge>
+            {sousFamilleId &&
+          <Badge>
                 {sousFamilles.find((sf) => sf.id === sousFamilleId)?.nom || ''}
               </Badge>
-            )}
+          }
           </div>
-        )}
+        }
 
         <div className="flex flex-col gap-1 p-2 rounded-xl">
           <AutoCompleteField
@@ -257,8 +257,8 @@ export default function ProduitForm({
             value={uniteId}
             onChange={(obj) => setUniteId(obj?.id || "")}
             options={uniteOptions}
-            required
-          />
+            required />
+          
           {errors.unite && <p className="text-red-500 text-sm">{errors.unite}</p>}
         </div>
 
@@ -270,14 +270,14 @@ export default function ProduitForm({
             id="prod-zone"
             className="input bg-white text-gray-900"
             value={zoneStockId}
-            onChange={(e) => setZoneStockId(e.target.value)}
-          >
+            onChange={(e) => setZoneStockId(e.target.value)}>
+            
             <option value="">Aucune</option>
-            {zones.map((z) => (
-              <option key={z.id} value={z.id}>
+            {zones.map((z) =>
+            <option key={z.id} value={z.id}>
                 {z.nom}
               </option>
-            ))}
+            )}
           </select>
         </div>
 
@@ -291,8 +291,8 @@ export default function ProduitForm({
             className="input"
             value={allergenes}
             onChange={(e) => setAllergenes(e.target.value)}
-            placeholder="Ex: gluten, lait"
-          />
+            placeholder="Ex: gluten, lait" />
+          
         </div>
         {/* Groupe 3 : stock minimum, actif */}
         <div className="flex flex-col gap-1 p-2 rounded-xl">
@@ -304,8 +304,8 @@ export default function ProduitForm({
             type="number"
             value={stockMin ?? 0}
             onChange={(e) => setStockMin(Number(e.target.value) || 0)}
-            min={0}
-          />
+            min={0} />
+          
         </div>
         <div className="flex flex-col gap-1 p-2 rounded-xl">
           <label htmlFor="prod-tva" className="label text-white">
@@ -317,15 +317,15 @@ export default function ProduitForm({
             value={tva ?? 0}
             onChange={(e) => setTva(Number(e.target.value) || 0)}
             min={0}
-            step="0.1"
-          />
+            step="0.1" />
+          
         </div>
         <div className="flex items-center gap-2 p-2 rounded-xl">
           <Checkbox
             id="prod-actif"
             checked={actif}
-            onChange={(e) => setActif(e.target.checked)}
-          />
+            onChange={(e) => setActif(e.target.checked)} />
+          
           <label htmlFor="prod-actif" className="label text-white m-0">
             Produit actif
           </label>
@@ -340,14 +340,14 @@ export default function ProduitForm({
             id="prod-fournisseur"
             className="input bg-white text-gray-900"
             value={fournisseurId}
-            onChange={(e) => setFournisseurId(e.target.value)}
-          >
+            onChange={(e) => setFournisseurId(e.target.value)}>
+            
             <option value="">Aucun</option>
-            {fournisseurs.map((f) => (
-              <option key={f.id} value={f.id}>
+            {fournisseurs.map((f) =>
+            <option key={f.id} value={f.id}>
                 {f.nom}
               </option>
-            ))}
+            )}
           </select>
         </div>
 
@@ -359,13 +359,13 @@ export default function ProduitForm({
           <button
             type="submit"
             disabled={loading || saving}
-            className="btn btn-primary flex items-center gap-2"
-          >
+            className="btn btn-primary flex items-center gap-2">
+            
             {(loading || saving) && <span className="loader-glass" />}
             {editing ? "Enregistrer" : "Créer"}
           </button>
         </div>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

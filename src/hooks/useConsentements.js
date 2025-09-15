@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { readText, existsFile } from "@/local/files";
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 const FILE_PATH = "config/consentements.json";
 
@@ -27,7 +27,7 @@ export default function useConsentements() {
       const list = all.filter(
         (c) => c.mama_id === mama_id && c.utilisateur_id === utilisateurId
       ).sort((a, b) =>
-        (b.date_consentement || "").localeCompare(a.date_consentement || "")
+      (b.date_consentement || "").localeCompare(a.date_consentement || "")
       );
       setConsentements(list);
       return list;

@@ -7,8 +7,8 @@ import {
   Tooltip,
   CartesianGrid,
   Legend,
-  ResponsiveContainer,
-} from "recharts";
+  ResponsiveContainer } from
+"recharts";import { isTauri } from "@/lib/db/sql";
 
 export default function GraphCost({ data }) {
   return (
@@ -22,6 +22,6 @@ export default function GraphCost({ data }) {
         <Line type="monotone" dataKey="food_cost" name="Cost Food %" stroke="#bfa14d" />
         <Line type="monotone" dataKey="boisson_cost" name="Cost Boisson %" stroke="#8884d8" />
       </LineChart>
-    </ResponsiveContainer>
-  );
+    </ResponsiveContainer>);
+
 }

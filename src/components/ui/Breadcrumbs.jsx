@@ -1,11 +1,11 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";import { isTauri } from "@/lib/db/sql";
 
 export default function Breadcrumbs() {
   const location = useLocation();
 
   // Découpe le pathname (ex: /stock/mouvement/123)
-  const pathnames = location.pathname.split("/").filter(x => x);
+  const pathnames = location.pathname.split("/").filter((x) => x);
 
   return (
     <nav className="text-xs text-mamastockGold bg-mamastockBg/80 py-2 px-4 rounded-md mb-6 shadow-sm" aria-label="Breadcrumb">
@@ -23,22 +23,22 @@ export default function Breadcrumbs() {
           const label = isNaN(name) ? decodeURIComponent(name) : "#";
           return (
             <li key={routeTo} className="flex items-center">
-              {!isLast ? (
-                <>
+              {!isLast ?
+              <>
                   <Link to={routeTo} className="hover:underline">
                     {label.charAt(0).toUpperCase() + label.slice(1)}
                   </Link>
                   <span className="mx-2">/</span>
-                </>
-              ) : (
-                <span className="font-bold text-mamastockGold">
+                </> :
+
+              <span className="font-bold text-mamastockGold">
                   {label.charAt(0).toUpperCase() + label.slice(1)}
                 </span>
-              )}
-            </li>
-          );
+              }
+            </li>);
+
         })}
       </ol>
-    </nav>
-  );
+    </nav>);
+
 }

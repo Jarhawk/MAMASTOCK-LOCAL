@@ -6,7 +6,7 @@ import ListingContainer from "@/components/ui/ListingContainer";
 import TableHeader from "@/components/ui/TableHeader";
 import PaginationFooter from "@/components/ui/PaginationFooter";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import RequisitionRow from "@/components/requisitions/RequisitionRow";
+import RequisitionRow from "@/components/requisitions/RequisitionRow";import { isTauri } from "@/lib/db/sql";
 
 const PAGE_SIZE = 20;
 
@@ -26,7 +26,7 @@ export default function RequisitionsPage() {
       const { data, count } = await fetchRequisitions({
         search,
         page,
-        limit: PAGE_SIZE,
+        limit: PAGE_SIZE
       });
       setItems(data);
       setTotal(count);
@@ -52,8 +52,8 @@ export default function RequisitionsPage() {
             setPage(1);
           }}
           className="form-input"
-          placeholder="Recherche produit"
-        />
+          placeholder="Recherche produit" />
+        
       </TableHeader>
       <ListingContainer>
         <table className="text-sm">
@@ -65,9 +65,9 @@ export default function RequisitionsPage() {
             </tr>
           </thead>
           <tbody>
-            {items.map((r) => (
-              <RequisitionRow key={r.id} requisition={r} />
-            ))}
+            {items.map((r) =>
+            <RequisitionRow key={r.id} requisition={r} />
+            )}
           </tbody>
         </table>
       </ListingContainer>
@@ -75,8 +75,8 @@ export default function RequisitionsPage() {
         page={page}
         pages={pageCount}
         onPageChange={setPage}
-        className="mt-4"
-      />
-    </div>
-  );
+        className="mt-4" />
+      
+    </div>);
+
 }

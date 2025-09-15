@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { loginLocal, registerLocal } from "@/auth/localAccount";
-import "./login.css";
+import "./login.css";import { isTauri } from "@/lib/db/sql";
 
 export default function LoginPage() {
   const nav = useNavigate();
@@ -43,8 +43,8 @@ export default function LoginPage() {
           alt="MamaStock"
           className="login-logo"
           width={72}
-          height={72}
-        />
+          height={72} />
+        
         <h1 className="login-title">Connexion</h1>
 
         {error ? <div className="login-error">{error}</div> : null}
@@ -56,10 +56,10 @@ export default function LoginPage() {
             type="email"
             placeholder="email@exemple.com"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             autoComplete="username"
-            required
-          />
+            required />
+          
 
           <label className="login-label">Mot de passe</label>
           <input
@@ -67,15 +67,15 @@ export default function LoginPage() {
             type="password"
             placeholder="••••••••"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
-            required
-          />
+            required />
+          
 
           <button type="submit" className="login-btn">Se connecter</button>
           <button className="login-btn secondary" onClick={onRegister}>Créer un compte local</button>
         </form>
       </div>
-    </div>
-  );
+    </div>);
+
 }

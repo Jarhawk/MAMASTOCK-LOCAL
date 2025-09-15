@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/AuthContext';
 import { deduceEnabledModulesFromRights } from '@/lib/access';
-import { readConfig, writeConfig } from '@/appFs';
+import { readConfig, writeConfig } from '@/appFs';import { isTauri } from "@/lib/db/sql";
 
 function safeQueryClient() {
   try {
@@ -48,7 +48,7 @@ export default function useMamaSettings() {
       const cfg = (await readConfig()) || {};
       const settings = cfg.mamaSettings || {};
       return { ...defaults, ...settings };
-    },
+    }
   });
 
   const updateMamaSettings = useCallback(
@@ -61,7 +61,7 @@ export default function useMamaSettings() {
       await writeConfig(cfg);
       queryClient.setQueryData(['mama-settings', mamaId], (old) => ({
         ...(old || {}),
-        ...next,
+        ...next
       }));
       return { data: next, error: null };
     },

@@ -6,7 +6,7 @@ import { fournisseurs_list } from '@/lib/db';
 /**
  * Autocomplete fournisseurs by nom
  * @param {{ term?: string, limit?: number }} params
- */
+ */import { isTauri } from "@/lib/db/sql";
 export function useFournisseursAutocomplete({ term = '', limit = 20 } = {}) {
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false);

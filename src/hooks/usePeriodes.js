@@ -7,8 +7,8 @@ import {
   periodes_create,
   periodes_get,
   periodes_active,
-  periodes_close,
-} from "@/lib/db";
+  periodes_close } from
+"@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export default function usePeriodes() {
   const { mama_id } = useAuth();
@@ -70,7 +70,7 @@ export default function usePeriodes() {
     await periodes_create({
       mama_id,
       debut: debut.toISOString().slice(0, 10),
-      fin: fin.toISOString().slice(0, 10),
+      fin: fin.toISOString().slice(0, 10)
     });
     setLoading(false);
     await fetchPeriodes();
@@ -83,7 +83,7 @@ export default function usePeriodes() {
       const data = await periodes_active(mama_id);
       if (!data) return { error: new Error('Aucune période active') };
       if (data.cloturee || date < data.debut || date > data.fin)
-        return { error: new Error('Période comptable clôturée') };
+      return { error: new Error('Période comptable clôturée') };
       return { data };
     } catch (error) {
       return { error };

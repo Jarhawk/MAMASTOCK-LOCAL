@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { readConfig } from '@/appFs';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/db/sql";
 
 const MultiMamaContext = createContext();
 

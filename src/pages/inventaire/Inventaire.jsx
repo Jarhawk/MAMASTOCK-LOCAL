@@ -5,7 +5,7 @@ import { useInventaires } from "@/hooks/useInventaires";
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export default function Inventaire() {
   const { inventaires, getInventaires } = useInventaires();
@@ -26,23 +26,23 @@ export default function Inventaire() {
     return <LoadingSpinner message="Chargement..." />;
   }
 
-  const filtered = inventaires
-    .filter(i => !zoneFilter || i.zone === zoneFilter)
-    .filter(i => !dateFilter || i.date_inventaire === dateFilter)
-    .filter(i => !statutFilter || i.statut === statutFilter)
-    .sort((a, b) => new Date(b.date_inventaire) - new Date(a.date_inventaire));
+  const filtered = inventaires.
+  filter((i) => !zoneFilter || i.zone === zoneFilter).
+  filter((i) => !dateFilter || i.date_inventaire === dateFilter).
+  filter((i) => !statutFilter || i.statut === statutFilter).
+  sort((a, b) => new Date(b.date_inventaire) - new Date(a.date_inventaire));
 
-  const zones = Array.from(new Set(inventaires.map(i => i.zone).filter(Boolean)));
+  const zones = Array.from(new Set(inventaires.map((i) => i.zone).filter(Boolean)));
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-xl font-bold">Inventaires</h1>
-        {canEdit && (
-          <Button asChild>
+        {canEdit &&
+        <Button asChild>
             <Link to="/inventaire/new">Créer un nouvel inventaire</Link>
           </Button>
-        )}
+        }
       </div>
 
       <div className="flex gap-4 mb-4 items-center">
@@ -50,23 +50,23 @@ export default function Inventaire() {
           type="date"
           className="form-input"
           value={dateFilter}
-          onChange={e => setDateFilter(e.target.value)}
-        />
+          onChange={(e) => setDateFilter(e.target.value)} />
+        
         <select
           className="form-input"
           value={zoneFilter}
-          onChange={e => setZoneFilter(e.target.value)}
-        >
+          onChange={(e) => setZoneFilter(e.target.value)}>
+          
           <option value="">Toutes zones</option>
-          {zones.map(z => (
-            <option key={z} value={z}>{z}</option>
-          ))}
+          {zones.map((z) =>
+          <option key={z} value={z}>{z}</option>
+          )}
         </select>
         <select
           className="form-input"
           value={statutFilter}
-          onChange={e => setStatutFilter(e.target.value)}
-        >
+          onChange={(e) => setStatutFilter(e.target.value)}>
+          
           <option value="">Tous statuts</option>
           <option value="brouillon">Brouillon</option>
           <option value="valide">Validé</option>
@@ -75,8 +75,8 @@ export default function Inventaire() {
           <input
             type="checkbox"
             checked={showArchives}
-            onChange={e => setShowArchives(e.target.checked)}
-          />
+            onChange={(e) => setShowArchives(e.target.checked)} />
+          
           Archivés
         </label>
       </div>
@@ -94,18 +94,18 @@ export default function Inventaire() {
             </tr>
           </thead>
           <tbody>
-            {filtered.map(inv => {
+            {filtered.map((inv) => {
               const total = (inv.lignes || []).reduce(
                 (sum, l) => sum + Number(l.quantite_reelle || 0) * Number(l.product?.pmp || 0),
                 0
               );
               const ecart = (inv.lignes || []).reduce(
                 (sum, l) =>
-                  sum + (Number(l.quantite_reelle || 0) - Number(l.product?.stock_theorique || 0)) * Number(l.product?.pmp || 0),
+                sum + (Number(l.quantite_reelle || 0) - Number(l.product?.stock_theorique || 0)) * Number(l.product?.pmp || 0),
                 0
               );
               return (
-                  <tr key={inv.id} className="border-b last:border-none">
+                <tr key={inv.id} className="border-b last:border-none">
                     <td className="p-2">{inv.date_inventaire}</td>
                   <td className="p-2">{inv.zone || '-'}</td>
                   <td className="p-2">{inv.lignes?.length || 0}</td>
@@ -114,19 +114,19 @@ export default function Inventaire() {
                   <td className="p-2">
                     <Link to={`/inventaire/${inv.id}`} className="text-blue-600 underline">Voir</Link>
                   </td>
-                </tr>
-              );
+                </tr>);
+
             })}
-            {filtered.length === 0 && (
-              <tr>
+            {filtered.length === 0 &&
+            <tr>
                 <td colSpan="6" className="p-4">
                   Aucun inventaire
                 </td>
               </tr>
-            )}
+            }
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

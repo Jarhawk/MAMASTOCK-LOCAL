@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import GlassCard from "@/components/ui/GlassCard";
 import PageWrapper from "@/components/ui/PageWrapper";
-import PrimaryButton from "@/components/ui/PrimaryButton";
+import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/db/sql";
 
 export default function Blocked() {
   const navigate = useNavigate();
@@ -13,6 +13,6 @@ export default function Blocked() {
         <p>Votre accès a été désactivé. Contactez un administrateur.</p>
         <PrimaryButton onClick={() => navigate("/logout")}>Se déconnecter</PrimaryButton>
       </GlassCard>
-    </PageWrapper>
-  );
+    </PageWrapper>);
+
 }

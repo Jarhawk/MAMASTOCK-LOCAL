@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useAuth } from '@/hooks/useAuth';
 import { produits_list, requisitions_create, requisition_ligne_add } from "@/lib/db";
 import { LiquidBackground, TouchLight } from "@/components/LiquidBackground";
-import GlassCard from "@/components/ui/GlassCard";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
 
 export default function MobileRequisition() {
   const { mama_id, loading: authLoading } = useAuth();

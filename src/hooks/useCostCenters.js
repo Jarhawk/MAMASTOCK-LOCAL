@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 
 import { useAuditLog } from "@/hooks/useAuditLog";
-import { readCostCenters, writeCostCenters } from "@/local/costCenters";
+import { readCostCenters, writeCostCenters } from "@/local/costCenters";import { isTauri } from "@/lib/db/sql";
 
 export async function importCostCentersFromExcel(file, sheetName) {
   const buf = await file.arrayBuffer();
@@ -49,7 +49,7 @@ export function useCostCenters() {
       const cc = {
         id: crypto.randomUUID(),
         nom: values.nom,
-        actif: values.actif !== false,
+        actif: values.actif !== false
       };
       list.push(cc);
       await writeCostCenters(list);
@@ -103,7 +103,7 @@ export function useCostCenters() {
   function exportCostCentersToExcel() {
     const datas = (costCenters || []).map((c) => ({
       nom: c.nom,
-      actif: c.actif,
+      actif: c.actif
     }));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(datas), "CostCenters");
@@ -138,6 +138,6 @@ export function useCostCenters() {
     updateCostCenter,
     deleteCostCenter,
     exportCostCentersToExcel,
-    importCostCentersFromExcel: importCostCentersFromExcelWithState,
+    importCostCentersFromExcel: importCostCentersFromExcelWithState
   };
 }

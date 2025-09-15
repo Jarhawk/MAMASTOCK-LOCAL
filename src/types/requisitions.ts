@@ -1,4 +1,4 @@
-export interface RequisitionLine {
+import { isTauri } from "@/lib/db/sql";export interface RequisitionLine {
   id: string;
   produit_id: string;
   unite: string | null;

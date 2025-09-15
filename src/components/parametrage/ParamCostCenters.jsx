@@ -7,7 +7,7 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Button } from '@/components/ui/button';
 import TableContainer from '@/components/ui/TableContainer';
 import { toast } from 'sonner';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx';import { isTauri } from "@/lib/db/sql";
 
 export default function ParamCostCenters() {
   const {
@@ -16,7 +16,7 @@ export default function ParamCostCenters() {
     addCostCenter,
     updateCostCenter,
     deleteCostCenter,
-    importCostCentersFromExcel,
+    importCostCentersFromExcel
   } = useCostCenters();
   const { mama_id, loading: authLoading } = useAuth();
   const [search, setSearch] = useState('');
@@ -112,46 +112,46 @@ export default function ParamCostCenters() {
           placeholder="Nom"
           value={form.nom}
           onChange={(e) => setForm((f) => ({ ...f, nom: e.target.value }))}
-          required
-        />
+          required />
+        
         <label className="flex items-center gap-1">
           <input
             type="checkbox"
             checked={form.actif}
             onChange={(e) =>
-              setForm((f) => ({ ...f, actif: e.target.checked }))
-            }
-          />
+            setForm((f) => ({ ...f, actif: e.target.checked }))
+            } />
+          
           Actif
         </label>
         <Button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-2"
-        >
+          className="flex items-center gap-2">
+          
           {loading && <span className="loader-glass" />}
           {editMode ? 'Modifier' : 'Ajouter'}
         </Button>
-        {editMode && (
-          <Button
-            variant="outline"
-            type="button"
-            onClick={() => {
-              setEditMode(false);
-              setForm({ nom: '', actif: true, id: null });
-            }}
-            disabled={loading}
-          >
+        {editMode &&
+        <Button
+          variant="outline"
+          type="button"
+          onClick={() => {
+            setEditMode(false);
+            setForm({ nom: '', actif: true, id: null });
+          }}
+          disabled={loading}>
+          
             Annuler
           </Button>
-        )}
+        }
       </form>
       <input
         className="form-input mb-2"
         placeholder="Recherche"
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+        onChange={(e) => setSearch(e.target.value)} />
+      
       <div className="flex gap-2 mb-2">
         <Button variant="outline" onClick={exportExcel} disabled={loading}>
           Export Excel
@@ -159,8 +159,8 @@ export default function ParamCostCenters() {
         <Button
           variant="outline"
           onClick={() => fileRef.current.click()}
-          disabled={loading}
-        >
+          disabled={loading}>
+          
           Import Excel
         </Button>
         <input
@@ -169,8 +169,8 @@ export default function ParamCostCenters() {
           ref={fileRef}
           onChange={handleImport}
           className="hidden"
-          data-testid="import-cc-input"
-        />
+          data-testid="import-cc-input" />
+        
       </div>
       <TableContainer className="mt-2">
         <table className="min-w-full text-xs">
@@ -182,31 +182,31 @@ export default function ParamCostCenters() {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((c) => (
-              <tr key={c.id}>
+            {filtered.map((c) =>
+            <tr key={c.id}>
                 <td>{c.nom}</td>
                 <td>{c.actif ? '✅' : '❌'}</td>
                 <td>
                   <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleEdit(c)}
-                  >
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleEdit(c)}>
+                  
                     Éditer
                   </Button>
                   <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => handleDelete(c.id)}
-                  >
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => handleDelete(c.id)}>
+                  
                     Supprimer
                   </Button>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

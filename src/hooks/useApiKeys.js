@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
-import { api_keys_list, api_keys_create, api_keys_revoke } from "@/local/apiKeys";
+import { api_keys_list, api_keys_create, api_keys_revoke } from "@/local/apiKeys";import { isTauri } from "@/lib/db/sql";
 
 export function useApiKeys() {
   const { mama_id, user_id } = useAuth();

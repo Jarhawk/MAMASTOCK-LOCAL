@@ -13,14 +13,14 @@ import { useAuth } from '@/hooks/useAuth';
  *   pageSize: nombre de lignes par page (défaut 30)
  *   params: params SQL additionnels pour la fonction (objet)
  * }
- */
+ */import { isTauri } from "@/lib/db/sql";
 export function useDashboardStats(options = {}) {
   const { mama_id, loading: authLoading } = useAuth();
   const {
     auto = false,
     interval = 30000,
     page = 1,
-    pageSize = 30,
+    pageSize = 30
   } = options;
 
   const [stats, setStats] = useState(null);
@@ -74,6 +74,6 @@ export function useDashboardStats(options = {}) {
     fetchStats,
     refresh: fetchStats,
     setPage: () => fetchStats(),
-    setPageSize: () => fetchStats(),
+    setPageSize: () => fetchStats()
   };
 }

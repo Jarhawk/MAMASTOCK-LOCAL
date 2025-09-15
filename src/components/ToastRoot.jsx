@@ -1,4 +1,4 @@
-import { Toaster } from 'sonner';
+import { Toaster } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function ToastRoot() {
   return (
@@ -9,8 +9,8 @@ export default function ToastRoot() {
       expand
       visibleToasts={5}
       toastOptions={{
-        duration: 3500,
-      }}
-    />
-  );
+        duration: 3500
+      }} />);
+
+
 }

@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect, useState } from 'react';
-import { useHelp } from '@/context/HelpProvider';
+import { useHelp } from '@/context/HelpProvider';import { isTauri } from "@/lib/db/sql";
 
 export default function TooltipHelper({ field }) {
   const { tooltips, fetchTooltips } = useHelp();
@@ -19,6 +19,6 @@ export default function TooltipHelper({ field }) {
   return (
     <span className="ml-1 cursor-pointer text-mamastockGold" title={text}>
       ?
-    </span>
-  );
+    </span>);
+
 }

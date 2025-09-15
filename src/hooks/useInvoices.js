@@ -7,11 +7,11 @@ import {
   facture_create,
   facture_update,
   facture_delete,
-  factures_update_status,
-} from "@/lib/db";
+  factures_update_status } from
+"@/lib/db";
 import * as XLSX from "xlsx";
 import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";
-import { saveAs } from "file-saver";
+import { saveAs } from "file-saver";import { isTauri } from "@/lib/db/sql";
 
 export function useInvoices() {
   const [invoices, setInvoices] = useState([]);
@@ -26,7 +26,7 @@ export function useInvoices() {
       const { factures } = await factures_list({
         search,
         fournisseur_id: fournisseur || undefined,
-        statut,
+        statut
       });
       setInvoices(factures || []);
       return factures;
@@ -134,7 +134,7 @@ export function useInvoices() {
       date: f.date_iso,
       fournisseur: f.fournisseur_nom,
       montant: f.montant,
-      statut: f.statut,
+      statut: f.statut
     }));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(datas), "Factures");
@@ -169,6 +169,6 @@ export function useInvoices() {
     deleteInvoice,
     batchUpdateStatus,
     exportInvoicesToExcel,
-    importInvoicesFromExcel,
+    importInvoicesFromExcel
   };
 }

@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 /**
  * Hook retournant le comparatif des prix par fournisseur pour un produit donné.
  * Calcule le dernier prix connu, le nombre d'achats et le prix moyen (PMP).
- */
+ */import { isTauri } from "@/lib/db/sql";
 export function useComparatif(productId) {
   const { mama_id } = useAuth();
   const [lignes, setLignes] = useState([]);
@@ -32,7 +32,7 @@ export function useComparatif(productId) {
             fournisseur: row.fournisseur_nom || "-",
             dernierPrix: prix,
             total: prix,
-            nb: 1,
+            nb: 1
           };
         } else {
           grouped[fid].nb += 1;
@@ -43,7 +43,7 @@ export function useComparatif(productId) {
         fournisseur: l.fournisseur,
         dernierPrix: l.dernierPrix,
         nb: l.nb,
-        pmp: l.total / l.nb,
+        pmp: l.total / l.nb
       }));
       setLignes(lignesRes);
       return lignesRes;

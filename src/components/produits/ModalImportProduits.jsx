@@ -10,11 +10,11 @@ import {
   parseProduitsFile,
   validateProduitRow,
   downloadProduitsTemplate,
-  insertProduits,
-} from '@/utils/excelUtils';
+  insertProduits } from
+'@/utils/excelUtils';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from "@/components/ui/button";
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 
 export default function ModalImportProduits({ open, onClose, onSuccess }) {

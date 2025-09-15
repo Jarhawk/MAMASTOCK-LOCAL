@@ -12,7 +12,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import PrimaryButton from "@/components/ui/PrimaryButton";
+import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/db/sql";
 
 function RequisitionFormPage() {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ function RequisitionFormPage() {
   const { list: listZoneProducts } = useZoneProducts();
   const { myAccessibleZones } = useZones();
   const [zones, setZones] = useState([]);
-    const { unites, listUnites } = useUnites();
+  const { unites, listUnites } = useUnites();
 
   const [statut, setStatut] = useState("");
   const [commentaire, setCommentaire] = useState("");
@@ -31,7 +31,7 @@ function RequisitionFormPage() {
   const [zoneProducts, setZoneProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
 
-    useEffect(() => { myAccessibleZones({ mode: 'requisition' }).then(setZones); listUnites(); }, [myAccessibleZones, listUnites]);
+  useEffect(() => {myAccessibleZones({ mode: 'requisition' }).then(setZones);listUnites();}, [myAccessibleZones, listUnites]);
 
   useEffect(() => {
     if (zones.length > 0) setZone(zones[0].id);
@@ -40,7 +40,7 @@ function RequisitionFormPage() {
   useEffect(() => {
     if (!zone_id) return;
     setLoadingProducts(true);
-    listZoneProducts(zone_id).then(p => { setZoneProducts(p); setLoadingProducts(false); });
+    listZoneProducts(zone_id).then((p) => {setZoneProducts(p);setLoadingProducts(false);});
   }, [zone_id, listZoneProducts]);
 
   const handleChangeArticle = (index, field, value) => {
@@ -55,7 +55,7 @@ function RequisitionFormPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!statut || !zone_id || articles.some(a => !a.produit_id || !a.quantite || !a.unite_id)) {
+    if (!statut || !zone_id || articles.some((a) => !a.produit_id || !a.quantite || !a.unite_id)) {
       toast.error("Tous les champs sont obligatoires");
       return;
     }
@@ -64,11 +64,11 @@ function RequisitionFormPage() {
       statut,
       commentaire,
       zone_id,
-      lignes: articles.map(a => ({
+      lignes: articles.map((a) => ({
         produit_id: a.produit_id,
         quantite: a.quantite,
-        unite: unites.find(u => u.id === a.unite_id)?.nom || "",
-      })),
+        unite: unites.find((u) => u.id === a.unite_id)?.nom || ""
+      }))
     };
     try {
       setSubmitting(true);
@@ -96,12 +96,12 @@ function RequisitionFormPage() {
         <div>
           <Label htmlFor="statut">Statut</Label>
           <Select
-            id="statut"
-            value={statut}
-            onChange={(e) => setStatut(e.target.value)}
-            required
-            className="w-full"
-          >
+              id="statut"
+              value={statut}
+              onChange={(e) => setStatut(e.target.value)}
+              required
+              className="w-full">
+              
             <option value="">Sélectionner…</option>
             <option value="brouillon">Brouillon</option>
             <option value="faite">Faite</option>
@@ -112,58 +112,58 @@ function RequisitionFormPage() {
         <div>
           <Label htmlFor="commentaire">Commentaire</Label>
           <Input
-            id="commentaire"
-            type="text"
-            value={commentaire}
-            onChange={(e) => setCommentaire(e.target.value)}
-            className="w-full"
-          />
+              id="commentaire"
+              type="text"
+              value={commentaire}
+              onChange={(e) => setCommentaire(e.target.value)}
+              className="w-full" />
+            
         </div>
 
-        {zone_id && (
+        {zone_id &&
           <div>
             <Label>Zone</Label>
             <div className="p-2 border rounded bg-muted/20">
-              {zones.find(z => z.id === zone_id)?.nom || "cave"}
+              {zones.find((z) => z.id === zone_id)?.nom || "cave"}
             </div>
           </div>
-        )}
+          }
 
         <div>
           <h2 className="text-lg font-semibold mb-2">Articles</h2>
-          {articles.map((article, index) => (
+          {articles.map((article, index) =>
             <div key={index} className="flex gap-4 mb-2 items-end">
-              {loadingProducts ? (
-                <div className="flex-1 flex items-center justify-center py-2">
+              {loadingProducts ?
+              <div className="flex-1 flex items-center justify-center py-2">
                   <LoadingSpinner message="Chargement produits..." />
-                </div>
-              ) : (
-                <Select
-                  value={article.produit_id}
-                  onChange={(e) =>
-                    handleChangeArticle(index, "produit_id", e.target.value)
-                  }
-                  className="flex-1"
-                  required
-                >
+                </div> :
+
+              <Select
+                value={article.produit_id}
+                onChange={(e) =>
+                handleChangeArticle(index, "produit_id", e.target.value)
+                }
+                className="flex-1"
+                required>
+                
                   <option value="">Sélectionner un produit</option>
-                  {zoneProducts.map((p) => (
-                    <option key={p.produit_id || p.id} value={p.produit_id || p.id}>
+                  {zoneProducts.map((p) =>
+                <option key={p.produit_id || p.id} value={p.produit_id || p.id}>
                       {p.produit_nom || p.nom}
                     </option>
-                  ))}
+                )}
                 </Select>
-              )}
+              }
               <Select
                 value={article.unite_id}
                 onChange={(e) => handleChangeArticle(index, "unite_id", e.target.value)}
                 className="w-32"
-                required
-              >
+                required>
+                
                 <option value="">Unité</option>
-                {unites.map(u => (
-                  <option key={u.id} value={u.id}>{u.nom}</option>
-                ))}
+                {unites.map((u) =>
+                <option key={u.id} value={u.id}>{u.nom}</option>
+                )}
               </Select>
               <Input
                 type="number"
@@ -171,15 +171,15 @@ function RequisitionFormPage() {
                 onChange={(e) => handleChangeArticle(index, "quantite", e.target.value)}
                 className="w-24"
                 min="1"
-                required
-              />
+                required />
+              
             </div>
-          ))}
+            )}
           <button
-            type="button"
-            onClick={handleAddArticle}
-            className="mt-2 text-sm text-mamastock-gold hover:underline"
-          >
+              type="button"
+              onClick={handleAddArticle}
+              className="mt-2 text-sm text-mamastock-gold hover:underline">
+              
             + Ajouter un article
           </button>
         </div>
@@ -191,12 +191,12 @@ function RequisitionFormPage() {
         </div>
         </form>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }
 
 export default function RequisitionForm() {
   return (
-    <RequisitionFormPage />
-  );
+    <RequisitionFormPage />);
+
 }

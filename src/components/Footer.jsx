@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";import { isTauri } from "@/lib/db/sql";
 
 export default function Footer() {
   return (
@@ -19,6 +19,6 @@ export default function Footer() {
       <span className="text-xs opacity-70 mt-2 sm:mt-0">
         Fonctionnement 100% local
       </span>
-    </footer>
-  );
+    </footer>);
+
 }

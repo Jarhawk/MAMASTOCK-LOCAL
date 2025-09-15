@@ -1,11 +1,11 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 self.addEventListener('push', (event) => {
   const data = event.data?.json() || {};
   const title = data.title || 'MamaStock';
   const options = {
     body: data.body,
     icon: '/icons/icon-192x192.png',
-    data: { url: data.url },
+    data: { url: data.url }
   };
   event.waitUntil(self.registration.showNotification(title, options));
 });

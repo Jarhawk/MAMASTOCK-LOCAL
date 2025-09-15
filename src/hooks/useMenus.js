@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useState } from "react";
+import { useState } from "react";import { isTauri } from "@/lib/db/sql";
 
 export async function importMenusFromExcel(file, sheetName) {
   const buf = await file.arrayBuffer();
@@ -64,7 +64,7 @@ export function useMenus() {
     deleteMenu,
     toggleMenuActive,
     exportMenusToExcel,
-    importMenusFromExcelWithState,
+    importMenusFromExcelWithState
   };
 }
 

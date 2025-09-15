@@ -2,7 +2,7 @@
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import { Button } from "@/components/ui/button";
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function MenuDuJourDetail({ menu, onClose }) {
   // Export Excel du menu du jour
@@ -10,7 +10,7 @@ export default function MenuDuJourDetail({ menu, onClose }) {
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet([{
       ...menu,
-      fiches: menu.fiches?.map(f => f.nom).join(", ")
+      fiches: menu.fiches?.map((f) => f.nom).join(", ")
     }]);
     XLSX.utils.book_append_sheet(wb, ws, "MenuDuJour");
     const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });
@@ -22,8 +22,8 @@ export default function MenuDuJourDetail({ menu, onClose }) {
   };
 
   const historique = menu.historique || [
-    { date: "2024-06-10", user: "admin", action: "Création" }
-  ];
+  { date: "2024-06-10", user: "admin", action: "Création" }];
+
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
@@ -38,13 +38,13 @@ export default function MenuDuJourDetail({ menu, onClose }) {
           </ul>
         </div>
         <div><b>Coût total :</b> {menu.cout_total?.toFixed(2)} €</div>
-        {menu.marge != null && (
-          <div><b>Marge :</b> {menu.marge.toFixed(1)}%</div>
-        )}
+        {menu.marge != null &&
+        <div><b>Marge :</b> {menu.marge.toFixed(1)}%</div>
+        }
         <div>
           <b>Document :</b> {menu.document ?
-            <a href={menu.document} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">Voir document</a> :
-            <span className="text-gray-400">Aucun</span>
+          <a href={menu.document} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">Voir document</a> :
+          <span className="text-gray-400">Aucun</span>
           }
         </div>
         <div className="flex gap-2 mt-4">
@@ -55,11 +55,11 @@ export default function MenuDuJourDetail({ menu, onClose }) {
           <b>Historique :</b>
           <ul className="list-disc pl-6">
             {historique.map((h, i) =>
-              <li key={i}>{h.date} — {h.user} — {h.action}</li>
+            <li key={i}>{h.date} — {h.user} — {h.action}</li>
             )}
           </ul>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

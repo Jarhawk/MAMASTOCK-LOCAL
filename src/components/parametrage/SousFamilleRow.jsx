@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import SousFamilleForm from '@/forms/SousFamilleForm.jsx';
+import SousFamilleForm from '@/forms/SousFamilleForm.jsx';import { isTauri } from "@/lib/db/sql";
 
 export default function SousFamilleRow({ sousFamille, onUpdate, onDelete, onToggle }) {
   const [editing, setEditing] = useState(false);
@@ -16,11 +16,11 @@ export default function SousFamilleRow({ sousFamille, onUpdate, onDelete, onTogg
               await onUpdate(sousFamille.id, data);
               setEditing(false);
             }}
-            onCancel={() => setEditing(false)}
-          />
+            onCancel={() => setEditing(false)} />
+          
         </td>
-      </tr>
-    );
+      </tr>);
+
   }
 
   return (
@@ -35,19 +35,19 @@ export default function SousFamilleRow({ sousFamille, onUpdate, onDelete, onTogg
           <Button
             size="sm"
             variant="outline"
-            onClick={() => onToggle(sousFamille)}
-          >
+            onClick={() => onToggle(sousFamille)}>
+            
             {sousFamille.actif ? 'Désactiver' : 'Activer'}
           </Button>
           <Button
             size="sm"
             className="bg-red-500 hover:bg-red-600 text-white"
-            onClick={() => onDelete(sousFamille.id)}
-          >
+            onClick={() => onDelete(sousFamille.id)}>
+            
             🗑
           </Button>
         </div>
       </td>
-    </tr>
-  );
+    </tr>);
+
 }

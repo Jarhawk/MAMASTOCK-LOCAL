@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useEffect } from 'react';
+import { useEffect } from 'react';import { isTauri } from "@/lib/db/sql";
 
 export function useSwipe(ref, { onSwipeLeft, onSwipeRight, threshold = 50 } = {}) {
   useEffect(() => {
@@ -15,8 +15,8 @@ export function useSwipe(ref, { onSwipeLeft, onSwipeRight, threshold = 50 } = {}
       if (startX === null) return;
       const dx = e.changedTouches[0].clientX - startX;
       if (Math.abs(dx) > threshold) {
-        if (dx > 0) onSwipeRight && onSwipeRight();
-        else onSwipeLeft && onSwipeLeft();
+        if (dx > 0) onSwipeRight && onSwipeRight();else
+        onSwipeLeft && onSwipeLeft();
       }
       startX = null;
     }

@@ -6,7 +6,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import TableContainer from "@/components/ui/TableContainer";
 
 // Affiche le comparatif des prix par fournisseur pour un produit
-
+import { isTauri } from "@/lib/db/sql";
 export default function PrixFournisseurs({ produitId }) {
   const { lignes, loading, error } = useComparatif(produitId);
 
@@ -18,8 +18,8 @@ export default function PrixFournisseurs({ produitId }) {
     return (
       <p className="text-red-600 bg-red-50 border border-red-200 rounded px-2 py-1 text-sm mt-2">
         {error.message || "Erreur de chargement"}
-      </p>
-    );
+      </p>);
+
   }
 
   if (!lignes || lignes.length === 0) {
@@ -40,18 +40,18 @@ export default function PrixFournisseurs({ produitId }) {
           </tr>
         </thead>
         <tbody>
-          {lignes.map((l, idx) => (
-            <tr key={idx} className="border-t">
+          {lignes.map((l, idx) =>
+              <tr key={idx} className="border-t">
               <td className="px-2 py-1">{l.fournisseur}</td>
               <td className="px-2 py-1 text-right">{parseFloat(l.dernierPrix).toFixed(2)} €</td>
               <td className="px-2 py-1 text-right">{parseFloat(l.pmp).toFixed(2)} €</td>
               <td className="px-2 py-1 text-center">{l.nb}</td>
             </tr>
-          ))}
+              )}
         </tbody>
           </table>
         </TableContainer>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

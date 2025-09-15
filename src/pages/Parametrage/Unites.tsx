@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { listUnites, createUnite, deleteUnite } from '@/lib/unites';
+import { listUnites, createUnite, deleteUnite } from '@/lib/unites';import { isTauri } from "@/lib/db/sql";
 
 export default function Unites() {
   const [rows, setRows] = useState([]);
@@ -53,13 +53,13 @@ export default function Unites() {
         <input
           placeholder="Code"
           value={code}
-          onChange={(e) => setCode(e.target.value)}
-        />
+          onChange={(e) => setCode(e.target.value)} />
+        
         <input
           placeholder="Libellé"
           value={libelle}
-          onChange={(e) => setLibelle(e.target.value)}
-        />
+          onChange={(e) => setLibelle(e.target.value)} />
+        
         <button onClick={onAdd}>Ajouter</button>
       </div>
       <table>
@@ -71,17 +71,17 @@ export default function Unites() {
           </tr>
         </thead>
         <tbody>
-          {rows.map((u: any) => (
-            <tr key={u.id}>
+          {rows.map((u: any) =>
+          <tr key={u.id}>
               <td>{u.code}</td>
               <td>{u.libelle}</td>
               <td>
                 <button onClick={() => onDelete(u.id)}>Supprimer</button>
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
-    </div>
-  );
+    </div>);
+
 }

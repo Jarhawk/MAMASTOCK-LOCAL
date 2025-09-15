@@ -7,7 +7,7 @@ import ParamAccess from "@/components/parametrage/ParamAccess";
 import ParamMama from "@/components/parametrage/ParamMama";
 import ParamCostCenters from "@/components/parametrage/ParamCostCenters";
 import ParamSecurity from "@/components/parametrage/ParamSecurity";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export default function Parametrage() {
   const { isAuthenticated } = useAuth();
@@ -16,15 +16,15 @@ export default function Parametrage() {
     <div className="p-6 container mx-auto">
       <Tabs
         tabs={[
-          { name: "Familles", content: <ParamFamilles /> },
-          { name: "Unités", content: <ParamUnites /> },
-          { name: "Rôles", content: <ParamRoles /> },
-          { name: "Accès", content: <ParamAccess /> },
-          { name: "Centres de coûts", content: <ParamCostCenters /> },
-          { name: "Établissement", content: <ParamMama /> },
-          { name: "Sécurité", content: <ParamSecurity /> },
-        ]}
-      />
-    </div>
-  );
+        { name: "Familles", content: <ParamFamilles /> },
+        { name: "Unités", content: <ParamUnites /> },
+        { name: "Rôles", content: <ParamRoles /> },
+        { name: "Accès", content: <ParamAccess /> },
+        { name: "Centres de coûts", content: <ParamCostCenters /> },
+        { name: "Établissement", content: <ParamMama /> },
+        { name: "Sécurité", content: <ParamSecurity /> }]
+        } />
+      
+    </div>);
+
 }

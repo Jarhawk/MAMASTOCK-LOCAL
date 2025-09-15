@@ -5,8 +5,8 @@ import {
   achats_list,
   achat_get,
   achat_insert,
-  achat_update,
-} from "@/local/achats";
+  achat_update } from
+"@/local/achats";import { isTauri } from "@/lib/db/sql";
 
 export function useAchats() {
   const { mama_id } = useAuth();
@@ -28,7 +28,7 @@ export function useAchats() {
         fin,
         actif,
         offset: (page - 1) * pageSize,
-        limit: pageSize,
+        limit: pageSize
       });
       setAchats(Array.isArray(data) ? data : []);
       setTotal(typeof count === "number" ? count : 0);
@@ -69,7 +69,7 @@ export function useAchats() {
     try {
       await achat_update(id, fields);
       const full = await achat_get(mama_id, id);
-      setAchats((a) => a.map((ac) => (ac.id === id ? full : ac)));
+      setAchats((a) => a.map((ac) => ac.id === id ? full : ac));
       return { data: full };
     } catch (e) {
       setError(e);
@@ -81,7 +81,7 @@ export function useAchats() {
     if (!mama_id) return { error: "no mama_id" };
     try {
       await achat_update(id, { actif: false });
-      setAchats((a) => a.map((ac) => (ac.id === id ? { ...ac, actif: false } : ac)));
+      setAchats((a) => a.map((ac) => ac.id === id ? { ...ac, actif: false } : ac));
       return { success: true };
     } catch (e) {
       setError(e);

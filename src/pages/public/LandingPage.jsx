@@ -8,8 +8,8 @@ import {
   LiquidBackground,
   WavesBackground,
   MouseLight,
-  TouchLight,
-} from "@/components/LiquidBackground";
+  TouchLight } from
+"@/components/LiquidBackground";import { isTauri } from "@/lib/db/sql";
 
 export default function LandingPage() {
   const { isAuthenticated, loading } = useAuth();
@@ -53,6 +53,6 @@ export default function LandingPage() {
         </section>
       </GlassCard>
       <footer className="mt-6 text-sm text-white/70 relative z-10">© MamaStock 2025</footer>
-    </div>
-  );
+    </div>);
+
 }

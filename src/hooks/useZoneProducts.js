@@ -4,8 +4,8 @@ import {
   zone_products_list,
   zone_products_move,
   zone_products_copy,
-  zone_products_merge,
-} from "@/lib/db";
+  zone_products_merge } from
+"@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export function useZoneProducts() {
   const { mama_id } = useAuth();

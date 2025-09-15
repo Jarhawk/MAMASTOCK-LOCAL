@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import GlassCard from "@/components/ui/GlassCard";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
 
 export default function NotificationSettingsForm() {
   const { fetchPreferences, updatePreferences } = useNotifications();
@@ -13,7 +13,7 @@ export default function NotificationSettingsForm() {
     email_enabled: true,
     webhook_enabled: false,
     webhook_url: "",
-    webhook_token: "",
+    webhook_token: ""
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -50,10 +50,10 @@ export default function NotificationSettingsForm() {
             type="checkbox"
             checked={prefs.email_enabled}
             onChange={(e) =>
-              setPrefs((p) => ({ ...p, email_enabled: e.target.checked }))
+            setPrefs((p) => ({ ...p, email_enabled: e.target.checked }))
             }
-            className="mr-2"
-          />
+            className="mr-2" />
+          
           Recevoir des e-mails
         </label>
         <label className="block">
@@ -61,36 +61,36 @@ export default function NotificationSettingsForm() {
             type="checkbox"
             checked={prefs.webhook_enabled}
             onChange={(e) =>
-              setPrefs((p) => ({ ...p, webhook_enabled: e.target.checked }))
+            setPrefs((p) => ({ ...p, webhook_enabled: e.target.checked }))
             }
-            className="mr-2"
-          />
+            className="mr-2" />
+          
           Activer les webhooks
         </label>
-        {prefs.webhook_enabled && (
-          <>
+        {prefs.webhook_enabled &&
+        <>
             <Input
-              className="w-full"
-              placeholder="Webhook URL"
-              value={prefs.webhook_url || ""}
-              onChange={(e) =>
-                setPrefs((p) => ({ ...p, webhook_url: e.target.value }))
-              }
-            />
+            className="w-full"
+            placeholder="Webhook URL"
+            value={prefs.webhook_url || ""}
+            onChange={(e) =>
+            setPrefs((p) => ({ ...p, webhook_url: e.target.value }))
+            } />
+          
             <Input
-              className="w-full"
-              placeholder="Webhook token"
-              value={prefs.webhook_token || ""}
-              onChange={(e) =>
-                setPrefs((p) => ({ ...p, webhook_token: e.target.value }))
-              }
-            />
+            className="w-full"
+            placeholder="Webhook token"
+            value={prefs.webhook_token || ""}
+            onChange={(e) =>
+            setPrefs((p) => ({ ...p, webhook_token: e.target.value }))
+            } />
+          
           </>
-        )}
+        }
         <PrimaryButton type="submit" disabled={saving}>
           {saving ? "Enregistrement…" : "Enregistrer"}
         </PrimaryButton>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

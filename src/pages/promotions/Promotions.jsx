@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import PromotionRow from "@/components/promotions/PromotionRow";
 import { toast } from 'sonner';
-import PromotionForm from "./PromotionForm.jsx";
+import PromotionForm from "./PromotionForm.jsx";import { isTauri } from "@/lib/db/sql";
 
 export default function Promotions() {
   const {
@@ -16,7 +16,7 @@ export default function Promotions() {
     fetchPromotions,
     addPromotion,
     updatePromotion,
-    deletePromotion,
+    deletePromotion
   } = usePromotions();
   const { mama_id, loading: authLoading, access_rights, hasAccess } = useAuth();
   const [showForm, setShowForm] = useState(false);
@@ -33,7 +33,7 @@ export default function Promotions() {
       search,
       actif: actifFilter === "all" ? null : actifFilter === "true",
       page,
-      limit: PAGE_SIZE,
+      limit: PAGE_SIZE
     });
   }, [fetchPromotions, search, actifFilter, page]);
 
@@ -52,10 +52,10 @@ export default function Promotions() {
   const filtered = promotions.filter((p) => {
     if (search && !p.nom.toLowerCase().includes(search.toLowerCase())) return false;
     if (
-      actifFilter !== "all" &&
-      (actifFilter === "true" ? !p.actif : p.actif)
-    )
-      return false;
+    actifFilter !== "all" && (
+    actifFilter === "true" ? !p.actif : p.actif))
+
+    return false;
     return true;
   });
 
@@ -78,23 +78,23 @@ export default function Promotions() {
             setSearch(e.target.value);
           }}
           className="form-input"
-          placeholder="Recherche promotion"
-        />
+          placeholder="Recherche promotion" />
+        
         <select
           className="form-input"
           value={actifFilter}
           onChange={(e) => {
             setPage(1);
             setActifFilter(e.target.value);
-          }}
-        >
+          }}>
+          
           <option value="all">Toutes</option>
           <option value="true">Actives</option>
           <option value="false">Inactives</option>
         </select>
-        {canEdit && (
-          <Button onClick={() => setShowForm(true)}>Nouvelle promotion</Button>
-        )}
+        {canEdit &&
+        <Button onClick={() => setShowForm(true)}>Nouvelle promotion</Button>
+        }
       </div>
       <TableContainer className="mt-2">
         <table className="min-w-full text-sm">
@@ -108,7 +108,7 @@ export default function Promotions() {
           </tr>
         </thead>
         <tbody>
-          {filtered.map((p) => (
+          {filtered.map((p) =>
             <PromotionRow
               key={p.id}
               promotion={p}
@@ -117,58 +117,58 @@ export default function Promotions() {
                 setEditRow(p);
                 setShowForm(true);
               }}
-              onDelete={handleDelete}
-            />
-          ))}
+              onDelete={handleDelete} />
+
+            )}
         </tbody>
         </table>
         <div className="mt-4 flex gap-2 justify-center">
           {Array.from(
             { length: Math.max(1, Math.ceil(total / PAGE_SIZE)) },
-            (_, i) => (
-              <Button
-                key={i + 1}
-                size="sm"
-                variant={page === i + 1 ? "default" : "outline"}
-                onClick={() => setPage(i + 1)}
-              >
+            (_, i) =>
+            <Button
+              key={i + 1}
+              size="sm"
+              variant={page === i + 1 ? "default" : "outline"}
+              onClick={() => setPage(i + 1)}>
+              
                 {i + 1}
               </Button>
-            ),
+
           )}
         </div>
       </TableContainer>
-      {showForm && (
-        <PromotionForm
-          promotion={editRow}
-          saving={saving}
-          onClose={() => {
+      {showForm &&
+      <PromotionForm
+        promotion={editRow}
+        saving={saving}
+        onClose={() => {
+          setShowForm(false);
+          setEditRow(null);
+          refreshList();
+        }}
+        onSave={async (values) => {
+          try {
+            setSaving(true);
+            if (editRow) {
+              await updatePromotion(editRow.id, values);
+              toast.success("Promotion modifiée !");
+            } else {
+              await addPromotion(values);
+              toast.success("Promotion ajoutée !");
+            }
             setShowForm(false);
             setEditRow(null);
             refreshList();
-          }}
-          onSave={async (values) => {
-            try {
-              setSaving(true);
-              if (editRow) {
-                await updatePromotion(editRow.id, values);
-                toast.success("Promotion modifiée !");
-              } else {
-                await addPromotion(values);
-                toast.success("Promotion ajoutée !");
-              }
-              setShowForm(false);
-              setEditRow(null);
-              refreshList();
-            } catch (err) {
-              console.error("Erreur enregistrement promotion:", err);
-              toast.error("Erreur lors de l'enregistrement.");
-            } finally {
-              setSaving(false);
-            }
-          }}
-        />
-      )}
-    </div>
-  );
+          } catch (err) {
+            console.error("Erreur enregistrement promotion:", err);
+            toast.error("Erreur lors de l'enregistrement.");
+          } finally {
+            setSaving(false);
+          }
+        }} />
+
+      }
+    </div>);
+
 }

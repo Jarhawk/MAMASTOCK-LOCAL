@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
-import { getRecommendations } from "@/local/recommendations";
+import { getRecommendations } from "@/local/recommendations";import { isTauri } from "@/lib/db/sql";
 
 export function useRecommendations() {
   const { id: user_id, mama_id } = useAuth();

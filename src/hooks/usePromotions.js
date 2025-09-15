@@ -5,8 +5,8 @@ import {
   promotions_list,
   promotions_add,
   promotions_update,
-  promotions_delete,
-} from "@/local/promotions";
+  promotions_delete } from
+"@/local/promotions";import { isTauri } from "@/lib/db/sql";
 
 export function usePromotions() {
   const { mama_id } = useAuth();
@@ -25,7 +25,7 @@ export function usePromotions() {
         search,
         actif,
         page,
-        limit,
+        limit
       });
       setPromotions(data);
       setTotal(total);

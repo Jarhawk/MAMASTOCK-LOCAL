@@ -1,7 +1,7 @@
-import { useAuth as useAuthContext } from '@/context/AuthContext'
+import { useAuth as useAuthContext } from '@/context/AuthContext';import { isTauri } from "@/lib/db/sql";
 
 export function useAuth() {
-  return useAuthContext()
+  return useAuthContext();
 }
 
-export default useAuth
+export default useAuth;

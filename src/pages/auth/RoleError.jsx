@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import GlassCard from "@/components/ui/GlassCard";
 import PageWrapper from "@/components/ui/PageWrapper";
-import PrimaryButton from "@/components/ui/PrimaryButton";
+import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/db/sql";
 
 export default function RoleError() {
   const navigate = useNavigate();
@@ -12,6 +12,6 @@ export default function RoleError() {
         <p>rôle utilisateur non trouvé. Merci de contacter l’administrateur.</p>
         <PrimaryButton onClick={() => navigate("/login")}>Se reconnecter</PrimaryButton>
       </GlassCard>
-    </PageWrapper>
-  );
+    </PageWrapper>);
+
 }

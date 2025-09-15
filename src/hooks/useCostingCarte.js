@@ -5,7 +5,7 @@ import { useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import * as XLSX from 'xlsx';
 import JSPDF from 'jspdf';
-import 'jspdf-autotable';
+import 'jspdf-autotable';import { isTauri } from "@/lib/db/sql";
 
 export function useCostingCarte() {
   const { mama_id } = useAuth();
@@ -24,7 +24,7 @@ export function useCostingCarte() {
           mama_id,
           type: filters.type,
           famille: filters.famille,
-          actif: filters.actif,
+          actif: filters.actif
         });
         setData(rows || []);
         return rows || [];

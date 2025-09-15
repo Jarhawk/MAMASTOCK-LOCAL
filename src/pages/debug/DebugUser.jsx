@@ -2,7 +2,7 @@
 // src/pages/debug/DebugUser.jsx
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import GlassCard from "@/components/ui/GlassCard";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
 
 export default function DebugUser() {
   const { session, role, mama_id, access_rights, loading: authLoading } = useAuth();
@@ -15,6 +15,6 @@ export default function DebugUser() {
         <h2 className="text-lg font-bold mb-2">🧪 DEBUG UTILISATEUR</h2>
         <pre>{JSON.stringify({ session, role, mama_id, access_rights }, null, 2)}</pre>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/db/sql";
 
 export default function StatsStock() {
   const { stats, loading, error, fetchStats } = useDashboardStats({ pageSize: 1000 });
@@ -49,29 +49,29 @@ export default function StatsStock() {
             </tr>
           </thead>
           <tbody>
-            {rows.length === 0 ? (
-              <tr>
+            {rows.length === 0 ?
+            <tr>
                 <td className="p-2 text-center text-gray-500" colSpan="4">
                   Aucune donnée
                 </td>
-              </tr>
-            ) : (
-              rows.map((r) => (
-                <tr key={r.produit_id}>
+              </tr> :
+
+            rows.map((r) =>
+            <tr key={r.produit_id}>
                   <td className="px-2 py-1">{r.nom}</td>
                   <td className="px-2 py-1 text-right">{Number(r.stock_reel ?? 0).toLocaleString()}</td>
                   <td className="px-2 py-1 text-right">{Number(r.pmp ?? 0).toLocaleString()}</td>
                   <td className="px-2 py-1">
-                    {r.last_purchase
-                      ? new Date(r.last_purchase).toLocaleDateString('fr-FR')
-                      : '-'}
+                    {r.last_purchase ?
+                new Date(r.last_purchase).toLocaleDateString('fr-FR') :
+                '-'}
                   </td>
                 </tr>
-              ))
-            )}
+            )
+            }
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

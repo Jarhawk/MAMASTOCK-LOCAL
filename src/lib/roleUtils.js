@@ -1,4 +1,4 @@
-export function extractAccessRightsFromRole(role) {
+import { isTauri } from "@/lib/db/sql";export function extractAccessRightsFromRole(role) {
   if (!role) return {};
   const rights = role.access_rights;
   if (typeof rights === 'string') {

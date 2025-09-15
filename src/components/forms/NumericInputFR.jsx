@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';import { isTauri } from "@/lib/db/sql";
 
 function normalize(raw) {
-  return raw
-    .replace(/\u00A0/g, ' ')
-    .replace(/\u202F/g, ' ')
-    .replace(/\s+/g, '')
-    .replace(/,/g, '.');
+  return raw.
+  replace(/\u00A0/g, ' ').
+  replace(/\u202F/g, ' ').
+  replace(/\s+/g, '').
+  replace(/,/g, '.');
 }
 function isTrailingSep(raw) {
   const t = (raw ?? '').trim();
@@ -23,26 +23,26 @@ export default function NumericInputFR({
   placeholder,
   disabled,
   name,
-  className = 'input input-bordered w-full',
+  className = 'input input-bordered w-full'
 }) {
   const formatter = useMemo(
     () =>
-      new Intl.NumberFormat('fr-FR', {
-        maximumFractionDigits: decimals,
-        minimumFractionDigits: 0,
-        useGrouping: true,
-      }),
+    new Intl.NumberFormat('fr-FR', {
+      maximumFractionDigits: decimals,
+      minimumFractionDigits: 0,
+      useGrouping: true
+    }),
     [decimals]
   );
 
   const format = useCallback(
     (n) =>
-      Number.isFinite(n)
-        ? formatter
-            .format(n)
-            .replace(/\u00A0/g, ' ')
-            .replace(/\u202F/g, ' ')
-        : '',
+    Number.isFinite(n) ?
+    formatter.
+    format(n).
+    replace(/\u00A0/g, ' ').
+    replace(/\u202F/g, ' ') :
+    '',
     [formatter]
   );
 
@@ -145,8 +145,7 @@ export default function NumericInputFR({
       disabled={disabled}
       className={className}
       lang="fr"
-      autoComplete="off"
-    />
-  );
-}
+      autoComplete="off" />);
 
+
+}

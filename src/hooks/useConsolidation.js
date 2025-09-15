@@ -4,7 +4,7 @@ import { consolidation_performance } from "@/lib/db";
 import { readConfig } from "@/appFs";
 import * as XLSX from "xlsx";
 import JSPDF from "jspdf";
-import "jspdf-autotable";
+import "jspdf-autotable";import { isTauri } from "@/lib/db/sql";
 
 export function useConsolidation() {
   const [sites, setSites] = useState([]);
@@ -33,9 +33,9 @@ export function useConsolidation() {
       setLoading(true);
       try {
         const data = await consolidation_performance({ start, end });
-        const filtered = mamaIds.length
-          ? data.filter((r) => mamaIds.includes(r.mama_id))
-          : data;
+        const filtered = mamaIds.length ?
+        data.filter((r) => mamaIds.includes(r.mama_id)) :
+        data;
         setRows(filtered);
         setLoading(false);
         return filtered;
@@ -85,7 +85,7 @@ export function useConsolidation() {
     fetchConsoMensuelle,
     exportExcel,
     exportPdf,
-    getKpis,
+    getKpis
   };
 }
 

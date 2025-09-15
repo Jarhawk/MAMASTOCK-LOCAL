@@ -1,8 +1,8 @@
-import { validateProduitRow } from "@/utils/excelUtils";
+import { validateProduitRow } from "@/utils/excelUtils";import { isTauri } from "@/lib/db/sql";
 
 export default function ImportPreviewTable({ rows, onUpdate, maps, reference }) {
   const { familles = [], sousFamilles = [], unites = [], zones = [] } =
-    reference || {};
+  reference || {};
 
   function handleChange(index, field, value) {
     const updated = [...rows];
@@ -13,21 +13,21 @@ export default function ImportPreviewTable({ rows, onUpdate, maps, reference }) 
     onUpdate(updated);
   }
 
-  const renderCell = (row, idx, field, listId) => (
-    <td
-      className={`${row.errors[field] ? "bg-red-50 text-red-600" : "text-black"}`}
-      title={row.errors[field] || ""}
-    >
+  const renderCell = (row, idx, field, listId) =>
+  <td
+    className={`${row.errors[field] ? "bg-red-50 text-red-600" : "text-black"}`}
+    title={row.errors[field] || ""}>
+    
       <input
-        value={row[field] ?? ""}
-        list={listId}
-        onChange={(e) => handleChange(idx, field, e.target.value)}
-        className={`w-full px-2 py-1 border rounded text-xs bg-white text-black ${
-          row.errors[field] ? "border-red-500" : "border-gray-300"
-        }`}
-      />
-    </td>
-  );
+      value={row[field] ?? ""}
+      list={listId}
+      onChange={(e) => handleChange(idx, field, e.target.value)}
+      className={`w-full px-2 py-1 border rounded text-xs bg-white text-black ${
+      row.errors[field] ? "border-red-500" : "border-gray-300"}`
+      } />
+    
+    </td>;
+
 
   return (
     <>
@@ -44,13 +44,13 @@ export default function ImportPreviewTable({ rows, onUpdate, maps, reference }) 
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, idx) => (
-            <tr
-              key={row.id}
-              className={
-                row.status === "error" ? "bg-red-50 text-black" : "bg-green-50 text-black"
-              }
-            >
+          {rows.map((row, idx) =>
+          <tr
+            key={row.id}
+            className={
+            row.status === "error" ? "bg-red-50 text-black" : "bg-green-50 text-black"
+            }>
+            
               {renderCell(row, idx, "nom")}
               {renderCell(row, idx, "famille_nom", "familles-list")}
               {renderCell(row, idx, "sous_famille_nom", "sousfamilles-list")}
@@ -59,29 +59,29 @@ export default function ImportPreviewTable({ rows, onUpdate, maps, reference }) 
               {renderCell(row, idx, "stock_min")}
               <td className="text-center">{row.status === "ok" ? "✅" : "❌"}</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
       <datalist id="familles-list">
-        {familles.map((f) => (
-          <option key={f.id} value={f.nom} />
-        ))}
+        {familles.map((f) =>
+        <option key={f.id} value={f.nom} />
+        )}
       </datalist>
       <datalist id="sousfamilles-list">
-        {sousFamilles.map((sf) => (
-          <option key={sf.id} value={sf.nom} />
-        ))}
+        {sousFamilles.map((sf) =>
+        <option key={sf.id} value={sf.nom} />
+        )}
       </datalist>
       <datalist id="unites-list">
-        {unites.map((u) => (
-          <option key={u.id} value={u.nom} />
-        ))}
+        {unites.map((u) =>
+        <option key={u.id} value={u.nom} />
+        )}
       </datalist>
       <datalist id="zones-list">
-        {zones.map((z) => (
-          <option key={z.id} value={z.nom} />
-        ))}
+        {zones.map((z) =>
+        <option key={z.id} value={z.nom} />
+        )}
       </datalist>
-    </>
-  );
+    </>);
+
 }

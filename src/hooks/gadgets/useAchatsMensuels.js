@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { achats_mensuels_list } from "@/lib/db";
+import { achats_mensuels_list } from "@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export default function useAchatsMensuels() {
   const { mama_id, loading: authLoading } = useAuth() || {};

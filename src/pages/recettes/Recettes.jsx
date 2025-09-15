@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import GlassCard from "@/components/ui/GlassCard";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
 
 export default function Recettes() {
   return (
@@ -8,6 +8,6 @@ export default function Recettes() {
         <h1 className="text-2xl font-bold">Recettes</h1>
         <p>Module Recettes en cours de développement.</p>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

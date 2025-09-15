@@ -13,7 +13,7 @@ import TableHeader from "@/components/ui/TableHeader";
 import { useFamilles } from "@/hooks/useFamilles";
 import { toast } from 'sonner';
 import { motion as Motion } from "framer-motion";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/db/sql";
 
 const PAGE_SIZE = 20;
 
@@ -26,7 +26,7 @@ export default function Fiches() {
     deleteFiche,
     duplicateFiche,
     exportFichesToExcel,
-    exportFichesToPDF,
+    exportFichesToPDF
   } = useFiches();
   const { mama_id, loading: authLoading, access_rights, hasAccess } = useAuth();
   const [showForm, setShowForm] = useState(false);
@@ -47,7 +47,7 @@ export default function Fiches() {
       famille: familleFilter || null,
       page,
       limit: PAGE_SIZE,
-      sortBy,
+      sortBy
     });
   }, [getFiches, search, actif, familleFilter, page, sortBy]);
 
@@ -82,16 +82,16 @@ export default function Fiches() {
             setSearch(e.target.value);
           }}
           className="form-input"
-          placeholder="Recherche fiche"
-        />
+          placeholder="Recherche fiche" />
+        
         <select
           className="form-input"
           value={sortBy}
           onChange={(e) => {
             setPage(1);
             setSortBy(e.target.value);
-          }}
-        >
+          }}>
+          
           <option value="nom">Tri: Nom</option>
           <option value="cout_par_portion">Tri: Coût/portion</option>
         </select>
@@ -101,8 +101,8 @@ export default function Fiches() {
           onChange={(e) => {
             setPage(1);
             setActif(e.target.value);
-          }}
-        >
+          }}>
+          
           <option value="true">Actives</option>
           <option value="false">Inactives</option>
           <option value="all">Toutes</option>
@@ -113,25 +113,25 @@ export default function Fiches() {
           onChange={(e) => {
             setPage(1);
             setFamilleFilter(e.target.value);
-          }}
-        >
+          }}>
+          
           <option value="">-- Famille --</option>
-          {familles.map((f) => (
-            <option key={f.id} value={f.id}>
+          {familles.map((f) =>
+          <option key={f.id} value={f.id}>
               {f.nom}
             </option>
-          ))}
+          )}
         </select>
-        {canEdit && (
-          <Button
-            onClick={() => {
-              setSelected(null);
-              setShowForm(true);
-            }}
-          >
+        {canEdit &&
+        <Button
+          onClick={() => {
+            setSelected(null);
+            setShowForm(true);
+          }}>
+          
             Ajouter une fiche
           </Button>
-        )}
+        }
         <Button variant="outline" onClick={exportExcel}>
           Export Excel
         </Button>
@@ -143,8 +143,8 @@ export default function Fiches() {
         <Motion.table
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="min-w-full text-sm"
-        >
+          className="min-w-full text-sm">
+          
           <thead>
             <tr>
               <th className="px-4 py-2">Nom</th>
@@ -156,60 +156,60 @@ export default function Fiches() {
             </tr>
           </thead>
           <tbody>
-            {fichesFiltres.map((fiche) => (
-              <FicheRow
-                key={fiche.id}
-                fiche={fiche}
-                canEdit={canEdit}
-                onEdit={(f) => {
-                  setSelected(f);
-                  setShowForm(true);
-                }}
-                onDetail={(f) => {
-                  setSelected(f);
-                  setShowDetail(true);
-                }}
-                onDuplicate={async (id) => {
-                  await duplicateFiche(id);
-                  toast.success("Fiche dupliquée");
+            {fichesFiltres.map((fiche) =>
+            <FicheRow
+              key={fiche.id}
+              fiche={fiche}
+              canEdit={canEdit}
+              onEdit={(f) => {
+                setSelected(f);
+                setShowForm(true);
+              }}
+              onDetail={(f) => {
+                setSelected(f);
+                setShowDetail(true);
+              }}
+              onDuplicate={async (id) => {
+                await duplicateFiche(id);
+                toast.success("Fiche dupliquée");
+                refreshList();
+              }}
+              onDelete={(id) => {
+                if (window.confirm("Désactiver cette fiche ?")) {
+                  deleteFiche(id);
+                  toast.success("Fiche désactivée");
                   refreshList();
-                }}
-                onDelete={(id) => {
-                  if (window.confirm("Désactiver cette fiche ?")) {
-                    deleteFiche(id);
-                    toast.success("Fiche désactivée");
-                    refreshList();
-                  }
-                }}
-              />
-            ))}
+                }
+              }} />
+
+            )}
           </tbody>
         </Motion.table>
       </ListingContainer>
       <PaginationFooter
         page={page}
         pages={Math.max(1, Math.ceil(total / PAGE_SIZE))}
-        onPageChange={setPage}
-      />
-      {showForm && (
-        <FicheForm
-          fiche={selected}
-          onClose={() => {
-            setShowForm(false);
-            setSelected(null);
-            refreshList();
-          }}
-        />
-      )}
-      {showDetail && selected && (
-        <FicheDetail
-          fiche={selected}
-          onClose={() => {
-            setShowDetail(false);
-            setSelected(null);
-          }}
-        />
-      )}
-    </div>
-  );
+        onPageChange={setPage} />
+      
+      {showForm &&
+      <FicheForm
+        fiche={selected}
+        onClose={() => {
+          setShowForm(false);
+          setSelected(null);
+          refreshList();
+        }} />
+
+      }
+      {showDetail && selected &&
+      <FicheDetail
+        fiche={selected}
+        onClose={() => {
+          setShowDetail(false);
+          setSelected(null);
+        }} />
+
+      }
+    </div>);
+
 }

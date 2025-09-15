@@ -1,4 +1,4 @@
-import { menuGroupes_list, menuGroupes_addLigne } from "@/local/menuGroupes";
+import { menuGroupes_list, menuGroupes_addLigne } from "@/local/menuGroupes";import { isTauri } from "@/lib/db/sql";
 
 export default function useMenuGroupe() {
   async function fetchMenusGroupes({ q } = {}) {

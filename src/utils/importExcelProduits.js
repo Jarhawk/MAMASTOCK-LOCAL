@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { fetchFamillesForValidation } from "@/hooks/useFamilles";
 import { listUnitesForValidation } from "@/hooks/useUnites";
-import { fetchZonesStock } from "@/hooks/useZonesStock";
+import { fetchZonesStock } from "@/hooks/useZonesStock";import { isTauri } from "@/lib/db/sql";
 
 function parseBoolean(value) {
   if (typeof value === "boolean") return value;
@@ -54,20 +54,20 @@ export async function parseProduitsFile(file, mama_id) {
   const raw = XLSX.utils.sheet_to_json(sheet, { defval: "" });
 
   const [
-    famillesRes,
-    sousFamillesRes,
-    unitesRes,
-    zonesRes,
-    fournisseursRes,
-    produitsRes
-  ] = await Promise.all([
-    fetchFamillesForValidation(mama_id),
-    query("SELECT id, nom FROM sous_familles WHERE mama_id = ?", [mama_id]),
-      listUnitesForValidation(mama_id),
-    fetchZonesStock(mama_id),
-    query("SELECT id FROM fournisseurs WHERE mama_id = ?", [mama_id]),
-    query("SELECT nom FROM produits WHERE mama_id = ?", [mama_id])
-  ]);
+  famillesRes,
+  sousFamillesRes,
+  unitesRes,
+  zonesRes,
+  fournisseursRes,
+  produitsRes] =
+  await Promise.all([
+  fetchFamillesForValidation(mama_id),
+  query("SELECT id, nom FROM sous_familles WHERE mama_id = ?", [mama_id]),
+  listUnitesForValidation(mama_id),
+  fetchZonesStock(mama_id),
+  query("SELECT id FROM fournisseurs WHERE mama_id = ?", [mama_id]),
+  query("SELECT nom FROM produits WHERE mama_id = ?", [mama_id])]
+  );
 
   const mapByName = (res) =>
   new Map(((res?.data ?? res) || []).map((x) => [x.nom.toLowerCase(), x.id]));
@@ -163,22 +163,22 @@ export async function insertProduits(rows) {
         (nom, unite_id, famille_id, zone_stock_id, stock_min, actif, sous_famille_id, code, allergenes, pmp, stock_theorique, dernier_prix, fournisseur_id, mama_id, seuil_min)
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         [
-          payload.nom,
-          payload.unite_id,
-          payload.famille_id,
-          payload.zone_stock_id,
-          payload.stock_min ?? 0,
-          payload.actif ? 1 : 0,
-          payload.sous_famille_id ?? null,
-          payload.code ?? null,
-          payload.allergenes ?? null,
-          payload.pmp ?? null,
-          payload.stock_theorique ?? null,
-          payload.dernier_prix ?? null,
-          payload.fournisseur_id ?? null,
-          payload.mama_id,
-          payload.seuil_min ?? null,
-        ]
+        payload.nom,
+        payload.unite_id,
+        payload.famille_id,
+        payload.zone_stock_id,
+        payload.stock_min ?? 0,
+        payload.actif ? 1 : 0,
+        payload.sous_famille_id ?? null,
+        payload.code ?? null,
+        payload.allergenes ?? null,
+        payload.pmp ?? null,
+        payload.stock_theorique ?? null,
+        payload.dernier_prix ?? null,
+        payload.fournisseur_id ?? null,
+        payload.mama_id,
+        payload.seuil_min ?? null]
+
       );
       const [{ id }] = await db.select('SELECT last_insert_rowid() as id');
       results.push({ ...r, id, insertError: null });

@@ -4,7 +4,7 @@ import PrimaryButton from "@/components/ui/PrimaryButton";
 import SecondaryButton from "@/components/ui/SecondaryButton";
 import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function FournisseurForm({ fournisseur: fournisseurProp, onSubmit, onCancel, saving }) {
   const fournisseur = fournisseurProp || null;
@@ -57,37 +57,37 @@ export default function FournisseurForm({ fournisseur: fournisseurProp, onSubmit
       <div>
         <label className="block font-semibold mb-1">Nom *</label>
         <Input
-          className="w-full"
-          value={nom}
-          onChange={e => setNom(e.target.value)}
-        />
+            className="w-full"
+            value={nom}
+            onChange={(e) => setNom(e.target.value)} />
+          
         {errors.nom && <p className="text-red-600 text-sm mt-1">{errors.nom}</p>}
       </div>
       <div>
         <label className="block font-semibold mb-1">Téléphone</label>
         <Input
-          type="tel"
-          className="w-full"
-          value={tel}
-          onChange={e => setTel(e.target.value)}
-        />
+            type="tel"
+            className="w-full"
+            value={tel}
+            onChange={(e) => setTel(e.target.value)} />
+          
       </div>
       <div>
         <label className="block font-semibold mb-1">Contact</label>
         <Input
-          className="w-full"
-          value={contact}
-          onChange={e => setContact(e.target.value)}
-        />
+            className="w-full"
+            value={contact}
+            onChange={(e) => setContact(e.target.value)} />
+          
       </div>
       <div>
         <label className="block font-semibold mb-1">Email</label>
         <Input
-          type="email"
-          className="w-full"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
+            type="email"
+            className="w-full"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} />
+          
         {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
       </div>
       <label className="flex items-center gap-2">
@@ -101,6 +101,6 @@ export default function FournisseurForm({ fournisseur: fournisseurProp, onSubmit
         <SecondaryButton type="button" disabled={saving} onClick={onCancel}>Annuler</SecondaryButton>
       </div>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

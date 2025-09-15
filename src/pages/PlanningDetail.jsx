@@ -5,7 +5,7 @@ import { usePlanning } from "@/hooks/usePlanning";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Button } from "@/components/ui/button";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export default function PlanningDetail() {
   const { id } = useParams();
@@ -28,8 +28,8 @@ export default function PlanningDetail() {
       <div>Date : {planning.date_prevue}</div>
       <div>Statut : {planning.statut}</div>
       <div>Commentaire : {planning.commentaire || "-"}</div>
-      {planning.lignes?.length > 0 && (
-        <TableContainer>
+      {planning.lignes?.length > 0 &&
+      <TableContainer>
           <table className="min-w-full text-sm">
             <thead>
               <tr>
@@ -39,17 +39,17 @@ export default function PlanningDetail() {
               </tr>
             </thead>
             <tbody>
-              {planning.lignes.map(l => (
-                <tr key={l.id}>
+              {planning.lignes.map((l) =>
+            <tr key={l.id}>
                   <td className="px-2 py-1">{l.produit?.nom}</td>
                   <td className="px-2 py-1">{l.quantite}</td>
                   <td className="px-2 py-1">{l.observation}</td>
                 </tr>
-              ))}
+            )}
             </tbody>
           </table>
         </TableContainer>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

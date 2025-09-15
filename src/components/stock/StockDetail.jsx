@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react";import { isTauri } from "@/lib/db/sql";
 
 export function buildRotationData(mvts) {
   const byMonth = {};
@@ -8,9 +8,9 @@ export function buildRotationData(mvts) {
       byMonth[mois] = (byMonth[mois] || 0) + m.quantite;
     }
   });
-  return Object.entries(byMonth)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([mois, q]) => ({ mois, q }));
+  return Object.entries(byMonth).
+  sort(([a], [b]) => a.localeCompare(b)).
+  map(([mois, q]) => ({ mois, q }));
 }
 
 export default function StockDetail() {

@@ -1,4 +1,4 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // src/components/ui/tabs.jsx
 
 export function Tabs({ children }) {
@@ -14,14 +14,14 @@ export function TabsTrigger({ children, onClick, isActive }) {
     <button
       onClick={onClick}
       className={`px-4 py-2 -mb-px border-b-2 font-medium transition-colors duration-200 ${
-        isActive
-          ? 'border-mamastock-gold text-mamastock-gold'
-          : 'border-transparent text-mamastock-text hover:text-mamastock-gold'
-      }`}
-    >
+      isActive ?
+      'border-mamastock-gold text-mamastock-gold' :
+      'border-transparent text-mamastock-text hover:text-mamastock-gold'}`
+      }>
+      
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 export function TabsContent({ children, isActive }) {

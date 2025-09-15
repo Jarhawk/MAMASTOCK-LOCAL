@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { Button } from '@/components/ui/button';
-import SousFamilleList from './SousFamilleList';
+import SousFamilleList from './SousFamilleList';import { isTauri } from "@/lib/db/sql";
 
 export default function SousFamilleModal({ famille, onClose }) {
   if (!famille) return null;
@@ -15,6 +15,6 @@ export default function SousFamilleModal({ famille, onClose }) {
           </Button>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

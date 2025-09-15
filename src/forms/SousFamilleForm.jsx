@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Form } from '@/components/ui/Form';
 import { FormField } from '@/components/ui/FormField';
 import { FormActions } from '@/components/ui/FormActions';
-import { Input, Select, Checkbox } from '@/components/ui/controls';
+import { Input, Select, Checkbox } from '@/components/ui/controls';import { isTauri } from "@/lib/db/sql";
 
 export default function SousFamilleForm({ sousFamille, familles = [], familleId, onSave, onCancel }) {
   const [nom, setNom] = useState(sousFamille?.nom || '');
@@ -31,35 +31,35 @@ export default function SousFamilleForm({ sousFamille, familles = [], familleId,
           value={nom}
           onChange={(e) => setNom(e.target.value)}
           placeholder="Nom de la sous-famille"
-          required
-        />
+          required />
+        
       </FormField>
-      {familles.length > 0 && (
-        <FormField label="Famille" htmlFor="sf-famille" required>
+      {familles.length > 0 &&
+      <FormField label="Famille" htmlFor="sf-famille" required>
           <Select
-            id="sf-famille"
-            value={famille}
-            onChange={(e) => setFamille(e.target.value)}
-            required
-          >
+          id="sf-famille"
+          value={famille}
+          onChange={(e) => setFamille(e.target.value)}
+          required>
+          
             <option value="">Choisir</option>
-            {familles.map((f) => (
-              <option key={f.id} value={f.id}>
+            {familles.map((f) =>
+          <option key={f.id} value={f.id}>
                 {f.nom}
               </option>
-            ))}
+          )}
           </Select>
         </FormField>
-      )}
+      }
       <FormField>
         <Checkbox
           id="sf-actif"
           label="Sous-famille active"
           checked={actif}
-          onChange={(e) => setActif(e.target.checked)}
-        />
+          onChange={(e) => setActif(e.target.checked)} />
+        
       </FormField>
       <FormActions onCancel={onCancel} />
-    </Form>
-  );
+    </Form>);
+
 }

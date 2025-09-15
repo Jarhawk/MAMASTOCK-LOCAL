@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect, useState } from "react";
 import { readConfig, writeConfig } from "@/appFs";
-import { DEFAULT_ROLES } from "@/constants/roles";
+import { DEFAULT_ROLES } from "@/constants/roles";import { isTauri } from "@/lib/db/sql";
 
 export function useRoles() {
   const [roles, setRoles] = useState([]);
@@ -27,8 +27,8 @@ export function useRoles() {
     await ensureDefaults(cfg);
     const list = cfg.roles || [];
     const idx = list.findIndex((r) => r.id === role.id);
-    if (idx >= 0) list[idx] = { ...list[idx], ...role };
-    else list.push({ ...role, id: role.id || crypto.randomUUID(), actif: true });
+    if (idx >= 0) list[idx] = { ...list[idx], ...role };else
+    list.push({ ...role, id: role.id || crypto.randomUUID(), actif: true });
     cfg.roles = list;
     await writeConfig(cfg);
     await fetchRoles();

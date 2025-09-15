@@ -13,7 +13,7 @@ import GlassCard from '@/components/ui/GlassCard';
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import Unauthorized from '@/pages/auth/Unauthorized';
+import Unauthorized from '@/pages/auth/Unauthorized';import { isTauri } from "@/lib/db/sql";
 
 export default function BLForm({ bon, fournisseurs = [], onClose }) {
   const { insertBonLivraison, updateBonLivraison } = useBonsLivraison();
@@ -31,14 +31,14 @@ export default function BLForm({ bon, fournisseurs = [], onClose }) {
   const [numero_bl, setNumero] = useState(bon?.numero_bl || '');
   const [lignes, setLignes] = useState(
     bon?.lignes?.map((l) => ({ ...l, produit_nom: l.produit?.nom || '' })) || [
-      {
-        produit_id: '',
-        produit_nom: '',
-        quantite_recue: 1,
-        prix_unitaire: 0,
-        tva: 20,
-      },
-    ]
+    {
+      produit_id: '',
+      produit_nom: '',
+      quantite_recue: 1,
+      prix_unitaire: 0,
+      tva: 20
+    }]
+
   );
   const [loading, setLoading] = useState(false);
 
@@ -50,22 +50,22 @@ export default function BLForm({ bon, fournisseurs = [], onClose }) {
   }, [bon?.fournisseur_id, fournisseurs]);
 
   useEffect(() => {
+
     // fetching handled by hook
   }, [fournisseurName]);
-
   if (authLoading) return <LoadingSpinner message="Chargement..." />;
   if (!canEdit) return <Unauthorized />;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!date_reception || !fournisseur_id)
-      return toast.error('Date et fournisseur requis');
+    return toast.error('Date et fournisseur requis');
     setLoading(true);
     const payload = {
       numero_bl,
       date_reception,
       fournisseur_id,
-      lignes,
+      lignes
     };
     try {
       if (bon?.id) {
@@ -88,22 +88,22 @@ export default function BLForm({ bon, fournisseurs = [], onClose }) {
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
       <GlassCard
         title={bon ? 'Modifier BL' : 'Nouveau BL'}
-        className="p-6 min-w-[400px] space-y-2"
-      >
+        className="p-6 min-w-[400px] space-y-2">
+        
         <form onSubmit={handleSubmit} className="space-y-2">
           <label className="block text-sm mb-1">Numéro</label>
           <Input
             value={numero_bl}
             onChange={(e) => setNumero(e.target.value)}
-            placeholder="Numéro"
-          />
+            placeholder="Numéro" />
+          
           <label className="block text-sm mb-1">Date de réception *</label>
           <Input
             type="date"
             value={date_reception}
             onChange={(e) => setDateReception(e.target.value)}
-            required
-          />
+            required />
+          
           <label className="block text-sm mb-1">Fournisseur *</label>
           <Input
             list="fournisseurs-list"
@@ -115,14 +115,14 @@ export default function BLForm({ bon, fournisseurs = [], onClose }) {
               setFournisseurId(found ? found.id : '');
             }}
             placeholder="Fournisseur"
-            required
-          />
+            required />
+          
           <datalist id="fournisseurs-list">
-            {fournisseurOptions.map((f) => (
-              <option key={f.id} value={f.nom}>
+            {fournisseurOptions.map((f) =>
+            <option key={f.id} value={f.nom}>
                 {f.nom}
               </option>
-            ))}
+            )}
           </datalist>
           <table className="w-full text-sm mb-2">
             <thead>
@@ -135,124 +135,124 @@ export default function BLForm({ bon, fournisseurs = [], onClose }) {
               </tr>
             </thead>
             <tbody>
-              {lignes.map((l, idx) => (
-                <tr key={idx}>
+              {lignes.map((l, idx) =>
+              <tr key={idx}>
                   <td className="min-w-[150px]">
                     <AutoCompleteField
-                      label=""
-                      value={l.produit_id}
-                      onChange={(obj) => {
-                        setLignes((ls) =>
-                          ls.map((it, i) =>
-                            i === idx
-                              ? {
-                                  ...it,
-                                  produit_nom: obj?.nom || '',
-                                  produit_id: obj?.id || '',
-                                }
-                              : it
-                          )
-                        );
-                        if ((obj?.nom || '').length >= 2)
-                          searchProduits(obj.nom);
-                      }}
-                      options={produitOptions.map((p) => ({
-                        id: p.id,
-                        nom: p.nom,
-                      }))}
-                    />
+                    label=""
+                    value={l.produit_id}
+                    onChange={(obj) => {
+                      setLignes((ls) =>
+                      ls.map((it, i) =>
+                      i === idx ?
+                      {
+                        ...it,
+                        produit_nom: obj?.nom || '',
+                        produit_id: obj?.id || ''
+                      } :
+                      it
+                      )
+                      );
+                      if ((obj?.nom || '').length >= 2)
+                      searchProduits(obj.nom);
+                    }}
+                    options={produitOptions.map((p) => ({
+                      id: p.id,
+                      nom: p.nom
+                    }))} />
+                  
                   </td>
                   <td>
                     <input
-                      type="number"
-                      className="form-input"
-                      value={l.quantite_recue}
-                      onChange={(e) =>
-                        setLignes((ls) =>
-                          ls.map((it, i) =>
-                            i === idx
-                              ? {
-                                  ...it,
-                                  quantite_recue: Number(e.target.value),
-                                }
-                              : it
-                          )
-                        )
-                      }
-                    />
+                    type="number"
+                    className="form-input"
+                    value={l.quantite_recue}
+                    onChange={(e) =>
+                    setLignes((ls) =>
+                    ls.map((it, i) =>
+                    i === idx ?
+                    {
+                      ...it,
+                      quantite_recue: Number(e.target.value)
+                    } :
+                    it
+                    )
+                    )
+                    } />
+                  
                   </td>
                   <td>
                     <input
-                      type="number"
-                      className="form-input"
-                      value={l.prix_unitaire}
-                      onChange={(e) =>
-                        setLignes((ls) =>
-                          ls.map((it, i) =>
-                            i === idx
-                              ? { ...it, prix_unitaire: Number(e.target.value) }
-                              : it
-                          )
-                        )
-                      }
-                    />
+                    type="number"
+                    className="form-input"
+                    value={l.prix_unitaire}
+                    onChange={(e) =>
+                    setLignes((ls) =>
+                    ls.map((it, i) =>
+                    i === idx ?
+                    { ...it, prix_unitaire: Number(e.target.value) } :
+                    it
+                    )
+                    )
+                    } />
+                  
                   </td>
                   <td>
                     <input
-                      type="number"
-                      className="form-input"
-                      value={l.tva}
-                      onChange={(e) =>
-                        setLignes((ls) =>
-                          ls.map((it, i) =>
-                            i === idx
-                              ? { ...it, tva: Number(e.target.value) }
-                              : it
-                          )
-                        )
-                      }
-                    />
+                    type="number"
+                    className="form-input"
+                    value={l.tva}
+                    onChange={(e) =>
+                    setLignes((ls) =>
+                    ls.map((it, i) =>
+                    i === idx ?
+                    { ...it, tva: Number(e.target.value) } :
+                    it
+                    )
+                    )
+                    } />
+                  
                   </td>
                   <td>
                     <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      onClick={() =>
-                        setLignes((ls) => ls.filter((_, i) => i !== idx))
-                      }
-                    >
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() =>
+                    setLignes((ls) => ls.filter((_, i) => i !== idx))
+                    }>
+                    
                       X
                     </Button>
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
           <Button
             type="button"
             onClick={() =>
-              setLignes((ls) => [
-                ...ls,
-                {
-                  produit_id: '',
-                  produit_nom: '',
-                  quantite_recue: 1,
-                  prix_unitaire: 0,
-                  tva: 20,
-                },
-              ])
+            setLignes((ls) => [
+            ...ls,
+            {
+              produit_id: '',
+              produit_nom: '',
+              quantite_recue: 1,
+              prix_unitaire: 0,
+              tva: 20
+            }]
+            )
             }
-            className="mt-2"
-          >
+            className="mt-2">
+            
             Ajouter ligne
           </Button>
           <div className="flex gap-2 justify-end mt-2">
             <PrimaryButton
               type="submit"
               disabled={loading}
-              className="min-w-[120px]"
-            >
+              className="min-w-[120px]">
+              
               {loading ? 'Enregistrement...' : bon ? 'Modifier' : 'Ajouter'}
             </PrimaryButton>
             <SecondaryButton type="button" onClick={onClose}>
@@ -261,6 +261,6 @@ export default function BLForm({ bon, fournisseurs = [], onClose }) {
           </div>
         </form>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

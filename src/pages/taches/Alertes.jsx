@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import { useAlerts } from "@/hooks/useAlerts";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import TableContainer from "@/components/ui/TableContainer";
+import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/db/sql";
 
 export default function Alertes() {
   const { rules: alertes, loading, fetchRules } = useAlerts();
@@ -26,25 +26,25 @@ export default function Alertes() {
             </tr>
           </thead>
           <tbody>
-            {alertes.map((a) => (
-              <tr key={a.id} className="">
+            {alertes.map((a) =>
+            <tr key={a.id} className="">
                 <td className="border px-2 py-1">{a.titre}</td>
                 <td className="border px-2 py-1">{a.type}</td>
                 <td className="border px-2 py-1">
                   {new Date(a.created_at).toLocaleDateString()}
                 </td>
               </tr>
-            ))}
-            {alertes.length === 0 && !loading && (
-              <tr>
+            )}
+            {alertes.length === 0 && !loading &&
+            <tr>
                 <td colSpan="3" className="py-4 text-center text-gray-500">
                   Aucune alerte
                 </td>
               </tr>
-            )}
+            }
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

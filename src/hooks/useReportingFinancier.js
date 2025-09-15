@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { reporting_financier } from "@/lib/db";
 import { saveText } from "@/local/files";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";import { isTauri } from "@/lib/db/sql";
 
 export function useReportingFinancier({ start, end }) {
   const { mama_id } = useAuth();
@@ -30,12 +30,12 @@ export function useReportingFinancier({ start, end }) {
   async function exportCsv(path) {
     if (!data) return;
     const csv = [
-      "poste,montant",
-      `Chiffre d'affaires,${data.total_ventes}`,
-      `Achats,${data.total_achats}`,
-      `Marge brute,${data.marge}`,
-      `Valeur du stock,${data.valeur_stock}`,
-    ].join("\n");
+    "poste,montant",
+    `Chiffre d'affaires,${data.total_ventes}`,
+    `Achats,${data.total_achats}`,
+    `Marge brute,${data.marge}`,
+    `Valeur du stock,${data.valeur_stock}`].
+    join("\n");
     await saveText(path, csv);
   }
 

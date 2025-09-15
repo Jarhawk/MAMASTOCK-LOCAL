@@ -1,4 +1,4 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 
 /**
  * Generic glass style card used across forms.
@@ -14,12 +14,12 @@
 export function GlassCard({ children, title, footer, className = '', width = 'w-full max-w-lg' }) {
   return (
     <div
-      className={`relative ${width} rounded-xl p-6 shadow-lg bg-white/5 backdrop-blur border border-white/20 text-white ${className}`}
-    >
+      className={`relative ${width} rounded-xl p-6 shadow-lg bg-white/5 backdrop-blur border border-white/20 text-white ${className}`}>
+      
       {title && <h2 className="text-xl font-semibold mb-4 text-white/90">{title}</h2>}
       <div className="space-y-4">{children}</div>
       {footer && <div className="mt-6">{footer}</div>}
-    </div>
-  );
+    </div>);
+
 }
 export default GlassCard;

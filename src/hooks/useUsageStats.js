@@ -3,8 +3,8 @@ import { useAuth } from '@/hooks/useAuth';
 import {
   usage_stats_module_counts,
   usage_stats_last_seen,
-  logs_securite_frequent_errors,
-} from "@/lib/db";
+  logs_securite_frequent_errors } from
+"@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export function useUsageStats() {
   const { mama_id } = useAuth();

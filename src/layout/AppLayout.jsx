@@ -1,6 +1,6 @@
 import Sidebar from "@/components/sidebar.autogen";
 import Footer from "@/components/Footer";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";import { isTauri } from "@/lib/db/sql";
 
 export default function AppLayout() {
   return (
@@ -12,6 +12,6 @@ export default function AppLayout() {
         </main>
         <Footer />
       </div>
-    </div>
-  );
+    </div>);
+
 }

@@ -1,4 +1,4 @@
-import { existsFile, readText, saveText } from "@/local/files";
+import { existsFile, readText, saveText } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "transferts.json";
 
@@ -43,44 +43,44 @@ export async function transferts_list({
   fin,
   zone_source_id,
   zone_dest_id,
-  produit_id,
-}: {
-  mama_id?: string;
-  debut?: string;
-  fin?: string;
-  zone_source_id?: string | number;
-  zone_dest_id?: string | number;
-  produit_id?: string | number;
-} = {}): Promise<Transfert[]> {
+  produit_id
+
+
+
+
+
+
+
+}: {mama_id?: string;debut?: string;fin?: string;zone_source_id?: string | number;zone_dest_id?: string | number;produit_id?: string | number;} = {}): Promise<Transfert[]> {
   let list = await readAll();
-  if (mama_id) list = list.filter(t => t.mama_id === mama_id);
-  if (debut) list = list.filter(t => t.date_transfert >= debut);
-  if (fin) list = list.filter(t => t.date_transfert <= fin);
-  if (zone_source_id) list = list.filter(t => String(t.zone_source_id) === String(zone_source_id));
-  if (zone_dest_id) list = list.filter(t => String(t.zone_dest_id) === String(zone_dest_id));
-  if (produit_id) list = list.filter(t => t.lignes.some(l => String(l.produit_id) === String(produit_id)));
-  list.sort((a,b) => b.date_transfert.localeCompare(a.date_transfert));
+  if (mama_id) list = list.filter((t) => t.mama_id === mama_id);
+  if (debut) list = list.filter((t) => t.date_transfert >= debut);
+  if (fin) list = list.filter((t) => t.date_transfert <= fin);
+  if (zone_source_id) list = list.filter((t) => String(t.zone_source_id) === String(zone_source_id));
+  if (zone_dest_id) list = list.filter((t) => String(t.zone_dest_id) === String(zone_dest_id));
+  if (produit_id) list = list.filter((t) => t.lignes.some((l) => String(l.produit_id) === String(produit_id)));
+  list.sort((a, b) => b.date_transfert.localeCompare(a.date_transfert));
   return list;
 }
 
 export async function transfert_get(id: string, mama_id?: string) {
   const list = await readAll();
-  return list.find(t => t.id === id && (!mama_id || t.mama_id === mama_id)) || null;
+  return list.find((t) => t.id === id && (!mama_id || t.mama_id === mama_id)) || null;
 }
 
 export async function transfert_create(
-  header: Omit<Transfert, "id" | "created_at" | "lignes">,
-  lignes: TransfertLigne[] = []
-): Promise<Transfert> {
+header: Omit<Transfert, "id" | "created_at" | "lignes">,
+lignes: TransfertLigne[] = [])
+: Promise<Transfert> {
   const list = await readAll();
   const item: Transfert = {
     id: crypto.randomUUID(),
     created_at: new Date().toISOString(),
     ...header,
-    lignes: lignes.map(l => ({
+    lignes: lignes.map((l) => ({
       ...l,
-      quantite: Number(l.quantite),
-    })),
+      quantite: Number(l.quantite)
+    }))
   };
   list.push(item);
   await writeAll(list);
@@ -89,9 +89,8 @@ export async function transfert_create(
 
 export async function transfert_delete(id: string, mama_id?: string) {
   const list = await readAll();
-  const idx = list.findIndex(t => t.id === id && (!mama_id || t.mama_id === mama_id));
+  const idx = list.findIndex((t) => t.id === id && (!mama_id || t.mama_id === mama_id));
   if (idx === -1) return;
-  list.splice(idx,1);
+  list.splice(idx, 1);
   await writeAll(list);
 }
-

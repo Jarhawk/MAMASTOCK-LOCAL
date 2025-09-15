@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import GlassCard from "@/components/ui/GlassCard";
 import PageWrapper from "@/components/ui/PageWrapper";
-import PrimaryButton from "@/components/ui/PrimaryButton";
+import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/db/sql";
 
 export default function Unauthorized() {
   const navigate = useNavigate();
@@ -14,6 +14,6 @@ export default function Unauthorized() {
         <p>Aucun accès attribué, contactez l'administrateur.</p>
         <PrimaryButton onClick={() => navigate("/")}>Retour à l'accueil</PrimaryButton>
       </GlassCard>
-    </PageWrapper>
-  );
+    </PageWrapper>);
+
 }

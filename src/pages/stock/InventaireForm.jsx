@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useNavigate, useParams } from "react-router-dom";
-import InventaireForm from "@/components/inventaires/InventaireForm";
+import InventaireForm from "@/components/inventaires/InventaireForm";import { isTauri } from "@/lib/db/sql";
 
 export default function InventaireFormPage() {
   const navigate = useNavigate();
@@ -10,8 +10,8 @@ export default function InventaireFormPage() {
     <div className="p-4">
       <InventaireForm
         inventaireId={id}
-        onClose={() => navigate(-1)}
-      />
-    </div>
-  );
+        onClose={() => navigate(-1)} />
+      
+    </div>);
+
 }

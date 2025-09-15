@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRGPD } from "@/hooks/useRGPD";
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function DeleteAccountButton() {
   const { purgeUserData } = useRGPD();
@@ -16,14 +16,14 @@ export default function DeleteAccountButton() {
     if (!window.confirm("Supprimer définitivement votre compte ?")) return;
     setLoading(true);
     const { error } = await purgeUserData(user_id);
-    if (error) toast.error("Erreur lors de la suppression");
-    else toast.success("Compte supprimé");
+    if (error) toast.error("Erreur lors de la suppression");else
+    toast.success("Compte supprimé");
     setLoading(false);
   }
 
   return (
     <Button onClick={handleDelete} disabled={loading} variant="destructive">
       {loading ? "Suppression..." : "Supprimer mon compte"}
-    </Button>
-  );
+    </Button>);
+
 }

@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import Unauthorized from "@/pages/auth/Unauthorized";
-import InventaireLigneRow from "@/components/inventaire/InventaireLigneRow";
+import InventaireLigneRow from "@/components/inventaire/InventaireLigneRow";import { isTauri } from "@/lib/db/sql";
 
 export default function InventaireForm() {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ export default function InventaireForm() {
   const [lignes, setLignes] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const zoneSuggestions = zones.map(z => z.nom);
+  const zoneSuggestions = zones.map((z) => z.nom);
 
 
   useEffect(() => {
@@ -52,17 +52,17 @@ export default function InventaireForm() {
   }
 
   const updateLine = (idx, newLigne) => {
-    setLignes(lignes.map((l, i) => (i === idx ? newLigne : l)));
+    setLignes(lignes.map((l, i) => i === idx ? newLigne : l));
   };
 
   const generateLines = () => {
-    const rows = produits.map(p => ({
+    const rows = produits.map((p) => ({
       produit_id: p.id,
       nom: p.nom,
       unite: p.unite,
       pmp: p.pmp,
       stock_theorique: p.stock_theorique,
-      quantite_reelle: p.stock_theorique,
+      quantite_reelle: p.stock_theorique
     }));
     setLignes(rows);
   };
@@ -73,11 +73,11 @@ export default function InventaireForm() {
   );
   const totalEcart = lignes.reduce(
     (s, l) =>
-      s + (Number(l.quantite_reelle || 0) - Number(l.stock_theorique || 0)) * Number(l.pmp || 0),
+    s + (Number(l.quantite_reelle || 0) - Number(l.stock_theorique || 0)) * Number(l.pmp || 0),
     0
   );
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
     if (!lignes.length) {
@@ -85,14 +85,14 @@ export default function InventaireForm() {
       return;
     }
     setLoading(true);
-    const zoneObj = zones.find(z => z.nom === zone);
+    const zoneObj = zones.find((z) => z.nom === zone);
     const payload = {
       date,
       zone_id: zoneObj?.id,
-      lignes: lignes.map(l => ({
+      lignes: lignes.map((l) => ({
         produit_id: l.produit_id,
-        quantite_reelle: Number(l.quantite_reelle || 0),
-      })),
+        quantite_reelle: Number(l.quantite_reelle || 0)
+      }))
     };
     try {
       const created = await createInventaire(payload);
@@ -112,24 +112,24 @@ export default function InventaireForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
 
       <div className="flex gap-4">
-        <input type="date" className="form-input" value={date} onChange={e => setDate(e.target.value)} />
+        <input type="date" className="form-input" value={date} onChange={(e) => setDate(e.target.value)} />
         <input
-          list="zones"
-          className="form-input"
-          placeholder="Zone"
-          value={zone}
-          onChange={e => setZone(e.target.value)}
-        />
+            list="zones"
+            className="form-input"
+            placeholder="Zone"
+            value={zone}
+            onChange={(e) => setZone(e.target.value)} />
+          
         <datalist id="zones">
-          {zoneSuggestions.map(z => (
+          {zoneSuggestions.map((z) =>
             <option key={z} value={z} />
-          ))}
+            )}
         </datalist>
       </div>
       <div className="flex justify-end">
         <Button type="button" onClick={generateLines}>Générer lignes</Button>
       </div>
-      {lignes.length > 0 && (
+      {lignes.length > 0 &&
         <TableContainer>
           <table className="min-w-full text-sm text-center">
             <thead>
@@ -143,13 +143,13 @@ export default function InventaireForm() {
               </tr>
             </thead>
             <tbody>
-              {lignes.map((l, idx) => (
-                <InventaireLigneRow key={l.produit_id} ligne={l} onChange={nl => updateLine(idx, nl)} />
-              ))}
+              {lignes.map((l, idx) =>
+              <InventaireLigneRow key={l.produit_id} ligne={l} onChange={(nl) => updateLine(idx, nl)} />
+              )}
             </tbody>
           </table>
         </TableContainer>
-      )}
+        }
 
       <div className="text-right font-semibold">
         Valeur totale : {totalValeur.toFixed(2)} € – Écart global : {totalEcart.toFixed(2)} €
@@ -162,6 +162,6 @@ export default function InventaireForm() {
         <SecondaryButton type="button" onClick={() => navigate(-1)} disabled={loading}>Annuler</SecondaryButton>
       </div>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

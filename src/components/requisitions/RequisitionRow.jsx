@@ -1,4 +1,4 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 export default function RequisitionRow({ requisition }) {
   return (
     <tr>
@@ -7,6 +7,6 @@ export default function RequisitionRow({ requisition }) {
       </td>
       <td className="p-2 text-center">{requisition.produit_nom}</td>
       <td className="p-2 text-right">{requisition.quantite}</td>
-    </tr>
-  );
+    </tr>);
+
 }

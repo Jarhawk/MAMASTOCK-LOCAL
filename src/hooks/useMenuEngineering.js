@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { menu_engineering_list, menu_engineering_save_vente } from '@/lib/db';
+import { menu_engineering_list, menu_engineering_save_vente } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 function median(arr) {
   if (!arr.length) return 0;
@@ -39,18 +39,18 @@ export function useMenuEngineering() {
       try {
         const rows = await menu_engineering_list({ mama_id, mois, famille: filters.famille, actif: filters.actif });
         const total = rows.reduce((acc, r) => acc + (r.ventes || 0), 0);
-        const enriched = rows.map(r => {
+        const enriched = rows.map((r) => {
           const margeEuro = (r.prix_vente || 0) - (r.cout_par_portion || 0);
-          const marge = r.prix_vente ? (margeEuro / r.prix_vente) * 100 : 0;
+          const marge = r.prix_vente ? margeEuro / r.prix_vente * 100 : 0;
           const ca = (r.ventes || 0) * (r.prix_vente || 0);
           const popularite = total ? (r.ventes || 0) / total : 0;
           return { ...r, margeEuro, marge, ca, popularite };
         });
-        const medMarge = median(enriched.map(r => r.marge));
-        const medPop = median(enriched.map(r => r.popularite));
-        const classified = enriched.map(r => ({
+        const medMarge = median(enriched.map((r) => r.marge));
+        const medPop = median(enriched.map((r) => r.popularite));
+        const classified = enriched.map((r) => ({
           ...r,
-          classement: classify(r.marge, medMarge, r.popularite, medPop),
+          classement: classify(r.marge, medMarge, r.popularite, medPop)
         }));
         setData(classified);
         return classified;
@@ -74,7 +74,7 @@ export function useMenuEngineering() {
         fiche_id,
         date_vente: mois,
         quantite: Number(quantite) || 0,
-        prix_vente_unitaire,
+        prix_vente_unitaire
       });
     },
     [mama_id]

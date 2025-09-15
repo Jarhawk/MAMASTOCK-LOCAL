@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 import { useAuth } from "@/hooks/useAuth";
 import { readConfig } from "@/appFs";
-import { facture_create, facture_add_ligne } from "@/lib/db";
+import { facture_create, facture_add_ligne } from "@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export function useFournisseurAPI() {
   const { mama_id } = useAuth();
@@ -55,7 +55,7 @@ export function useFournisseurAPI() {
     setLoading(true);
     try {
       const res = await fetch(`${config.url}/factures`, {
-        headers: { Authorization: `Bearer ${config.token}` },
+        headers: { Authorization: `Bearer ${config.token}` }
       });
       const factures = await res.json();
       for (const ft of factures) {
@@ -64,7 +64,7 @@ export function useFournisseurAPI() {
           fournisseur_id,
           date_iso: ft.date_iso || ft.date,
           montant: ft.montant || null,
-          statut: ft.statut || null,
+          statut: ft.statut || null
         });
         if (Array.isArray(ft.lignes)) {
           for (const l of ft.lignes) {
@@ -72,7 +72,7 @@ export function useFournisseurAPI() {
               facture_id: id,
               produit_id: l.produit_id,
               quantite: l.quantite,
-              prix_unitaire: l.prix_unitaire,
+              prix_unitaire: l.prix_unitaire
             });
           }
         }
@@ -94,7 +94,7 @@ export function useFournisseurAPI() {
     setLoading(true);
     try {
       const res = await fetch(`${config.url}/catalogue`, {
-        headers: { Authorization: `Bearer ${config.token}` },
+        headers: { Authorization: `Bearer ${config.token}` }
       });
       const produits = await res.json();
       toast.success("Catalogue synchronisé");
@@ -119,9 +119,9 @@ export function useFournisseurAPI() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${config.token}`,
+          Authorization: `Bearer ${config.token}`
         },
-        body: JSON.stringify(commande),
+        body: JSON.stringify(commande)
       });
       const body = await res.json();
       toast.success("Commande envoyée");
@@ -143,7 +143,7 @@ export function useFournisseurAPI() {
     setError(null);
     try {
       const res = await fetch(`${config.url}/commandes/${commande_id}/status`, {
-        headers: { Authorization: `Bearer ${config.token}` },
+        headers: { Authorization: `Bearer ${config.token}` }
       });
       const body = await res.json();
       return { data: body };
@@ -167,8 +167,8 @@ export function useFournisseurAPI() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${config.token}`,
-        },
+          Authorization: `Bearer ${config.token}`
+        }
       });
       const body = await res.json();
       toast.success("Commande annulée");

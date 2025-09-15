@@ -1,12 +1,12 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
 
 export default function DocumentUpload({
   onUploaded,
   entiteType = "",
   entiteId = null,
-  categories = [],
+  categories = []
 }) {
   const inputRef = useRef(null);
   const [files, setFiles] = useState([]);
@@ -30,7 +30,7 @@ export default function DocumentUpload({
       await onUploaded?.(file, {
         categorie,
         entite_liee_type: entiteType,
-        entite_liee_id: entiteId,
+        entite_liee_id: entiteId
       });
     }
     setFiles([]);
@@ -43,33 +43,33 @@ export default function DocumentUpload({
         className="border-2 border-dashed rounded-xl p-6 text-center cursor-pointer mb-2"
         onClick={openDialog}
         onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-      >
+        onDragOver={(e) => e.preventDefault()}>
+        
         <p className="mb-2">Glissez-déposez vos fichiers ou cliquez pour sélectionner</p>
         <input
           ref={inputRef}
           type="file"
           multiple
           className="hidden"
-          onChange={(e) => handleFiles(e.target.files)}
-        />
-        {files.length > 0 && (
-          <p className="text-sm text-gray-300">{files.length} fichier(s) sélectionné(s)</p>
-        )}
+          onChange={(e) => handleFiles(e.target.files)} />
+        
+        {files.length > 0 &&
+        <p className="text-sm text-gray-300">{files.length} fichier(s) sélectionné(s)</p>
+        }
       </div>
       <select
         className="form-select w-full mb-2"
         value={categorie}
-        onChange={(e) => setCategorie(e.target.value)}
-      >
+        onChange={(e) => setCategorie(e.target.value)}>
+        
         <option value="">Catégorie</option>
-        {categories.map((c) => (
-          <option key={c} value={c}>{c}</option>
-        ))}
+        {categories.map((c) =>
+        <option key={c} value={c}>{c}</option>
+        )}
       </select>
-      {files.length > 0 && (
-        <Button onClick={upload}>Uploader</Button>
-      )}
-    </div>
-  );
+      {files.length > 0 &&
+      <Button onClick={upload}>Uploader</Button>
+      }
+    </div>);
+
 }

@@ -7,8 +7,8 @@ import {
   commande_get,
   commande_insert,
   commande_update,
-  commande_delete,
-} from '@/local/commandes';
+  commande_delete } from
+'@/local/commandes';import { isTauri } from "@/lib/db/sql";
 
 export function useCommandes() {
   const { mama_id, id: user_id } = useAuth();
@@ -31,7 +31,7 @@ export function useCommandes() {
           debut,
           fin,
           offset: (page - 1) * limit,
-          limit,
+          limit
         });
         setData(data);
         setCount(count);

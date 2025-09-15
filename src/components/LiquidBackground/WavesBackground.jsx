@@ -1,4 +1,4 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 
 export default function WavesBackground({ className = '' }) {
   return (
@@ -9,6 +9,6 @@ export default function WavesBackground({ className = '' }) {
       <svg className="wave text-white/5 fill-current" viewBox="0 0 1440 320">
         <path d="M0 160L48 138.7C96 117 192 75 288 74.7C384 75 480 117 576 144C672 171 768 181 864 170.7C960 160 1056 128 1152 112C1248 96 1344 96 1392 96L1440 96V320H1392C1344 320 1248 320 1152 320C1056 320 960 320 864 320C768 320 672 320 576 320C480 320 384 320 288 320C192 320 96 320 48 320H0Z" />
       </svg>
-    </div>
-  );
+    </div>);
+
 }

@@ -14,7 +14,7 @@ import { motion as Motion } from 'framer-motion';
 import ListingContainer from '@/components/ui/ListingContainer';
 import PaginationFooter from '@/components/ui/PaginationFooter';
 import TableHeader from '@/components/ui/TableHeader';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/db/sql";
 
 export default function Menus() {
   const { menus, total, getMenus, deleteMenu, loading } = useMenus();
@@ -36,7 +36,7 @@ export default function Menus() {
       search,
       date: dateFilter || undefined,
       offset: (page - 1) * perPage,
-      limit: perPage,
+      limit: perPage
     };
     if (weekFilter) {
       const [year, wk] = weekFilter.split('-W');
@@ -66,16 +66,16 @@ export default function Menus() {
       loadMenus();
     }
   }, [
-    authLoading,
-    mama_id,
-    search,
-    dateFilter,
-    weekFilter,
-    monthFilter,
-    page,
-    getMenus,
-    fetchFiches,
-  ]);
+  authLoading,
+  mama_id,
+  search,
+  dateFilter,
+  weekFilter,
+  monthFilter,
+  page,
+  getMenus,
+  fetchFiches]
+  );
 
   const pageCount = Math.ceil(total / perPage);
   const paginatedMenus = menus;
@@ -89,7 +89,7 @@ export default function Menus() {
     const ws = XLSX.utils.json_to_sheet(
       menus.map((m) => ({
         ...m,
-        fiches: m.fiches?.map((f) => f.fiche?.nom).join(', '),
+        fiches: m.fiches?.map((f) => f.fiche?.nom).join(', ')
       }))
     );
     XLSX.utils.book_append_sheet(wb, ws, 'Menus');
@@ -113,32 +113,32 @@ export default function Menus() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="form-input"
-          placeholder="Recherche menu"
-        />
+          placeholder="Recherche menu" />
+        
         <input
           type="date"
           value={dateFilter}
           onChange={(e) => setDateFilter(e.target.value)}
-          className="form-input"
-        />
+          className="form-input" />
+        
         <input
           type="week"
           value={weekFilter}
           onChange={(e) => setWeekFilter(e.target.value)}
-          className="form-input"
-        />
+          className="form-input" />
+        
         <input
           type="month"
           value={monthFilter}
           onChange={(e) => setMonthFilter(e.target.value)}
-          className="form-input"
-        />
+          className="form-input" />
+        
         <Button
           onClick={() => {
             setSelected(null);
             setShowForm(true);
-          }}
-        >
+          }}>
+          
           Ajouter un menu
         </Button>
         <Button variant="outline" onClick={exportExcel}>
@@ -149,8 +149,8 @@ export default function Menus() {
         <Motion.table
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="min-w-full text-sm"
-        >
+          className="min-w-full text-sm">
+          
           <thead>
             <tr>
               <th className="px-4 py-2">Date</th>
@@ -162,18 +162,18 @@ export default function Menus() {
             </tr>
           </thead>
           <tbody>
-            {paginatedMenus.map((menu) => (
-              <tr key={menu.id}>
+            {paginatedMenus.map((menu) =>
+            <tr key={menu.id}>
                 <td className="border px-4 py-2">{menu.date}</td>
                 <td className="border px-4 py-2">
                   <Button
-                    variant="link"
-                    className="font-semibold text-mamastockGold"
-                    onClick={() => {
-                      setSelected(menu);
-                      setShowDetail(true);
-                    }}
-                  >
+                  variant="link"
+                  className="font-semibold text-mamastockGold"
+                  onClick={() => {
+                    setSelected(menu);
+                    setShowDetail(true);
+                  }}>
+                  
                     {menu.nom}
                   </Button>
                 </td>
@@ -181,14 +181,14 @@ export default function Menus() {
                   {menu.fiches?.length || 0}
                 </td>
                 <td className="border px-4 py-2 text-right">
-                  {(menu.fiches || [])
-                    .reduce((sum, f) => {
-                      const fiche = fiches.find(
-                        (fi) => fi.id === f.fiche_id || fi.id === f.fiche?.id
-                      );
-                      return sum + (Number(fiche?.cout_total) || 0);
-                    }, 0)
-                    .toFixed(2)}{' '}
+                  {(menu.fiches || []).
+                reduce((sum, f) => {
+                  const fiche = fiches.find(
+                    (fi) => fi.id === f.fiche_id || fi.id === f.fiche?.id
+                  );
+                  return sum + (Number(fiche?.cout_total) || 0);
+                }, 0).
+                toFixed(2)}{' '}
                   €
                 </td>
                 <td className="border px-4 py-2 text-center">
@@ -196,38 +196,38 @@ export default function Menus() {
                 </td>
                 <td className="border px-4 py-2">
                   <Button
-                    size="sm"
-                    variant="outline"
-                    className="mr-2"
-                    onClick={() => {
-                      setSelected(menu);
-                      setShowForm(true);
-                    }}
-                  >
+                  size="sm"
+                  variant="outline"
+                  className="mr-2"
+                  onClick={() => {
+                    setSelected(menu);
+                    setShowForm(true);
+                  }}>
+                  
                     Modifier
                   </Button>
                   <Button
-                    size="sm"
-                    variant="outline"
-                    className="mr-2"
-                    onClick={() => {
-                      setSelected({ ...menu, date: '' });
-                      setShowForm(true);
-                    }}
-                  >
+                  size="sm"
+                  variant="outline"
+                  className="mr-2"
+                  onClick={() => {
+                    setSelected({ ...menu, date: '' });
+                    setShowForm(true);
+                  }}>
+                  
                     Dupliquer
                   </Button>
                   <Button
-                    size="sm"
-                    variant="outline"
-                    className="mr-2"
-                    onClick={() => handleDelete(menu)}
-                  >
+                  size="sm"
+                  variant="outline"
+                  className="mr-2"
+                  onClick={() => handleDelete(menu)}>
+                  
                     Supprimer
                   </Button>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </Motion.table>
       </ListingContainer>
@@ -235,32 +235,32 @@ export default function Menus() {
         page={page}
         pages={pageCount}
         onPageChange={setPage}
-        className="my-4"
-      />
-      {showForm && (
-        <MenuForm
-          menu={selected}
-          fiches={fiches}
-          onClose={() => {
-            setShowForm(false);
-            setSelected(null);
-            loadMenus();
-          }}
-        />
-      )}
-      {showDetail && selected && (
-        <MenuDetail
-          menu={selected}
-          onClose={() => {
-            setShowDetail(false);
-            setSelected(null);
-          }}
-          onDuplicate={(m) => {
-            setSelected({ ...m, date: '' });
-            setShowForm(true);
-          }}
-        />
-      )}
-    </div>
-  );
+        className="my-4" />
+      
+      {showForm &&
+      <MenuForm
+        menu={selected}
+        fiches={fiches}
+        onClose={() => {
+          setShowForm(false);
+          setSelected(null);
+          loadMenus();
+        }} />
+
+      }
+      {showDetail && selected &&
+      <MenuDetail
+        menu={selected}
+        onClose={() => {
+          setShowDetail(false);
+          setSelected(null);
+        }}
+        onDuplicate={(m) => {
+          setSelected({ ...m, date: '' });
+          setShowForm(true);
+        }} />
+
+      }
+    </div>);
+
 }

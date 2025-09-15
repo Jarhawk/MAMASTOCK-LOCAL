@@ -6,7 +6,7 @@ import { usePlanning } from '@/hooks/usePlanning';
 import { Button } from '@/components/ui/button';
 import TableContainer from '@/components/ui/TableContainer';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export default function Planning() {
   const { getPlannings } = usePlanning();
@@ -39,8 +39,8 @@ export default function Planning() {
           <select
             className="form-input"
             value={statut}
-            onChange={(e) => setStatut(e.target.value)}
-          >
+            onChange={(e) => setStatut(e.target.value)}>
+            
             <option value="">Tous statuts</option>
             <option value="prévu">Prévu</option>
             <option value="confirmé">Confirmé</option>
@@ -49,25 +49,25 @@ export default function Planning() {
             type="date"
             className="form-input"
             value={debut}
-            onChange={(e) => setDebut(e.target.value)}
-          />
+            onChange={(e) => setDebut(e.target.value)} />
+          
           <input
             type="date"
             className="form-input"
             value={fin}
-            onChange={(e) => setFin(e.target.value)}
-          />
+            onChange={(e) => setFin(e.target.value)} />
+          
         </div>
-        {canEdit && (
-          <Link to="/planning/nouveau">
+        {canEdit &&
+        <Link to="/planning/nouveau">
             <Button>Nouvelle entrée</Button>
           </Link>
-        )}
+        }
       </div>
-      {authLoading || loading ? (
-        <LoadingSpinner message="Chargement..." />
-      ) : (
-        <TableContainer>
+      {authLoading || loading ?
+      <LoadingSpinner message="Chargement..." /> :
+
+      <TableContainer>
           <table className="min-w-full text-sm">
             <thead>
               <tr>
@@ -77,24 +77,24 @@ export default function Planning() {
               </tr>
             </thead>
             <tbody>
-              {items.map((p) => (
-                <tr key={p.id} className="hover:bg-white/5">
+              {items.map((p) =>
+            <tr key={p.id} className="hover:bg-white/5">
                   <td className="px-2 py-1 whitespace-nowrap">
                     <Link
-                      to={`/planning/${p.id}`}
-                      className="text-mamastockGold hover:underline"
-                    >
+                  to={`/planning/${p.id}`}
+                  className="text-mamastockGold hover:underline">
+                  
                       {p.date_prevue}
                     </Link>
                   </td>
                   <td className="px-2 py-1">{p.nom}</td>
                   <td className="px-2 py-1">{p.statut}</td>
                 </tr>
-              ))}
+            )}
             </tbody>
           </table>
         </TableContainer>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

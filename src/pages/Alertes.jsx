@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import TableContainer from "@/components/ui/TableContainer";
 import GlassCard from "@/components/ui/GlassCard";
 import { Search } from "lucide-react";
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function Alertes() {
   const { rules, fetchRules, addRule, deleteRule } = useAlerts();
@@ -65,23 +65,23 @@ export default function Alertes() {
         <form onSubmit={handleSubmit} className="flex flex-wrap gap-2 items-end">
           <Select
             value={form.produit_id}
-            onChange={(e) => setForm(f => ({ ...f, produit_id: e.target.value }))}
+            onChange={(e) => setForm((f) => ({ ...f, produit_id: e.target.value }))}
             className="w-64"
-            required
-        >
+            required>
+            
           <option value="">-- Produit --</option>
-          {products.map(p => (
+          {products.map((p) =>
             <option key={p.id} value={p.id}>{p.nom}</option>
-          ))}
+            )}
         </Select>
         <Input
-          type="number"
-          className="w-32"
-          placeholder="Seuil"
-          value={form.threshold}
-          onChange={(e) => setForm(f => ({ ...f, threshold: e.target.value }))}
-          required
-        />
+            type="number"
+            className="w-32"
+            placeholder="Seuil"
+            value={form.threshold}
+            onChange={(e) => setForm((f) => ({ ...f, threshold: e.target.value }))}
+            required />
+          
         <PrimaryButton type="submit">Ajouter</PrimaryButton>
         </form>
       </GlassCard>
@@ -91,8 +91,8 @@ export default function Alertes() {
           className="w-full pl-8"
           placeholder="Recherche produit"
           value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
+          onChange={(e) => setSearch(e.target.value)} />
+        
         <Search className="absolute left-2 top-2.5 text-white" size={18} />
       </div>
       <div className="mt-4">
@@ -106,10 +106,10 @@ export default function Alertes() {
           </tr>
         </thead>
         <tbody>
-          {rules.map(r => (
-            <tr key={r.id} className="border-t">
+          {rules.map((r) =>
+              <tr key={r.id} className="border-t">
               <td className="px-2 py-1">
-                {products.find(p => p.id === r.produit_id)?.nom || r.produit_id}
+                {products.find((p) => p.id === r.produit_id)?.nom || r.produit_id}
               </td>
               <td className="px-2 py-1">{r.threshold}</td>
               <td className="px-2 py-1 text-right">
@@ -118,18 +118,18 @@ export default function Alertes() {
                 </Button>
               </td>
             </tr>
-          ))}
-          {rules.length === 0 && (
-            <tr>
+              )}
+          {rules.length === 0 &&
+              <tr>
               <td colSpan={3} className="py-2 text-center text-gray-500">
                 Aucun résultat trouvé.
               </td>
             </tr>
-          )}
+              }
           </tbody>
         </table>
         </TableContainer>
       </div>
-    </div>
-  );
+    </div>);
+
 }

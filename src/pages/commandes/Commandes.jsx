@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from '@/hooks/useAuth';
 import { useCommandes } from "@/hooks/useCommandes";
-import useFournisseurs from "@/hooks/data/useFournisseurs";
+import useFournisseurs from "@/hooks/data/useFournisseurs";import { isTauri } from "@/lib/db/sql";
 
 export default function Commandes() {
   const { mama_id, role } = useAuth();
@@ -25,12 +25,12 @@ export default function Commandes() {
             aria-label="Fournisseur"
             className="input"
             value={filters.fournisseur}
-            onChange={e => setFilters(f => ({ ...f, fournisseur: e.target.value }))}
-          >
+            onChange={(e) => setFilters((f) => ({ ...f, fournisseur: e.target.value }))}>
+            
             <option value="">Tous</option>
-            {fournisseurs.map(f => (
-              <option key={f.id} value={f.id}>{f.nom}</option>
-            ))}
+            {fournisseurs.map((f) =>
+            <option key={f.id} value={f.id}>{f.nom}</option>
+            )}
           </select>
         </div>
         <div>
@@ -40,8 +40,8 @@ export default function Commandes() {
             aria-label="Date début"
             className="input"
             value={filters.debut}
-            onChange={e => setFilters(f => ({ ...f, debut: e.target.value }))}
-          />
+            onChange={(e) => setFilters((f) => ({ ...f, debut: e.target.value }))} />
+          
         </div>
         <div>
           <label className="block">Date fin</label>
@@ -50,8 +50,8 @@ export default function Commandes() {
             aria-label="Date fin"
             className="input"
             value={filters.fin}
-            onChange={e => setFilters(f => ({ ...f, fin: e.target.value }))}
-          />
+            onChange={(e) => setFilters((f) => ({ ...f, fin: e.target.value }))} />
+          
         </div>
         <div>
           <label className="block">Statut</label>
@@ -59,8 +59,8 @@ export default function Commandes() {
             aria-label="Statut"
             className="input"
             value={filters.statut}
-            onChange={e => setFilters(f => ({ ...f, statut: e.target.value }))}
-          >
+            onChange={(e) => setFilters((f) => ({ ...f, statut: e.target.value }))}>
+            
             <option value="">Tous</option>
             <option value="brouillon">Brouillon</option>
             <option value="validée">Validée</option>
@@ -82,13 +82,13 @@ export default function Commandes() {
             </tr>
           </thead>
           <tbody>
-            {loading ? (
-              <tr>
+            {loading ?
+            <tr>
                 <td colSpan={6}>Chargement...</td>
-              </tr>
-            ) : (
-              commandes.map((c) => (
-                <tr key={c.id} className="border-b border-white/10">
+              </tr> :
+
+            commandes.map((c) =>
+            <tr key={c.id} className="border-b border-white/10">
                   <td>{c.reference}</td>
                   <td>{c.fournisseur?.nom || '-'}</td>
                   <td>{c.date_commande}</td>
@@ -96,16 +96,16 @@ export default function Commandes() {
                   <td>{c.total || 0}</td>
                   <td className="space-x-2">
                     <Link to={`/commandes/${c.id}`}>Voir</Link>
-                    {role === 'admin' && c.statut === 'brouillon' && (
-                      <button onClick={() => validateCommande(c.id)}>Valider</button>
-                    )}
+                    {role === 'admin' && c.statut === 'brouillon' &&
+                <button onClick={() => validateCommande(c.id)}>Valider</button>
+                }
                   </td>
                 </tr>
-              ))
-            )}
+            )
+            }
           </tbody>
         </table>
       </div>
-    </div>
-  );
+    </div>);
+
 }

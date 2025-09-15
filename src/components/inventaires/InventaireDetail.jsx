@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function InventaireDetail({ inventaire, onClose }) {
 
@@ -29,8 +29,8 @@ export default function InventaireDetail({ inventaire, onClose }) {
         <div><b>Clôture :</b> {inventaire.cloture ? "Oui" : "Non"}</div>
         <div>
           <b>Document :</b> {inventaire.document ?
-            <a href={inventaire.document} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">Voir document</a> :
-            <span className="text-gray-400">Aucun</span>
+          <a href={inventaire.document} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline">Voir document</a> :
+          <span className="text-gray-400">Aucun</span>
           }
         </div>
         <div className="my-4">
@@ -47,8 +47,8 @@ export default function InventaireDetail({ inventaire, onClose }) {
               </tr>
             </thead>
             <tbody>
-              {inventaire.lignes?.length > 0 ? inventaire.lignes.map((l, i) => (
-                <tr key={i}>
+              {inventaire.lignes?.length > 0 ? inventaire.lignes.map((l, i) =>
+              <tr key={i}>
                   <td>{l.nom}</td>
                   <td>{l.quantite}</td>
                   <td>{l.unite}</td>
@@ -56,9 +56,9 @@ export default function InventaireDetail({ inventaire, onClose }) {
                   <td>{l.pmp}</td>
                   <td>{(l.quantite - l.stock_theorique)?.toFixed(2)}</td>
                 </tr>
-              )) : (
-                <tr><td colSpan={6} className="text-gray-400">Aucune ligne</td></tr>
-              )}
+              ) :
+              <tr><td colSpan={6} className="text-gray-400">Aucune ligne</td></tr>
+              }
             </tbody>
           </table>
         </div>
@@ -67,6 +67,6 @@ export default function InventaireDetail({ inventaire, onClose }) {
           <Button variant="outline" onClick={exportPDF}>Export PDF</Button>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

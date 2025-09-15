@@ -4,7 +4,7 @@ import { useInvoiceImport } from "@/hooks/useInvoiceImport";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function ImportFactures() {
   const { importFromFile, loading, error } = useInvoiceImport();
@@ -14,8 +14,8 @@ export default function ImportFactures() {
     e.preventDefault();
     if (!file) return toast.error("Sélectionne un fichier à importer");
     const id = await importFromFile(file);
-    if (id) toast.success("Facture importée !");
-    else toast.error("Echec de l'import");
+    if (id) toast.success("Facture importée !");else
+    toast.error("Echec de l'import");
   };
 
   return (
@@ -26,13 +26,13 @@ export default function ImportFactures() {
           <Input
             type="file"
             accept="application/json,application/xml"
-            onChange={e => setFile(e.target.files[0])}
-            className="flex-1"
-          />
+            onChange={(e) => setFile(e.target.files[0])}
+            className="flex-1" />
+          
           <PrimaryButton type="submit" disabled={loading}>Importer</PrimaryButton>
         </form>
         {error && <p className="text-red-500 mt-2">{error}</p>}
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

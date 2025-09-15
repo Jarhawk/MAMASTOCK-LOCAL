@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { readConfig, writeConfig } from '@/appFs';
 import * as XLSX from "xlsx";
 import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";
-import { saveAs } from "file-saver";
+import { saveAs } from "file-saver";import { isTauri } from "@/lib/db/sql";
 
 export function useMamas() {
   const { mama_id, role } = useAuth();
@@ -71,7 +71,7 @@ export function useMamas() {
     setError(null);
     try {
       const list = mamas.map((m) =>
-        m.id === id ? { ...m, ...updateFields } : m
+      m.id === id ? { ...m, ...updateFields } : m
       );
       await saveMamas(list);
       setMamas(list);
@@ -91,7 +91,7 @@ export function useMamas() {
     setError(null);
     try {
       const list = mamas.map((m) =>
-        m.id === id ? { ...m, actif } : m
+      m.id === id ? { ...m, actif } : m
       );
       await saveMamas(list);
       setMamas(list);

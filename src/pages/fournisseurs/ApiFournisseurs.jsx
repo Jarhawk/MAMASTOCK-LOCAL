@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useFournisseurApiConfig } from "@/hooks/useFournisseurApiConfig";
 import { Link } from "react-router-dom";
 import TableContainer from "@/components/ui/TableContainer";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/db/sql";
 
 export default function ApiFournisseurs() {
   const { mama_id } = useAuth();
@@ -38,8 +38,8 @@ export default function ApiFournisseurs() {
             </tr>
           </thead>
           <tbody>
-            {configs.map((c) => (
-              <tr key={c.fournisseur_id} className="border-t">
+            {configs.map((c) =>
+            <tr key={c.fournisseur_id} className="border-t">
                 <td className="px-2 py-1">{c.fournisseur?.nom || c.fournisseur_id}</td>
                 <td className="px-2 py-1">{c.url}</td>
                 <td className="px-2 py-1">{c.type_api}</td>
@@ -48,17 +48,17 @@ export default function ApiFournisseurs() {
                   <Link className="underline" to={`/fournisseurs/${c.fournisseur_id}/api`}>Éditer</Link>
                 </td>
               </tr>
-            ))}
-            {configs.length === 0 && (
-              <tr>
+            )}
+            {configs.length === 0 &&
+            <tr>
                 <td colSpan="5" className="py-4 text-center text-gray-500">
                   Aucune configuration
                 </td>
               </tr>
-            )}
+            }
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

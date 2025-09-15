@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import useDebounce from '@/hooks/useDebounce';
 
 import { getQueryClient } from '@/lib/react-query';
-import { produits_list } from '@/lib/db';
+import { produits_list } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 function normalize(list = []) {
   return list.map((p) => ({
@@ -17,10 +17,10 @@ function normalize(list = []) {
 }
 
 export function useProduitsSearch(
-  term = '',
-  _mamaIdParam,
-  { enabled = true, debounce = 300, page = 1, pageSize = 20 } = {}
-) {
+term = '',
+_mamaIdParam,
+{ enabled = true, debounce = 300, page = 1, pageSize = 20 } = {})
+{
   const debounced = useDebounce(term, debounce);
 
   const query = useQuery({

@@ -4,8 +4,8 @@ import {
   LiquidBackground,
   WavesBackground,
   MouseLight,
-  TouchLight,
-} from "@/components/LiquidBackground";
+  TouchLight } from
+"@/components/LiquidBackground";import { isTauri } from "@/lib/db/sql";
 
 export default function LegalLayout({ title = "", description = "", children }) {
   useEffect(() => {
@@ -31,6 +31,6 @@ export default function LegalLayout({ title = "", description = "", children }) 
         <p className="mt-4 text-sm opacity-70">Dernière mise à jour : {updated}</p>
       </main>
       <Footer />
-    </div>
-  );
+    </div>);
+
 }

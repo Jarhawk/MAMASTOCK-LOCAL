@@ -1,12 +1,12 @@
-export type FormatLiveOptions = {
+import { isTauri } from "@/lib/db/sql";export type FormatLiveOptions = {
   type: 'qty' | 'money';
   locale?: string;
 };
 
 export function formatNumberLive(
-  input: HTMLInputElement,
-  { type, locale = (typeof navigator !== 'undefined' ? navigator.language : 'fr-FR') }: FormatLiveOptions
-): number | null {
+input: HTMLInputElement,
+{ type, locale = typeof navigator !== 'undefined' ? navigator.language : 'fr-FR' }: FormatLiveOptions)
+: number | null {
   const raw = input.value;
   const selection = input.selectionStart ?? raw.length;
 
@@ -22,16 +22,16 @@ export function formatNumberLive(
   }
 
   const formatter =
-    type === 'money'
-      ? new Intl.NumberFormat(locale, {
-          style: 'currency',
-          currency: 'EUR',
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })
-      : new Intl.NumberFormat(locale, {
-          maximumFractionDigits: 6,
-        });
+  type === 'money' ?
+  new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) :
+  new Intl.NumberFormat(locale, {
+    maximumFractionDigits: 6
+  });
   const formatted = formatter.format(num);
 
   const digitsBefore = raw.slice(0, selection).replace(/\D/g, '').length;

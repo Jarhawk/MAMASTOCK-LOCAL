@@ -8,7 +8,7 @@ import MenuDuJourDetail from "./MenuDuJourDetail.jsx";
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { toast } from 'sonner';
-import { motion as Motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/db/sql";
 
 export default function MenuDuJour() {
   const { menusDuJour, fetchMenusDuJour, deleteMenuDuJour, exportMenusDuJourToExcel } = useMenuDuJour();
@@ -27,9 +27,9 @@ export default function MenuDuJour() {
     }
   }, [authLoading, mama_id, search, dateFilter, fetchMenusDuJour, fetchFiches]);
 
-  const menusFiltres = menusDuJour.filter(m =>
-    (!search || m.nom?.toLowerCase().includes(search.toLowerCase())) &&
-    (!dateFilter || m.date === dateFilter)
+  const menusFiltres = menusDuJour.filter((m) =>
+  (!search || m.nom?.toLowerCase().includes(search.toLowerCase())) && (
+  !dateFilter || m.date === dateFilter)
   );
 
   const exportExcel = () => {
@@ -50,17 +50,17 @@ export default function MenuDuJour() {
         <input
           type="search"
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
           className="form-input"
-          placeholder="Recherche menu du jour"
-        />
+          placeholder="Recherche menu du jour" />
+        
         <input
           type="date"
           value={dateFilter}
-          onChange={e => setDateFilter(e.target.value)}
-          className="form-input"
-        />
-        <Button onClick={() => { setSelected(null); setShowForm(true); }}>
+          onChange={(e) => setDateFilter(e.target.value)}
+          className="form-input" />
+        
+        <Button onClick={() => {setSelected(null);setShowForm(true);}}>
           Ajouter un menu du jour
         </Button>
         <Button variant="outline" onClick={exportExcel}>Export Excel</Button>
@@ -78,20 +78,20 @@ export default function MenuDuJour() {
           </tr>
         </thead>
         <tbody>
-          {menusFiltres.map(menu => (
+          {menusFiltres.map((menu) =>
             <tr key={menu.id}>
               <td className="border px-4 py-2">{menu.date}</td>
               <td className="border px-4 py-2">
                 <Button
                   variant="link"
                   className="font-semibold text-mamastockGold"
-                  onClick={() => { setSelected(menu); setShowDetail(true); }}
-                >
+                  onClick={() => {setSelected(menu);setShowDetail(true);}}>
+                  
                   {menu.nom}
                 </Button>
               </td>
               <td className="border px-4 py-2">
-                {menu.fiches?.map(f => f.nom).join(", ")}
+                {menu.fiches?.map((f) => f.nom).join(", ")}
               </td>
               <td className="border px-4 py-2">{menu.cout_total?.toFixed(2)} €</td>
               <td className="border px-4 py-2">{menu.marge != null ? `${menu.marge.toFixed(1)}%` : '-'}</td>
@@ -100,37 +100,37 @@ export default function MenuDuJour() {
                   size="sm"
                   variant="outline"
                   className="mr-2"
-                  onClick={() => { setSelected(menu); setShowForm(true); }}
-                >
+                  onClick={() => {setSelected(menu);setShowForm(true);}}>
+                  
                   Modifier
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   className="mr-2"
-                  onClick={() => handleDelete(menu)}
-                >
+                  onClick={() => handleDelete(menu)}>
+                  
                   Supprimer
                 </Button>
               </td>
             </tr>
-          ))}
+            )}
         </tbody>
         </table>
       </TableContainer>
-      {showForm && (
-        <MenuDuJourForm
-          menu={selected}
-          fiches={fiches}
-          onClose={() => { setShowForm(false); setSelected(null); fetchMenusDuJour({ search, date: dateFilter || undefined }); }}
-        />
-      )}
-      {showDetail && selected && (
-        <MenuDuJourDetail
-          menu={selected}
-          onClose={() => { setShowDetail(false); setSelected(null); }}
-        />
-      )}
-    </div>
-  );
+      {showForm &&
+      <MenuDuJourForm
+        menu={selected}
+        fiches={fiches}
+        onClose={() => {setShowForm(false);setSelected(null);fetchMenusDuJour({ search, date: dateFilter || undefined });}} />
+
+      }
+      {showDetail && selected &&
+      <MenuDuJourDetail
+        menu={selected}
+        onClose={() => {setShowDetail(false);setSelected(null);}} />
+
+      }
+    </div>);
+
 }

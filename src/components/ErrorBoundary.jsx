@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Component } from "react";
+import { Component } from "react";import { isTauri } from "@/lib/db/sql";
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ export default class ErrorBoundary extends Component {
 
   render() {
     const { message = "Une erreur est survenue. Merci de réessayer." } =
-      this.props;
+    this.props;
     if (this.state.hasError) {
       return <div className="p-4 text-red-500">{message}</div>;
     }

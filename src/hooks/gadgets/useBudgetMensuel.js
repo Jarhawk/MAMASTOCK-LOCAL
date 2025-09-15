@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { useAuth } from '@/hooks/useAuth';
-import { budgetMensuelGet } from '@/local/budget';
+import { budgetMensuelGet } from '@/local/budget';import { isTauri } from "@/lib/db/sql";
 
 export default function useBudgetMensuel() {
   const { mama_id } = useAuth();

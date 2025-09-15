@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import useMenuGroupe from '@/hooks/useMenuGroupe';
+import useMenuGroupe from '@/hooks/useMenuGroupe';import { isTauri } from "@/lib/db/sql";
 
 export default function MenuGroupes() {
   const { menus, fetchMenusGroupes, exportExcel, archiver } = useMenuGroupe();
@@ -21,13 +21,13 @@ export default function MenuGroupes() {
         <input
           aria-label="recherche"
           value={q}
-          onChange={(e) => setQ(e.target.value)}
-        />
+          onChange={(e) => setQ(e.target.value)} />
+        
         <select
           aria-label="statut"
           value={statut}
-          onChange={(e) => setStatut(e.target.value)}
-        >
+          onChange={(e) => setStatut(e.target.value)}>
+          
           <option value="">Tous</option>
           <option value="brouillon">Brouillon</option>
           <option value="valide">Validé</option>
@@ -37,8 +37,8 @@ export default function MenuGroupes() {
           <input
             type="checkbox"
             checked={actif}
-            onChange={(e) => setActif(e.target.checked)}
-          />
+            onChange={(e) => setActif(e.target.checked)} />
+          
         </label>
         <Link to="/menu-groupes/nouveau">Nouveau</Link>
       </div>
@@ -55,8 +55,8 @@ export default function MenuGroupes() {
           </tr>
         </thead>
         <tbody>
-          {menus.map((m) => (
-            <tr key={m.id}>
+          {menus.map((m) =>
+          <tr key={m.id}>
               <td>
                 <Link to={`/menu-groupes/${m.id}`}>{m.nom}</Link>
               </td>
@@ -70,9 +70,9 @@ export default function MenuGroupes() {
                 <button onClick={() => archiver(m.id)}>Archiver</button>
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
-    </div>
-  );
+    </div>);
+
 }

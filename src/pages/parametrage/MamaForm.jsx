@@ -7,7 +7,7 @@ import PrimaryButton from "@/components/ui/PrimaryButton";
 import SecondaryButton from "@/components/ui/SecondaryButton";
 import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function MamaForm({ mama, mamas = [], addMama, updateMama, onClose, onSaved }) {
   const { loading: authLoading } = useAuth();
@@ -41,9 +41,9 @@ export default function MamaForm({ mama, mamas = [], addMama, updateMama, onClos
     }
 
     try {
-      const res = mama?.id
-        ? await updateMama?.(mama.id, values)
-        : await addMama?.(values);
+      const res = mama?.id ?
+      await updateMama?.(mama.id, values) :
+      await addMama?.(values);
       if (res?.error) {
         throw new Error(res.error);
       }

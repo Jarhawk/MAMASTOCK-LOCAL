@@ -8,7 +8,7 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
 import { useAuth } from '@/hooks/useAuth';
 import usePeriodes from '@/hooks/usePeriodes';
-import PeriodeForm from '@/forms/PeriodeForm';
+import PeriodeForm from '@/forms/PeriodeForm';import { isTauri } from "@/lib/db/sql";
 
 export default function Periodes() {
   const { hasAccess, loading: authLoading } = useAuth();
@@ -18,7 +18,7 @@ export default function Periodes() {
     loading,
     fetchPeriodes,
     createPeriode,
-    cloturerPeriode,
+    cloturerPeriode
   } = usePeriodes();
   const [showForm, setShowForm] = useState(false);
 
@@ -26,20 +26,20 @@ export default function Periodes() {
     fetchPeriodes();
   }, [fetchPeriodes]);
 
-  const handleCreate = async values => {
+  const handleCreate = async (values) => {
     const { error } = await createPeriode(values);
-    if (error) toast.error(error.message || 'Erreur lors de la création');
-    else {
+    if (error) toast.error(error.message || 'Erreur lors de la création');else
+    {
       toast.success('Période créée');
       setShowForm(false);
     }
   };
 
-  const handleClose = async id => {
+  const handleClose = async (id) => {
     if (!confirm('Clôturer cette période ?')) return;
     const { error } = await cloturerPeriode(id);
-    if (error) toast.error(error.message || 'Erreur de clôture');
-    else toast.success('Période clôturée');
+    if (error) toast.error(error.message || 'Erreur de clôture');else
+    toast.success('Période clôturée');
   };
 
   if (authLoading || loading) return <LoadingSpinner message="Chargement..." />;
@@ -62,34 +62,34 @@ export default function Periodes() {
             </tr>
           </thead>
           <tbody>
-            {periodes.length === 0 ? (
-              <tr>
+            {periodes.length === 0 ?
+            <tr>
                 <td colSpan="4" className="py-2">
                   Aucune période
                 </td>
-              </tr>
-            ) : (
-              periodes.map(p => (
-                <tr key={p.id}>
+              </tr> :
+
+            periodes.map((p) =>
+            <tr key={p.id}>
                   <td className="px-2 py-1">{p.debut}</td>
                   <td className="px-2 py-1">{p.fin}</td>
                   <td className="px-2 py-1">
                     {p.actif ? 'En cours' : p.cloturee ? 'Clôturée' : 'Future'}
                   </td>
                   <td className="px-2 py-1">
-                    {p.actif && (
-                      <Button size="sm" onClick={() => handleClose(p.id)}>
+                    {p.actif &&
+                <Button size="sm" onClick={() => handleClose(p.id)}>
                         Clôturer
                       </Button>
-                    )}
+                }
                   </td>
                 </tr>
-              ))
-            )}
+            )
+            }
           </tbody>
         </table>
       </ListingContainer>
       {showForm && <PeriodeForm onSave={handleCreate} onCancel={() => setShowForm(false)} />}
-    </div>
-  );
+    </div>);
+
 }

@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { Form } from '@/components/ui/Form';
 import { FormField } from '@/components/ui/FormField';
 import { FormActions } from '@/components/ui/FormActions';
-import { Input } from '@/components/ui/controls';
+import { Input } from '@/components/ui/controls';import { isTauri } from "@/lib/db/sql";
 
 export default function PeriodeForm({ onSave, onCancel }) {
   const [debut, setDebut] = useState('');
   const [fin, setFin] = useState('');
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!debut || !fin) return;
     onSave({ debut, fin });
@@ -22,20 +22,20 @@ export default function PeriodeForm({ onSave, onCancel }) {
           id="periode-debut"
           type="date"
           value={debut}
-          onChange={e => setDebut(e.target.value)}
-          required
-        />
+          onChange={(e) => setDebut(e.target.value)}
+          required />
+        
       </FormField>
       <FormField label="Fin" htmlFor="periode-fin" required>
         <Input
           id="periode-fin"
           type="date"
           value={fin}
-          onChange={e => setFin(e.target.value)}
-          required
-        />
+          onChange={(e) => setFin(e.target.value)}
+          required />
+        
       </FormField>
       <FormActions onCancel={onCancel} />
-    </Form>
-  );
+    </Form>);
+
 }

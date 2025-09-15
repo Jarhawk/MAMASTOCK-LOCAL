@@ -4,8 +4,8 @@ import { useAuth } from '@/hooks/useAuth';
 import {
   validation_requests_list,
   validation_requests_add,
-  validation_requests_update,
-} from '@/local/validations';
+  validation_requests_update } from
+'@/local/validations';import { isTauri } from "@/lib/db/sql";
 
 export default function useValidations() {
   const { mama_id, user } = useAuth();
@@ -40,7 +40,7 @@ export default function useValidations() {
           ...payload,
           mama_id,
           requested_by: user_id,
-          actif: true,
+          actif: true
         });
         await fetchRequests();
         return { id };
@@ -62,7 +62,7 @@ export default function useValidations() {
         await validation_requests_update(id, {
           status,
           reviewed_by: user_id,
-          reviewed_at: new Date().toISOString(),
+          reviewed_at: new Date().toISOString()
         });
         await fetchRequests();
         return { id };

@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export default function AuthDebug() {
   const { id, email, mama_id, signOut } = useAuth();
@@ -10,6 +10,6 @@ export default function AuthDebug() {
       <p>Email: {email}</p>
       <p>Mama ID: {mama_id}</p>
       <button onClick={signOut}>Se déconnecter</button>
-    </div>
-  );
+    </div>);
+
 }

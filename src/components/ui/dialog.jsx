@@ -5,8 +5,8 @@ import {
   DialogOverlay as RadixDialogOverlay,
   DialogTitle as RadixDialogTitle,
   DialogDescription as RadixDialogDescription,
-  DialogClose as RadixDialogClose,
-} from "@radix-ui/react-dialog";
+  DialogClose as RadixDialogClose } from
+"@radix-ui/react-dialog";import { isTauri } from "@/lib/db/sql";
 
 export function Dialog(props) {
   return <RadixDialog {...props} />;
@@ -21,9 +21,9 @@ export function DialogContent({ asChild = false, className = "", ...props }) {
     <RadixDialogContent
       asChild={asChild}
       className={`animate-fade-in-down ${className}`}
-      {...props}
-    />
-  );
+      {...props} />);
+
+
 }
 
 export function DialogTitle(props) {
@@ -42,6 +42,6 @@ export function DialogHeader({ children, className = "", ...props }) {
   return (
     <div className={`p-4 border-b relative ${className}`} {...props}>
       {children}
-    </div>
-  );
+    </div>);
+
 }

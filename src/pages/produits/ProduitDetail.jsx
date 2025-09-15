@@ -7,7 +7,7 @@ import GlassCard from '@/components/ui/GlassCard';
 import { LiquidBackground } from '@/components/LiquidBackground';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import { buildPriceData } from '@/components/produits/priceHelpers';
+import { buildPriceData } from '@/components/produits/priceHelpers';import { isTauri } from "@/lib/db/sql";
 
 export default function ProduitDetailPage() {
   const { id } = useParams();
@@ -25,9 +25,9 @@ export default function ProduitDetailPage() {
         if (!active) return;
         setProduct(p);
         setProductName(p?.nom || "");
-        document.title = p?.nom
-          ? `Historique produit - ${p.nom}`
-          : "Historique produit";
+        document.title = p?.nom ?
+        `Historique produit - ${p.nom}` :
+        "Historique produit";
       });
     } else {
       document.title = "Historique produit";
@@ -72,7 +72,7 @@ export default function ProduitDetailPage() {
           count: 0,
           total: 0,
           lastPrice: null,
-          lastDate: null,
+          lastDate: null
         };
       }
       const cur = acc[idF];
@@ -88,7 +88,7 @@ export default function ProduitDetailPage() {
     }, {})
   ).map((s) => ({
     ...s,
-    prix_moyen: s.count ? s.total / s.count : null,
+    prix_moyen: s.count ? s.total / s.count : null
   }));
 
   return (
@@ -103,26 +103,26 @@ export default function ProduitDetailPage() {
             <button className="btn" onClick={() => setShowForm(true)}>
               Éditer
             </button>
-            {product && (
-              <button className="btn btn-secondary" onClick={handleToggle}>
+            {product &&
+            <button className="btn btn-secondary" onClick={handleToggle}>
                 {product.actif ? "Désactiver" : "Réactiver"}
               </button>
-            )}
+            }
           </div>
         </div>
-        {loading ? (
-          <div className="flex justify-center py-6">
+        {loading ?
+        <div className="flex justify-center py-6">
             <LoadingSpinner message="Chargement..." />
-          </div>
-        ) : (
-          <>
-            {product && (
-              <div className="mb-4 text-sm">
+          </div> :
+
+        <>
+            {product &&
+          <div className="mb-4 text-sm">
                 <p>Fournisseur : {product.main_fournisseur?.nom || '-'}</p>
                 <p>Unité : {product.unite?.nom || '-'}</p>
                 <p>Stock minimum : {product.seuil_min ?? '-'}</p>
               </div>
-            )}
+          }
             <table className="min-w-full text-sm mb-6">
               <thead>
                 <tr>
@@ -133,20 +133,20 @@ export default function ProduitDetailPage() {
                 </tr>
               </thead>
               <tbody>
-                {summary.length === 0 ? (
-                  <tr>
+                {summary.length === 0 ?
+              <tr>
                     <td colSpan={4} className="py-4 text-center">Aucune donnée</td>
-                  </tr>
-                ) : (
-                  summary.map((s, i) => (
-                    <tr key={i}>
+                  </tr> :
+
+              summary.map((s, i) =>
+              <tr key={i}>
                       <td>{s.nom}</td>
                       <td>{s.count}</td>
                       <td>{s.prix_moyen ? s.prix_moyen.toFixed(2) : '-'}</td>
                       <td>{s.lastPrice != null ? s.lastPrice.toFixed(2) : '-'}</td>
                     </tr>
-                  ))
-                )}
+              )
+              }
               </tbody>
             </table>
             <table className="min-w-full text-sm">
@@ -159,39 +159,39 @@ export default function ProduitDetailPage() {
                 </tr>
               </thead>
               <tbody>
-                {historyData.length === 0 ? (
-                  <tr>
+                {historyData.length === 0 ?
+              <tr>
                     <td colSpan={4} className="py-4 text-center">Aucune donnée</td>
-                  </tr>
-                ) : (
-                  historyData.map((h, i) => (
-                    <tr key={i}>
+                  </tr> :
+
+              historyData.map((h, i) =>
+              <tr key={i}>
                       <td>{h.created_at?.slice(0, 10) || '-'}</td>
                       <td>{h.fournisseur?.nom || '-'}</td>
                       <td>{h.prix_achat ?? '-'}</td>
                       <td>{h.derniere_livraison?.slice(0, 10) || '-'}</td>
                     </tr>
-                  ))
-                )}
+              )
+              }
               </tbody>
             </table>
           </>
-        )}
-        {chartData.length > 0 && (
-          <div className="mt-6">
+        }
+        {chartData.length > 0 &&
+        <div className="mt-6">
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
                 <XAxis dataKey="date" fontSize={11} />
                 <YAxis fontSize={11} />
                 <Tooltip />
                 <Legend />
-                {Object.keys(chartData[0]).filter((k) => k !== 'date').map((key) => (
-                  <Line key={key} type="monotone" dataKey={key} stroke="#bfa14d" />
-                ))}
+                {Object.keys(chartData[0]).filter((k) => k !== 'date').map((key) =>
+              <Line key={key} type="monotone" dataKey={key} stroke="#bfa14d" />
+              )}
               </LineChart>
             </ResponsiveContainer>
           </div>
-        )}
+        }
       </GlassCard>
       <ProduitFormModal
         open={showForm}
@@ -201,8 +201,8 @@ export default function ProduitDetailPage() {
           const updated = await getProduct(product.id);
           setProduct(updated);
           setProductName(updated?.nom || "");
-        }}
-      />
-    </div>
-  );
+        }} />
+      
+    </div>);
+
 }

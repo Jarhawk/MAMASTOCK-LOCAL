@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
-import { facture_create, facture_add_ligne } from "@/lib/db";
+import { facture_create, facture_add_ligne } from "@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export function useInvoiceImport() {
   const [loading, setLoading] = useState(false);
@@ -17,14 +17,14 @@ export function useInvoiceImport() {
         fournisseur_id: payload.fournisseur_id,
         date_iso: payload.date_iso,
         montant: payload.montant,
-        statut: payload.statut,
+        statut: payload.statut
       });
       for (const l of payload.lignes || []) {
         await facture_add_ligne({
           facture_id: id,
           produit_id: l.produit_id,
           quantite: l.quantite,
-          prix_unitaire: l.prix_unitaire,
+          prix_unitaire: l.prix_unitaire
         });
       }
       setLoading(false);

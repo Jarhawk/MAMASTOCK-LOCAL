@@ -7,7 +7,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { useAuth } from '@/hooks/useAuth';
 import { useCostCenters } from "@/hooks/useCostCenters";
 import { useFamilles } from "@/hooks/useFamilles";
-import { useAnalytique } from "@/hooks/useAnalytique";
+import { useAnalytique } from "@/hooks/useAnalytique";import { isTauri } from "@/lib/db/sql";
 
 export default function AnalytiqueDashboard() {
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -29,8 +29,8 @@ export default function AnalytiqueDashboard() {
     if (!isAuthenticated || authLoading) return;
     const periode = filters.debut ? { debut: filters.debut + "-01", fin: filters.debut + "-31" } : {};
     getConsommationParActivite(periode, filters.centre || null).then(setDataActivite);
-    getVentilationProduits(periode, filters.centre || null).then(data => {
-      const filtered = filters.famille ? data.filter(d => d.famille === filters.famille) : data;
+    getVentilationProduits(periode, filters.centre || null).then((data) => {
+      const filtered = filters.famille ? data.filter((d) => d.famille === filters.famille) : data;
       setDataProduits(filtered);
     });
   }, [isAuthenticated, authLoading, filters, getConsommationParActivite, getVentilationProduits]);
@@ -45,19 +45,19 @@ export default function AnalytiqueDashboard() {
     <div className="p-8 container mx-auto">
             <h1 className="text-2xl font-bold mb-4">Dashboard analytique</h1>
       <div className="flex flex-wrap gap-2 mb-4">
-        <select className="form-input" value={filters.centre} onChange={e => setFilters(f => ({ ...f, centre: e.target.value }))}>
+        <select className="form-input" value={filters.centre} onChange={(e) => setFilters((f) => ({ ...f, centre: e.target.value }))}>
           <option value="">Tous centres</option>
-          {costCenters.map(c => (
-            <option key={c.id} value={c.id}>{c.nom}</option>
-          ))}
+          {costCenters.map((c) =>
+          <option key={c.id} value={c.id}>{c.nom}</option>
+          )}
         </select>
-        <select className="form-input" value={filters.famille} onChange={e => setFilters(f => ({ ...f, famille: e.target.value }))}>
+        <select className="form-input" value={filters.famille} onChange={(e) => setFilters((f) => ({ ...f, famille: e.target.value }))}>
           <option value="">Toutes familles</option>
-          {familles.map(f => (
-            <option key={f.id} value={f.nom}>{f.nom}</option>
-          ))}
+          {familles.map((f) =>
+          <option key={f.id} value={f.nom}>{f.nom}</option>
+          )}
         </select>
-        <input type="month" className="form-input" value={filters.debut} onChange={e => setFilters(f => ({ ...f, debut: e.target.value }))} />
+        <input type="month" className="form-input" value={filters.debut} onChange={(e) => setFilters((f) => ({ ...f, debut: e.target.value }))} />
       </div>
       <Button variant="outline" className="mb-4" onClick={exportExcel}>Export Excel</Button>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -77,15 +77,15 @@ export default function AnalytiqueDashboard() {
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie data={dataProduits} dataKey="sumv" nameKey="famille" label>
-                {dataProduits.map((_, i) => (
-                  <Cell key={i} fill={["#0088FE", "#00C49F", "#FFBB28", "#FF8042"][i % 4]} />
-                ))}
+                {dataProduits.map((_, i) =>
+                <Cell key={i} fill={["#0088FE", "#00C49F", "#FFBB28", "#FF8042"][i % 4]} />
+                )}
               </Pie>
               <Tooltip />
             </PieChart>
           </ResponsiveContainer>
         </GlassCard>
       </div>
-    </div>
-  );
+    </div>);
+
 }

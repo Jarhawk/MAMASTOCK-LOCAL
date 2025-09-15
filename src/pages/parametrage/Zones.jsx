@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { useAuth } from '@/hooks/useAuth';
-import Unauthorized from '@/pages/auth/Unauthorized';
+import Unauthorized from '@/pages/auth/Unauthorized';import { isTauri } from "@/lib/db/sql";
 
 
 export default function Zones() {
@@ -24,7 +24,7 @@ export default function Zones() {
 
   async function handleDelete(id) {
     const { error } = await deleteZone(id);
-    if (error) toast.error(String(error)); else {
+    if (error) toast.error(String(error));else {
       toast.success('Zone supprimée');
       const refreshed = await fetchZones(filters);
       setRows(Array.isArray(refreshed) ? refreshed : []);

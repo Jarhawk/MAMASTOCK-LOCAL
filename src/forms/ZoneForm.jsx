@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Form } from '@/components/ui/Form';
 import { FormField } from '@/components/ui/FormField';
 import { FormActions } from '@/components/ui/FormActions';
-import { Input, Checkbox } from '@/components/ui/controls';
+import { Input, Checkbox } from '@/components/ui/controls';import { isTauri } from "@/lib/db/sql";
 
 export default function ZoneForm({ zone, onSave, onCancel }) {
   const [nom, setNom] = useState(zone?.nom || '');
@@ -16,7 +16,7 @@ export default function ZoneForm({ zone, onSave, onCancel }) {
     setActif(zone?.actif ?? true);
   }, [zone]);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!nom.trim()) return;
     onSave({ nom: nom.trim(), position, actif });
@@ -29,9 +29,9 @@ export default function ZoneForm({ zone, onSave, onCancel }) {
           id="zone-nom"
           placeholder="Nom de la zone"
           value={nom}
-          onChange={e => setNom(e.target.value)}
-          required
-        />
+          onChange={(e) => setNom(e.target.value)}
+          required />
+        
       </FormField>
       <FormField label="Position" htmlFor="zone-position">
         <Input
@@ -40,18 +40,18 @@ export default function ZoneForm({ zone, onSave, onCancel }) {
           min={0}
           step={1}
           value={position}
-          onChange={e => setPosition(parseInt(e.target.value, 10) || 0)}
-        />
+          onChange={(e) => setPosition(parseInt(e.target.value, 10) || 0)} />
+        
       </FormField>
       <FormField>
         <Checkbox
           id="zone-actif"
           label="Zone active"
           checked={actif}
-          onChange={e => setActif(e.target.checked)}
-        />
+          onChange={(e) => setActif(e.target.checked)} />
+        
       </FormField>
       <FormActions onCancel={onCancel} />
-    </Form>
-  );
+    </Form>);
+
 }

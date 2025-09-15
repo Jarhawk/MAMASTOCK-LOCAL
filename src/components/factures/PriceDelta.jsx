@@ -1,12 +1,12 @@
-import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight } from 'lucide-react';import { isTauri } from "@/lib/db/sql";
 
 const formatMoneyFR = (n) =>
-  new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(n);
+new Intl.NumberFormat('fr-FR', {
+  style: 'currency',
+  currency: 'EUR',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+}).format(n);
 
 export default function PriceDelta({ puHT = 0, pmp = 0 }) {
   const delta = puHT - pmp;
@@ -29,9 +29,9 @@ export default function PriceDelta({ puHT = 0, pmp = 0 }) {
     <span
       className={`absolute right-2 inset-y-0 flex items-center pointer-events-none ${color}`}
       title={label}
-      aria-label={label}
-    >
+      aria-label={label}>
+      
       {content}
-    </span>
-  );
+    </span>);
+
 }

@@ -22,7 +22,7 @@ import {
 'recharts';
 import { Button } from '@/components/ui/button';
 import GlassCard from '@/components/ui/GlassCard';
-import TableContainer from '@/components/ui/TableContainer';
+import TableContainer from '@/components/ui/TableContainer';import { isTauri } from "@/lib/db/sql";
 
 export default function FournisseurDetail({ id }) {
   const { mama_id } = useAuth();
@@ -40,12 +40,12 @@ export default function FournisseurDetail({ id }) {
     if (!id || !mama_id) return;
     setLoading(true);
     Promise.all([
-      fetchStatsForFournisseur(id).then(setStats),
-      factures_by_fournisseur(id).then(setInvoices),
-      fournisseur_get(id).then((data) => {
-        if (data) setFournisseur({ ...data });
-      }),
-    ]).finally(() => setLoading(false));
+    fetchStatsForFournisseur(id).then(setStats),
+    factures_by_fournisseur(id).then(setInvoices),
+    fournisseur_get(id).then((data) => {
+      if (data) setFournisseur({ ...data });
+    })]
+    ).finally(() => setLoading(false));
   }, [id, mama_id]);
 
   // Met à jour le top produits lors du changement d'id

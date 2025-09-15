@@ -1,13 +1,13 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 export function Input(props) {
   const { id, className = "", ...rest } = props;
   return (
     <input
       id={id}
       className={`block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 ${className}`}
-      {...rest}
-    />
-  );
+      {...rest} />);
+
+
 }
 
 export function Select(props) {
@@ -16,12 +16,12 @@ export function Select(props) {
     <select
       id={id}
       className={`block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 ${className}`}
-      {...rest}
-    >
+      {...rest}>
+      
       {placeholder !== undefined && <option value="">{placeholder}</option>}
       {children}
-    </select>
-  );
+    </select>);
+
 }
 
 export function Textarea(props) {
@@ -30,9 +30,9 @@ export function Textarea(props) {
     <textarea
       id={id}
       className={`block w-full min-h-[88px] rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 ${className}`}
-      {...rest}
-    />
-  );
+      {...rest} />);
+
+
 }
 
 export function Checkbox({ id, label, className = "", ...rest }) {
@@ -40,23 +40,22 @@ export function Checkbox({ id, label, className = "", ...rest }) {
     <label className="inline-flex items-center gap-2 text-sm">
       <input id={id} type="checkbox" className={`h-4 w-4 rounded border-gray-300 ${className}`} {...rest} />
       {label}
-    </label>
-  );
+    </label>);
+
 }
 
 export function Button({ children, variant = "primary", className = "", ...rest }) {
   const variants = {
     primary: "bg-gray-900 text-white hover:bg-black",
     ghost: "bg-white text-gray-900 border border-gray-300 hover:bg-gray-50",
-    danger: "bg-red-600 text-white hover:bg-red-700",
+    danger: "bg-red-600 text-white hover:bg-red-700"
   };
   return (
     <button
       className={`inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium transition ${variants[variant]} ${className}`}
-      {...rest}
-    >
+      {...rest}>
+      
       {children}
-    </button>
-  );
-}
+    </button>);
 
+}

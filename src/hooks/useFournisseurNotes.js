@@ -3,8 +3,8 @@ import { useState } from "react";
 import {
   fournisseur_notes_list,
   fournisseur_notes_add,
-  fournisseur_notes_delete,
-} from "@/lib/db";
+  fournisseur_notes_delete } from
+"@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export function useFournisseurNotes() {
   const [notes, setNotes] = useState([]);
@@ -39,6 +39,6 @@ export function useFournisseurNotes() {
     error,
     fetchNotes,
     addNote,
-    deleteNote,
+    deleteNote
   };
 }

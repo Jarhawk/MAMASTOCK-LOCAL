@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { exportToCSV } from '@/lib/export/exportHelpers';
 import { toast } from 'sonner';
-import { compta_journal_lines, compta_mapping_list } from '@/lib/db';
+import { compta_journal_lines, compta_mapping_list } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export default function useExportCompta() {
   const { mama_id } = useAuth();
@@ -26,17 +26,17 @@ export default function useExportCompta() {
   async function generateJournalCsv(month, download = true) {
     setLoading(true);
     const lignes = await fetchJournalLines(month);
-      const rows = lignes.map((l) => {
-        const ht = l.quantite * l.prix;
-        const tva = ht * ((l.tva || 0) / 100);
-        return {
-          date: l.date_facture,
-          fournisseur: l.fournisseur || '',
-          ht,
-          tva,
-          ttc: ht + tva,
-        };
-      });
+    const rows = lignes.map((l) => {
+      const ht = l.quantite * l.prix;
+      const tva = ht * ((l.tva || 0) / 100);
+      return {
+        date: l.date_facture,
+        fournisseur: l.fournisseur || '',
+        ht,
+        tva,
+        ttc: ht + tva
+      };
+    });
     if (download) {
       exportToCSV(rows, { filename: `journal-achat-${month}.csv` });
       toast.success('Export généré');

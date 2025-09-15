@@ -5,7 +5,7 @@ import { useProducts } from '@/hooks/useProducts';
 import { useZones } from '@/hooks/useZones';
 import { Button } from '@/components/ui/button';
 import GlassCard from '@/components/ui/GlassCard';
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function TransfertForm({ onClose, onSaved }) {
   const { createTransfert } = useTransferts();
@@ -17,7 +17,7 @@ export default function TransfertForm({ onClose, onSaved }) {
   const [header, setHeader] = useState({
     zone_source_id: '',
     zone_dest_id: '',
-    motif: '',
+    motif: ''
   });
   const [lignes, setLignes] = useState([{ produit_id: '', quantite: '' }]);
   const [saving, setSaving] = useState(false);
@@ -73,32 +73,32 @@ export default function TransfertForm({ onClose, onSaved }) {
               className="input flex-1"
               value={header.zone_source_id}
               onChange={(e) =>
-                setHeader((h) => ({ ...h, zone_source_id: e.target.value }))
-              }
-            >
+              setHeader((h) => ({ ...h, zone_source_id: e.target.value }))
+              }>
+              
               <option value="">Zone départ</option>
-              {zonesSafe.map((z) => (
-                <option key={z.id} value={z.id}>
+              {zonesSafe.map((z) =>
+              <option key={z.id} value={z.id}>
                   {z.nom}
                 </option>
-              ))}
+              )}
             </select>
             <select
               className="input flex-1"
               value={header.zone_dest_id}
               onChange={(e) =>
-                setHeader((h) => ({
-                  ...h,
-                  zone_dest_id: e.target.value,
-                }))
-              }
-            >
+              setHeader((h) => ({
+                ...h,
+                zone_dest_id: e.target.value
+              }))
+              }>
+              
               <option value="">Zone arrivée</option>
-              {zonesSafe.map((z) => (
-                <option key={z.id} value={z.id}>
+              {zonesSafe.map((z) =>
+              <option key={z.id} value={z.id}>
                   {z.nom}
                 </option>
-              ))}
+              )}
             </select>
           </div>
           <textarea
@@ -106,9 +106,9 @@ export default function TransfertForm({ onClose, onSaved }) {
             placeholder="Motif"
             value={header.motif}
             onChange={(e) =>
-              setHeader((h) => ({ ...h, motif: e.target.value }))
-            }
-          />
+            setHeader((h) => ({ ...h, motif: e.target.value }))
+            } />
+          
           <table className="w-full text-sm">
             <thead>
               <tr>
@@ -117,36 +117,36 @@ export default function TransfertForm({ onClose, onSaved }) {
               </tr>
             </thead>
             <tbody>
-              {lignes.map((l, idx) => (
-                <tr key={idx}>
+              {lignes.map((l, idx) =>
+              <tr key={idx}>
                   <td>
                     <select
-                      className="input"
-                      value={l.produit_id}
-                      onChange={(e) =>
-                        handleLineChange(idx, 'produit_id', e.target.value)
-                      }
-                    >
+                    className="input"
+                    value={l.produit_id}
+                    onChange={(e) =>
+                    handleLineChange(idx, 'produit_id', e.target.value)
+                    }>
+                    
                       <option value="">Produit</option>
-                      {products.map((p) => (
-                        <option key={p.id} value={p.id}>
+                      {products.map((p) =>
+                    <option key={p.id} value={p.id}>
                           {p.nom}
                         </option>
-                      ))}
+                    )}
                     </select>
                   </td>
                   <td>
                     <input
-                      type="number"
-                      className="input w-24"
-                      value={l.quantite}
-                      onChange={(e) =>
-                        handleLineChange(idx, 'quantite', e.target.value)
-                      }
-                    />
+                    type="number"
+                    className="input w-24"
+                    value={l.quantite}
+                    onChange={(e) =>
+                    handleLineChange(idx, 'quantite', e.target.value)
+                    } />
+                  
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
           <Button type="button" onClick={handleAddLine} className="mt-2">
@@ -160,13 +160,13 @@ export default function TransfertForm({ onClose, onSaved }) {
               type="button"
               variant="outline"
               onClick={onClose}
-              disabled={saving}
-            >
+              disabled={saving}>
+              
               Annuler
             </Button>
           </div>
         </form>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

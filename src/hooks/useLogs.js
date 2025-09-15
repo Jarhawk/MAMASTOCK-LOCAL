@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { logs_list, logs_add, rapports_list } from "@/local/logs";
 import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/db/sql";
 
 export function useLogs() {
   const { mama_id } = useAuth();
@@ -66,9 +66,9 @@ export function useLogs() {
       saveAs(new Blob([buf]), "logs.xlsx");
     } else {
       const header = "Date;Type;Module;Description;Critique\n";
-      const csv = logs
-        .map((l) => `${l.date_log};${l.type};${l.module};${l.description};${l.critique}`)
-        .join("\n");
+      const csv = logs.
+      map((l) => `${l.date_log};${l.type};${l.module};${l.description};${l.critique}`).
+      join("\n");
       const blob = new Blob([header + csv], { type: "text/csv;charset=utf-8" });
       saveAs(blob, "logs.csv");
     }
@@ -83,7 +83,7 @@ export function useLogs() {
     logAction,
     fetchRapports,
     downloadRapport,
-    exportLogs,
+    exportLogs
   };
 }
 

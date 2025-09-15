@@ -1,12 +1,12 @@
-import { QueryClient, useQueryClient } from '@tanstack/react-query'
+import { QueryClient, useQueryClient } from '@tanstack/react-query';import { isTauri } from "@/lib/db/sql";
 
-let client
+let client;
 export function getQueryClient() {
   try {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useQueryClient()
+    return useQueryClient();
   } catch {
-    if (!client) client = new QueryClient()
-    return client
+    if (!client) client = new QueryClient();
+    return client;
   }
 }

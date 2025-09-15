@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useFournisseursAutocomplete } from '@/hooks/useFournisseursAutocomplete';
+import { useFournisseursAutocomplete } from '@/hooks/useFournisseursAutocomplete';import { isTauri } from "@/lib/db/sql";
 
 export default function SupplierFilter({ value, onChange, placeholder = 'Rechercher un fournisseur' }) {
   const [query, setQuery] = useState('');
@@ -31,34 +31,33 @@ export default function SupplierFilter({ value, onChange, placeholder = 'Recherc
         <input
           ref={inputRef}
           value={value ? value.nom : query}
-          onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
+          onChange={(e) => {setQuery(e.target.value);setOpen(true);}}
           onFocus={() => setOpen(true)}
           onBlur={() => setTimeout(() => setOpen(false), 150)}
           placeholder={placeholder}
-          className="bg-transparent outline-none w-full placeholder:opacity-60"
-        />
-        {value && (
-          <button type="button" onClick={clear} className="opacity-70 hover:opacity-100">✕</button>
-        )}
+          className="bg-transparent outline-none w-full placeholder:opacity-60" />
+        
+        {value &&
+        <button type="button" onClick={clear} className="opacity-70 hover:opacity-100">✕</button>
+        }
       </div>
 
-      {open && !value && (query.trim().length > 0 || loading) && (
-        <div className="absolute z-20 mt-1 w-full rounded-md border border-slate-600 bg-slate-800 shadow-lg max-h-56 overflow-auto">
+      {open && !value && (query.trim().length > 0 || loading) &&
+      <div className="absolute z-20 mt-1 w-full rounded-md border border-slate-600 bg-slate-800 shadow-lg max-h-56 overflow-auto">
           {loading && <div className="px-3 py-2 text-sm opacity-70">Recherche…</div>}
-          {!loading && (results?.length ? results.map(r => (
-            <button
-              key={r.id}
-              type="button"
-              onMouseDown={(e)=>e.preventDefault()}
-              onClick={() => handleSelect({ id: r.id, nom: r.nom })}
-              className="w-full text-left px-3 py-2 hover:bg-slate-700"
-            >
+          {!loading && (results?.length ? results.map((r) =>
+        <button
+          key={r.id}
+          type="button"
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => handleSelect({ id: r.id, nom: r.nom })}
+          className="w-full text-left px-3 py-2 hover:bg-slate-700">
+          
               {r.nom}
             </button>
-          )) : <div className="px-3 py-2 text-sm opacity-70">Aucun résultat</div>)}
+        ) : <div className="px-3 py-2 text-sm opacity-70">Aucun résultat</div>)}
         </div>
-      )}
-    </div>
-  );
-}
+      }
+    </div>);
 
+}

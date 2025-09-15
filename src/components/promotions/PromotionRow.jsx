@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
 
 export default function PromotionRow({ promotion, onEdit, onDelete, canEdit }) {
   return (
@@ -8,8 +8,8 @@ export default function PromotionRow({ promotion, onEdit, onDelete, canEdit }) {
       <td className="px-4 py-1">{promotion.date_fin || "-"}</td>
       <td className="px-4 py-1">{promotion.actif ? "Oui" : "Non"}</td>
       <td className="px-4 py-1 text-right">
-        {canEdit && (
-          <>
+        {canEdit &&
+        <>
             <Button size="sm" variant="outline" className="mr-2" onClick={() => onEdit(promotion)}>
               Modifier
             </Button>
@@ -17,8 +17,8 @@ export default function PromotionRow({ promotion, onEdit, onDelete, canEdit }) {
               Supprimer
             </Button>
           </>
-        )}
+        }
       </td>
-    </tr>
-  );
+    </tr>);
+
 }

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useFournisseurAPI } from "@/hooks/useFournisseurAPI";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import GlassCard from "@/components/ui/GlassCard";
-import TableContainer from "@/components/ui/TableContainer";
+import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/db/sql";
 
 export default function CommandesEnvoyees() {
   const { mama_id, loading: authLoading } = useAuth();
@@ -18,7 +18,7 @@ export default function CommandesEnvoyees() {
   useEffect(() => {
     setPageLoading(true);
     readConfig().then((cfg) => {
-      const list = (cfg && cfg.commandes_envoyees) || [];
+      const list = cfg && cfg.commandes_envoyees || [];
       setItems(list);
       setPageLoading(false);
     });

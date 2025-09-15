@@ -1,4 +1,4 @@
-import { existsFile, readText, saveText } from "@/local/files";
+import { existsFile, readText, saveText } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 export type ApiKey = {
   id: string;
@@ -31,18 +31,18 @@ async function writeAll(list: ApiKey[]) {
 
 export async function api_keys_list(mama_id: string) {
   const list = await readAll();
-  return list
-    .filter(k => k.mama_id === mama_id)
-    .sort((a, b) => (b.created_at.localeCompare(a.created_at)));
+  return list.
+  filter((k) => k.mama_id === mama_id).
+  sort((a, b) => b.created_at.localeCompare(a.created_at));
 }
 
-export async function api_keys_create(values: Omit<ApiKey, "id"|"created_at"|"revoked">) {
+export async function api_keys_create(values: Omit<ApiKey, "id" | "created_at" | "revoked">) {
   const list = await readAll();
   const item: ApiKey = {
     id: crypto.randomUUID(),
     created_at: new Date().toISOString(),
     revoked: false,
-    ...values,
+    ...values
   };
   list.unshift(item);
   await writeAll(list);
@@ -51,7 +51,7 @@ export async function api_keys_create(values: Omit<ApiKey, "id"|"created_at"|"re
 
 export async function api_keys_revoke(mama_id: string, id: string) {
   const list = await readAll();
-  const idx = list.findIndex(k => k.id === id && k.mama_id === mama_id);
+  const idx = list.findIndex((k) => k.id === id && k.mama_id === mama_id);
   if (idx === -1) return;
   list[idx].revoked = true;
   await writeAll(list);

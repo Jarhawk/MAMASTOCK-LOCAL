@@ -1,5 +1,5 @@
-﻿/* @ts-nocheck */
-import React from 'react';
+/* @ts-nocheck */
+import React from 'react';import { isTauri } from "@/lib/db/sql";
 
 export default function Signalements() {
   // TODO: brancher aux vues SQL correspondantes + RLS
@@ -7,6 +7,6 @@ export default function Signalements() {
     <div className="p-6">
       <h1 className="text-lg font-semibold">Signalements</h1>
       <p className="text-sm text-gray-600">Module en cours de migration.</p>
-    </div>
-  );
+    </div>);
+
 }

@@ -10,7 +10,7 @@ import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Tabs } from '@/components/ui/tabs';
-import ZoneFormProducts from '@/components/parametrage/ZoneFormProducts.jsx';
+import ZoneFormProducts from '@/components/parametrage/ZoneFormProducts.jsx';import { isTauri } from "@/lib/db/sql";
 
 export default function ZoneForm() {
   const { id } = useParams();
@@ -43,10 +43,10 @@ export default function ZoneForm() {
       parent_id: form.parent_id.value || null,
       adresse: form.adresse.value.trim() || null,
       actif: form.actif.checked,
-      position: parseInt(form.position.value || '0', 10),
+      position: parseInt(form.position.value || '0', 10)
     };
     const { error } =
-      id === 'new' ? await createZone(payload) : await updateZone(id, payload);
+    id === 'new' ? await createZone(payload) : await updateZone(id, payload);
     if (!error) {
       toast.success('Zone enregistrée');
       navigate('/parametrage/zones');
@@ -55,8 +55,8 @@ export default function ZoneForm() {
 
   if (loading) return <LoadingSpinner message="Chargement..." />;
 
-  const infoForm = (
-    <form onSubmit={handleSubmit} className="space-y-4">
+  const infoForm =
+  <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="block text-sm mb-1" htmlFor="nom">
           Nom
@@ -68,12 +68,12 @@ export default function ZoneForm() {
           Type
         </label>
         <Select
-          id="type"
-          name="type"
-          defaultValue={zone?.type || ''}
-          required
-          className="w-full"
-        >
+        id="type"
+        name="type"
+        defaultValue={zone?.type || ''}
+        required
+        className="w-full">
+        
           <option value="">Choisir…</option>
           <option value="cave">Cave</option>
           <option value="shop">Shop</option>
@@ -94,19 +94,19 @@ export default function ZoneForm() {
           Parent
         </label>
         <Select
-          id="parent_id"
-          name="parent_id"
-          defaultValue={zone?.parent_id || ''}
-          className="w-full"
-        >
+        id="parent_id"
+        name="parent_id"
+        defaultValue={zone?.parent_id || ''}
+        className="w-full">
+        
           <option value="">Aucun</option>
-          {zones
-            .filter((z) => z.id !== id)
-            .map((z) => (
-              <option key={z.id} value={z.id}>
+          {zones.
+        filter((z) => z.id !== id).
+        map((z) =>
+        <option key={z.id} value={z.id}>
                 {z.nom}
               </option>
-            ))}
+        )}
         </Select>
       </div>
       <div>
@@ -120,21 +120,21 @@ export default function ZoneForm() {
           Position
         </label>
         <Input
-          id="position"
-          name="position"
-          type="number"
-          min={0}
-          step={1}
-          defaultValue={zone?.position || 0}
-        />
+        id="position"
+        name="position"
+        type="number"
+        min={0}
+        step={1}
+        defaultValue={zone?.position || 0} />
+      
       </div>
       <div className="flex items-center gap-2">
         <input
-          id="actif"
-          name="actif"
-          type="checkbox"
-          defaultChecked={zone?.actif ?? true}
-        />
+        id="actif"
+        name="actif"
+        type="checkbox"
+        defaultChecked={zone?.actif ?? true} />
+      
         <label htmlFor="actif">Zone active</label>
       </div>
       <p className="text-xs text-muted-foreground">
@@ -143,31 +143,31 @@ export default function ZoneForm() {
       </p>
       <div className="flex gap-2 justify-end">
         <Button
-          type="button"
-          variant="outline"
-          onClick={() => navigate('/parametrage/zones')}
-        >
+        type="button"
+        variant="outline"
+        onClick={() => navigate('/parametrage/zones')}>
+        
           Annuler
         </Button>
         <Button type="submit">Enregistrer</Button>
       </div>
-    </form>
-  );
+    </form>;
+
 
   return (
     <div className="p-6 max-w-xl mx-auto">
       <GlassCard title={id === 'new' ? 'Nouvelle zone' : 'Modifier la zone'}>
-        {id === 'new' ? (
-          infoForm
-        ) : (
-          <Tabs
-            tabs={[
-              { name: 'Infos', content: infoForm },
-              { name: 'Produits', content: <ZoneFormProducts zoneId={id} /> },
-            ]}
-          />
-        )}
+        {id === 'new' ?
+        infoForm :
+
+        <Tabs
+          tabs={[
+          { name: 'Infos', content: infoForm },
+          { name: 'Produits', content: <ZoneFormProducts zoneId={id} /> }]
+          } />
+
+        }
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

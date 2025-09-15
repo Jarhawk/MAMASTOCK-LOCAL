@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { Link } from "react-router-dom";
-import { LiquidBackground, TouchLight } from "@/components/LiquidBackground";
+import { LiquidBackground, TouchLight } from "@/components/LiquidBackground";import { isTauri } from "@/lib/db/sql";
 
 export default function MobileAccueil() {
   return (
@@ -13,24 +13,24 @@ export default function MobileAccueil() {
         <div className="flex flex-col gap-4">
           <Link
             to="/mobile/inventaire"
-            className="bg-mamastock-gold hover:bg-mamastock-gold-hover transition text-white py-3 px-6 rounded-lg shadow-md text-lg font-semibold"
-          >
+            className="bg-mamastock-gold hover:bg-mamastock-gold-hover transition text-white py-3 px-6 rounded-lg shadow-md text-lg font-semibold">
+            
             📦 Inventaire
           </Link>
           <Link
             to="/mobile/requisition"
-            className="bg-mamastock-gold hover:bg-mamastock-gold-hover transition text-white py-3 px-6 rounded-lg shadow-md text-lg font-semibold"
-          >
+            className="bg-mamastock-gold hover:bg-mamastock-gold-hover transition text-white py-3 px-6 rounded-lg shadow-md text-lg font-semibold">
+            
             🔄 Réquisition
           </Link>
           <Link
             to="/mobile/mouvement"
-            className="bg-mamastock-gold hover:bg-mamastock-gold-hover transition text-white py-3 px-6 rounded-lg shadow-md text-lg font-semibold"
-          >
+            className="bg-mamastock-gold hover:bg-mamastock-gold-hover transition text-white py-3 px-6 rounded-lg shadow-md text-lg font-semibold">
+            
             🚚 Mouvement
           </Link>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
-import { consolidation_performance } from "@/lib/db";
+import { consolidation_performance } from "@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 
 export function useConsolidatedStats() {
@@ -18,7 +18,7 @@ export function useConsolidatedStats() {
         nom: r.mama_id,
         stock_valorise: r.valeur_stock || 0,
         conso_mois: r.total_achats || 0,
-        nb_mouvements: 0,
+        nb_mouvements: 0
       }));
       setStats(mapped);
       setError(null);

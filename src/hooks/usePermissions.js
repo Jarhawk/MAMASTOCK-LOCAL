@@ -3,14 +3,14 @@ import {
   permissions_list,
   permission_add,
   permission_update,
-  permission_delete,
-} from '@/lib/db';
+  permission_delete } from
+'@/lib/db';
 import { useState } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
 import * as XLSX from "xlsx";
 import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";
-import { saveAs } from "file-saver";
+import { saveAs } from "file-saver";import { isTauri } from "@/lib/db/sql";
 
 export function usePermissions() {
   const { mama_id, role } = useAuth();
@@ -27,7 +27,7 @@ export function usePermissions() {
       const data = await permissions_list({
         mama_id: role !== "superadmin" ? mama_id : undefined,
         role_id: roleId,
-        user_id: userId,
+        user_id: userId
       });
       setPermissions(Array.isArray(data) ? data : []);
       return data || [];

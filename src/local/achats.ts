@@ -1,4 +1,4 @@
-import { readText, saveText, existsFile } from "@/local/files";
+import { readText, saveText, existsFile } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "achats.json";
 
@@ -25,7 +25,7 @@ export async function achats_list({
   fin = "",
   actif = true,
   offset = 0,
-  limit = 50,
+  limit = 50
 }: any) {
   const list = await readAll();
   let rows = list.filter((a) => {
@@ -38,9 +38,9 @@ export async function achats_list({
     return true;
   });
   const count = rows.length;
-  rows = rows
-    .sort((a, b) => (b.date_achat || "").localeCompare(a.date_achat || ""))
-    .slice(offset, offset + limit);
+  rows = rows.
+  sort((a, b) => (b.date_achat || "").localeCompare(a.date_achat || "")).
+  slice(offset, offset + limit);
   return { data: rows, count };
 }
 
@@ -57,7 +57,7 @@ export async function achat_insert(achat: any) {
     id,
     created_at: new Date().toISOString(),
     actif: true,
-    ...achat,
+    ...achat
   };
   list.push(newAchat);
   await writeAll(list);

@@ -1,5 +1,5 @@
 // src/local/db.ts
-import { getDb } from "@/lib/db/sql";
+import { getDb, isTauri } from "@/lib/db/sql";
 
 export { getDb };
 
@@ -17,4 +17,3 @@ export async function one<T = any>(sql: string, params: any[] = []): Promise<T |
   const rows = await query<T>(sql, params);
   return rows.length ? rows[0] : null;
 }
-

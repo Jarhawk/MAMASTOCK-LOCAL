@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import GraphCost from "./GraphCost";
+import GraphCost from "./GraphCost";import { isTauri } from "@/lib/db/sql";
 
 export default function ReportingPDF() {
   return (
@@ -7,6 +7,6 @@ export default function ReportingPDF() {
       <h2 className="text-xl font-bold text-mamastock-gold mb-4">Rapport complet</h2>
       <GraphCost />
       {/* Tu peux ajouter d’autres stats ici plus tard */}
-    </div>
-  );
+    </div>);
+
 }

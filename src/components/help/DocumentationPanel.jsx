@@ -4,9 +4,9 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  DialogDescription,
-} from '@/components/ui/SmartDialog';
-import { useHelp } from '@/context/HelpProvider';
+  DialogDescription } from
+'@/components/ui/SmartDialog';
+import { useHelp } from '@/context/HelpProvider';import { isTauri } from "@/lib/db/sql";
 
 export default function DocumentationPanel({ open, onOpenChange }) {
   const { docs, fetchDocs } = useHelp();
@@ -27,17 +27,17 @@ export default function DocumentationPanel({ open, onOpenChange }) {
           className="form-input w-full mb-4"
           placeholder="Recherche..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+          onChange={(e) => setSearch(e.target.value)} />
+        
         <ul className="space-y-4">
-          {docs.map((d) => (
-            <li key={d.id} className="text-sm">
+          {docs.map((d) =>
+          <li key={d.id} className="text-sm">
               <h4 className="font-semibold mb-1">{d.titre}</h4>
               <div dangerouslySetInnerHTML={{ __html: d.contenu }} />
             </li>
-          ))}
+          )}
         </ul>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>);
+
 }

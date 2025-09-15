@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
 
 export default function AchatRow({ achat, onEdit, onDetail, onArchive, canEdit }) {
   return (
@@ -11,8 +11,8 @@ export default function AchatRow({ achat, onEdit, onDetail, onArchive, canEdit }
         {Number(achat.prix || 0).toFixed(2)} €
       </td>
       <td className="border px-2 py-1 space-x-1">
-        {canEdit && (
-          <>
+        {canEdit &&
+        <>
             <Button size="sm" variant="outline" onClick={() => onEdit(achat)} className="mr-2">
               Éditer
             </Button>
@@ -20,11 +20,11 @@ export default function AchatRow({ achat, onEdit, onDetail, onArchive, canEdit }
               Archiver
             </Button>
           </>
-        )}
+        }
         <Button size="sm" variant="outline" onClick={() => onDetail(achat)}>
           Détail
         </Button>
       </td>
-    </tr>
-  );
+    </tr>);
+
 }

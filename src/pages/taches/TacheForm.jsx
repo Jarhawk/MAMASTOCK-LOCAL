@@ -5,7 +5,7 @@ import { useTasks } from "@/hooks/useTasks";
 import { useUtilisateurs } from "@/hooks/useUtilisateurs";
 import { Button } from "@/components/ui/button";
 import GlassCard from "@/components/ui/GlassCard";
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function TacheForm({ task }) {
   const navigate = useNavigate();
@@ -14,10 +14,10 @@ export default function TacheForm({ task }) {
   const [form, setForm] = useState({
     titre: task?.titre || "",
     description: task?.description || "",
-    assignes: task?.utilisateurs_taches?.map(a => a.utilisateur_id) || [],
+    assignes: task?.utilisateurs_taches?.map((a) => a.utilisateur_id) || [],
     priorite: task?.priorite || "moyenne",
     date_echeance: task?.date_echeance || "",
-    statut: task?.statut || "a_faire",
+    statut: task?.statut || "a_faire"
   });
   const [loading, setLoading] = useState(false);
 
@@ -25,17 +25,17 @@ export default function TacheForm({ task }) {
     fetchUsers({ actif: true });
   }, [fetchUsers]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value, options } = e.target;
     if (name === "assignes") {
-      const vals = Array.from(options).filter(o => o.selected).map(o => o.value);
-      setForm(f => ({ ...f, assignes: vals }));
+      const vals = Array.from(options).filter((o) => o.selected).map((o) => o.value);
+      setForm((f) => ({ ...f, assignes: vals }));
     } else {
-      setForm(f => ({ ...f, [name]: value }));
+      setForm((f) => ({ ...f, [name]: value }));
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
     setLoading(true);
@@ -65,8 +65,8 @@ export default function TacheForm({ task }) {
             name="titre"
             value={form.titre}
             onChange={handleChange}
-            required
-          />
+            required />
+          
         </label>
         <label className="block">
           <span>Description</span>
@@ -74,8 +74,8 @@ export default function TacheForm({ task }) {
             className="input w-full"
             name="description"
             value={form.description}
-            onChange={handleChange}
-          />
+            onChange={handleChange} />
+          
         </label>
         <label className="block">
           <span>Assignés</span>
@@ -84,13 +84,13 @@ export default function TacheForm({ task }) {
             name="assignes"
             value={form.assignes}
             onChange={handleChange}
-            className="input w-full"
-          >
-            {users.map(u => (
-              <option key={u.id} value={u.id}>
+            className="input w-full">
+            
+            {users.map((u) =>
+            <option key={u.id} value={u.id}>
                 {u.nom}
               </option>
-            ))}
+            )}
           </select>
         </label>
         <label className="block">
@@ -99,8 +99,8 @@ export default function TacheForm({ task }) {
             className="input w-full"
             name="priorite"
             value={form.priorite}
-            onChange={handleChange}
-          >
+            onChange={handleChange}>
+            
             <option value="basse">Basse</option>
             <option value="moyenne">Moyenne</option>
             <option value="haute">Haute</option>
@@ -113,8 +113,8 @@ export default function TacheForm({ task }) {
             className="input w-full"
             name="date_echeance"
             value={form.date_echeance}
-            onChange={handleChange}
-          />
+            onChange={handleChange} />
+          
         </label>
         <label className="block">
           <span>Statut</span>
@@ -122,8 +122,8 @@ export default function TacheForm({ task }) {
             className="input w-full"
             name="statut"
             value={form.statut}
-            onChange={handleChange}
-          >
+            onChange={handleChange}>
+            
             <option value="a_faire">À faire</option>
             <option value="en_cours">En cours</option>
             <option value="terminee">Terminée</option>
@@ -133,6 +133,6 @@ export default function TacheForm({ task }) {
           {task ? "Mettre à jour" : "Créer"}
         </Button>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

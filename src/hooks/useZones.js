@@ -6,10 +6,10 @@ import {
   zone_update,
   zone_delete,
   zones_reorder,
-  zones_accessible,
-} from "@/lib/db";
+  zones_accessible } from
+"@/lib/db";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState } from "react";import { isTauri } from "@/lib/db/sql";
 
 export default function useZones() {
   const [zones, setZones] = useState([]);
@@ -19,7 +19,7 @@ export default function useZones() {
       const rows = await zones_list(params);
       const cleaned = (rows || []).map((z) => ({
         ...z,
-        position: Number.isFinite(z.position) ? z.position : 0,
+        position: Number.isFinite(z.position) ? z.position : 0
       }));
       cleaned.sort(
         (a, b) => a.position - b.position || a.nom.localeCompare(b.nom)
@@ -38,7 +38,7 @@ export default function useZones() {
       if (!z) return null;
       return {
         ...z,
-        position: Number.isFinite(z.position) ? z.position : 0,
+        position: Number.isFinite(z.position) ? z.position : 0
       };
     } catch (e) {
       toast.error(String(e));
@@ -104,9 +104,8 @@ export default function useZones() {
     updateZone,
     deleteZone,
     reorderZones,
-    myAccessibleZones,
+    myAccessibleZones
   };
 }
 
 export { useZones };
-

@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
-import { carte_list, fiches_update } from '@/lib/db';
+import { carte_list, fiches_update } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export function useCarte() {
   const { mama_id } = useAuth();

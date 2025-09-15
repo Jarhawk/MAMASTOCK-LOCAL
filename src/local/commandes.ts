@@ -1,4 +1,4 @@
-import { readText, saveText, existsFile } from "@/local/files";
+import { readText, saveText, existsFile } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "commandes.json";
 
@@ -28,13 +28,13 @@ export async function commandes_list({ mama_id, fournisseur = "", statut = "", d
     return true;
   });
   const count = rows.length;
-  rows = rows
-    .sort((a, b) => (b.date_commande || "").localeCompare(a.date_commande || ""))
-    .slice(offset, offset + limit)
-    .map((c) => ({
-      ...c,
-      total: (c.lignes || []).reduce((s: number, l: any) => s + Number(l.total_ligne || l.quantite * l.prix_unitaire || 0), 0),
-    }));
+  rows = rows.
+  sort((a, b) => (b.date_commande || "").localeCompare(a.date_commande || "")).
+  slice(offset, offset + limit).
+  map((c) => ({
+    ...c,
+    total: (c.lignes || []).reduce((s: number, l: any) => s + Number(l.total_ligne || l.quantite * l.prix_unitaire || 0), 0)
+  }));
   return { data: rows, count };
 }
 
@@ -52,7 +52,7 @@ export async function commande_insert(cmd: any) {
     created_at: new Date().toISOString(),
     statut: "draft",
     lignes: [],
-    ...cmd,
+    ...cmd
   };
   list.push(newCmd);
   await writeAll(list);

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { useTasks } from "@/hooks/useTasks";
+import { useTasks } from "@/hooks/useTasks";import { isTauri } from "@/lib/db/sql";
 
 export default function TacheDetail() {
   const { id } = useParams();
@@ -19,10 +19,10 @@ export default function TacheDetail() {
   const handleDone = async () => {
     await updateTask(id, {
       ...tache,
-      assignes: (tache.utilisateurs_taches || []).map(a => a.utilisateur_id),
-      statut: "terminee",
+      assignes: (tache.utilisateurs_taches || []).map((a) => a.utilisateur_id),
+      statut: "terminee"
     });
-    setTache(t => ({ ...t, statut: "terminee" }));
+    setTache((t) => ({ ...t, statut: "terminee" }));
   };
 
   return (
@@ -34,10 +34,10 @@ export default function TacheDetail() {
       <p>Statut : {tache.statut}</p>
       <p>
         Assignés :
-        {(tache.utilisateurs_taches || [])
-          .map(a => a.utilisateur?.nom)
-          .filter(Boolean)
-          .join(", ") || " - "}
+        {(tache.utilisateurs_taches || []).
+        map((a) => a.utilisateur?.nom).
+        filter(Boolean).
+        join(", ") || " - "}
       </p>
       <Button onClick={handleDone} disabled={tache.statut === "terminee"}>
         Terminer la tâche
@@ -50,6 +50,6 @@ export default function TacheDetail() {
         <h2 className="font-semibold mt-4">Historique</h2>
         <p className="text-gray-500 text-xs">Historique non disponible</p>
       </div>
-    </div>
-  );
+    </div>);
+
 }

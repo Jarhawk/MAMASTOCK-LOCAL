@@ -1,12 +1,12 @@
-// Nettoie une chaîne pour usage en id HTML
+import { isTauri } from "@/lib/db/sql"; // Nettoie une chaîne pour usage en id HTML
 const sanitize = (str = '') =>
-  str
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '') // retire accents
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')    // remplace espaces & spéciaux par -
-    .replace(/^-+|-+$/g, '');       // retire tirets en bord
+str.
+normalize('NFD').
+replace(/\p{Diacritic}/gu, '') // retire accents
+.toLowerCase().
+trim().
+replace(/[^a-z0-9]+/g, '-') // remplace espaces & spéciaux par -
+.replace(/^-+|-+$/g, ''); // retire tirets en bord
 
 export function idFromLabel(label, prefix = 'fld') {
   const base = sanitize(String(label || ''));

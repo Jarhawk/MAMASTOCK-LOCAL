@@ -1,11 +1,11 @@
-import * as React from 'react'
-import { Slot } from '@radix-ui/react-slot'
+import * as React from 'react';
+import { Slot } from '@radix-ui/react-slot';import { isTauri } from "@/lib/db/sql";
 
-function cn(...cls) { return cls.filter(Boolean).join(' ') }
+function cn(...cls) {return cls.filter(Boolean).join(' ');}
 
 export const Button = React.forwardRef(
   ({ asChild = false, className, ...props }, ref) => {
-    const Comp = asChild ? Slot : 'button'
+    const Comp = asChild ? Slot : 'button';
     return (
       <Comp
         ref={ref}
@@ -13,11 +13,11 @@ export const Button = React.forwardRef(
           'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none h-9 px-3 py-2',
           className
         )}
-        {...props}
-      />
-    )
-  }
-)
-Button.displayName = 'Button'
+        {...props} />);
 
-export default Button
+
+  }
+);
+Button.displayName = 'Button';
+
+export default Button;

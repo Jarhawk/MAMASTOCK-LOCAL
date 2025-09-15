@@ -3,8 +3,8 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  DialogDescription,
-} from "@/components/ui/SmartDialog";
+  DialogDescription } from
+"@/components/ui/SmartDialog";import { isTauri } from "@/lib/db/sql";
 
 export default function DocumentPreview({ url, type = "", open, onClose }) {
   const isPdf = type.includes("pdf") || url?.toLowerCase().endsWith(".pdf");
@@ -15,12 +15,12 @@ export default function DocumentPreview({ url, type = "", open, onClose }) {
         <DialogDescription className="sr-only">
           Prévisualisation du document
         </DialogDescription>
-        {isPdf ? (
-          <iframe src={url} className="w-full h-[80vh] rounded-lg" />
-        ) : (
-          <img src={url} alt="Aperçu" className="max-h-[80vh] mx-auto" />
-        )}
+        {isPdf ?
+        <iframe src={url} className="w-full h-[80vh] rounded-lg" /> :
+
+        <img src={url} alt="Aperçu" className="max-h-[80vh] mx-auto" />
+        }
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>);
+
 }

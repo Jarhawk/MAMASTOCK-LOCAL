@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import GlassCard from "@/components/ui/GlassCard";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
 
 export default function Surcouts() {
   return (
@@ -8,6 +8,6 @@ export default function Surcouts() {
         <h1 className="text-2xl font-bold">Surcoûts</h1>
         <p>Module Surcoûts en cours de développement.</p>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

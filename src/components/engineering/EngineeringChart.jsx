@@ -15,13 +15,13 @@ import {
   PolarRadiusAxis,
   Radar,
   BarChart,
-  Bar,
-} from 'recharts'
+  Bar } from
+'recharts';import { isTauri } from "@/lib/db/sql";
 
-const median = arr => {
-  const s = [...arr].sort((a, b) => a - b)
-  return s.length ? s[Math.floor(s.length / 2)] : 0
-}
+const median = (arr) => {
+  const s = [...arr].sort((a, b) => a - b);
+  return s.length ? s[Math.floor(s.length / 2)] : 0;
+};
 
 export default function EngineeringChart({ data, type }) {
   if (type === 'radar') {
@@ -33,8 +33,8 @@ export default function EngineeringChart({ data, type }) {
           <PolarRadiusAxis />
           <Radar dataKey="marge" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
         </RadarChart>
-      </ResponsiveContainer>
-    )
+      </ResponsiveContainer>);
+
   }
   if (type === 'histogram') {
     return (
@@ -46,8 +46,8 @@ export default function EngineeringChart({ data, type }) {
           <Tooltip />
           <Bar dataKey="ventes" fill="#8884d8" />
         </BarChart>
-      </ResponsiveContainer>
-    )
+      </ResponsiveContainer>);
+
   }
   if (type === 'heatmap') {
     return (
@@ -60,12 +60,12 @@ export default function EngineeringChart({ data, type }) {
           <Tooltip cursor={{ strokeDasharray: '3 3' }} />
           <Scatter data={data} fill="#8884d8" />
         </ScatterChart>
-      </ResponsiveContainer>
-    )
+      </ResponsiveContainer>);
+
   }
   // default matrix chart
-  const medianPop = median(data.map(d => d.x))
-  const medianMarge = median(data.map(d => d.y))
+  const medianPop = median(data.map((d) => d.x));
+  const medianMarge = median(data.map((d) => d.y));
   return (
     <ResponsiveContainer width="100%" height="100%">
       <ScatterChart>
@@ -77,6 +77,6 @@ export default function EngineeringChart({ data, type }) {
         <ReferenceLine y={medianMarge} stroke="grey" />
         <Scatter data={data} fill="#8884d8" />
       </ScatterChart>
-    </ResponsiveContainer>
-  )
+    </ResponsiveContainer>);
+
 }

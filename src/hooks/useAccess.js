@@ -1,4 +1,4 @@
-import { useAuth } from './useAuth';
+import { useAuth } from './useAuth';import { isTauri } from "@/lib/db/sql";
 
 export default function useAccess(module, right = 'peut_voir') {
   const { hasAccess, loading, pending, isSuperadmin } = useAuth();
@@ -6,4 +6,3 @@ export default function useAccess(module, right = 'peut_voir') {
   const ready = !loading && !pending;
   return { allowed: isSuperadmin || allowed, loading: !ready };
 }
-

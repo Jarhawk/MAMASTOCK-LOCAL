@@ -1,4 +1,4 @@
-import useFournisseurs from '@/hooks/data/useFournisseurs';
+import useFournisseurs from '@/hooks/data/useFournisseurs';import { isTauri } from "@/lib/db/sql";
 
 export function useFournisseursList(params = {}) {
   const query = useFournisseurs(params);

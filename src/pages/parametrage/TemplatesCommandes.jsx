@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useTemplatesCommandes } from "@/hooks/useTemplatesCommandes";
 import useFournisseurs from "@/hooks/data/useFournisseurs";
 import TemplateCommandeForm from "./TemplateCommandeForm";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
 
 export default function TemplatesCommandes() {
   const { fetchTemplates, deleteTemplate } = useTemplatesCommandes();
@@ -42,14 +42,14 @@ export default function TemplatesCommandes() {
         <select
           className="border px-2 py-1 rounded text-black"
           value={fournisseurId}
-          onChange={(e) => setFournisseurId(e.target.value)}
-        >
+          onChange={(e) => setFournisseurId(e.target.value)}>
+          
           <option value="">Tous les fournisseurs</option>
-          {fournisseurs.map((f) => (
-            <option key={f.id} value={f.id}>
+          {fournisseurs.map((f) =>
+          <option key={f.id} value={f.id}>
               {f.nom}
             </option>
-          ))}
+          )}
         </select>
       </div>
 
@@ -67,8 +67,8 @@ export default function TemplatesCommandes() {
           </tr>
         </thead>
         <tbody>
-          {templates.map((tpl) => (
-            <tr key={tpl.id} className="border-b">
+          {templates.map((tpl) =>
+          <tr key={tpl.id} className="border-b">
               <td className="p-2">{tpl.nom}</td>
               <td className="p-2">{tpl.fournisseur ? tpl.fournisseur.nom : "Générique"}</td>
               <td className="p-2">{tpl.actif ? "Oui" : "Non"}</td>
@@ -80,29 +80,28 @@ export default function TemplatesCommandes() {
                   Modifier
                 </Button>
                 <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => handleDelete(tpl.id)}
-                >
+                size="sm"
+                variant="destructive"
+                onClick={() => handleDelete(tpl.id)}>
+                
                   Supprimer
                 </Button>
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 
-      {selected && (
-        <TemplateCommandeForm
-          template={selected}
-          fournisseurs={fournisseurs}
-          onClose={() => {
-            setSelected(null);
-            load();
-          }}
-        />
-      )}
-    </div>
-  );
-}
+      {selected &&
+      <TemplateCommandeForm
+        template={selected}
+        fournisseurs={fournisseurs}
+        onClose={() => {
+          setSelected(null);
+          load();
+        }} />
 
+      }
+    </div>);
+
+}

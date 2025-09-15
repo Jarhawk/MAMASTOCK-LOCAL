@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import SimulationForm from "./SimulationForm";
 import SimulationResult from "./SimulationResult";
-import { useSimulation } from "@/hooks/useSimulation";
+import { useSimulation } from "@/hooks/useSimulation";import { isTauri } from "@/lib/db/sql";
 
 export default function SimulationMenu() {
   const { selection, results, addRecipe, setPrix } = useSimulation();
@@ -13,6 +13,6 @@ export default function SimulationMenu() {
       <div className="mt-6">
         <SimulationResult selection={selection} results={results} />
       </div>
-    </div>
-  );
+    </div>);
+
 }

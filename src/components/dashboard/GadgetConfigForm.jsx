@@ -3,7 +3,7 @@ import { useGadgets } from '@/hooks/useGadgets';
 import InputField from '@/components/ui/InputField';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import GlassCard from '@/components/ui/GlassCard';
+import GlassCard from '@/components/ui/GlassCard';import { isTauri } from "@/lib/db/sql";
 
 export default function GadgetConfigForm({ gadget, onSave, onCancel }) {
   const editing = !!gadget;
@@ -31,7 +31,7 @@ export default function GadgetConfigForm({ gadget, onSave, onCancel }) {
         await updateGadget(gadget.id, {
           nom,
           type,
-          config: json,
+          config: json
         });
       } else {
         await addGadget({ nom, type, config: json });
@@ -59,12 +59,12 @@ export default function GadgetConfigForm({ gadget, onSave, onCancel }) {
       <div>
         <label htmlFor="config" className="block text-sm text-white mb-1">Configuration (JSON)</label>
         <textarea
-          id="config"
-          className="form-textarea w-full font-mono"
-          rows="4"
-          value={config}
-          onChange={(e) => setConfig(e.target.value)}
-        />
+            id="config"
+            className="form-textarea w-full font-mono"
+            rows="4"
+            value={config}
+            onChange={(e) => setConfig(e.target.value)} />
+          
       </div>
       <div className="flex justify-end gap-2">
         <Button type="button" onClick={onCancel}>Annuler</Button>
@@ -74,6 +74,6 @@ export default function GadgetConfigForm({ gadget, onSave, onCancel }) {
         </Button>
       </div>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

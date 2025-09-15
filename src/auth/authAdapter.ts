@@ -1,6 +1,6 @@
 // src/auth/authAdapter.ts
 import { loginLocal, registerLocal } from "@/auth/localAccount";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";import { isTauri } from "@/lib/db/sql";
 
 export function useAuthAdapter() {
   const { signIn, signOut, user } = useAuth();
@@ -19,6 +19,6 @@ export function useAuthAdapter() {
     },
     logout() {
       signOut();
-    },
+    }
   };
 }

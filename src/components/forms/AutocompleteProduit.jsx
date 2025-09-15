@@ -3,12 +3,12 @@ import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/useAuth';
 import { useProduitsSearch } from '@/hooks/useProduitsSearch';
 import useDebounce from '@/hooks/useDebounce';
-import ProductPickerModal from './ProductPickerModal';
+import ProductPickerModal from './ProductPickerModal';import { isTauri } from "@/lib/db/sql";
 
 function AutocompleteProduit(
-  { value, onChange, required = false, placeholder = '', className = '', lineKey = 0, onFocus },
-  ref
-) {
+{ value, onChange, required = false, placeholder = '', className = '', lineKey = 0, onFocus },
+ref)
+{
   const [inputValue, setInputValue] = useState(value?.nom || '');
   const [selected, setSelected] = useState(value?.id ? value : null);
   const [search, setSearch] = useState('');
@@ -23,7 +23,7 @@ function AutocompleteProduit(
 
   const { mama_id: mamaId } = useAuth();
   const { data: options = [] } = useProduitsSearch(search, mamaId, {
-    enabled: open || modalOpen,
+    enabled: open || modalOpen
   });
 
   useEffect(() => {
@@ -140,52 +140,52 @@ function AutocompleteProduit(
         aria-expanded={open}
         aria-controls={listId}
         aria-activedescendant={
-          active >= 0 ? `${listId}-opt-${active}` : undefined
+        active >= 0 ? `${listId}-opt-${active}` : undefined
         }
         placeholder={placeholder}
         required={required}
-        className={className}
-      />
+        className={className} />
+      
       <button
         type="button"
         aria-label="Sélecteur de produits"
         className="absolute right-1 top-1/2 -translate-y-1/2 p-1"
-        onClick={() => setModalOpen(true)}
-      >
+        onClick={() => setModalOpen(true)}>
+        
         🔍
       </button>
-      {open && options.length > 0 && (
-        <ul
-          id={listId}
-          role="listbox"
-          className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-white/20 bg-neutral-800 text-white"
-        >
-          {options.map((opt, idx) => (
-            <li
-              key={opt.id}
-              id={`${listId}-opt-${idx}`}
-              role="option"
-              aria-selected={idx === active}
-              className={`px-2 py-1 cursor-pointer ${idx === active ? 'bg-white/20' : ''}`}
-              onMouseDown={(e) => {
-                e.preventDefault();
-                select(opt);
-              }}
-            >
+      {open && options.length > 0 &&
+      <ul
+        id={listId}
+        role="listbox"
+        className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-white/20 bg-neutral-800 text-white">
+        
+          {options.map((opt, idx) =>
+        <li
+          key={opt.id}
+          id={`${listId}-opt-${idx}`}
+          role="option"
+          aria-selected={idx === active}
+          className={`px-2 py-1 cursor-pointer ${idx === active ? 'bg-white/20' : ''}`}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            select(opt);
+          }}>
+          
               {opt.nom}
             </li>
-          ))}
+        )}
         </ul>
-      )}
+      }
       <ProductPickerModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSelect={(p) => {
           select(p);
-        }}
-      />
-    </div>
-  );
+        }} />
+      
+    </div>);
+
 }
 
 export default forwardRef(AutocompleteProduit);

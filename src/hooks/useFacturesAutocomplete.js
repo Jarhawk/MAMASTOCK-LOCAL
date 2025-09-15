@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { factures_list } from "@/lib/db";
+import { factures_list } from "@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export function useFacturesAutocomplete() {
   const [results, setResults] = useState([]);

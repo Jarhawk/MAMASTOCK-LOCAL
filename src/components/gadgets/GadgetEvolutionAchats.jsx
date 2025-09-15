@@ -1,17 +1,17 @@
 import { ResponsiveContainer, LineChart, Line, Tooltip } from 'recharts';
 import useEvolutionAchats from '@/hooks/gadgets/useEvolutionAchats';
-import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/db/sql";
 
 export default function GadgetEvolutionAchats() {
   const { data, loading } = useEvolutionAchats();
 
   if (loading) return <LoadingSkeleton className="h-40 w-full rounded-2xl" />;
   if (!data.length)
-    return (
-      <div className="bg-white/10 rounded-2xl p-4 text-center text-white">
+  return (
+    <div className="bg-white/10 rounded-2xl p-4 text-center text-white">
         Aucune donnée
-      </div>
-    );
+      </div>);
+
 
   return (
     <div className="bg-white/10 border border-white/20 backdrop-blur-xl rounded-2xl shadow-md p-4 text-white">
@@ -22,6 +22,6 @@ export default function GadgetEvolutionAchats() {
           <Tooltip />
         </LineChart>
       </ResponsiveContainer>
-    </div>
-  );
+    </div>);
+
 }

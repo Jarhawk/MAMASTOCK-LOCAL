@@ -1,10 +1,10 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
 
 export default function UtilisateurDetail({ utilisateur, onClose }) {
   const historique = utilisateur.historique || [
-    { date: "2024-06-10", action: "Création", by: "superadmin" },
-    // Ajoute plus d’actions selon ta base
+  { date: "2024-06-10", action: "Création", by: "superadmin" }
+  // Ajoute plus d’actions selon ta base
   ];
 
   return (
@@ -14,23 +14,23 @@ export default function UtilisateurDetail({ utilisateur, onClose }) {
         <h2 className="font-bold text-xl mb-4">{utilisateur.nom || utilisateur.email}</h2>
         <div><b>Rôle :</b> {utilisateur.role}</div>
         <div><b>Actif :</b> {utilisateur.actif ? "Oui" : "Non"}</div>
-        {utilisateur.access_rights && (
-          <div>
+        {utilisateur.access_rights &&
+        <div>
             <b>Droits :</b>
             <pre className="text-xs whitespace-pre-wrap max-h-40 overflow-auto bg-black/20 p-2 rounded">
               {JSON.stringify(utilisateur.access_rights, null, 2)}
             </pre>
           </div>
-        )}
+        }
         <div>
           <b>Historique :</b>
           <ul className="list-disc pl-6">
             {historique.map((h, i) =>
-              <li key={i}>{h.date} — {h.action} {h.by ? `par ${h.by}` : ""}</li>
+            <li key={i}>{h.date} — {h.action} {h.by ? `par ${h.by}` : ""}</li>
             )}
           </ul>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

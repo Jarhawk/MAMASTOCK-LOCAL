@@ -2,7 +2,7 @@
 import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
-import { zones_stock_list, inventaires_list } from '@/lib/db';
+import { zones_stock_list, inventaires_list } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export function useGraphiquesMultiZone() {
   const { mama_id } = useAuth();
@@ -19,10 +19,10 @@ export function useGraphiquesMultiZone() {
       const inventaires = await inventaires_list(mama_id);
       const allData = zones.map((z) => ({
         zone: z.nom,
-        points: inventaires
-          .filter((i) => i.zone_id === z.id)
-          .sort((a, b) => a.date_inventaire.localeCompare(b.date_inventaire))
-          .map((i) => ({ date: i.date_inventaire })),
+        points: inventaires.
+        filter((i) => i.zone_id === z.id).
+        sort((a, b) => a.date_inventaire.localeCompare(b.date_inventaire)).
+        map((i) => ({ date: i.date_inventaire }))
       }));
       setData(allData);
       return allData;

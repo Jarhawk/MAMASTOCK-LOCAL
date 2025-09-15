@@ -5,12 +5,12 @@ import {
   Content as DialogContent,
   Title as DialogTitle,
   Description as DialogDescription,
-  Close as DialogClose,
-} from '@radix-ui/react-dialog'
+  Close as DialogClose } from
+'@radix-ui/react-dialog';import { isTauri } from "@/lib/db/sql";
 
-export { Dialog, DialogOverlay, DialogContent, DialogTitle, DialogDescription, DialogClose }
+export { Dialog, DialogOverlay, DialogContent, DialogTitle, DialogDescription, DialogClose };
 
-export default Dialog
+export default Dialog;
 
 /** Bloque le scroll de fond quand le Dialog est ouvert */
 export function useLockBodyScroll(open) {

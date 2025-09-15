@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import GlassCard from '@/components/ui/GlassCard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/db/sql";
 
 export default function ZoneAccess() {
   const { id } = useParams();
@@ -23,7 +23,7 @@ export default function ZoneAccess() {
     lecture: true,
     ecriture: false,
     transfert: false,
-    requisition: false,
+    requisition: false
   });
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function ZoneAccess() {
     const { error } = await setUserRights({
       zone_id: id,
       user_id: userId,
-      ...params,
+      ...params
     });
     if (!error) {
       toast.success('Droits mis à jour');
@@ -62,16 +62,16 @@ export default function ZoneAccess() {
               placeholder="User ID"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              className="flex-1"
-            />
+              className="flex-1" />
+            
             <label className="flex items-center gap-1 text-sm">
               <input
                 type="checkbox"
                 checked={params.lecture}
                 onChange={(e) =>
-                  setParams((p) => ({ ...p, lecture: e.target.checked }))
-                }
-              />
+                setParams((p) => ({ ...p, lecture: e.target.checked }))
+                } />
+              
               Lecture
             </label>
             <label className="flex items-center gap-1 text-sm">
@@ -79,9 +79,9 @@ export default function ZoneAccess() {
                 type="checkbox"
                 checked={params.ecriture}
                 onChange={(e) =>
-                  setParams((p) => ({ ...p, ecriture: e.target.checked }))
-                }
-              />
+                setParams((p) => ({ ...p, ecriture: e.target.checked }))
+                } />
+              
               Écriture
             </label>
             <label className="flex items-center gap-1 text-sm">
@@ -89,9 +89,9 @@ export default function ZoneAccess() {
                 type="checkbox"
                 checked={params.transfert}
                 onChange={(e) =>
-                  setParams((p) => ({ ...p, transfert: e.target.checked }))
-                }
-              />
+                setParams((p) => ({ ...p, transfert: e.target.checked }))
+                } />
+              
               Transfert
             </label>
             <label className="flex items-center gap-1 text-sm">
@@ -99,9 +99,9 @@ export default function ZoneAccess() {
                 type="checkbox"
                 checked={params.requisition}
                 onChange={(e) =>
-                  setParams((p) => ({ ...p, requisition: e.target.checked }))
-                }
-              />
+                setParams((p) => ({ ...p, requisition: e.target.checked }))
+                } />
+              
               Réquisition
             </label>
             <Button onClick={handleAdd}>Ajouter</Button>
@@ -111,39 +111,39 @@ export default function ZoneAccess() {
             ou shop.
           </p>
           <ul className="space-y-2">
-            {rights.map((r) => (
-              <li
-                key={r.id}
-                className="flex justify-between items-center text-sm"
-              >
+            {rights.map((r) =>
+            <li
+              key={r.id}
+              className="flex justify-between items-center text-sm">
+              
                 <span>{r.user_id}</span>
                 <span className="text-xs">
                   L:{r.lecture ? '✔' : '✖'} E:{r.ecriture ? '✔' : '✖'} T:
                   {r.transfert ? '✔' : '✖'} R:{r.requisition ? '✔' : '✖'}
                 </span>
                 <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={async () => {
-                    await removeUserRights(r.id);
-                    setRights(await fetchZoneRights(id));
-                  }}
-                >
+                size="sm"
+                variant="outline"
+                onClick={async () => {
+                  await removeUserRights(r.id);
+                  setRights(await fetchZoneRights(id));
+                }}>
+                
                   Supprimer
                 </Button>
               </li>
-            ))}
+            )}
           </ul>
           <div className="flex justify-end">
             <Button
               variant="outline"
-              onClick={() => navigate('/parametrage/zones')}
-            >
+              onClick={() => navigate('/parametrage/zones')}>
+              
               Fermer
             </Button>
           </div>
         </div>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

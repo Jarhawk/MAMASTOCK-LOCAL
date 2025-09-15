@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { Link } from "react-router-dom";
-import LegalLayout from "@/layout/LegalLayout";
+import LegalLayout from "@/layout/LegalLayout";import { isTauri } from "@/lib/db/sql";
 
 export default function Licence() {
   return (
@@ -18,10 +18,10 @@ export default function Licence() {
       </p>
       <Link
         to="/"
-        className="inline-block px-6 py-2 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 transition"
-      >
+        className="inline-block px-6 py-2 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 transition">
+        
         Retour à l'accueil
       </Link>
-    </LegalLayout>
-  );
+    </LegalLayout>);
+
 }

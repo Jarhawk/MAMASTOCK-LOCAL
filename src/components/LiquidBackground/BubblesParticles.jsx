@@ -1,9 +1,9 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 
 export default function BubblesParticles({
   count = 12,
   className = '',
-  color = 'rgba(255,255,255,0.15)',
+  color = 'rgba(255,255,255,0.15)'
 }) {
   const bubbles = Array.from({ length: count }).map((_, i) => {
     const delay = (Math.random() * 8).toFixed(2);
@@ -16,7 +16,7 @@ export default function BubblesParticles({
       height: size,
       animationDelay: `${delay}s`,
       animationDuration: `${duration}s`,
-      background: color,
+      background: color
     };
     return <span key={i} className="bubble" style={style} />;
   });

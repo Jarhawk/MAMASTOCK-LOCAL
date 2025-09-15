@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
 import { useAuth } from '@/hooks/useAuth';
-import { fiches_actives_list, fiches_create, fiches_update, fiches_delete } from '@/lib/db';
+import { fiches_actives_list, fiches_create, fiches_update, fiches_delete } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export function useFichesTechniques() {
   const { mama_id } = useAuth();
@@ -83,6 +83,6 @@ export function useFichesTechniques() {
     fetchFichesTechniques,
     addFicheTechnique,
     updateFicheTechnique,
-    deleteFicheTechnique,
+    deleteFicheTechnique
   };
 }

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { FACTURE_STATUT_BADGES } from "@/constants/factures";
+import { FACTURE_STATUT_BADGES } from "@/constants/factures";import { isTauri } from "@/lib/db/sql";
 
 export default function FactureRow({ facture, onEdit, onDetail, onToggleActive, onArchive, canEdit }) {
   return (
@@ -13,28 +13,28 @@ export default function FactureRow({ facture, onEdit, onDetail, onToggleActive, 
       </td>
       <td className="border px-4 py-2">{facture.actif ? "✅" : "❌"}</td>
       <td className="border px-4 py-2 space-x-1">
-        {canEdit && (
-          <>
+        {canEdit &&
+        <>
             <Button size="sm" variant="outline" className="mr-2" onClick={() => onEdit(facture)}>
               Modifier
             </Button>
             <Button
-              size="sm"
-              variant="outline"
-              className="mr-2"
-              onClick={() => onToggleActive(facture.id, !facture.actif)}
-            >
+            size="sm"
+            variant="outline"
+            className="mr-2"
+            onClick={() => onToggleActive(facture.id, !facture.actif)}>
+            
               {facture.actif ? "Désactiver" : "Réactiver"}
             </Button>
             <Button size="sm" variant="destructive" className="mr-2" onClick={() => onArchive(facture)}>
               Archiver
             </Button>
           </>
-        )}
+        }
         <Button size="sm" variant="outline" onClick={() => onDetail(facture)}>
           Détail
         </Button>
       </td>
-    </tr>
-  );
+    </tr>);
+
 }

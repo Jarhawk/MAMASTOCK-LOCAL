@@ -7,28 +7,28 @@ import GadgetEvolutionAchats from '@/components/gadgets/GadgetEvolutionAchats';
 import GadgetTachesUrgentes from '@/components/gadgets/GadgetTachesUrgentes';
 import GadgetConsoMoyenne from '@/components/gadgets/GadgetConsoMoyenne';
 import GadgetDerniersAcces from '@/components/gadgets/GadgetDerniersAcces';
-import React from 'react';
+import React from 'react';import { isTauri } from "@/lib/db/sql";
 
 export default function Dashboard() {
 
   const gadgets = [
-    GadgetBudgetMensuel,
-    GadgetTopFournisseurs,
-    GadgetProduitsUtilises,
-    GadgetAlerteStockFaible,
-    GadgetEvolutionAchats,
-    GadgetTachesUrgentes,
-    GadgetConsoMoyenne,
-    GadgetDerniersAcces,
-  ];
+  GadgetBudgetMensuel,
+  GadgetTopFournisseurs,
+  GadgetProduitsUtilises,
+  GadgetAlerteStockFaible,
+  GadgetEvolutionAchats,
+  GadgetTachesUrgentes,
+  GadgetConsoMoyenne,
+  GadgetDerniersAcces];
+
 
   return (
     <div className="p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {gadgets.map((Component, idx) => (
-          <Component key={idx} />
-        ))}
+        {gadgets.map((Component, idx) =>
+        <Component key={idx} />
+        )}
       </div>
-    </div>
-  );
+    </div>);
+
 }

@@ -3,7 +3,7 @@ import ModalGlass from "@/components/ui/ModalGlass";
 import Button from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
+import { saveAs } from "file-saver";import { isTauri } from "@/lib/db/sql";
 
 export default function SimulationDetailsModal({ open, onClose, result }) {
   const exportExcel = () => {
@@ -31,13 +31,13 @@ export default function SimulationDetailsModal({ open, onClose, result }) {
             </tr>
           </thead>
           <tbody>
-            {(result?.produits || []).map((p, idx) => (
-              <tr key={idx}>
+            {(result?.produits || []).map((p, idx) =>
+            <tr key={idx}>
                 <td className="px-2">{p.produit_nom || p.produit_id}</td>
                 <td className="px-2">{p.quantite}</td>
                 <td className="px-2">{p.valeur}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </TableContainer>
@@ -45,6 +45,6 @@ export default function SimulationDetailsModal({ open, onClose, result }) {
         <Button onClick={exportExcel}>Export Excel</Button>
         <Button onClick={onClose}>Fermer</Button>
       </div>
-    </ModalGlass>
-  );
+    </ModalGlass>);
+
 }

@@ -1,10 +1,10 @@
-import { getDb } from "@/lib/db/sql";
+import { getDb, isTauri } from "@/lib/db/sql";
 
 export { getDb };
 
 export async function getMeta(key: string) {
   const db = await getDb();
-  const row = await db.select<{ value?: string }[]>(
+  const row = await db.select<{value?: string;}[]>(
     "SELECT value FROM meta WHERE key = ? LIMIT 1",
     [key]
   );
@@ -18,4 +18,3 @@ export async function setMeta(key: string, value: string) {
     [key, value]
   );
 }
-

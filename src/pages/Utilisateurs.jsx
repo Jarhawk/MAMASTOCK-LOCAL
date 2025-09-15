@@ -12,7 +12,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
-import { motion as Motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/db/sql";
 
 const PAGE_SIZE = 20;
 
@@ -30,11 +30,11 @@ export default function Utilisateurs() {
     if (!authLoading && mama_id) fetchUsers();
   }, [authLoading, mama_id, fetchUsers]);
 
-  const filtres = users.filter(u =>
-    (!search ||
-      u.nom?.toLowerCase().includes(search.toLowerCase()) ||
-      u.email?.toLowerCase().includes(search.toLowerCase())) &&
-    (actifFilter === "all" || (actifFilter === "true" ? u.actif : !u.actif))
+  const filtres = users.filter((u) =>
+  (!search ||
+  u.nom?.toLowerCase().includes(search.toLowerCase()) ||
+  u.email?.toLowerCase().includes(search.toLowerCase())) && (
+  actifFilter === "all" || (actifFilter === "true" ? u.actif : !u.actif))
   );
   const nbPages = Math.ceil(filtres.length / PAGE_SIZE);
   const paged = filtres.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -68,16 +68,16 @@ export default function Utilisateurs() {
           <input
             type="search"
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             className="form-input"
-            placeholder="Recherche nom"
-          />
-          <select className="form-input" value={actifFilter} onChange={e => setActifFilter(e.target.value)}>
+            placeholder="Recherche nom" />
+          
+          <select className="form-input" value={actifFilter} onChange={(e) => setActifFilter(e.target.value)}>
             <option value="all">Tous</option>
             <option value="true">Actif</option>
             <option value="false">Inactif</option>
           </select>
-          <Button onClick={() => { setSelected(null); setShowForm(true); }}>
+          <Button onClick={() => {setSelected(null);setShowForm(true);}}>
             Ajouter un utilisateur
           </Button>
           <Button variant="outline" onClick={exportExcel}>Export Excel</Button>
@@ -87,8 +87,8 @@ export default function Utilisateurs() {
         <Motion.table
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="min-w-full text-sm"
-        >
+          className="min-w-full text-sm">
+          
         <thead>
           <tr>
             <th className="px-4 py-2">Nom</th>
@@ -98,14 +98,14 @@ export default function Utilisateurs() {
           </tr>
         </thead>
         <tbody>
-          {paged.map(u => (
+          {paged.map((u) =>
             <tr key={u.id}>
               <td className="border px-4 py-2">
                 <Button
                   variant="link"
                   className="font-semibold text-white"
-                  onClick={() => { setSelected(u); setShowDetail(true); }}
-                >
+                  onClick={() => {setSelected(u);setShowDetail(true);}}>
+                  
                   {u.nom}
                 </Button>
               </td>
@@ -116,34 +116,34 @@ export default function Utilisateurs() {
                 </span>
               </td>
               <td className="border px-4 py-2 flex gap-2">
-                <Button size="sm" variant="outline" onClick={() => { setSelected(u); setShowForm(true); }}>Modifier</Button>
+                <Button size="sm" variant="outline" onClick={() => {setSelected(u);setShowForm(true);}}>Modifier</Button>
                 <Button size="sm" variant="outline" onClick={() => handleToggleActive(u)}>
                   {u.actif ? "Désactiver" : "Réactiver"}
                 </Button>
                 <Button size="sm" variant="outline" onClick={() => handleDelete(u)}>Supprimer</Button>
               </td>
             </tr>
-          ))}
+            )}
         </tbody>
         </Motion.table>
       </ListingContainer>
       <PaginationFooter
         page={page}
         pages={nbPages}
-        onPageChange={setPage}
-      />
-      {showForm && (
-        <UtilisateurForm
-          utilisateur={selected}
-          onClose={() => { setShowForm(false); setSelected(null); fetchUsers(); }}
-        />
-      )}
-      {showDetail && selected && (
-        <UtilisateurDetail
-          utilisateur={selected}
-          onClose={() => { setShowDetail(false); setSelected(null); }}
-        />
-      )}
-    </div>
-  );
+        onPageChange={setPage} />
+      
+      {showForm &&
+      <UtilisateurForm
+        utilisateur={selected}
+        onClose={() => {setShowForm(false);setSelected(null);fetchUsers();}} />
+
+      }
+      {showDetail && selected &&
+      <UtilisateurDetail
+        utilisateur={selected}
+        onClose={() => {setShowDetail(false);setSelected(null);}} />
+
+      }
+    </div>);
+
 }

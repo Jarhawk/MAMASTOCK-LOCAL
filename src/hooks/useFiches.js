@@ -7,12 +7,12 @@ import {
   fiches_create,
   fiches_update,
   fiches_delete,
-  fiches_duplicate,
-} from '@/lib/db';
+  fiches_duplicate } from
+'@/lib/db';
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import JSPDF from "jspdf";
-import "jspdf-autotable";
+import "jspdf-autotable";import { isTauri } from "@/lib/db/sql";
 
 export function useFiches() {
   const { mama_id } = useAuth();
@@ -34,7 +34,7 @@ export function useFiches() {
         page,
         limit,
         sortBy: sortField,
-        asc,
+        asc
       });
       setFiches(rows);
       setTotal(total);
@@ -156,11 +156,11 @@ export function useFiches() {
   function exportFichesToPDF() {
     const doc = new JSPDF();
     const rows = (fiches || []).map((f) => [
-      f.nom,
-      f.famille?.nom || "",
-      f.portions,
-      f.cout_par_portion
-    ]);
+    f.nom,
+    f.famille?.nom || "",
+    f.portions,
+    f.cout_par_portion]
+    );
     doc.autoTable({ head: [["Nom", "Famille", "Portions", "Coût/portion"]], body: rows });
     doc.save("fiches_mamastock.pdf");
   }

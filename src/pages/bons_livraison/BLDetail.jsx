@@ -5,7 +5,7 @@ import { useBonsLivraison } from "@/hooks/useBonsLivraison";
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export default function BLDetail({ bon: bonProp, onClose }) {
   const { id } = useParams();
@@ -37,8 +37,8 @@ export default function BLDetail({ bon: bonProp, onClose }) {
             setBon(b);
           }}>{bon.actif ? "Désactiver" : "Réactiver"}</Button>
         </div>
-        {bon.lignes?.length > 0 && (
-          <TableContainer className="mt-4">
+        {bon.lignes?.length > 0 &&
+        <TableContainer className="mt-4">
             <table className="min-w-full text-sm">
               <thead>
                 <tr>
@@ -49,19 +49,19 @@ export default function BLDetail({ bon: bonProp, onClose }) {
                 </tr>
               </thead>
               <tbody>
-                {bon.lignes.map(l => (
-                  <tr key={l.id}>
+                {bon.lignes.map((l) =>
+              <tr key={l.id}>
                     <td className="border px-2 py-1">{l.produit?.nom}</td>
                     <td className="border px-2 py-1 text-right">{l.quantite_recue}</td>
                     <td className="border px-2 py-1 text-right">{l.prix_unitaire}</td>
                     <td className="border px-2 py-1 text-right">{l.tva}</td>
                   </tr>
-                ))}
+              )}
               </tbody>
             </table>
           </TableContainer>
-        )}
+        }
       </div>
-    </div>
-  );
+    </div>);
+
 }

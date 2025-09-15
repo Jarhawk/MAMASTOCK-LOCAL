@@ -1,9 +1,9 @@
-import { openDb } from "@/db/index";
+import { openDb } from "@/db/index";import { isTauri } from "@/lib/db/sql";
 
 async function sha256Hex(input: string) {
   const enc = new TextEncoder();
   const digest = await crypto.subtle.digest("SHA-256", enc.encode(input));
-  return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2,"0")).join("");
+  return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 export async function registerSql(email: string, password: string) {
@@ -12,7 +12,7 @@ export async function registerSql(email: string, password: string) {
   const exists = await db.select("SELECT 1 as ok FROM users WHERE email = $1", [email]);
   if (exists.length) throw new Error("Email déjà utilisé.");
   const id = crypto.randomUUID();
-  const mama_id = "local-" + Math.random().toString(36).slice(2,8);
+  const mama_id = "local-" + Math.random().toString(36).slice(2, 8);
   const salt = crypto.randomUUID();
   const password_hash = await sha256Hex(`${password}:${salt}`);
   const created_at = new Date().toISOString();

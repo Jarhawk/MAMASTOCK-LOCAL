@@ -1,6 +1,6 @@
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import GlassCard from "@/components/ui/GlassCard";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
 
 export default function AccessExample() {
   const { loading, hasAccess } = useAuth();
@@ -13,6 +13,6 @@ export default function AccessExample() {
         <p className="mb-2">Accès au module 'factures' : {hasAccess('factures') ? 'oui' : 'non'}</p>
         <p>Accès au module 'utilisateurs' : {hasAccess('utilisateurs') ? 'oui' : 'non'}</p>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

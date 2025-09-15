@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import SecondaryButton from "@/components/ui/SecondaryButton";
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function FeedbackForm({ open, onOpenChange }) {
   const { addFeedback } = useFeedback();
@@ -42,26 +42,26 @@ export default function FeedbackForm({ open, onOpenChange }) {
             id="module"
             placeholder="Module"
             value={module}
-            onChange={e => setModule(e.target.value)}
-            required
-          />
+            onChange={(e) => setModule(e.target.value)}
+            required />
+          
           <label className="sr-only" htmlFor="message">Message</label>
           <textarea
             id="message"
             className="textarea h-24"
             placeholder="Votre message"
             value={message}
-            onChange={e => setMessage(e.target.value)}
-            required
-          />
+            onChange={(e) => setMessage(e.target.value)}
+            required />
+          
           <label htmlFor="urgence" className="label">Urgence</label>
           <select
             id="urgence"
             aria-label="Urgence"
             className="input bg-white text-gray-900"
             value={urgence}
-            onChange={e => setUrgence(e.target.value)}
-          >
+            onChange={(e) => setUrgence(e.target.value)}>
+            
             <option value="faible">Faible</option>
             <option value="normal">Normal</option>
             <option value="elevee">Élevée</option>
@@ -76,7 +76,6 @@ export default function FeedbackForm({ open, onOpenChange }) {
           </div>
         </form>
       </GlassCard>
-    </ModalGlass>
-  );
-}
+    </ModalGlass>);
 
+}

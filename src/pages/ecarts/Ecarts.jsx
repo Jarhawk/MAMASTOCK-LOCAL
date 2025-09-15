@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import GlassCard from "@/components/ui/GlassCard";
 import { saveAs } from "file-saver";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/db/sql";
 
 export default function Ecarts() {
   const { loading: authLoading } = useAuth();
@@ -25,24 +25,24 @@ export default function Ecarts() {
     return (
       <div className="p-6 text-red-500 text-center">
         ❌ Erreur : {error.message}
-      </div>
-    );
+      </div>);
+
   }
 
-  const ecarts = (ecartsRaw || [])
-    .filter((e) =>
-      e.produit.toLowerCase().includes(search.toLowerCase())
-    )
-    .sort((a, b) => Math.abs(b.ecart) - Math.abs(a.ecart));
+  const ecarts = (ecartsRaw || []).
+  filter((e) =>
+  e.produit.toLowerCase().includes(search.toLowerCase())
+  ).
+  sort((a, b) => Math.abs(b.ecart) - Math.abs(a.ecart));
 
   const handleExportCSV = () => {
     const headers = ["Produit", "Écart", "Motif"];
-    const rows = ecarts.map(e => [
-      e.produit,
-      e.ecart,
-      e.motif || "Non renseigné",
-    ]);
-    const csvContent = [headers, ...rows].map(r => r.join(";")).join("\n");
+    const rows = ecarts.map((e) => [
+    e.produit,
+    e.ecart,
+    e.motif || "Non renseigné"]
+    );
+    const csvContent = [headers, ...rows].map((r) => r.join(";")).join("\n");
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     saveAs(blob, "ecarts_inventaire.csv");
   };
@@ -56,19 +56,19 @@ export default function Ecarts() {
           placeholder="🔍 Rechercher un produit"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-64"
-        />
+          className="w-64" />
+        
         <Button onClick={handleExportCSV}>📁 Exporter CSV</Button>
       </div>
 
-      {ecarts.length === 0 ? (
-        <div className="text-gray-400 text-center mt-10">
+      {ecarts.length === 0 ?
+      <div className="text-gray-400 text-center mt-10">
           📭 Aucun écart détecté pour le moment.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {ecarts.map((ecart) => (
-            <GlassCard key={ecart.id} className="p-4">
+        </div> :
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {ecarts.map((ecart) =>
+        <GlassCard key={ecart.id} className="p-4">
               <h2 className="text-lg font-semibold">{ecart.produit}</h2>
               <p className="text-sm text-gray-300">
                 Écart : <span className="font-bold">{ecart.ecart}</span>
@@ -76,15 +76,15 @@ export default function Ecarts() {
               <p className="text-sm text-gray-300">
                 Motif : {ecart.motif || "Non renseigné"}
               </p>
-              {ecart.date && (
-                <p className="text-sm text-gray-400">
+              {ecart.date &&
+          <p className="text-sm text-gray-400">
                   📅 {new Date(ecart.date).toLocaleDateString()}
                 </p>
-              )}
+          }
             </GlassCard>
-          ))}
+        )}
         </div>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

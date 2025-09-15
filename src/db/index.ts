@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import { getDb } from "@/lib/db/sql";
+import { getDb, isTauri } from "@/lib/db/sql";
 
 export async function openDb() {
   return await getDb();
@@ -50,4 +50,3 @@ export async function sumStock(itemId: string): Promise<number> {
   const rows = await db.select("SELECT COALESCE(SUM(qty),0) AS s FROM stock_movements WHERE item_id = $1", [itemId]);
   return Number(rows?.[0]?.s ?? 0);
 }
-

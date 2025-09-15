@@ -1,4 +1,4 @@
-import { readText, saveText, existsFile } from "@/local/files";
+import { readText, saveText, existsFile } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "requisitions.json";
 
@@ -26,13 +26,13 @@ export async function requisitions_list({ mama_id, search = "", zone = "", statu
     if (debut && r.date_requisition < debut) return false;
     if (fin && r.date_requisition > fin) return false;
     if (produit && !(r.lignes || []).some((l) => l.produit_id === produit)) return false;
-    if (search && !((r.commentaire || "").toLowerCase().includes(search.toLowerCase()))) return false;
+    if (search && !(r.commentaire || "").toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
   const count = rows.length;
-  rows = rows
-    .sort((a, b) => (b.date_requisition || "").localeCompare(a.date_requisition || ""))
-    .slice((page - 1) * limit, page * limit);
+  rows = rows.
+  sort((a, b) => (b.date_requisition || "").localeCompare(a.date_requisition || "")).
+  slice((page - 1) * limit, page * limit);
   return { data: rows, count };
 }
 

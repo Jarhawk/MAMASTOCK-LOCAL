@@ -6,13 +6,13 @@ import {
   SelectTrigger,
   SelectContent,
   SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
+  SelectValue } from
+"@/components/ui/select";
 import { Trash2 } from "lucide-react";
 import ProduitSearchModal from "@/components/factures/ProduitSearchModal";
 import PriceDelta from "@/components/factures/PriceDelta";
 import NumericInputFR from "@/components/forms/NumericInputFR";
-import MoneyInputFR from "@/components/forms/MoneyInputFR";
+import MoneyInputFR from "@/components/forms/MoneyInputFR";import { isTauri } from "@/lib/db/sql";
 export default function FactureLigne({
   value: line,
   onChange,
@@ -20,7 +20,7 @@ export default function FactureLigne({
   allLines = [],
   invalidProduit = false,
   index,
-  zones = [],
+  zones = []
 }) {
   const lineRef = useRef(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -49,24 +49,24 @@ export default function FactureLigne({
       prix_unitaire_ht: pu,
       tva: tv,
       tva_montant: tvaMontant,
-      total_ttc: totalTtc,
+      total_ttc: totalTtc
     });
   };
 
   const fmt = (n) =>
-    Number.isFinite(n)
-      ? n.toLocaleString("fr-FR", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })
-      : "";
+  Number.isFinite(n) ?
+  n.toLocaleString("fr-FR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) :
+  "";
 
-  const excludeIdsSameZone = allLines
-    .filter(
-      (l) =>
-        l.id !== line.id && (l.zone_id ?? null) === (line.zone_id ?? null) && !!l.produit_id
-    )
-    .map((l) => l.produit_id);
+  const excludeIdsSameZone = allLines.
+  filter(
+    (l) =>
+    l.id !== line.id && (l.zone_id ?? null) === (line.zone_id ?? null) && !!l.produit_id
+  ).
+  map((l) => l.produit_id);
 
   const TVA_OPTIONS = [0, 5.5, 10, 20];
 
@@ -74,16 +74,16 @@ export default function FactureLigne({
     <div
       ref={lineRef}
       tabIndex={-1}
-      className="grid gap-3 items-center grid-cols-[repeat(auto-fit,minmax(140px,1fr))] xl:grid-cols-[minmax(260px,1fr)_90px_110px_140px_140px_110px_110px_180px_60px]"
-    >
+      className="grid gap-3 items-center grid-cols-[repeat(auto-fit,minmax(140px,1fr))] xl:grid-cols-[minmax(260px,1fr)_90px_110px_140px_140px_110px_110px_180px_60px]">
+      
       <div className="flex gap-2">
         <Input
           className={`input w-full ${invalidProduit ? 'border-destructive' : ''}`}
           value={line.produit_nom || ""}
           readOnly
           placeholder="Choisir un produit"
-          aria-invalid={invalidProduit ? 'true' : 'false'}
-        />
+          aria-invalid={invalidProduit ? 'true' : 'false'} />
+        
         <Button type="button" onClick={() => setModalOpen(true)}>
           Choisir un produit
         </Button>
@@ -97,26 +97,26 @@ export default function FactureLigne({
             produit_nom: p.nom,
             unite_id: p.unite_id ?? null,
             tva: p.tva ?? 0,
-            zone_id: p.zone_id ?? line.zone_id ?? null,
+            zone_id: p.zone_id ?? line.zone_id ?? null
           });
         }}
         excludeIdsSameZone={excludeIdsSameZone}
-        currentLineProductId={line.produit_id}
-      />
+        currentLineProductId={line.produit_id} />
+      
       <NumericInputFR
         name={`lignes.${index}.quantite`}
         value={qte}
         onChange={(v) => recalc({ quantite: v ?? 0 })}
         decimals={6}
-        placeholder="0"
-      />
+        placeholder="0" />
+      
       <Input readOnly disabled value={line.unite || ""} placeholder="Unité" />
       <MoneyInputFR
         name={`lignes.${index}.total_ht`}
         value={totalHt}
         onChange={(v) => recalc({ total_ht: v ?? 0 })}
-        placeholder="0,00 €"
-      />
+        placeholder="0,00 €" />
+      
       <div className="relative">
         <Input
           readOnly
@@ -126,8 +126,8 @@ export default function FactureLigne({
           className="pr-6"
           aria-label="Prix unitaire HT"
           step="0.01"
-          lang="fr-FR"
-        />
+          lang="fr-FR" />
+        
         <PriceDelta puHT={puHt} pmp={pmp} />
       </div>
       <Input readOnly disabled value={fmt(pmp)} placeholder="PMP" />
@@ -136,27 +136,27 @@ export default function FactureLigne({
           <SelectValue placeholder="TVA (%)" />
         </SelectTrigger>
         <SelectContent>
-          {TVA_OPTIONS.map((t) => (
-            <SelectItem key={t} value={String(t)}>
+          {TVA_OPTIONS.map((t) =>
+          <SelectItem key={t} value={String(t)}>
               {t}%
             </SelectItem>
-          ))}
+          )}
         </SelectContent>
       </Select>
       <Select
         value={line.zone_id ?? "__none__"}
-        onValueChange={(v) => onChange({ zone_id: v === "__none__" ? null : v })}
-      >
+        onValueChange={(v) => onChange({ zone_id: v === "__none__" ? null : v })}>
+        
         <SelectTrigger className="w-44">
           <SelectValue placeholder="Zone (optionnel)" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="__none__">Aucune</SelectItem>
-          {zones.map((z) => (
-            <SelectItem key={z.id} value={z.id}>
+          {zones.map((z) =>
+          <SelectItem key={z.id} value={z.id}>
               {z.nom}
             </SelectItem>
-          ))}
+          )}
         </SelectContent>
       </Select>
       <Button
@@ -164,11 +164,10 @@ export default function FactureLigne({
         variant="ghost"
         size="icon"
         className="text-destructive"
-        onClick={onRemove}
-      >
+        onClick={onRemove}>
+        
         <Trash2 size={16} />
       </Button>
-    </div>
-  );
-}
+    </div>);
 
+}

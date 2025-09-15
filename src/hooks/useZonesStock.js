@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { zones_stock_list } from '@/lib/db';
+import { zones_stock_list } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export function useZonesStock(mamaId, { onlyActive = true } = {}) {
   return useQuery({
@@ -8,7 +8,7 @@ export function useZonesStock(mamaId, { onlyActive = true } = {}) {
       if (!mamaId) return [];
       return await zones_stock_list(mamaId, onlyActive);
     },
-    initialData: [],
+    initialData: []
   });
 }
 
@@ -18,4 +18,3 @@ export async function fetchZonesStock(mamaId, { onlyActive = true } = {}) {
 }
 
 export default useZonesStock;
-

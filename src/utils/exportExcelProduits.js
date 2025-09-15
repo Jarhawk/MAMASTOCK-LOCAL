@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 
 
 // Colonnes exportées avec libellés lisibles
-const EXPORT_HEADERS = [
+import { isTauri } from "@/lib/db/sql";const EXPORT_HEADERS = [
 { key: "nom", header: "Nom" },
 { key: "unite", header: "Unité" },
 { key: "famille", header: "Famille" },
@@ -56,7 +56,7 @@ export async function exportExcelProduits(mama_id) {
     stock: p.stock ?? 0,
     pmp: p.pmp ?? "",
     actif: p.actif ? "TRUE" : "FALSE",
-    seuil_min: p.seuil_min ?? 0,
+    seuil_min: p.seuil_min ?? 0
   }));
 
   const wb = XLSX.utils.book_new();

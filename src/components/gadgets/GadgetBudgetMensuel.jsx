@@ -1,19 +1,19 @@
 import { motion as Motion } from 'framer-motion';
 import useBudgetMensuel from '@/hooks/gadgets/useBudgetMensuel';
-import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/db/sql";
 
 export default function GadgetBudgetMensuel() {
   const { cible, reel, loading } = useBudgetMensuel();
 
   if (loading) return <LoadingSkeleton className="h-32 w-full rounded-2xl" />;
   if (!cible && !reel)
-    return (
-      <div className="bg-white/10 rounded-2xl p-4 text-center text-white">
+  return (
+    <div className="bg-white/10 rounded-2xl p-4 text-center text-white">
         Aucune donnée
-      </div>
-    );
+      </div>);
 
-  const progress = cible ? Math.min(100, (reel / cible) * 100) : 0;
+
+  const progress = cible ? Math.min(100, reel / cible * 100) : 0;
 
   return (
     <div className="bg-white/10 border border-white/20 backdrop-blur-xl rounded-2xl shadow-md p-4 text-white">
@@ -24,9 +24,9 @@ export default function GadgetBudgetMensuel() {
         <Motion.div
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
-          className="h-2 bg-mamastock-gold"
-        />
+          className="h-2 bg-mamastock-gold" />
+        
       </Motion.div>
-    </div>
-  );
+    </div>);
+
 }

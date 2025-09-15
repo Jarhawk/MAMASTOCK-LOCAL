@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Button } from "@/components/ui/button";
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/db/sql";
 
 export default function StatsAdvanced() {
   const { data, loading, error, fetchStats } = useAdvancedStats();
@@ -37,12 +37,12 @@ export default function StatsAdvanced() {
         <div>
           <label className="block text-xs">Début</label>
           <input type="month" className="form-input" value={start}
-            onChange={e => setStart(e.target.value)} />
+          onChange={(e) => setStart(e.target.value)} />
         </div>
         <div>
           <label className="block text-xs">Fin</label>
           <input type="month" className="form-input" value={end}
-            onChange={e => setEnd(e.target.value)} />
+          onChange={(e) => setEnd(e.target.value)} />
         </div>
         <Button onClick={refresh}>Rafraîchir</Button>
         <Button variant="outline" onClick={exportExcel}>Export Excel</Button>
@@ -56,6 +56,6 @@ export default function StatsAdvanced() {
           <Line type="monotone" dataKey="purchases" stroke="#8884d8" />
         </LineChart>
       </ResponsiveContainer>
-    </div>
-  );
+    </div>);
+
 }

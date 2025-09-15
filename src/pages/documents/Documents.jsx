@@ -6,7 +6,7 @@ import DocumentForm from "./DocumentForm.jsx";
 import DocumentPreview from "@/components/documents/DocumentPreview";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
 
 export default function Documents() {
   const { mama_id, loading: authLoading } = useAuth();
@@ -22,7 +22,7 @@ export default function Documents() {
       listDocuments({
         search,
         type: typeFilter || undefined,
-        categorie: categorieFilter || undefined,
+        categorie: categorieFilter || undefined
       });
     }
   }, [authLoading, mama_id, listDocuments, search, typeFilter, categorieFilter]);
@@ -46,33 +46,33 @@ export default function Documents() {
         <h1 className="text-2xl font-bold">Documents</h1>
         <Button onClick={() => setShowUpload(!showUpload)}>Ajouter un document</Button>
       </div>
-      {showUpload && (
-        <div className="mb-4">
+      {showUpload &&
+      <div className="mb-4">
           <DocumentForm
-            onUploaded={handleUploaded}
-            categories={["Contrat fournisseur", "Spécification produit"]}
-          />
+          onUploaded={handleUploaded}
+          categories={["Contrat fournisseur", "Spécification produit"]} />
+        
         </div>
-      )}
+      }
       <div className="flex flex-wrap gap-2 mb-4">
         <input
           className="form-input"
           placeholder="Recherche"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+          onChange={(e) => setSearch(e.target.value)} />
+        
         <input
           className="form-input"
           placeholder="Type"
           value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
-        />
+          onChange={(e) => setTypeFilter(e.target.value)} />
+        
         <input
           className="form-input"
           placeholder="Catégorie"
           value={categorieFilter}
-          onChange={(e) => setCategorieFilter(e.target.value)}
-        />
+          onChange={(e) => setCategorieFilter(e.target.value)} />
+        
       </div>
       <TableContainer>
         <table className="min-w-full text-sm">
@@ -87,15 +87,15 @@ export default function Documents() {
             </tr>
           </thead>
           <tbody>
-            {documents.map((doc) => (
-              <tr key={doc.id}>
+            {documents.map((doc) =>
+            <tr key={doc.id}>
                 <td className="p-2">{doc.titre || doc.nom}</td>
                 <td className="p-2">
-                  {doc.categorie && (
-                    <span className="bg-blue-800/50 text-white px-2 py-0.5 rounded-full text-xs">
+                  {doc.categorie &&
+                <span className="bg-blue-800/50 text-white px-2 py-0.5 rounded-full text-xs">
                       {doc.categorie}
                     </span>
-                  )}
+                }
                 </td>
                 <td className="p-2">{doc.type}</td>
                 <td className="p-2">{(doc.taille / 1024).toFixed(1)} Ko</td>
@@ -109,18 +109,18 @@ export default function Documents() {
                   </Button>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </TableContainer>
-      {preview && (
-        <DocumentPreview
-          open={!!preview}
-          url={preview.url}
-          type={preview.type}
-          onClose={() => setPreview(null)}
-        />
-      )}
-    </div>
-  );
+      {preview &&
+      <DocumentPreview
+        open={!!preview}
+        url={preview.url}
+        type={preview.type}
+        onClose={() => setPreview(null)} />
+
+      }
+    </div>);
+
 }

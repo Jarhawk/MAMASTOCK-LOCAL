@@ -9,14 +9,14 @@ import { toast } from 'sonner';
 import { uploadFile, deleteFile, pathFromUrl } from '@/hooks/useStorage';
 
 // Ajuste le seuil d'alerte si besoin
-const SEUIL_ECART = 0.5; // Unité
+import { isTauri } from "@/lib/db/sql";const SEUIL_ECART = 0.5; // Unité
 
 export default function InventaireForm({ inventaire, onClose }) {
   const {
     addInventaire,
     editInventaire,
     clotureInventaire,
-    fetchLastClosedInventaire,
+    fetchLastClosedInventaire
   } = useInventaires();
   const { products, fetchProducts } = useProducts();
 
@@ -48,29 +48,29 @@ export default function InventaireForm({ inventaire, onClose }) {
       }
       setDateDebut(date_debut);
       if (dateInventaire) {
+
         // TODO: recompute mouvements via requisitions
-      }
-    }
+      }}
     init();
   }, [dateInventaire, inventaire?.date_inventaire]);
 
   // Ajout/suppression de lignes
   const addLigne = () =>
-    setLignes([...lignes, { produit_id: '', quantite: 0 }]);
+  setLignes([...lignes, { produit_id: '', quantite: 0 }]);
   const updateLigne = (i, field, val) => {
-    setLignes(lignes.map((l, idx) => (idx === i ? { ...l, [field]: val } : l)));
+    setLignes(lignes.map((l, idx) => idx === i ? { ...l, [field]: val } : l));
   };
   const removeLigne = (i) => setLignes(lignes.filter((_, idx) => idx !== i));
 
   // Calcul consommation/mouvement par produit
   const getConsommationProduit = (produit_id, quantite_inventaire) => {
     const mvts = mouvementsProduits.filter((m) => m.produit_id === produit_id);
-    const entrees = mvts
-      .filter((m) => m.type === 'entree')
-      .reduce((sum, m) => sum + m.quantite, 0);
-    const sorties = mvts
-      .filter((m) => m.type === 'sortie')
-      .reduce((sum, m) => sum + m.quantite, 0);
+    const entrees = mvts.
+    filter((m) => m.type === 'entree').
+    reduce((sum, m) => sum + m.quantite, 0);
+    const sorties = mvts.
+    filter((m) => m.type === 'sortie').
+    reduce((sum, m) => sum + m.quantite, 0);
     // Stock de début : à définir selon la base (dernier inventaire clôturé, ou 0 si pas trouvé)
     const stock_debut = mvts[0]?.stock_debut ?? 0;
     const stock_fin = quantite_inventaire ?? 0;
@@ -118,14 +118,14 @@ export default function InventaireForm({ inventaire, onClose }) {
     if (!reference.trim()) return toast.error('Nom requis');
     if (!dateInventaire) return toast.error('Date requise');
     if (lignes.some((l) => !l.produit_id))
-      return toast.error('Produit manquant');
+    return toast.error('Produit manquant');
     setLoading(true);
     const invData = {
       reference,
       date_inventaire: dateInventaire,
       lignes,
       document: fileUrl || inventaire?.document,
-      date_debut: dateDebut,
+      date_debut: dateDebut
     };
     try {
       if (inventaire?.id) {
@@ -145,23 +145,23 @@ export default function InventaireForm({ inventaire, onClose }) {
 
   return (
     <GlassCard
-      title={inventaire ? "Modifier l'inventaire" : 'Ajouter un inventaire'}
-    >
+      title={inventaire ? "Modifier l'inventaire" : 'Ajouter un inventaire'}>
+      
       <form onSubmit={handleSubmit} className="space-y-2">
         <input
           className="form-input mb-2"
           value={reference}
           onChange={(e) => setReference(e.target.value)}
           placeholder="Nom de l'inventaire"
-          required
-        />
+          required />
+        
         <input
           className="form-input mb-2"
           type="date"
           value={dateInventaire}
           onChange={(e) => setDateInventaire(e.target.value)}
-          required
-        />
+          required />
+        
         {/* Optionnel : affichage période analysée */}
         <div className="mb-4 text-xs">
           <b>Période d'analyse mouvements :</b> {dateDebut} →{' '}
@@ -198,7 +198,7 @@ export default function InventaireForm({ inventaire, onClose }) {
                   entrees,
                   sorties,
                   stock_fin,
-                  conso_theorique,
+                  conso_theorique
                 } = getConsommationProduit(l.produit_id, l.quantite);
 
                 const ecart = -conso_theorique; // Si tu veux comparer à la conso constatée
@@ -209,16 +209,16 @@ export default function InventaireForm({ inventaire, onClose }) {
                         className="form-input"
                         value={l.produit_id}
                         onChange={(e) =>
-                          updateLigne(i, 'produit_id', e.target.value)
+                        updateLigne(i, 'produit_id', e.target.value)
                         }
-                        required
-                      >
+                        required>
+                        
                         <option value="">Sélectionner</option>
-                        {products.map((p) => (
-                          <option key={p.id} value={p.id}>
+                        {products.map((p) =>
+                        <option key={p.id} value={p.id}>
                             {p.nom}
                           </option>
-                        ))}
+                        )}
                       </select>
                     </td>
                     <td>
@@ -229,10 +229,10 @@ export default function InventaireForm({ inventaire, onClose }) {
                         step="0.01"
                         value={l.quantite}
                         onChange={(e) =>
-                          updateLigne(i, 'quantite', Number(e.target.value))
+                        updateLigne(i, 'quantite', Number(e.target.value))
                         }
-                        required
-                      />
+                        required />
+                      
                     </td>
                     <td>{prod?.unite?.nom || '-'}</td>
                     <td>{stock_debut}</td>
@@ -241,27 +241,27 @@ export default function InventaireForm({ inventaire, onClose }) {
                     <td>{stock_fin}</td>
                     <td>{conso_theorique.toFixed(2)}</td>
                     <td>
-                      {Math.abs(ecart) > SEUIL_ECART ? (
-                        <span className="text-red-500 font-bold">
+                      {Math.abs(ecart) > SEUIL_ECART ?
+                      <span className="text-red-500 font-bold">
                           {ecart.toFixed(2)} ⚠️
-                        </span>
-                      ) : (
-                        <span className="text-green-600">
+                        </span> :
+
+                      <span className="text-green-600">
                           {ecart.toFixed(2)}
                         </span>
-                      )}
+                      }
                     </td>
                     <td>
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => removeLigne(i)}
-                      >
+                        onClick={() => removeLigne(i)}>
+                        
                         Suppr.
                       </Button>
                     </td>
-                  </tr>
-                );
+                  </tr>);
+
               })}
             </tbody>
           </table>
@@ -277,40 +277,40 @@ export default function InventaireForm({ inventaire, onClose }) {
             size="sm"
             variant="outline"
             className="ml-2"
-            onClick={handleUpload}
-          >
+            onClick={handleUpload}>
+            
             Upload
           </Button>
-          {fileUrl && (
-            <a
-              href={fileUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ml-2 text-blue-600 underline"
-            >
+          {fileUrl &&
+          <a
+            href={fileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-2 text-blue-600 underline">
+            
               Voir
             </a>
-          )}
+          }
         </label>
         <div className="flex gap-2 mt-4">
           <Button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2"
-          >
+            className="flex items-center gap-2">
+            
             {loading && <span className="loader-glass" />}
             {inventaire ? 'Modifier' : 'Ajouter'}
           </Button>
           <Button variant="outline" type="button" onClick={onClose}>
             Annuler
           </Button>
-          {inventaire && !inventaire.cloture && (
-            <Button type="button" variant="destructive" onClick={handleCloture}>
+          {inventaire && !inventaire.cloture &&
+          <Button type="button" variant="destructive" onClick={handleCloture}>
               Clôturer
             </Button>
-          )}
+          }
         </div>
       </form>
-    </GlassCard>
-  );
+    </GlassCard>);
+
 }

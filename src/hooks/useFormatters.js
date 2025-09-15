@@ -1,23 +1,23 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';import { isTauri } from "@/lib/db/sql";
 
 export default function useFormatters() {
   const { i18n } = useTranslation();
 
-  const formatDate = date => {
+  const formatDate = (date) => {
     if (!date) return '';
     return new Intl.DateTimeFormat(i18n.language).format(new Date(date));
   };
 
-  const formatCurrency = value => {
+  const formatCurrency = (value) => {
     if (value == null) return '';
     return new Intl.NumberFormat(i18n.language, {
       style: 'currency',
-      currency: i18n.language === 'fr' ? 'EUR' : i18n.language === 'es' ? 'EUR' : 'USD',
+      currency: i18n.language === 'fr' ? 'EUR' : i18n.language === 'es' ? 'EUR' : 'USD'
     }).format(Number(value));
   };
 
-  const formatNumber = value => {
+  const formatNumber = (value) => {
     if (value == null) return '';
     return new Intl.NumberFormat(i18n.language).format(Number(value));
   };

@@ -1,4 +1,4 @@
-import { readText, saveText, existsFile } from "@/local/files";
+import { readText, saveText, existsFile } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "bons_livraison.json";
 
@@ -46,7 +46,7 @@ export async function bonLivraison_insert(bl: any) {
     mama_id: bl.mama_id,
     created_at: new Date().toISOString(),
     lignes: [],
-    ...bl,
+    ...bl
   };
   list.push(newBl);
   await writeAll(list);

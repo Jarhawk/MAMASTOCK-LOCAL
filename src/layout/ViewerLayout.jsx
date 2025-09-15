@@ -4,13 +4,13 @@ import {
   LiquidBackground,
   WavesBackground,
   MouseLight,
-  TouchLight,
-} from "@/components/LiquidBackground";
+  TouchLight } from
+"@/components/LiquidBackground";
 
 /**
  * Layout pour les utilisateurs en lecture seule (viewer).
  * Pas de sidebar, uniquement la navbar + contenu centré.
- */
+ */import { isTauri } from "@/lib/db/sql";
 export default function ViewerLayout({ children }) {
   return (
     <div className="relative flex flex-col min-h-screen text-white text-shadow overflow-hidden">
@@ -24,6 +24,6 @@ export default function ViewerLayout({ children }) {
           {children}
         </div>
       </main>
-    </div>
-  );
+    </div>);
+
 }

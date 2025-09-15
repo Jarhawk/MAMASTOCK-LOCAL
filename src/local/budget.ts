@@ -1,17 +1,17 @@
-import { readText, saveText, existsFile } from "./files";
+import { readText, saveText, existsFile } from "./files";import { isTauri } from "@/lib/db/sql";
 
 const FILE = "stats/budget_mensuel.json";
 
 async function readAll() {
-  if (!(await existsFile(FILE))) return {} as Record<string, {cible:number; reel:number}>;
+  if (!(await existsFile(FILE))) return {} as Record<string, {cible: number;reel: number;}>;
   try {
-    return JSON.parse(await readText(FILE)) as Record<string, {cible:number; reel:number}>;
+    return JSON.parse(await readText(FILE)) as Record<string, {cible: number;reel: number;}>;
   } catch {
-    return {} as Record<string, {cible:number; reel:number}>;
+    return {} as Record<string, {cible: number;reel: number;}>;
   }
 }
 
-async function writeAll(data: Record<string, {cible:number; reel:number}>) {
+async function writeAll(data: Record<string, {cible: number;reel: number;}>) {
   await saveText(FILE, JSON.stringify(data, null, 2));
 }
 

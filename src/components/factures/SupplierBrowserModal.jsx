@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import useFournisseursBrowse from '@/hooks/useFournisseursBrowse';
+import useFournisseursBrowse from '@/hooks/useFournisseursBrowse';import { isTauri } from "@/lib/db/sql";
 
 export default function SupplierBrowserModal({ open, onClose, onSelect }) {
   const [query, setQuery] = useState('');
@@ -11,7 +11,7 @@ export default function SupplierBrowserModal({ open, onClose, onSelect }) {
   const { data: results = [], total } = useFournisseursBrowse({
     page,
     limit: pageSize,
-    term: query,
+    term: query
   });
   const [active, setActive] = useState(-1);
 
@@ -56,8 +56,8 @@ export default function SupplierBrowserModal({ open, onClose, onSelect }) {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-[#0B1220]/60 backdrop-blur-sm" />
         <Dialog.Content
-          className="fixed left-1/2 top-1/2 z-50 w-[min(600px,95vw)] max-h-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
-        >
+          className="fixed left-1/2 top-1/2 z-50 w-[min(600px,95vw)] max-h-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden">
+          
           <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/40">
             <Dialog.Title className="text-sm font-semibold">Rechercher un fournisseur</Dialog.Title>
             <Dialog.Close asChild>
@@ -77,34 +77,34 @@ export default function SupplierBrowserModal({ open, onClose, onSelect }) {
               autoCorrect="off"
               autoCapitalize="none"
               spellCheck={false}
-              className="w-full px-4 py-2 font-semibold text-white placeholder-white/50 bg-white/10 backdrop-blur rounded-md shadow-lg border border-white/20 ring-1 ring-white/20 focus:outline-none hover:bg-white/10"
-            />
+              className="w-full px-4 py-2 font-semibold text-white placeholder-white/50 bg-white/10 backdrop-blur rounded-md shadow-lg border border-white/20 ring-1 ring-white/20 focus:outline-none hover:bg-white/10" />
+            
             <div className="border border-border rounded-lg max-h-60 overflow-y-auto">
-              {results.length === 0 ? (
-                <div className="p-4 text-sm text-muted-foreground">Aucun résultat</div>
-              ) : (
-                results.map((f, idx) => (
-                  <button
-                    key={f.id}
-                    type="button"
-                    onClick={() => {
-                      onSelect?.(f);
-                      onClose?.();
-                    }}
-                    className={`w-full text-left px-3 py-2 hover:bg-white/5 rounded ${idx === active ? 'bg-white/10' : ''}`}
-                  >
+              {results.length === 0 ?
+              <div className="p-4 text-sm text-muted-foreground">Aucun résultat</div> :
+
+              results.map((f, idx) =>
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => {
+                  onSelect?.(f);
+                  onClose?.();
+                }}
+                className={`w-full text-left px-3 py-2 hover:bg-white/5 rounded ${idx === active ? 'bg-white/10' : ''}`}>
+                
                     {f.nom}
                   </button>
-                ))
-              )}
+              )
+              }
             </div>
             <div className="flex justify-between items-center pt-2">
               <Button
                 variant="outline"
                 size="sm"
                 disabled={page === 1}
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-              >
+                onClick={() => setPage((p) => Math.max(1, p - 1))}>
+                
                 Préc.
               </Button>
               <span className="text-xs text-muted-foreground">
@@ -115,8 +115,8 @@ export default function SupplierBrowserModal({ open, onClose, onSelect }) {
                 variant="outline"
                 size="sm"
                 disabled={page * pageSize >= total}
-                onClick={() => setPage((p) => p + 1)}
-              >
+                onClick={() => setPage((p) => p + 1)}>
+                
                 Suiv.
               </Button>
             </div>
@@ -128,7 +128,6 @@ export default function SupplierBrowserModal({ open, onClose, onSelect }) {
           </div>
         </Dialog.Content>
       </Dialog.Portal>
-    </Dialog.Root>
-  );
-}
+    </Dialog.Root>);
 
+}

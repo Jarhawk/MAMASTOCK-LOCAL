@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { MODULES } from "@/config/modules";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { toast } from 'sonner';
-import TableContainer from "@/components/ui/TableContainer";
+import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/db/sql";
 
 export default function AccessRights() {
   const { users, fetchUsers, updateUser } = useUtilisateurs();
@@ -18,9 +18,9 @@ export default function AccessRights() {
   if (authLoading) return <LoadingSpinner message="Chargement..." />;
 
   const toggle = async (user, moduleKey, field) => {
-    const current = user.access_rights && typeof user.access_rights === 'object'
-      ? user.access_rights
-      : {};
+    const current = user.access_rights && typeof user.access_rights === 'object' ?
+    user.access_rights :
+    {};
     const mod = { ...(current[moduleKey] || {}) };
     mod[field] = !mod[field];
     const updated = { ...current, [moduleKey]: mod };
@@ -38,61 +38,61 @@ export default function AccessRights() {
           <thead>
             <tr>
               <th rowSpan="2" className="px-2 py-1 text-left">Utilisateur</th>
-              {MODULES.map(m => (
-                <th key={m.key} colSpan={2} className="px-2 py-1">
+              {MODULES.map((m) =>
+              <th key={m.key} colSpan={2} className="px-2 py-1">
                   {m.label}
                 </th>
-              ))}
+              )}
             </tr>
             <tr>
-              {MODULES.map(m => (
-                <>
+              {MODULES.map((m) =>
+              <>
                   <th key={`${m.key}-v`} className="px-2 py-1">Voir</th>
                   <th key={`${m.key}-e`} className="px-2 py-1">Modifier</th>
                 </>
-              ))}
+              )}
             </tr>
           </thead>
           <tbody>
-            {users.map(u => (
-              <tr key={u.id}>
+            {users.map((u) =>
+            <tr key={u.id}>
                 <td className="px-2 py-1 text-left">{u.nom || u.email}</td>
-                {MODULES.map(m => {
-                  const current =
-                    u.access_rights && typeof u.access_rights === 'object'
-                      ? u.access_rights
-                      : {};
-                  return (
-                    <>
+                {MODULES.map((m) => {
+                const current =
+                u.access_rights && typeof u.access_rights === 'object' ?
+                u.access_rights :
+                {};
+                return (
+                  <>
                       <td key={`${m.key}-v`} className="px-2 py-1">
                         <input
-                          type="checkbox"
-                          checked={current[m.key]?.peut_voir || false}
-                          onChange={() => toggle(u, m.key, 'peut_voir')}
-                        />
+                        type="checkbox"
+                        checked={current[m.key]?.peut_voir || false}
+                        onChange={() => toggle(u, m.key, 'peut_voir')} />
+                      
                       </td>
                       <td key={`${m.key}-e`} className="px-2 py-1">
                         <input
-                          type="checkbox"
-                          checked={current[m.key]?.peut_modifier || false}
-                          onChange={() => toggle(u, m.key, 'peut_modifier')}
-                        />
+                        type="checkbox"
+                        checked={current[m.key]?.peut_modifier || false}
+                        onChange={() => toggle(u, m.key, 'peut_modifier')} />
+                      
                       </td>
-                    </>
-                  );
-                })}
+                    </>);
+
+              })}
               </tr>
-            ))}
-            {users.length === 0 && (
-              <tr>
+            )}
+            {users.length === 0 &&
+            <tr>
                 <td colSpan={MODULES.length * 2 + 1} className="py-4 text-gray-400">
                   Aucun utilisateur.
                 </td>
               </tr>
-            )}
+            }
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

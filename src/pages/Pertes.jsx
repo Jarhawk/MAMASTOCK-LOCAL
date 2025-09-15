@@ -8,7 +8,7 @@ import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Input } from "@/components/ui/input";
 import TableContainer from "@/components/ui/TableContainer";
 import GlassCard from "@/components/ui/GlassCard";
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function Pertes() {
   const { mama_id } = useAuth();
@@ -24,15 +24,15 @@ export default function Pertes() {
     }
   }, [fetchPertes, fetchProducts, mama_id]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(f => ({
+    setForm((f) => ({
       ...f,
-      [name]: name === "quantite" ? Number(value) : value,
+      [name]: name === "quantite" ? Number(value) : value
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.produit_id || !form.quantite) {
       toast.error("Produit et quantité requis !");
@@ -51,7 +51,7 @@ export default function Pertes() {
     }
   };
 
-  const handleDelete = async id => {
+  const handleDelete = async (id) => {
     if (!window.confirm("Supprimer cette perte ?")) return;
     try {
       await deletePerte(id);
@@ -72,40 +72,40 @@ export default function Pertes() {
             id="produit_id"
             name="produit_id"
             className="form-input"
-          value={form.produit_id}
-          onChange={handleChange}
-          required
-        >
+            value={form.produit_id}
+            onChange={handleChange}
+            required>
+            
           <option value="">Produit…</option>
-          {products.map((p) => (
+          {products.map((p) =>
             <option key={p.id} value={p.id}>
               {p.nom}
             </option>
-          ))}
+            )}
         </select>
         <Input
-          type="number"
-          name="quantite"
-          className="w-24"
-          min={0}
-          value={form.quantite}
-          onChange={handleChange}
-          placeholder="Quantité"
-          required
-        />
+            type="number"
+            name="quantite"
+            className="w-24"
+            min={0}
+            value={form.quantite}
+            onChange={handleChange}
+            placeholder="Quantité"
+            required />
+          
         <Input
-          type="date"
-          name="date_perte"
-          value={form.date_perte}
-          onChange={handleChange}
-        />
+            type="date"
+            name="date_perte"
+            value={form.date_perte}
+            onChange={handleChange} />
+          
         <Input
-          name="motif"
-          className="flex-1"
-          placeholder="Motif"
-          value={form.motif}
-          onChange={handleChange}
-        />
+            name="motif"
+            className="flex-1"
+            placeholder="Motif"
+            value={form.motif}
+            onChange={handleChange} />
+          
           <PrimaryButton type="submit" disabled={saving} className="h-10">
             {saving ? "Ajout..." : "Ajouter"}
           </PrimaryButton>
@@ -123,7 +123,7 @@ export default function Pertes() {
           </tr>
         </thead>
         <tbody>
-          {pertes.map(p => (
+          {pertes.map((p) =>
             <tr key={p.id}>
               <td className="px-2 py-1">{p.date_perte}</td>
               <td className="px-2 py-1">{p.produit?.nom || p.produit_id}</td>
@@ -133,10 +133,10 @@ export default function Pertes() {
                 <Button variant="ghost" size="sm" onClick={() => handleDelete(p.id)}>Supprimer</Button>
               </td>
             </tr>
-          ))}
+            )}
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

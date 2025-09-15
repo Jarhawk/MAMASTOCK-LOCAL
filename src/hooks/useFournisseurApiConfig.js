@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { readConfig, writeConfig } from '@/appFs';
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export function useFournisseurApiConfig() {
   const { mama_id } = useAuth();
@@ -31,7 +31,7 @@ export function useFournisseurApiConfig() {
     const idx = list.findIndex(
       (c) => c.mama_id === mama_id && c.fournisseur_id === fournisseur_id
     );
-    if (idx >= 0) list[idx] = entry; else list.push(entry);
+    if (idx >= 0) list[idx] = entry;else list.push(entry);
     cfg.fournisseurs_api_config = list;
     await writeConfig(cfg);
     setLoading(false);
@@ -62,7 +62,7 @@ export function useFournisseurApiConfig() {
     );
     if (fournisseur_id) list = list.filter((c) => c.fournisseur_id === fournisseur_id);
     if (actif !== undefined && actif !== null)
-      list = list.filter((c) => c.actif === actif);
+    list = list.filter((c) => c.actif === actif);
     const p = Number(page) || 1;
     const l = Number(limit) || 20;
     const start = (p - 1) * l;

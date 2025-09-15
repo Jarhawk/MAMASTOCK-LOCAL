@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
-import { readConfig, writeConfig } from '@/appFs';
+import { readConfig, writeConfig } from '@/appFs';import { isTauri } from "@/lib/db/sql";
 
 const HelpContext = createContext();
 

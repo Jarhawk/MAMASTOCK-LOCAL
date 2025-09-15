@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import SousFamilleRow from './SousFamilleRow';
-import SousFamilleForm from '@/forms/SousFamilleForm.jsx';
+import SousFamilleForm from '@/forms/SousFamilleForm.jsx';import { isTauri } from "@/lib/db/sql";
 
 export default function FamilleRow({
   famille,
@@ -12,7 +12,7 @@ export default function FamilleRow({
   onAddSousFamille,
   onUpdateSousFamille,
   onDeleteSousFamille,
-  onToggleSousFamille,
+  onToggleSousFamille
 }) {
   const [open, setOpen] = useState(false);
   const [adding, setAdding] = useState(false);
@@ -25,8 +25,8 @@ export default function FamilleRow({
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
-            className="mr-2 text-xs"
-          >
+            className="mr-2 text-xs">
+            
             {open ? '▼' : '▶'}
           </button>
           {famille.nom}
@@ -47,47 +47,47 @@ export default function FamilleRow({
               size="sm"
               className="bg-red-500 hover:bg-red-600 text-white"
               onClick={() => onDelete(famille.id)}
-              disabled={hasActiveSous}
-            >
+              disabled={hasActiveSous}>
+              
               🗑 Supprimer
             </Button>
           </div>
         </td>
       </tr>
-      {open && (
-        <>
-          {famille.sous_familles?.map((sf) => (
-            <SousFamilleRow
-              key={sf.id}
-              sousFamille={sf}
-              onUpdate={onUpdateSousFamille}
-              onDelete={onDeleteSousFamille}
-              onToggle={onToggleSousFamille}
-            />
-          ))}
-          {adding && (
-            <tr>
+      {open &&
+      <>
+          {famille.sous_familles?.map((sf) =>
+        <SousFamilleRow
+          key={sf.id}
+          sousFamille={sf}
+          onUpdate={onUpdateSousFamille}
+          onDelete={onDeleteSousFamille}
+          onToggle={onToggleSousFamille} />
+
+        )}
+          {adding &&
+        <tr>
               <td colSpan={3} className="px-2 py-1">
                 <SousFamilleForm
-                  familleId={famille.id}
-                  onSave={async (data) => {
-                    await onAddSousFamille(famille.id, data);
-                    setAdding(false);
-                  }}
-                  onCancel={() => setAdding(false)}
-                />
+              familleId={famille.id}
+              onSave={async (data) => {
+                await onAddSousFamille(famille.id, data);
+                setAdding(false);
+              }}
+              onCancel={() => setAdding(false)} />
+            
               </td>
             </tr>
-          )}
-          {(!famille.sous_familles || famille.sous_familles.length === 0) && !adding && (
-            <tr>
+        }
+          {(!famille.sous_familles || famille.sous_familles.length === 0) && !adding &&
+        <tr>
               <td colSpan={3} className="px-2 py-1 pl-6 text-sm text-muted-foreground">
                 Aucune sous-famille
               </td>
             </tr>
-          )}
+        }
         </>
-      )}
-    </>
-  );
+      }
+    </>);
+
 }

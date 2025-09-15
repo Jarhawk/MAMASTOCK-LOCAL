@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState, useEffect, useMemo, useId } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
 
 export default function AutoCompleteField({
   label,
@@ -18,25 +18,25 @@ export default function AutoCompleteField({
   ...props
 }) {
   const [inputValue, setInputValue] = useState(() => {
-    const match = (options || []).find(o => o.id === value || o.nom === value);
+    const match = (options || []).find((o) => o.id === value || o.nom === value);
     return match ? match.nom : value || "";
   });
 
-  const { data: hookOptions = [] } = optionsHook
-    ? optionsHook(inputValue, {
-        enabled: enabled && inputValue.trim().length >= minChars,
-      })
-    : { data: [] };
+  const { data: hookOptions = [] } = optionsHook ?
+  optionsHook(inputValue, {
+    enabled: enabled && inputValue.trim().length >= minChars
+  }) :
+  { data: [] };
   const allOptions = options ?? hookOptions;
   const resolved = useMemo(
-    () => (allOptions || []).map((opt) => (typeof opt === "string" ? { id: opt, nom: opt } : opt)),
-    [allOptions],
+    () => (allOptions || []).map((opt) => typeof opt === "string" ? { id: opt, nom: opt } : opt),
+    [allOptions]
   );
   const [showAdd, setShowAdd] = useState(false);
   const listId = useId();
 
   useEffect(() => {
-    const match = resolved.find(o => o.id === value || o.nom === value);
+    const match = resolved.find((o) => o.id === value || o.nom === value);
     if (match) {
       setInputValue(match.nom);
     } else if (typeof value === "string") {
@@ -45,25 +45,25 @@ export default function AutoCompleteField({
   }, [value, resolved]);
 
   const disabledIds = disabledOptions.map((d) =>
-    typeof d === "string" ? d : d.id,
+  typeof d === "string" ? d : d.id
   );
 
   const isValid =
-    inputValue &&
-    resolved.some(
-      (o) =>
-        o.nom.toLowerCase() === inputValue.toLowerCase() &&
-        !disabledIds.includes(o.id),
-    );
+  inputValue &&
+  resolved.some(
+    (o) =>
+    o.nom.toLowerCase() === inputValue.toLowerCase() &&
+    !disabledIds.includes(o.id)
+  );
 
   const handleInputChange = (e) => {
     const val = e.target.value;
     setInputValue(val);
     const match = resolved.find(
-      (o) => o.nom.toLowerCase() === val.toLowerCase(),
+      (o) => o.nom.toLowerCase() === val.toLowerCase()
     );
-    if (match) onChange(match);
-    else onChange(val ? { id: null, nom: val } : { id: "", nom: "" });
+    if (match) onChange(match);else
+    onChange(val ? { id: null, nom: val } : { id: "", nom: "" });
     setShowAdd(val && !match && !!onAddNewValue);
   };
 
@@ -83,40 +83,40 @@ export default function AutoCompleteField({
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      {label && (
-        <label className="text-sm text-white font-medium">
+      {label &&
+      <label className="text-sm text-white font-medium">
           {label} {required && "*"}
         </label>
-      )}
+      }
       <Input
         list={listId}
         value={inputValue}
         onChange={handleInputChange}
         className={`${isValid ? "border-mamastockGold" : ""} ${className}`}
         aria-label={label}
-        onKeyDown={e => {
+        onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
             if (showAdd) handleAddOption();
           }
         }}
-        {...props}
-      />
+        {...props} />
+      
       <datalist id={listId}>
-        {resolved.map(opt => (
-          <option key={opt.id} value={opt.nom} />
-        ))}
+        {resolved.map((opt) =>
+        <option key={opt.id} value={opt.nom} />
+        )}
       </datalist>
-      {showAdd && onAddNewValue && (
-        <Button
-          type="button"
-          size="sm"
-          onClick={handleAddOption}
-          className="mt-1 w-fit text-xs bg-mamastockGold text-black"
-        >
+      {showAdd && onAddNewValue &&
+      <Button
+        type="button"
+        size="sm"
+        onClick={handleAddOption}
+        className="mt-1 w-fit text-xs bg-mamastockGold text-black">
+        
           ➕ Ajouter "{inputValue}"
         </Button>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

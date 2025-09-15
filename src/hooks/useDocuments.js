@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
 import { uploadFile, deleteFile, pathFromUrl } from "@/hooks/useStorage";
-import { documents_list, document_add, document_delete, document_get } from "@/local/documents";
+import { documents_list, document_add, document_delete, document_get } from "@/local/documents";import { isTauri } from "@/lib/db/sql";
 
 export function useDocuments() {
   const { mama_id } = useAuth();
@@ -36,8 +36,8 @@ export function useDocuments() {
       setError(null);
       try {
         const folder = metadata.entite_liee_type ?
-          `${metadata.entite_liee_type}s` :
-          "misc";
+        `${metadata.entite_liee_type}s` :
+        "misc";
         const url = await uploadFile("mamastock-documents", file, folder);
         const doc = {
           id: crypto.randomUUID(),
@@ -95,8 +95,8 @@ export function useDocuments() {
       try {
         await deleteFile("mamastock-documents", path);
       } catch {
-        /* ignore */
-      }
+
+        /* ignore */}
       setDocuments((d) => d.filter((x) => x.id !== id));
       setLoading(false);
       return { success: true };

@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { readText, saveText, existsFile } from "@/local/files";
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 const FILE_PATH = "planning.json";
 
@@ -27,10 +27,10 @@ export function usePlanning() {
     try {
       const all = await readAll();
       const filt = all.filter((p) =>
-        p.mama_id === mama_id &&
-        (!statut || p.statut === statut) &&
-        (!debut || p.date_prevue >= debut) &&
-        (!fin || p.date_prevue <= fin)
+      p.mama_id === mama_id && (
+      !statut || p.statut === statut) && (
+      !debut || p.date_prevue >= debut) && (
+      !fin || p.date_prevue <= fin)
       );
       return { data: filt };
     } catch (err) {
@@ -59,7 +59,7 @@ export function usePlanning() {
         statut,
         actif: true,
         lignes: lignes.map((l) => ({ id: crypto.randomUUID(), ...l })),
-        created_at: new Date().toISOString(),
+        created_at: new Date().toISOString()
       };
       all.push(plan);
       await writeAll(all);
@@ -100,7 +100,7 @@ export function usePlanning() {
     const { data } = await getPlannings({
       statut,
       debut: start,
-      fin: end,
+      fin: end
     });
     return data;
   }
@@ -113,7 +113,7 @@ export function usePlanning() {
     updatePlanning,
     deletePlanning,
     fetchPlanning,
-    addPlanning,
+    addPlanning
   };
 }
 

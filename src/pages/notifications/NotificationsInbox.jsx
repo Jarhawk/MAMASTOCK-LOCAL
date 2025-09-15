@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import useNotifications from "@/hooks/useNotifications";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import TableContainer from "@/components/ui/TableContainer";
+import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/db/sql";
 
 export default function NotificationsInbox() {
   const {
@@ -11,7 +11,7 @@ export default function NotificationsInbox() {
     loading,
     error,
     fetchNotifications,
-    markAsRead,
+    markAsRead
   } = useNotifications();
   const [filters, setFilters] = useState({ type: "" });
 
@@ -20,7 +20,7 @@ export default function NotificationsInbox() {
   }, [fetchNotifications, filters]);
 
   const handleChange = (e) =>
-    setFilters((f) => ({ ...f, [e.target.name]: e.target.value }));
+  setFilters((f) => ({ ...f, [e.target.name]: e.target.value }));
 
   return (
     <div className="p-6 text-sm">
@@ -30,8 +30,8 @@ export default function NotificationsInbox() {
           name="type"
           value={filters.type}
           onChange={handleChange}
-          className="form-input"
-        >
+          className="form-input">
+          
           <option value="">-- Type --</option>
           <option value="info">Info</option>
           <option value="alerte">Alerte</option>
@@ -52,7 +52,7 @@ export default function NotificationsInbox() {
           </tr>
         </thead>
         <tbody>
-          {items.map((n) => (
+          {items.map((n) =>
             <tr key={n.id} className={n.lu ? "" : "font-bold"}>
               <td className="px-2 py-1">{n.titre}</td>
               <td className="px-2 py-1">{n.texte}</td>
@@ -60,24 +60,24 @@ export default function NotificationsInbox() {
                 {new Date(n.created_at).toLocaleString()}
               </td>
               <td className="px-2 py-1 text-right">
-                {!n.lu && (
-                  <Button size="sm" onClick={() => markAsRead(n.id)}>
+                {!n.lu &&
+                <Button size="sm" onClick={() => markAsRead(n.id)}>
                     Marquer comme lu
                   </Button>
-                )}
+                }
               </td>
             </tr>
-          ))}
-          {items.length === 0 && !loading && (
+            )}
+          {items.length === 0 && !loading &&
             <tr>
               <td colSpan="4" className="py-4 text-center text-gray-500">
                 Aucune notification
               </td>
             </tr>
-          )}
+            }
         </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

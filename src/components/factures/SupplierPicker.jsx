@@ -4,7 +4,7 @@ import useDebounce from '@/hooks/useDebounce';
 
 import { useFournisseursAutocomplete } from '@/hooks/useFournisseursAutocomplete';
 import SupplierBrowserModal from './SupplierBrowserModal';
-import { fournisseur_get } from '@/lib/db';
+import { fournisseur_get } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export default function SupplierPicker({ value, onChange, error }) {
   const [inputValue, setInputValue] = useState('');

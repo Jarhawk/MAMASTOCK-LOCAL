@@ -4,8 +4,8 @@ import {
   LiquidBackground,
   WavesBackground,
   MouseLight,
-  TouchLight,
-} from "@/components/LiquidBackground";
+  TouchLight } from
+"@/components/LiquidBackground";import { isTauri } from "@/lib/db/sql";
 
 export default function NotFound() {
   return (
@@ -20,12 +20,12 @@ export default function NotFound() {
         <p className="text-xl text-mamastockText mb-6">Page non trouvée</p>
         <Link
           to="/"
-          className="inline-block mt-2 px-6 py-2 rounded-xl bg-mamastockGold text-white font-semibold shadow hover:bg-[#b89730] transition"
-        >
+          className="inline-block mt-2 px-6 py-2 rounded-xl bg-mamastockGold text-white font-semibold shadow hover:bg-[#b89730] transition">
+          
           Retour à l’accueil
         </Link>
       </div>
 
-    </div>
-  );
+    </div>);
+
 }

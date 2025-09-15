@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useState } from "react";
+import { useState } from "react";import { isTauri } from "@/lib/db/sql";
 
 export function useMenuDuJour() {
   const [menusDuJour, setMenus] = useState([]);
@@ -41,7 +41,7 @@ export function useMenuDuJour() {
     loadFromFavoris: noop,
     exportExcel: () => {},
     exportPdf: () => {},
-    getMonthlyAverageFoodCost: async () => null,
+    getMonthlyAverageFoodCost: async () => null
   };
 }
 

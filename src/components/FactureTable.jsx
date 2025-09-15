@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { motion as Motion } from "framer-motion";
 import FactureRow from "@/components/factures/FactureRow.jsx";
-import ListingContainer from "@/components/ui/ListingContainer";
+import ListingContainer from "@/components/ui/ListingContainer";import { isTauri } from "@/lib/db/sql";
 
 export default function FactureTable({
   factures = [],
@@ -9,15 +9,15 @@ export default function FactureTable({
   onEdit,
   onDetail,
   onToggleActive,
-  onArchive,
+  onArchive
 }) {
   return (
     <ListingContainer className="mb-4">
       <Motion.table
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="min-w-full text-sm"
-      >
+        className="min-w-full text-sm">
+        
         <thead>
           <tr>
             <th className="px-4 py-2">Numéro</th>
@@ -30,19 +30,19 @@ export default function FactureTable({
           </tr>
         </thead>
         <tbody>
-          {factures.map(facture => (
-            <FactureRow
-              key={facture.id}
-              facture={facture}
-              canEdit={canEdit}
-              onEdit={onEdit}
-              onDetail={onDetail}
-              onToggleActive={onToggleActive}
-              onArchive={onArchive}
-            />
-          ))}
+          {factures.map((facture) =>
+          <FactureRow
+            key={facture.id}
+            facture={facture}
+            canEdit={canEdit}
+            onEdit={onEdit}
+            onDetail={onDetail}
+            onToggleActive={onToggleActive}
+            onArchive={onArchive} />
+
+          )}
         </tbody>
       </Motion.table>
-    </ListingContainer>
-  );
+    </ListingContainer>);
+
 }

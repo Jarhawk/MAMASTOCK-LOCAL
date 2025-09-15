@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { price_trends_list } from '@/lib/db';
+import { price_trends_list } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export function usePriceTrends(productIdInitial) {
   const { mama_id } = useAuth();

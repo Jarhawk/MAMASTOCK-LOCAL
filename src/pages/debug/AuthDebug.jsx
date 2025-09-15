@@ -2,14 +2,14 @@
 // src/pages/debug/AuthDebug.jsx
 import { useAuth } from '@/hooks/useAuth';
 import GlassCard from "@/components/ui/GlassCard";
-import ResetAuthButton from "@/components/ResetAuthButton";
+import ResetAuthButton from "@/components/ResetAuthButton";import { isTauri } from "@/lib/db/sql";
 
 function StatusDot({ ok }) {
   return (
     <span
-      className={`inline-block w-3 h-3 rounded-full ${ok ? 'bg-green-500' : 'bg-red-500'}`}
-    />
-  );
+      className={`inline-block w-3 h-3 rounded-full ${ok ? 'bg-green-500' : 'bg-red-500'}`} />);
+
+
 }
 
 export default function AuthDebug() {
@@ -28,6 +28,6 @@ export default function AuthDebug() {
           <ResetAuthButton className="underline text-sm" />
         </div>
       </GlassCard>
-    </div>
-  );
+    </div>);
+
 }

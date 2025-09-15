@@ -4,8 +4,8 @@ import {
   facture_ligne_get,
   facture_add_ligne,
   facture_ligne_update,
-  facture_ligne_delete,
-} from "@/lib/db";
+  facture_ligne_delete } from
+"@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export function useInvoiceItems() {
   const [items, setItems] = useState([]);
@@ -79,6 +79,6 @@ export function useInvoiceItems() {
     fetchItemById,
     addItem,
     updateItem,
-    deleteItem,
+    deleteItem
   };
 }

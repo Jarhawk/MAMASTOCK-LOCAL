@@ -1,8 +1,8 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 export function buildPriceData(historique = []) {
   const fournisseurs = {};
   const dates = new Set();
-  historique.forEach(h => {
+  historique.forEach((h) => {
     const date = h.derniere_livraison?.slice(0, 10) || h.created_at?.slice(0, 10);
     if (!date) return;
     const key = h.fournisseur?.nom || '';
@@ -11,9 +11,9 @@ export function buildPriceData(historique = []) {
     dates.add(date);
   });
   const sorted = Array.from(dates).sort();
-  return sorted.map(d => {
+  return sorted.map((d) => {
     const row = { date: d };
-    Object.keys(fournisseurs).forEach(s => { row[s] = fournisseurs[s][d] ?? null; });
+    Object.keys(fournisseurs).forEach((s) => {row[s] = fournisseurs[s][d] ?? null;});
     return row;
   });
 }

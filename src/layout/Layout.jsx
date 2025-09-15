@@ -13,7 +13,7 @@ import {
   WavesBackground,
   MouseLight,
   TouchLight } from
-"@/components/LiquidBackground";
+"@/components/LiquidBackground";import { isTauri } from "@/lib/db/sql";
 
 export default function Layout() {
   const { fetchUnreadCount, subscribeToNotifications } = useNotifications();
@@ -38,11 +38,11 @@ export default function Layout() {
           <div className="flex justify-end items-center gap-2 mb-4">
             <Link to="/notifications" className="relative">
               <Bell size={20} />
-              {unread > 0 && (
-                <Badge color="red" className="absolute -top-1 -right-1">
+              {unread > 0 &&
+              <Badge color="red" className="absolute -top-1 -right-1">
                   {unread}
                 </Badge>
-              )}
+              }
             </Link>
             <AlertBadge />
           </div>

@@ -14,7 +14,7 @@ import {
 '@/components/ui/SmartDialog';
 import MamaForm from './MamaForm';
 import { toast } from 'sonner';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/db/sql";
 
 export default function Mamas() {
   const { mama_id: myMama, role } = useAuth();
@@ -24,7 +24,7 @@ export default function Mamas() {
     fetchMamas,
     toggleMamaActive,
     addMama,
-    updateMama,
+    updateMama
   } = useMamas();
   const [search, setSearch] = useState('');
   const [editMama, setEditMama] = useState(null);
@@ -52,8 +52,8 @@ export default function Mamas() {
 
   const filtered = mamas.filter(
     (m) =>
-      m.nom?.toLowerCase().includes(search.toLowerCase()) ||
-      m.ville?.toLowerCase().includes(search.toLowerCase())
+    m.nom?.toLowerCase().includes(search.toLowerCase()) ||
+    m.ville?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -66,13 +66,13 @@ export default function Mamas() {
           value={search}
           onChange={(e) => setSearch(e.target.value)} />
 
-        {role === 'superadmin' && (
-          <Button
-            onClick={() => setEditMama({ nom: '', ville: '', actif: true })}
-          >
+        {role === 'superadmin' &&
+        <Button
+          onClick={() => setEditMama({ nom: '', ville: '', actif: true })}>
+          
             + Nouvel établissement
           </Button>
-        )}
+        }
       </div>
       <TableContainer className="mb-6">
         {loading ?
@@ -179,8 +179,8 @@ export default function Mamas() {
               fetchMamas();
               setEditMama(null);
             }}
-            onClose={() => setEditMama(null)}
-          />
+            onClose={() => setEditMama(null)} />
+          
 
         </DialogContent>
       </Dialog>

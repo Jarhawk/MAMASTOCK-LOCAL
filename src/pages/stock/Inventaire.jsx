@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useStock } from "@/hooks/useStock";
 import { Button } from "@/components/ui/button";
 import ListingContainer from "@/components/ui/ListingContainer";
-import TableHeader from "@/components/ui/TableHeader";
+import TableHeader from "@/components/ui/TableHeader";import { isTauri } from "@/lib/db/sql";
 
 export default function InventairePage() {
   const { getInventaires } = useStock();
@@ -34,18 +34,18 @@ export default function InventairePage() {
             </tr>
           </thead>
           <tbody>
-            {inventaires.map((inv) => (
-              <tr key={inv.id}>
+            {inventaires.map((inv) =>
+            <tr key={inv.id}>
                 <td className="p-2">{inv.reference}</td>
                 <td className="p-2">{inv.date_inventaire}</td>
                 <td className="p-2">{inv.utilisateurs?.username || "-"}</td>
                 <td className="p-2">{inv.cloture ? "validé" : "en cours"}</td>
                 <td className="p-2 text-right">{inv.ecart_total ?? "-"}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </ListingContainer>
-    </div>
-  );
+    </div>);
+
 }

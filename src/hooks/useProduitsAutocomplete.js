@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
-import { produits_autocomplete } from "@/lib/db";
+import { produits_autocomplete } from "@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export function useProduitsAutocomplete() {
   const { mama_id } = useAuth();

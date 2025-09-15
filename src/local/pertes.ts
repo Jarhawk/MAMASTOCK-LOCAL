@@ -1,4 +1,4 @@
-import { existsFile, readText, saveText } from "@/local/files";
+import { existsFile, readText, saveText } from "@/local/files";import { isTauri } from "@/lib/db/sql";
 
 export type Perte = {
   id: string;
@@ -29,26 +29,26 @@ async function writeAll(list: Perte[]) {
 export async function pertes_list({
   mama_id,
   debut = null,
-  fin = null,
-}: {
-  mama_id: string;
-  debut?: string | null;
-  fin?: string | null;
-}): Promise<Perte[]> {
+  fin = null
+
+
+
+
+}: {mama_id: string;debut?: string | null;fin?: string | null;}): Promise<Perte[]> {
   let list = await readAll();
-  if (mama_id) list = list.filter(p => p.mama_id === mama_id);
-  if (debut) list = list.filter(p => p.date_perte >= debut);
-  if (fin) list = list.filter(p => p.date_perte <= fin);
+  if (mama_id) list = list.filter((p) => p.mama_id === mama_id);
+  if (debut) list = list.filter((p) => p.date_perte >= debut);
+  if (fin) list = list.filter((p) => p.date_perte <= fin);
   // ordre du plus récent au plus ancien
-  list.sort((a, b) => (a.date_perte < b.date_perte ? 1 : -1));
+  list.sort((a, b) => a.date_perte < b.date_perte ? 1 : -1);
   return list;
 }
 
-export async function pertes_add(values: Omit<Perte, "id"> & { id?: string }) {
+export async function pertes_add(values: Omit<Perte, "id"> & {id?: string;}) {
   const list = await readAll();
   const item: Perte = {
     id: values.id || crypto.randomUUID(),
-    ...values,
+    ...values
   } as Perte;
   list.push(item);
   await writeAll(list);
@@ -57,7 +57,7 @@ export async function pertes_add(values: Omit<Perte, "id"> & { id?: string }) {
 
 export async function pertes_update(id: string, values: Partial<Perte>) {
   const list = await readAll();
-  const idx = list.findIndex(p => p.id === id);
+  const idx = list.findIndex((p) => p.id === id);
   if (idx === -1) return;
   list[idx] = { ...list[idx], ...values };
   await writeAll(list);
@@ -65,7 +65,6 @@ export async function pertes_update(id: string, values: Partial<Perte>) {
 
 export async function pertes_delete(id: string) {
   let list = await readAll();
-  list = list.filter(p => p.id !== id);
+  list = list.filter((p) => p.id !== id);
   await writeAll(list);
 }
-

@@ -1,4 +1,4 @@
-import { query } from '@/local/db';
+import { query } from '@/local/db';import { isTauri } from "@/lib/db/sql";
 
 export default function ApiDiagnostic({ mamaId }) {
   const test = async () => {
@@ -28,7 +28,6 @@ export default function ApiDiagnostic({ mamaId }) {
   return (
     <button onClick={test} style={{ padding: 8, borderRadius: 8 }}>
       Diagnostic API
-    </button>
-  );
-}
+    </button>);
 
+}

@@ -1,21 +1,21 @@
-import React from 'react'
-import { useAuth } from '@/context/AuthContext'
+import React from 'react';
+import { useAuth } from '@/context/AuthContext';import { isTauri } from "@/lib/db/sql";
 
 export default function DebugAuth() {
-  const { session, userData, loading } = useAuth()
+  const { session, userData, loading } = useAuth();
   return (
-    <pre style={{padding:16, background:'#111', color:'#0f0', overflow:'auto'}}>
-{JSON.stringify({
-  loading,
-  session: session ? {
-    user: {
-      id: session.user?.id,
-      email: session.user?.email,
-      role: session.user?.role
-    }
-  } : null,
-  userData
-}, null, 2)}
-    </pre>
-  )
+    <pre style={{ padding: 16, background: '#111', color: '#0f0', overflow: 'auto' }}>
+      {JSON.stringify({
+        loading,
+        session: session ? {
+          user: {
+            id: session.user?.id,
+            email: session.user?.email,
+            role: session.user?.role
+          }
+        } : null,
+        userData
+      }, null, 2)}
+    </pre>);
+
 }

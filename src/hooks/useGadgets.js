@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { dashboards_list, gadget_add, gadget_update, gadget_delete } from '@/lib/db';
+import { dashboards_list, gadget_add, gadget_update, gadget_delete } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
 
 export function useGadgets() {
   const { id: user_id, mama_id } = useAuth();
@@ -31,8 +31,8 @@ export function useGadgets() {
     setLoading(true);
     setError(null);
     try {
-       const data = await gadget_add({ ...gadget, mama_id });
-       setGadgets((g) => [...g, data]);
+      const data = await gadget_add({ ...gadget, mama_id });
+      setGadgets((g) => [...g, data]);
       return data;
     } catch (e) {
       setError(e.message || e);
@@ -48,7 +48,7 @@ export function useGadgets() {
     setError(null);
     try {
       const data = await gadget_update(id, values);
-      setGadgets((g) => g.map((x) => (x.id === id ? data : x)));
+      setGadgets((g) => g.map((x) => x.id === id ? data : x));
       return data;
     } catch (e) {
       setError(e.message || e);
@@ -79,6 +79,6 @@ export function useGadgets() {
     fetchGadgets,
     addGadget,
     updateGadget,
-    deleteGadget,
+    deleteGadget
   };
 }

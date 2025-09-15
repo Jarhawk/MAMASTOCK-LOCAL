@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';import { isTauri } from "@/lib/db/sql";
 
 export default function TouchLight({ className = '' }) {
   const [ripple, setRipple] = useState(null);
@@ -18,14 +18,14 @@ export default function TouchLight({ className = '' }) {
 
   return (
     <div className={`md:hidden fixed inset-0 pointer-events-none ${className}`}>
-      {ripple && (
-        <span
-          key={ripple.id}
-          className="absolute block w-40 h-40 bg-white/20 rounded-full -translate-x-1/2 -translate-y-1/2 animate-touch-fade"
-          style={{ left: ripple.x, top: ripple.y }}
-          onAnimationEnd={() => setRipple(null)}
-        />
-      )}
-    </div>
-  );
+      {ripple &&
+      <span
+        key={ripple.id}
+        className="absolute block w-40 h-40 bg-white/20 rounded-full -translate-x-1/2 -translate-y-1/2 animate-touch-fade"
+        style={{ left: ripple.x, top: ripple.y }}
+        onAnimationEnd={() => setRipple(null)} />
+
+      }
+    </div>);
+
 }

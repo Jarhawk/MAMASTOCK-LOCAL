@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';import { isTauri } from "@/lib/db/sql";
 
 export default function PreviewBanner() {
   const { search } = useLocation();
@@ -13,6 +13,6 @@ export default function PreviewBanner() {
       Aperçu du thème actif
       {intensity && ` (intensité ${intensity})`} -{' '}
       <Link to={exitUrl} className="underline">Quitter</Link>
-    </div>
-  );
+    </div>);
+
 }

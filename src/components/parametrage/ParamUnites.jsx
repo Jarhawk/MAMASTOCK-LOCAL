@@ -8,19 +8,19 @@ import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { toast } from 'sonner';
 import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx';import { isTauri } from "@/lib/db/sql";
 
 export default function ParamUnites() {
   const { unites, listUnites, addUnite, updateUnite, deleteUnite } =
-    useUnites();
+  useUnites();
   const { mama_id, loading: authLoading } = useAuth();
   const [form, setForm] = useState({ nom: '', id: null });
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-      if (mama_id) listUnites();
-    }, [mama_id]);
+  useEffect(() => {
+    if (mama_id) listUnites();
+  }, [mama_id]);
 
   if (authLoading) return <LoadingSpinner message="Chargement..." />;
 
@@ -31,8 +31,8 @@ export default function ParamUnites() {
   const handleDelete = async (id) => {
     if (window.confirm('Désactiver l’unité ?')) {
       try {
-          await deleteUnite(id);
-          await listUnites();
+        await deleteUnite(id);
+        await listUnites();
         toast.success('Unité désactivée.');
       } catch (err) {
         console.error('Erreur suppression unité:', err);
@@ -56,7 +56,7 @@ export default function ParamUnites() {
       }
       setEditMode(false);
       setForm({ nom: '', id: null });
-        await listUnites();
+      await listUnites();
     } catch (err) {
       console.error('Erreur enregistrement unité:', err);
       toast.error('Échec enregistrement');
@@ -82,29 +82,29 @@ export default function ParamUnites() {
           placeholder="Nom de l’unité"
           value={form.nom}
           onChange={(e) => setForm((f) => ({ ...f, nom: e.target.value }))}
-          required
-        />
+          required />
+        
         <Button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-2"
-        >
+          className="flex items-center gap-2">
+          
           {loading && <span className="loader-glass" />}
           {editMode ? 'Modifier' : 'Ajouter'}
         </Button>
-        {editMode && (
-          <Button
-            variant="outline"
-            type="button"
-            onClick={() => {
-              setEditMode(false);
-              setForm({ nom: '', id: null });
-            }}
-            disabled={loading}
-          >
+        {editMode &&
+        <Button
+          variant="outline"
+          type="button"
+          onClick={() => {
+            setEditMode(false);
+            setForm({ nom: '', id: null });
+          }}
+          disabled={loading}>
+          
             Annuler
           </Button>
-        )}
+        }
       </form>
       <Button variant="outline" className="mb-2" onClick={exportExcel}>
         Export Excel
@@ -118,30 +118,30 @@ export default function ParamUnites() {
             </tr>
           </thead>
           <tbody>
-            {unites.map((u) => (
-              <tr key={u.id}>
+            {unites.map((u) =>
+            <tr key={u.id}>
                 <td>{u.nom}</td>
                 <td>
                   <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleEdit(u)}
-                  >
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleEdit(u)}>
+                  
                     Modifier
                   </Button>
                   <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleDelete(u.id)}
-                  >
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleDelete(u.id)}>
+                  
                     Archiver
                   </Button>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

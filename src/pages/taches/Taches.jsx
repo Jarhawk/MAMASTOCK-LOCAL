@@ -8,7 +8,7 @@ import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import TableContainer from "@/components/ui/TableContainer";
 import TachesKanban from "@/components/taches/TachesKanban";
 import GlassCard from "@/components/ui/GlassCard";
-import { toast } from 'sonner';
+import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
 
 export default function Taches() {
   const { tasks, loading, error, fetchTasks, addTask } = useTasks();
@@ -25,9 +25,9 @@ export default function Taches() {
     fetchTasks();
   }, [fetchTasks]);
 
-  const handleChange = e => setFilters(f => ({ ...f, [e.target.name]: e.target.value }));
-  const handleQuickChange = e => setQuick(q => ({ ...q, [e.target.name]: e.target.value }));
-  const handleQuickSubmit = async e => {
+  const handleChange = (e) => setFilters((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const handleQuickChange = (e) => setQuick((q) => ({ ...q, [e.target.name]: e.target.value }));
+  const handleQuickSubmit = async (e) => {
     e.preventDefault();
     if (!quick.titre.trim()) return;
     try {
@@ -39,14 +39,14 @@ export default function Taches() {
     }
   };
 
-  const filtered = tasks.filter(t => {
+  const filtered = tasks.filter((t) => {
     if (filters.statut && t.statut !== filters.statut) return false;
     if (filters.priorite && t.priorite !== filters.priorite) return false;
     if (
-      filters.utilisateur &&
-      !(t.utilisateurs_taches || []).some(a => a.utilisateur_id === filters.utilisateur)
-    )
-      return false;
+    filters.utilisateur &&
+    !(t.utilisateurs_taches || []).some((a) => a.utilisateur_id === filters.utilisateur))
+
+    return false;
     if (filters.start && t.date_echeance < filters.start) return false;
     if (filters.end && t.date_echeance > filters.end) return false;
     return true;
@@ -57,7 +57,7 @@ export default function Taches() {
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Tâches planifiées</h1>
         <div className="flex gap-2">
-          <Button onClick={() => setView(v => (v === 'table' ? 'kanban' : 'table'))}>
+          <Button onClick={() => setView((v) => v === 'table' ? 'kanban' : 'table')}>
             {view === 'table' ? 'Vue Kanban' : 'Vue liste'}
           </Button>
           <Link to="/taches/new" className="btn">Créer une tâche</Link>
@@ -71,15 +71,15 @@ export default function Taches() {
             value={quick.titre}
             onChange={handleQuickChange}
             placeholder="Nouvelle tâche"
-            required
-          />
+            required />
+          
           <input
             type="date"
             className="form-input"
             name="date_echeance"
             value={quick.date_echeance}
-            onChange={handleQuickChange}
-          />
+            onChange={handleQuickChange} />
+          
           <Button type="submit">Ajouter</Button>
         </form>
       </GlassCard>
@@ -92,50 +92,50 @@ export default function Taches() {
             <option value="terminee">Terminée</option>
           </select>
         <select
-          name="priorite"
-          value={filters.priorite}
-          onChange={handleChange}
-          className="form-input"
-        >
+            name="priorite"
+            value={filters.priorite}
+            onChange={handleChange}
+            className="form-input">
+            
           <option value="">-- Priorité --</option>
           <option value="basse">Basse</option>
           <option value="moyenne">Moyenne</option>
           <option value="haute">Haute</option>
         </select>
         <select
-          name="utilisateur"
-          value={filters.utilisateur}
-          onChange={handleChange}
-          className="form-input"
-        >
+            name="utilisateur"
+            value={filters.utilisateur}
+            onChange={handleChange}
+            className="form-input">
+            
           <option value="">-- Assigné --</option>
-          {users.map(u => (
+          {users.map((u) =>
             <option key={u.id} value={u.id}>
               {u.nom}
             </option>
-          ))}
+            )}
         </select>
         <input
-          type="date"
-          name="start"
-          value={filters.start}
-          onChange={handleChange}
-          className="form-input"
-        />
+            type="date"
+            name="start"
+            value={filters.start}
+            onChange={handleChange}
+            className="form-input" />
+          
         <input
-          type="date"
-          name="end"
-          value={filters.end}
-          onChange={handleChange}
-          className="form-input"
-        />
+            type="date"
+            name="end"
+            value={filters.end}
+            onChange={handleChange}
+            className="form-input" />
+          
         <Button onClick={() => fetchTasks()}>Filtrer</Button>
         </div>
       </GlassCard>
       {loading && <LoadingSpinner message="Chargement..." />}
       {error && <div className="text-red-600">{error}</div>}
-      {view === 'table' ? (
-        <TableContainer>
+      {view === 'table' ?
+      <TableContainer>
           <table className="min-w-full text-white">
             <thead>
               <tr>
@@ -147,8 +147,8 @@ export default function Taches() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map(t => (
-                <tr key={t.id} className="border-t">
+              {filtered.map((t) =>
+            <tr key={t.id} className="border-t">
                   <td className="px-2 py-1">{t.statut}</td>
                   <td className="px-2 py-1">
                     <Link to={`/taches/${t.id}`} className="underline">
@@ -158,26 +158,26 @@ export default function Taches() {
                   <td className="px-2 py-1">{t.priorite}</td>
                   <td className="px-2 py-1">{t.date_echeance}</td>
                   <td className="px-2 py-1">
-                    {(t.utilisateurs_taches || [])
-                      .map(a => a.utilisateur?.nom)
-                      .filter(Boolean)
-                      .join(", ")}
+                    {(t.utilisateurs_taches || []).
+                map((a) => a.utilisateur?.nom).
+                filter(Boolean).
+                join(", ")}
                   </td>
                 </tr>
-              ))}
-              {filtered.length === 0 && !loading && (
-                <tr>
+            )}
+              {filtered.length === 0 && !loading &&
+            <tr>
                   <td colSpan="5" className="py-4 text-center text-gray-500">
                     Aucune tâche
                   </td>
                 </tr>
-              )}
+            }
             </tbody>
           </table>
-        </TableContainer>
-      ) : (
-        <TachesKanban taches={filtered} />
-      )}
-    </div>
-  );
+        </TableContainer> :
+
+      <TachesKanban taches={filtered} />
+      }
+    </div>);
+
 }

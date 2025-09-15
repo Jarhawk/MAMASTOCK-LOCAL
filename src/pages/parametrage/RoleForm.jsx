@@ -1,20 +1,20 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
 import { useRoles } from "@/hooks/useRoles";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
 
 const MODULES = [
-  "produits",
-  "fiches",
-  "factures",
-  "utilisateurs",
-  "roles",
-  "commandes",
-  "inventaire",
-  "requisitions",
-  "menu_du_jour",
-  "menu_engineering",
-];
+"produits",
+"fiches",
+"factures",
+"utilisateurs",
+"roles",
+"commandes",
+"inventaire",
+"requisitions",
+"menu_du_jour",
+"menu_engineering"];
+
 
 export default function RoleForm({ role, onClose }) {
   const { addOrUpdateRole } = useRoles();
@@ -22,12 +22,12 @@ export default function RoleForm({ role, onClose }) {
   const [accessRights, setAccessRights] = useState(role.access_rights || {});
 
   const toggle = (module, action) => {
-    setAccessRights(prev => ({
+    setAccessRights((prev) => ({
       ...prev,
       [module]: {
         ...(prev[module] || {}),
-        [action]: !prev?.[module]?.[action],
-      },
+        [action]: !prev?.[module]?.[action]
+      }
     }));
   };
 
@@ -35,7 +35,7 @@ export default function RoleForm({ role, onClose }) {
     const payload = {
       ...role,
       nom,
-      access_rights: accessRights,
+      access_rights: accessRights
     };
     await addOrUpdateRole(payload);
     onClose();
@@ -49,9 +49,9 @@ export default function RoleForm({ role, onClose }) {
         <label className="block mb-2">Nom du rôle</label>
         <input
           value={nom}
-          onChange={e => setNom(e.target.value)}
-          className="w-full border px-2 py-1 mb-4"
-        />
+          onChange={(e) => setNom(e.target.value)}
+          className="w-full border px-2 py-1 mb-4" />
+        
 
         <table className="w-full text-sm border">
           <thead>
@@ -64,20 +64,20 @@ export default function RoleForm({ role, onClose }) {
             </tr>
           </thead>
           <tbody>
-            {MODULES.map(mod => (
-              <tr key={mod}>
+            {MODULES.map((mod) =>
+            <tr key={mod}>
                 <td className="border p-1">{mod}</td>
-                {["lecture", "creation", "edition", "suppression"].map(action => (
-                  <td key={action} className="border p-1 text-center">
+                {["lecture", "creation", "edition", "suppression"].map((action) =>
+              <td key={action} className="border p-1 text-center">
                     <input
-                      type="checkbox"
-                      checked={accessRights?.[mod]?.[action] || false}
-                      onChange={() => toggle(mod, action)}
-                    />
+                  type="checkbox"
+                  checked={accessRights?.[mod]?.[action] || false}
+                  onChange={() => toggle(mod, action)} />
+                
                   </td>
-                ))}
+              )}
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
 
@@ -88,6 +88,6 @@ export default function RoleForm({ role, onClose }) {
           <Button onClick={save}>Enregistrer</Button>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

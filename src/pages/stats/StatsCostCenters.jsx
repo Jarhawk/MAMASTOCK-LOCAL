@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/db/sql";
 
 export default function StatsCostCenters() {
   const { fetchStats } = useCostCenterStats();
@@ -22,7 +22,7 @@ export default function StatsCostCenters() {
 
   useEffect(() => {
     if (!mama_id || authLoading) return;
-    fetchStats().then(data => {
+    fetchStats().then((data) => {
       setStats(data);
       setLoading(false);
     });
@@ -46,24 +46,24 @@ export default function StatsCostCenters() {
           </tr>
         </thead>
         <tbody>
-          {stats.length === 0 ? (
+          {stats.length === 0 ?
             <tr>
               <td colSpan="3" className="p-2 text-center text-gray-500">
                 Aucune donnée
               </td>
-            </tr>
-          ) : (
-            stats.map((s) => (
-              <tr key={s.cost_center_id}>
+            </tr> :
+
+            stats.map((s) =>
+            <tr key={s.cost_center_id}>
                 <td className="px-2 py-1">{s.nom}</td>
                 <td className="px-2 py-1">{Number(s.quantite).toLocaleString()}</td>
                 <td className="px-2 py-1">{Number(s.valeur).toLocaleString()}</td>
               </tr>
-            ))
-          )}
+            )
+            }
           </tbody>
         </table>
       </TableContainer>
-    </div>
-  );
+    </div>);
+
 }

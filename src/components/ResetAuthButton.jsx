@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
 
 export default function ResetAuthButton({ className = "" }) {
   const { resetAuth } = useAuth() || {};
@@ -7,9 +7,9 @@ export default function ResetAuthButton({ className = "" }) {
     <button
       type="button"
       onClick={resetAuth}
-      className={className}
-    >
+      className={className}>
+      
       Réinitialiser la connexion
-    </button>
-  );
+    </button>);
+
 }

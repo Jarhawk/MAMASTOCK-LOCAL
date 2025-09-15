@@ -1,4 +1,4 @@
-import { getDb } from "@/lib/db/sql";
+import { getDb, isTauri } from "@/lib/db/sql";
 
 export type SousFamille = {
   id: number;
@@ -17,12 +17,12 @@ export async function listSousFamilles(): Promise<SousFamille[]> {
 export async function createSousFamille({
   famille_id,
   code,
-  libelle,
-}: {
-  famille_id: number;
-  code: string;
-  libelle: string;
-}): Promise<SousFamille> {
+  libelle
+
+
+
+
+}: {famille_id: number;code: string;libelle: string;}): Promise<SousFamille> {
   const db = await getDb();
   const rows: SousFamille[] = await db.select(
     "INSERT INTO sous_familles(famille_id, code, libelle) VALUES (?,?,?) RETURNING *",
@@ -32,9 +32,9 @@ export async function createSousFamille({
 }
 
 export async function updateSousFamille(
-  id: number,
-  { famille_id, code, libelle }: { famille_id: number; code: string; libelle: string }
-): Promise<void> {
+id: number,
+{ famille_id, code, libelle }: {famille_id: number;code: string;libelle: string;})
+: Promise<void> {
   const db = await getDb();
   await db.execute(
     "UPDATE sous_familles SET famille_id=?, code=?, libelle=? WHERE id=?",
@@ -46,4 +46,3 @@ export async function deleteSousFamille(id: number): Promise<void> {
   const db = await getDb();
   await db.execute("DELETE FROM sous_familles WHERE id=?", [id]);
 }
-

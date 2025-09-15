@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useCallback, useEffect, useState } from "react";
-import { produits_list, produits_create, produits_update } from "@/lib/db";
+import { produits_list, produits_create, produits_update } from "@/lib/db";import { isTauri } from "@/lib/db/sql";
 
 export function useProducts() {
   const [products, setProducts] = useState([]);
@@ -65,7 +65,7 @@ export function useProducts() {
     toggleProductActive,
     getProduct,
     fetchProductPrices,
-    fetchProducts,
+    fetchProducts
   };
 }
 

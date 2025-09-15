@@ -1,4 +1,4 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 
 export default function UtilisateurRow({ utilisateur, onEdit, onToggleActive, canEdit }) {
   return (
@@ -7,14 +7,14 @@ export default function UtilisateurRow({ utilisateur, onEdit, onToggleActive, ca
       <td>{utilisateur.email}</td>
       <td>{utilisateur.role}</td>
       <td>{utilisateur.actif ? "Actif" : "Inactif"}</td>
-      {canEdit && (
-        <td>
+      {canEdit &&
+      <td>
           <button className="btn btn-sm mr-2" onClick={() => onEdit(utilisateur)}>Éditer</button>
           <button className="btn btn-sm" onClick={() => onToggleActive(utilisateur)}>
             {utilisateur.actif ? "Désactiver" : "Activer"}
           </button>
         </td>
-      )}
-    </tr>
-  );
+      }
+    </tr>);
+
 }
