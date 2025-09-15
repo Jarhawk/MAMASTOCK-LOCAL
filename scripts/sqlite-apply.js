@@ -2,10 +2,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import Database from "better-sqlite3";
+import { dbDir, dbFile } from "./paths.js";
 
 // Emplacement DB final (déjà utilisé dans le projet)
-const DB_PATH = process.env.MS_DB_PATH
-  || path.join(process.env.USERPROFILE || process.env.HOME, "MamaStock", "data", "mamastock.db");
+const DB_PATH = process.env.MS_DB_PATH || dbFile();
+const DB_DIR = process.env.MS_DB_PATH ? path.dirname(process.env.MS_DB_PATH) : dbDir();
 
 const SQL_DIR = path.join(process.cwd(), "db", "sqlite");
 
@@ -43,7 +44,7 @@ function markApplied(db, filename) {
 }
 
 function main() {
-  ensureDir(path.dirname(DB_PATH));
+  ensureDir(DB_DIR);
   const db = new Database(DB_PATH);
   db.pragma("journal_mode = WAL");
   db.pragma("foreign_keys = ON");

@@ -1,17 +1,15 @@
 // node scripts/sqlite-inspect.js
 import fs from "node:fs";
-import path from "node:path";
-import os from "node:os";
 import Database from "better-sqlite3";
+import { dbDir, dbFile } from "./paths.js";
 
 function candidatePaths() {
-  const home = process.env.USERPROFILE || os.homedir();
-  const roaming = process.env.APPDATA || path.join(home, "AppData", "Roaming");
-  return [
-    process.env.MS_DB_PATH,                                                   // 1) chemin forcé
-    home && path.join(home, "MamaStock", "data", "mamastock.db"),            // 2) C:\Users\<user>\MamaStock\data\mamastock.db
-    roaming && path.join(roaming, "MamaStock", "data", "mamastock.db"),      // 3) %APPDATA%\MamaStock\data\mamastock.db
-  ].filter(Boolean);
+  const forced = process.env.MS_DB_PATH;
+  const defaults = dbFile();
+  const candidates = [];
+  if (forced) candidates.push(forced);
+  if (!candidates.includes(defaults)) candidates.push(defaults);
+  return candidates;
 }
 
 function findDbPath() {
@@ -40,13 +38,15 @@ function main() {
   const { sample } = parseArgs();
   const DB_PATH = findDbPath();
   if (!DB_PATH) {
-    console.error("❌ Aucun chemin de DB candidat. Définis MS_DB_PATH ou crée MamaStock/data/mamastock.db");
+    console.error("❌ Aucun chemin de DB candidat. Définis MS_DB_PATH ou crée la base attendue.");
     process.exit(1);
   }
   if (!fs.existsSync(DB_PATH)) {
     console.error("❌ Base introuvable:", DB_PATH);
     console.error("   - Lance d’abord vos migrations: `npm run db:apply`");
-    console.error("   - Ou définis MS_DB_PATH=CHEMIN\\mamastock.db");
+    console.error(`   - Emplacement attendu par défaut: ${dbFile()}`);
+    console.error(`   - Dossier AppData cible: ${dbDir()}`);
+    console.error("   - Ou définis MS_DB_PATH=CHEMIN\\\\mamastock.db");
     process.exit(1);
   }
 

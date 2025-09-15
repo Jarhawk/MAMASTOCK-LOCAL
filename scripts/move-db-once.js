@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { getAppDataDbPath } from "./paths.js";
+import { dbFile } from "./paths.js";
 
 const oldPath = path.join(os.homedir(), "MamaStock", "data", "mamastock.db");
-const newPath = getAppDataDbPath();
+const newPath = dbFile();
 
 if (fs.existsSync(oldPath) && oldPath !== newPath) {
   fs.mkdirSync(path.dirname(newPath), { recursive: true });
