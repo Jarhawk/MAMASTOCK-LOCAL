@@ -2,7 +2,7 @@
 // src/pages/debug/AuthDebug.jsx
 import { useAuth } from '@/hooks/useAuth';
 import GlassCard from "@/components/ui/GlassCard";
-import ResetAuthButton from "@/components/ResetAuthButton";import { isTauri } from "@/lib/db/sql";
+import ResetAuthButton from "@/components/ResetAuthButton";import { isTauri } from "@/lib/runtime/isTauri";
 
 function StatusDot({ ok }) {
   return (

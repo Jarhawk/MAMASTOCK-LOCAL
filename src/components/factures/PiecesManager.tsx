@@ -1,7 +1,7 @@
 import React from "react";
 import type { FacturePiece } from "@/lib/dal/facturePieces";
 import { attachFromPicker, listPieces, openPiece, removePiece } from "@/lib/dal/facturePieces";
-import { isTauri } from "@/lib/db/sql";
+import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function PiecesManager({ factureId }: { factureId: string }) {
   const [items, setItems] = React.useState<FacturePiece[]>([]);

@@ -7,7 +7,7 @@ import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { buildPriceData } from "./priceHelpers";import { isTauri } from "@/lib/db/sql";
+import { buildPriceData } from "./priceHelpers";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ProduitDetail({ produitId, produit, open, onClose }) {
   const { fetchProductPrices, fetchProductMouvements, fetchProductStock } =

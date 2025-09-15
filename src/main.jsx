@@ -7,7 +7,7 @@ import "./globals.css";
 import "nprogress/nprogress.css";
 import { runSqlSelfTest } from "@/debug/sqlSelfTest";
 import { clearWebviewOnDev } from "@/debug/clearWebview";
-import { isTauri } from "@/lib/db/sql";
+import { isTauri } from "@/lib/runtime/isTauri";
 
 clearWebviewOnDev();
 setupPwaGuard();

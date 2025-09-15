@@ -5,7 +5,7 @@ import {
   validation_requests_list,
   validation_requests_add,
   validation_requests_update } from
-'@/local/validations';import { isTauri } from "@/lib/db/sql";
+'@/local/validations';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function useValidations() {
   const { mama_id, user } = useAuth();

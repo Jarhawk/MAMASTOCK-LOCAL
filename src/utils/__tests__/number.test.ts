@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { normalizeNumberString, parseNumber, formatNumberFR } from '../number';import { isTauri } from "@/lib/db/sql";
+import { normalizeNumberString, parseNumber, formatNumberFR } from '../number';import { isTauri } from "@/lib/runtime/isTauri";
 
 describe('utils/number', () => {
   test('normalizeNumberString', () => {

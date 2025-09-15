@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useEffect } from 'react';import { isTauri } from "@/lib/db/sql";
+import { useEffect } from 'react';import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useSwipe(ref, { onSwipeLeft, onSwipeRight, threshold = 50 } = {}) {
   useEffect(() => {

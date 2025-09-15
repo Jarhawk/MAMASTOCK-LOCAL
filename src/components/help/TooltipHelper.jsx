@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect, useState } from 'react';
-import { useHelp } from '@/context/HelpProvider';import { isTauri } from "@/lib/db/sql";
+import { useHelp } from '@/context/HelpProvider';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function TooltipHelper({ field }) {
   const { tooltips, fetchTooltips } = useHelp();

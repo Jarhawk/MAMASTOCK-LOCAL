@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from 'sonner';
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/db/sql";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/runtime/isTauri";
 
 const FOOD_COST_SEUIL = 35;
 

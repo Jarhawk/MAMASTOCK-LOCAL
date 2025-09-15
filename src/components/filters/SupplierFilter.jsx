@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useFournisseursAutocomplete } from '@/hooks/useFournisseursAutocomplete';import { isTauri } from "@/lib/db/sql";
+import { useFournisseursAutocomplete } from '@/hooks/useFournisseursAutocomplete';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function SupplierFilter({ value, onChange, placeholder = 'Rechercher un fournisseur' }) {
   const [query, setQuery] = useState('');

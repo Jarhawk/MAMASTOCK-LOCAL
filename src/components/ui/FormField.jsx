@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { idFromLabel } from "@/utils/formIds";
-import React, { useId } from "react";import { isTauri } from "@/lib/db/sql";
+import React, { useId } from "react";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function FormField(props) {
   const { label, required, help, error, children, full = false } = props;

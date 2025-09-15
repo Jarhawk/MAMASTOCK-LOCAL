@@ -1,6 +1,6 @@
 import { backupDb, restoreDb, maintenanceDb } from "@/lib/db";
 import { toast } from "sonner";
-import { isTauri, getDb } from "@/lib/db/sql";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function SystemTools() {
   const backup = async () => {

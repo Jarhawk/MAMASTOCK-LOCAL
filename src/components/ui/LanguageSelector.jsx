@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { forwardRef, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';import { isTauri } from "@/lib/db/sql";
+import { useTranslation } from 'react-i18next';import { isTauri } from "@/lib/runtime/isTauri";
 
 const LanguageSelector = forwardRef(function LanguageSelector(
 { className = "px-2 py-1 text-sm rounded-md bg-mamastock-gold text-black", ...props },

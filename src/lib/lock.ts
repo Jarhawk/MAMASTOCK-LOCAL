@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { shutdownDbSafely } from "./shutdown";
-import { isTauri, getDb } from "@/lib/db/sql";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 import { locksPath, inAppDir } from "@/lib/paths";
 
 const TTL = 20_000; // 20s

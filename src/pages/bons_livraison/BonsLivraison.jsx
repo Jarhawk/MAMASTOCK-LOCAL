@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import GlassCard from "@/components/ui/GlassCard";
 import BonLivraisonRow from "@/components/bons_livraison/BonLivraisonRow";
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function BonsLivraison() {
   const { bons, total, getBonsLivraison, toggleBonActif } = useBonsLivraison();

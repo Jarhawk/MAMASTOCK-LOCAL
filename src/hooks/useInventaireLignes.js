@@ -7,7 +7,7 @@ import {
   inventaire_ligne_add,
   inventaire_ligne_update,
   inventaire_ligne_delete } from
-'@/lib/db';import { isTauri } from "@/lib/db/sql";
+'@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useInventaireLignes() {
   const { mama_id } = useAuth();

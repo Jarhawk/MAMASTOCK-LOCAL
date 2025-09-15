@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useCostingCarte } from '@/hooks/useCostingCarte';
 import TableContainer from '@/components/ui/TableContainer';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { Button } from '@/components/ui/button';import { isTauri } from "@/lib/db/sql";
+import { Button } from '@/components/ui/button';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function CostingCarte() {
   const { role, loading: authLoading, access_rights } = useAuth();

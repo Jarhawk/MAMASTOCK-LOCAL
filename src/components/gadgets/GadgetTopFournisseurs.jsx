@@ -1,7 +1,7 @@
 import { motion as Motion } from 'framer-motion';
 import useTopFournisseurs from '@/hooks/gadgets/useTopFournisseurs';
 import useFournisseurs from '@/hooks/data/useFournisseurs';
-import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/db/sql";
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function GadgetTopFournisseurs() {
   const { data, loading } = useTopFournisseurs();

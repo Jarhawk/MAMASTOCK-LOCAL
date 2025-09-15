@@ -2,7 +2,7 @@
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import GlassCard from "@/components/ui/GlassCard";
-import ApiDiagnostic from '@/components/dev/ApiDiagnostic.jsx';import { isTauri } from "@/lib/db/sql";
+import ApiDiagnostic from '@/components/dev/ApiDiagnostic.jsx';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Debug() {
   const { session, role, mama_id, access_rights, loading: authLoading } = useAuth();

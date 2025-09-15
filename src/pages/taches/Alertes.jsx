@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import { useAlerts } from "@/hooks/useAlerts";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/db/sql";
+import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Alertes() {
   const { rules: alertes, loading, fetchRules } = useAlerts();

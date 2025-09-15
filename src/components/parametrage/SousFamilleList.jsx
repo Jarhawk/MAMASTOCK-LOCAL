@@ -1,5 +1,5 @@
 /* @ts-nocheck */
-import React from 'react';import { isTauri } from "@/lib/db/sql";
+import React from 'react';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function SousFamilleList() {
   // TODO: implémentation réelle (filtre par mama_id, pagination)

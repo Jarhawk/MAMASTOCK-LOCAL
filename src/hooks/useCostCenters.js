@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 
 import { useAuditLog } from "@/hooks/useAuditLog";
-import { readCostCenters, writeCostCenters } from "@/local/costCenters";import { isTauri } from "@/lib/db/sql";
+import { readCostCenters, writeCostCenters } from "@/local/costCenters";import { isTauri } from "@/lib/runtime/isTauri";
 
 export async function importCostCentersFromExcel(file, sheetName) {
   const buf = await file.arrayBuffer();

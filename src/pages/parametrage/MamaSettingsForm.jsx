@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
 import useMamaSettings from "@/hooks/useMamaSettings";
 import { uploadFile, deleteFile, pathFromUrl } from "@/hooks/useStorage";
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function MamaSettingsForm() {
   const { mama_id } = useAuth();

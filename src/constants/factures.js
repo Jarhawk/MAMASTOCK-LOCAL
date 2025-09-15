@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export const FACTURE_STATUTS = [
+import { isTauri } from "@/lib/runtime/isTauri";export const FACTURE_STATUTS = [
 "Brouillon",
 "En attente",
 "Validée",

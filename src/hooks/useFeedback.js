@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { readText, saveText, existsFile } from "@/local/files";
 
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
 
 const FILE_PATH = "feedback.json";
 

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useStock } from "@/hooks/useStock";
 import { Button } from "@/components/ui/button";
 import ListingContainer from "@/components/ui/ListingContainer";
-import TableHeader from "@/components/ui/TableHeader";import { isTauri } from "@/lib/db/sql";
+import TableHeader from "@/components/ui/TableHeader";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function InventairePage() {
   const { getInventaires } = useStock();

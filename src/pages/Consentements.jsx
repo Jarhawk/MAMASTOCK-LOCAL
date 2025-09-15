@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import useConsentements from "@/hooks/useConsentements";
-import RGPDConsentForm from "@/pages/parametrage/RGPDConsentForm.jsx";import { isTauri } from "@/lib/db/sql";
+import RGPDConsentForm from "@/pages/parametrage/RGPDConsentForm.jsx";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Consentements() {
   const { consentements, fetchConsentements } = useConsentements();

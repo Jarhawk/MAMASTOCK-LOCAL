@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRuptureAlerts } from "@/hooks/useRuptureAlerts";
-import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function AlertesRupture() {
   const { fetchAlerts, generateSuggestions } = useRuptureAlerts();

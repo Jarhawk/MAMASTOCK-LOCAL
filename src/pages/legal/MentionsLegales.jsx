@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect, useState } from "react";
 import LegalLayout from "@/layout/LegalLayout";
-import useMamaSettings from "@/hooks/useMamaSettings";import { isTauri } from "@/lib/db/sql";
+import useMamaSettings from "@/hooks/useMamaSettings";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function MentionsLegales() {
   const { settings } = useMamaSettings();

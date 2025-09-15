@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { createAsyncState } from './_shared/createAsyncState';
-import { emails_envoyes_list } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
+import { emails_envoyes_list } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useEmailsEnvoyes() {
   const { mama_id } = useAuth();

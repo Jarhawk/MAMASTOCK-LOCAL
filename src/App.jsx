@@ -9,7 +9,7 @@ import { ThemeProvider } from "@/context/ThemeProvider";
 import CookieConsent from "@/components/CookieConsent";
 import ToastRoot from "@/components/ToastRoot";
 import DebugRibbon from "@/components/DebugRibbon";
-import { testRandom } from "/src/shims/selftest";import { isTauri } from "@/lib/db/sql";
+import { testRandom } from "/src/shims/selftest";import { isTauri } from "@/lib/runtime/isTauri";
 
 const queryClient = new QueryClient({
   defaultOptions: {

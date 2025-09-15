@@ -1,3 +1,3 @@
-import { isTauri } from "@/lib/db/sql";export default {
+import { isTauri } from "@/lib/runtime/isTauri";export default {
   validateLicense: () => true
 };

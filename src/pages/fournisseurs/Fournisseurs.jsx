@@ -17,7 +17,7 @@ import FournisseurRow from '@/components/fournisseurs/FournisseurRow';
 import { Dialog, DialogContent } from '@/components/ui/SmartDialog';
 import { toast } from 'sonner';
 import useExport from '@/hooks/useExport';
-import { isTauri, getDb } from '@/lib/db/sql';
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 import {
   ResponsiveContainer,
   LineChart,

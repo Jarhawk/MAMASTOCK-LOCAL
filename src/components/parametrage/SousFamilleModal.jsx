@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { Button } from '@/components/ui/button';
-import SousFamilleList from './SousFamilleList';import { isTauri } from "@/lib/db/sql";
+import SousFamilleList from './SousFamilleList';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function SousFamilleModal({ famille, onClose }) {
   if (!famille) return null;

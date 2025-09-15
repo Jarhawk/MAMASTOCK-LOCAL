@@ -1,4 +1,4 @@
-import { existsFile, readText, saveText } from "@/local/files";import { isTauri } from "@/lib/db/sql";
+import { existsFile, readText, saveText } from "@/local/files";import { isTauri } from "@/lib/runtime/isTauri";
 
 const FILE = "notifications.json";
 const PREF_FILE = "notification_preferences.json";

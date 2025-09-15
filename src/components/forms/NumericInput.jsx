@@ -1,5 +1,5 @@
 // NumericInput.jsx — saisie FR tolérante, sans milliers, pas de reformatage en cours de frappe
-import { useEffect, useRef, useState } from 'react';import { isTauri } from "@/lib/db/sql";
+import { useEffect, useRef, useState } from 'react';import { isTauri } from "@/lib/runtime/isTauri";
 
 function normalize(raw) {
   return raw.

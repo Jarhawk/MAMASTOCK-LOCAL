@@ -13,7 +13,7 @@ import {
   notifications_get,
   preferences_get,
   preferences_update } from
-'@/local/notifications';import { isTauri } from "@/lib/db/sql";
+'@/local/notifications';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function useNotifications() {
   const { mama_id, user_id } = useAuthContext();

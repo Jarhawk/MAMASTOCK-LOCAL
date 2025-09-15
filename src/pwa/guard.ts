@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";
+import { isTauri } from "@/lib/runtime/isTauri";
 
 export function setupPwaGuard() {
   if (isTauri) {

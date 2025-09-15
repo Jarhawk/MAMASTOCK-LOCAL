@@ -6,7 +6,7 @@ import ListingContainer from "@/components/ui/ListingContainer";
 import TableHeader from "@/components/ui/TableHeader";
 import PaginationFooter from "@/components/ui/PaginationFooter";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import RequisitionRow from "@/components/requisitions/RequisitionRow";import { isTauri } from "@/lib/db/sql";
+import RequisitionRow from "@/components/requisitions/RequisitionRow";import { isTauri } from "@/lib/runtime/isTauri";
 
 const PAGE_SIZE = 20;
 

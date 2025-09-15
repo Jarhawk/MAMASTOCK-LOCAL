@@ -12,7 +12,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/db/sql";
+import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/runtime/isTauri";
 
 function RequisitionFormPage() {
   const navigate = useNavigate();

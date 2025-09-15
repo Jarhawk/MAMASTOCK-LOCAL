@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Link, useLocation } from "react-router-dom";import { isTauri } from "@/lib/db/sql";
+import { Link, useLocation } from "react-router-dom";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Breadcrumbs() {
   const location = useLocation();

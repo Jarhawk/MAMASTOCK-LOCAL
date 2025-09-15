@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ProduitRow({
   produit,

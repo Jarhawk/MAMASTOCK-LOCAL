@@ -3,7 +3,7 @@ import {
   parseMoneyToNumberFR,
   normalizeDecimalFR,
   roundTo } from
-'@/utils/numberFormat';import { isTauri } from "@/lib/db/sql";
+'@/utils/numberFormat';import { isTauri } from "@/lib/runtime/isTauri";
 
 describe('numberFormat', () => {
   test('formatMoneyFR', () => {

@@ -6,7 +6,7 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react";
 // Remplace ce helper par ton utilitaire de classes si besoin.
 // Si tu as déjà un utilitaire "cn" dans "@/lib/utils", importe-le et utilise-le.
 // Sinon, garde cette version minimale.
-import { isTauri } from "@/lib/db/sql";function cn(...classes) {
+import { isTauri } from "@/lib/runtime/isTauri";function cn(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 

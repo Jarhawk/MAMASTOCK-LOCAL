@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/useAuth';
 import { useProduitsSearch } from '@/hooks/useProduitsSearch';
 import useDebounce from '@/hooks/useDebounce';
-import ProductPickerModal from './ProductPickerModal';import { isTauri } from "@/lib/db/sql";
+import ProductPickerModal from './ProductPickerModal';import { isTauri } from "@/lib/runtime/isTauri";
 
 function AutocompleteProduit(
 { value, onChange, required = false, placeholder = '', className = '', lineKey = 0, onFocus },

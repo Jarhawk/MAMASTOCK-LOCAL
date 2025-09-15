@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useInventaires } from "@/hooks/useInventaires";
 import { produits_list } from "@/lib/db";
 import { LiquidBackground, TouchLight } from "@/components/LiquidBackground";
-import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function MobileInventaire() {
   const { mama_id, loading: authLoading } = useAuth();

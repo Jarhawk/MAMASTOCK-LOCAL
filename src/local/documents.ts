@@ -1,4 +1,4 @@
-import { existsFile, readText, saveText } from "./files";import { isTauri } from "@/lib/db/sql";
+import { existsFile, readText, saveText } from "./files";import { isTauri } from "@/lib/runtime/isTauri";
 
 const FILE = "documents.json";
 

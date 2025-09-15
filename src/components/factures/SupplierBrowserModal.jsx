@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import useFournisseursBrowse from '@/hooks/useFournisseursBrowse';import { isTauri } from "@/lib/db/sql";
+import useFournisseursBrowse from '@/hooks/useFournisseursBrowse';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function SupplierBrowserModal({ open, onClose, onSelect }) {
   const [query, setQuery] = useState('');

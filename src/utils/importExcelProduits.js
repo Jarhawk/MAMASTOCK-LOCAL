@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { fetchFamillesForValidation } from "@/hooks/useFamilles";
 import { listUnitesForValidation } from "@/hooks/useUnites";
-import { fetchZonesStock } from "@/hooks/useZonesStock";import { isTauri } from "@/lib/db/sql";
+import { fetchZonesStock } from "@/hooks/useZonesStock";import { isTauri } from "@/lib/runtime/isTauri";
 
 function parseBoolean(value) {
   if (typeof value === "boolean") return value;

@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export const DEFAULT_ROLES = [
+import { isTauri } from "@/lib/runtime/isTauri";export const DEFAULT_ROLES = [
 {
   id: "chef_site",
   nom: "Chef de site",

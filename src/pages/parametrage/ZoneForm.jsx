@@ -10,7 +10,7 @@ import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Tabs } from '@/components/ui/tabs';
-import ZoneFormProducts from '@/components/parametrage/ZoneFormProducts.jsx';import { isTauri } from "@/lib/db/sql";
+import ZoneFormProducts from '@/components/parametrage/ZoneFormProducts.jsx';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ZoneForm() {
   const { id } = useParams();

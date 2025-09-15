@@ -2,7 +2,7 @@
 import { motion as Motion, AnimatePresence } from "framer-motion";
 
 // Modal glassy avec overlay et anims
-import { isTauri } from "@/lib/db/sql";export default function ModalGlass({
+import { isTauri } from "@/lib/runtime/isTauri";export default function ModalGlass({
   open,
   onClose,
   children,

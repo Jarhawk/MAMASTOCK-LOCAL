@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import { uploadFile, deleteFile, pathFromUrl } from '@/hooks/useStorage';
 
 // Ajuste le seuil d'alerte si besoin
-import { isTauri } from "@/lib/db/sql";const SEUIL_ECART = 0.5; // Unité
+import { isTauri } from "@/lib/runtime/isTauri";const SEUIL_ECART = 0.5; // Unité
 
 export default function InventaireForm({ inventaire, onClose }) {
   const {

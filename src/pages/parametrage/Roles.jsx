@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRoles } from "@/hooks/useRoles";
 import { Button } from "@/components/ui/button";
-import RoleForm from "./RoleForm";import { isTauri } from "@/lib/db/sql";
+import RoleForm from "./RoleForm";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Roles() {
   const { roles, loading, toggleActif } = useRoles();

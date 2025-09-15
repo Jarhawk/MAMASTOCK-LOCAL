@@ -1,4 +1,4 @@
-import { getDb as baseGetDb, closeDb as baseCloseDb, isTauri } from "@/lib/db/sql";
+import { getDb as baseGetDb, closeDb as baseCloseDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 import { dataDbPath, inAppDir } from "@/lib/paths";
 import { readConfig, writeConfig } from "@/appFs";
 

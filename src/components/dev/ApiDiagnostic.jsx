@@ -1,4 +1,4 @@
-import { query } from '@/local/db';import { isTauri } from "@/lib/db/sql";
+import { query } from '@/local/db';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ApiDiagnostic({ mamaId }) {
   const test = async () => {

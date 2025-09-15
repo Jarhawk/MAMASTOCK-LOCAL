@@ -12,7 +12,7 @@ import {
 "recharts";
 import { useRef, useState, useMemo } from "react";
 import html2canvas from "html2canvas";
-import { makeId } from "@/utils/formIds";import { isTauri } from "@/lib/db/sql";
+import { makeId } from "@/utils/formIds";import { isTauri } from "@/lib/runtime/isTauri";
 
 const allZones = [
 { key: "cost_cuisine", label: "Cuisine", color: "#bfa14d" },

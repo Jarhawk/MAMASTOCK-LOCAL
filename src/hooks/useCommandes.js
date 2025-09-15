@@ -8,7 +8,7 @@ import {
   commande_insert,
   commande_update,
   commande_delete } from
-'@/local/commandes';import { isTauri } from "@/lib/db/sql";
+'@/local/commandes';import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useCommandes() {
   const { mama_id, id: user_id } = useAuth();

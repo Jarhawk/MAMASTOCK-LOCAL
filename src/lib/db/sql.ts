@@ -1,80 +1,66 @@
-import type { Database } from "@tauri-apps/plugin-sql";
+/* src/lib/db/sql.ts */
+import Database from "@tauri-apps/plugin-sql";
+import { appDataDir, join } from "@tauri-apps/api/path";
+import { isTauri } from "@/lib/runtime/isTauri";
 
-const NOT_TAURI_HINT =
-  "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
+let _db: any | null = null;
+let _opening: Promise<any> | null = null;
 
-export const isTauri = (typeof window !== "undefined" && !!(window as any).__TAURI__) || !!import.meta.env.TAURI_PLATFORM;
+async function dbPath(): Promise<string> {
+  // On stocke la DB dans l’AppData du profil Tauri, sous MamaStock/data/mamastock.db
+  const base = await appDataDir();
+  // on tolère l’absence de mkdir ici : la base est créée par SQLite si le dossier existe déjà
+  // Si besoin tu peux sécuriser avec plugin-fs mkdir récursif.
+  const dir = await join(base, "MamaStock", "data");
+  const file = await join(dir, "mamastock.db");
+  return file;
+}
 
-let _db: Database | null = null;
-const DB_PATH = "C:/Users/dark_/MamaStock/data/mamastock.db";
-const DB_URI = "sqlite:" + DB_PATH;
-
-export async function getDb(): Promise<Database> {
+export async function getDb() {
   if (!isTauri) {
-    console.warn(NOT_TAURI_HINT);
-    return Promise.reject(new Error("SQLite indisponible hors Tauri"));
+    throw new Error("Tauri requis : ouvre l’app via la fenêtre Tauri (pas le navigateur) pour activer SQLite.");
   }
   if (_db) return _db;
-  const { Database } = await import("@tauri-apps/plugin-sql");
-  _db = await Database.load(DB_URI);
-  return _db;
+  if (_opening) return _opening;
+
+  _opening = (async () => {
+    const file = await dbPath();
+    try {
+      // NOTE: v2 -> default import + Database.load("sqlite:<abs path>")
+      const db = await Database.load(`sqlite:${file}`);
+      _db = db;
+      return db;
+    } catch (e: any) {
+      // Cas de droits manquants (capabilities)
+      const msg = String(e?.message || e);
+      if (/sql\.load not allowed/i.test(msg)) {
+        console.error(
+          "[SQL] Permission manquante: sql:allow-load. " +
+          "Vérifie src-tauri/capabilities/sql.json (doit contenir sql:allow-load, sql:allow-select, sql:allow-execute, sql:allow-close)."
+        );
+      }
+      throw e;
+    } finally {
+      _opening = null;
+    }
+  })();
+
+  return _opening;
 }
 
 export async function closeDb() {
-  if (!_db) return;
-  try {
-    await _db.close();
-  } finally {
-    _db = null;
+  try { await _db?.close?.(); } catch {}
+  _db = null;
+}
+
+export async function sqlSelfTest() {
+  if (!isTauri) {
+    console.info("[SQL SelfTest] hors Tauri -> ok (skip)");
+    return { ok: true, skipped: true };
   }
+  const db = await getDb();
+  const rows = await db.select("SELECT 1 as v");
+  return { ok: rows?.[0]?.v === 1, rows };
 }
 
-export async function tableCount(name: string): Promise<number> {
-  try {
-    const db = await getDb();
-    const rows: any = await db.select(`SELECT COUNT(*) AS c FROM ${name}`);
-    return rows?.[0]?.c ?? 0;
-  } catch {
-    return 0;
-  }
-}
-
-export async function locateDb(): Promise<string> {
-  return DB_URI;
-}
-
-export async function openDb(): Promise<Database> {
-  return getDb();
-}
-
-let seedWarned = false;
-export async function ensureSeeds() {
-  try {
-    const db = await getDb();
-    await db.execute(
-      "CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);",
-    );
-    await db.execute(
-      "INSERT OR IGNORE INTO meta(key, value) VALUES ('init','ok');",
-    );
-  } catch (err) {
-    if (!seedWarned) {
-      console.info("ensureSeeds failed", err);
-      seedWarned = true;
-    }
-  }
-}
-
-export async function getMigrationsState(): Promise<{
-  ok: boolean;
-  error?: string;
-}> {
-  try {
-    const db = await getDb();
-    await db.select("SELECT 1 AS ok");
-    return { ok: true };
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    return { ok: false, error: msg };
-  }
-}
+export { isTauri };

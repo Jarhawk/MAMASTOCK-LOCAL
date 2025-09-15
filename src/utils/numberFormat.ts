@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export function formatMoneyFR(n: number | string, opts?: Intl.NumberFormatOptions): string {
+import { isTauri } from "@/lib/runtime/isTauri";export function formatMoneyFR(n: number | string, opts?: Intl.NumberFormatOptions): string {
   const value = typeof n === 'string' ? Number(n) : n;
   const formatter = new Intl.NumberFormat('fr-FR', {
     style: 'currency',

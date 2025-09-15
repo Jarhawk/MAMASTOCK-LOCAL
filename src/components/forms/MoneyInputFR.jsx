@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Input from '@/components/ui/input.jsx';
-import { formatMoneyFR, parseMoneyToNumberFR } from '@/utils/numberFormat';import { isTauri } from "@/lib/db/sql";
+import { formatMoneyFR, parseMoneyToNumberFR } from '@/utils/numberFormat';import { isTauri } from "@/lib/runtime/isTauri";
 
 function isTrailing(raw) {
   const t = (raw ?? '').trim();

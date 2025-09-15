@@ -1,5 +1,5 @@
 import { factures_list } from "@/lib/db";
-import { useQuery } from "@tanstack/react-query";import { isTauri } from "@/lib/db/sql";
+import { useQuery } from "@tanstack/react-query";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useFactures(filters = {}) {
   const { page = 1, pageSize = 20, search = "", fournisseur, statut } = filters;

@@ -1,4 +1,4 @@
-import { getDb, isTauri } from "@/lib/db/sql";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 
 function b64url(buf: Uint8Array) {
   // base64url sans padding

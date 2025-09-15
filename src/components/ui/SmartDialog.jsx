@@ -6,7 +6,7 @@ import {
   Title as DialogTitle,
   Description as DialogDescription,
   Close as DialogClose } from
-'@radix-ui/react-dialog';import { isTauri } from "@/lib/db/sql";
+'@radix-ui/react-dialog';import { isTauri } from "@/lib/runtime/isTauri";
 
 export { Dialog, DialogOverlay, DialogContent, DialogTitle, DialogDescription, DialogClose };
 

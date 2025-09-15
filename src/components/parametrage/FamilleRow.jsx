@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import SousFamilleRow from './SousFamilleRow';
-import SousFamilleForm from '@/forms/SousFamilleForm.jsx';import { isTauri } from "@/lib/db/sql";
+import SousFamilleForm from '@/forms/SousFamilleForm.jsx';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function FamilleRow({
   famille,

@@ -1,4 +1,4 @@
-import { readText, saveText, existsFile } from "./files";import { isTauri } from "@/lib/db/sql";
+import { readText, saveText, existsFile } from "./files";import { isTauri } from "@/lib/runtime/isTauri";
 
 const FILE = "stats/budget_mensuel.json";
 

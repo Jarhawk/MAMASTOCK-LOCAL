@@ -14,7 +14,7 @@ import {
 '@/components/ui/SmartDialog';
 import MamaForm from './MamaForm';
 import { toast } from 'sonner';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/db/sql";
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Mamas() {
   const { mama_id: myMama, role } = useAuth();

@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { toast } from 'sonner';
 import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';import { isTauri } from "@/lib/db/sql";
+import * as XLSX from 'xlsx';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ParamFamilles() {
   const {

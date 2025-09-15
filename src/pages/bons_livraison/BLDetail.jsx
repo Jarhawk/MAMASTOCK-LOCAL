@@ -5,7 +5,7 @@ import { useBonsLivraison } from "@/hooks/useBonsLivraison";
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function BLDetail({ bon: bonProp, onClose }) {
   const { id } = useParams();

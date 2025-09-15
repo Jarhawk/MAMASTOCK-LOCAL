@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import TableContainer from "@/components/ui/TableContainer";
 import GlassCard from "@/components/ui/GlassCard";
 import { Search } from "lucide-react";
-import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
+import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Alertes() {
   const { rules, fetchRules, addRule, deleteRule } = useAlerts();

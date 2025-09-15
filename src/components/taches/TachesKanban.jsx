@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export default function TachesKanban({ taches = [] }) {
+import { isTauri } from "@/lib/runtime/isTauri";export default function TachesKanban({ taches = [] }) {
   const cols = ['a_faire', 'en_cours', 'terminee'];
   const labels = {
     a_faire: 'À faire',

@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export function hasAccess(module, access_rights) {
+import { isTauri } from "@/lib/runtime/isTauri";export function hasAccess(module, access_rights) {
   if (!access_rights || typeof access_rights !== "object") return false;
   const mod = access_rights[module];
   if (!mod || typeof mod !== "object") return false;

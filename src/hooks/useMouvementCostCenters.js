@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from '@/hooks/useAuth';
 import { useAuditLog } from "@/hooks/useAuditLog";
 import { readText, saveText, existsFile } from "@/local/files";
-import { readCostCenters } from "@/local/costCenters";import { isTauri } from "@/lib/db/sql";
+import { readCostCenters } from "@/local/costCenters";import { isTauri } from "@/lib/runtime/isTauri";
 
 const FILE_PATH = "config/cost_center_allocations.json";
 

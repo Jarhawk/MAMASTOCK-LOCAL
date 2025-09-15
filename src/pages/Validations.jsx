@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import GlassCard from '@/components/ui/GlassCard';
-import TableContainer from '@/components/ui/TableContainer';import { isTauri } from "@/lib/db/sql";
+import TableContainer from '@/components/ui/TableContainer';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Validations() {
   const { isAdmin, mama_id } = useAuth();

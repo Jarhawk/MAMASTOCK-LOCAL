@@ -16,7 +16,7 @@ import {
   Radar,
   BarChart,
   Bar } from
-'recharts';import { isTauri } from "@/lib/db/sql";
+'recharts';import { isTauri } from "@/lib/runtime/isTauri";
 
 const median = (arr) => {
   const s = [...arr].sort((a, b) => a - b);

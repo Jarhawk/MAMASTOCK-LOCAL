@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useMenuEngineering } from '@/hooks/useMenuEngineering';
 import FicheRentabiliteCard from '@/components/fiches/FicheRentabiliteCard';
 import html2canvas from 'html2canvas';
-import JSPDF from 'jspdf';import { isTauri } from "@/lib/db/sql";
+import JSPDF from 'jspdf';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function MenuEngineering() {
   const { data, fetchData } = useMenuEngineering();

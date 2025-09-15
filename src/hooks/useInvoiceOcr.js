@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 /**
  * Hook OCR factures (stub).
  * @returns {{ enabled: boolean, parse: (file: File|Blob) => Promise<{lines:any[], meta:any}> }}
- */import { isTauri } from "@/lib/db/sql";
+ */import { isTauri } from "@/lib/runtime/isTauri";
 export default function useInvoiceOcr() {
   return useMemo(() => ({
     enabled: false,

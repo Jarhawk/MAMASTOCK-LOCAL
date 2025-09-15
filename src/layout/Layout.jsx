@@ -13,7 +13,7 @@ import {
   WavesBackground,
   MouseLight,
   TouchLight } from
-"@/components/LiquidBackground";import { isTauri } from "@/lib/db/sql";
+"@/components/LiquidBackground";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Layout() {
   const { fetchUnreadCount, subscribeToNotifications } = useNotifications();

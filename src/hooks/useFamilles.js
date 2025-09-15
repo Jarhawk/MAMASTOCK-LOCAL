@@ -6,7 +6,7 @@ import {
   familles_update,
   familles_delete,
   familles_batch_delete } from
-'@/lib/db';import { isTauri } from "@/lib/db/sql";
+'@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
 
 export async function fetchFamilles(mamaId) {
   const data = await familles_list(mamaId);

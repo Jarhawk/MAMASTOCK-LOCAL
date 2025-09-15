@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Surcouts() {
   return (

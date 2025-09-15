@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function NotificationSettingsForm() {
   const { fetchPreferences, updatePreferences } = useNotifications();

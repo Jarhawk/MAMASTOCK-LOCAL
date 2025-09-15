@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export async function testRandom() {
+import { isTauri } from "@/lib/runtime/isTauri";export async function testRandom() {
   const shim = (window as any).cryptoShim ?? (await import("/src/shims/crypto"));
   const uuid = shim.randomUUID();
   if (!(uuid && typeof uuid === "string")) throw new Error("randomUUID failed");

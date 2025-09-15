@@ -9,7 +9,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import MamaLogo from "@/components/ui/MamaLogo";
 import { Input } from "@/components/ui/input";
 import PrimaryButton from "@/components/ui/PrimaryButton";
-import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
+import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function CreateMama() {
   const [nom, setNom] = useState("");

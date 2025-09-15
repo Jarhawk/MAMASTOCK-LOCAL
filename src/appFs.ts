@@ -1,5 +1,5 @@
 import { configPath } from "@/lib/paths";
-import { isTauri } from "@/lib/db/sql";
+import { isTauri } from "@/lib/runtime/isTauri";
 
 export type Config = Record<string, any>;
 const LS_KEY = "config.json";

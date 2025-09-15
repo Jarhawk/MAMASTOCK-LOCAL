@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect } from "react";
-import { useMultiMama } from "@/context/MultiMamaContext";import { isTauri } from "@/lib/db/sql";
+import { useMultiMama } from "@/context/MultiMamaContext";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useMamaSwitcher() {
   const { mamas, mamaActif, setMamaActif, loading } = useMultiMama();

@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useFournisseurApiConfig } from "@/hooks/useFournisseurApiConfig";
 import { Link } from "react-router-dom";
 import TableContainer from "@/components/ui/TableContainer";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/db/sql";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ApiFournisseurs() {
   const { mama_id } = useAuth();

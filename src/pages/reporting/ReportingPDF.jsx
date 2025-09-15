@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import GraphCost from "./GraphCost";import { isTauri } from "@/lib/db/sql";
+import GraphCost from "./GraphCost";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ReportingPDF() {
   return (
