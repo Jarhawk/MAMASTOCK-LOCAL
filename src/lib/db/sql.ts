@@ -1,7 +1,7 @@
 // src/lib/db/sql.ts
 import { appDataDir, homeDir, join } from "@tauri-apps/api/path";
 import { exists, mkdir } from "@tauri-apps/plugin-fs";
-import { Database } from "@tauri-apps/plugin-sql";
+import Database from "@tauri-apps/plugin-sql";
 
 export const isTauri = !!import.meta.env.TAURI_PLATFORM;
 
