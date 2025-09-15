@@ -16,7 +16,7 @@ if (import.meta.env.DEV && isTauri) {
   import("@/debug/check-capabilities-runtime");
 }
 
-runSqlSelfTest().catch(console.error);
+runSqlSelfTest().catch(() => {});
 
 if (
   typeof window !== "undefined" &&

@@ -1,17 +1,23 @@
-import { isTauri } from "@/lib/db/sql";
+import { isTauri, getDb } from "@/lib/db/sql";
 
+let done = false;
 export async function runSqlSelfTest() {
+  if (done) return;
+  done = true;
   if (!isTauri) {
-    console.info("[SQL SelfTest] hors Tauri -> ok (skip)");
+    console.log("[SQL SelfTest] hors Tauri -> ok (skip)");
     return;
   }
   try {
-    const Database = (await import("@tauri-apps/plugin-sql")).default;
-    const db = await Database.load("sqlite:mamastock.db"); // nécessite sql:allow-load
-    const rows = await db.select("SELECT 1 AS ok");
-    console.info("[SQL SelfTest] OK, permissions actives:", rows);
-  } catch (e:any) {
-    console.error("[SQL SelfTest] ÉCHEC:", e?.message ?? e);
-    console.error("-> Vérifie src-tauri/capabilities/sql.json et relance complètement Tauri.");
+    const db = await getDb();
+    await db.select("SELECT 1 AS ok");
+    console.info("[SQL SelfTest] SELECT ok");
+    await db.execute("CREATE TABLE IF NOT EXISTS _ping (id INTEGER PRIMARY KEY, ts TEXT)");
+    await db.execute("DELETE FROM _ping");
+    await db.execute("INSERT INTO _ping(ts) VALUES (datetime('now'))");
+    const r = await db.select("SELECT COUNT(*) AS c FROM _ping");
+    console.info("[SQL SelfTest] write ok, rows:", r?.[0]?.c ?? 0);
+  } catch (e: any) {
+    console.error("[SQL SelfTest] ERROR:", e?.message || e);
   }
 }
