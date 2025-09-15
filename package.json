@@ -7,7 +7,8 @@
     "node": ">=18"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --strictPort",
+    "tauri:dev": "cross-env TAURI_DEV_URL=http://localhost:5173/ npx tauri dev",
     "build": "node scripts/check-node-native.js && vite build",
     "lint:node": "node scripts/check-node-native.js",
     "preview": "vite preview",
