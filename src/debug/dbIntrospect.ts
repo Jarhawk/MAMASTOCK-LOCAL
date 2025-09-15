@@ -1,6 +1,6 @@
 // src/debug/dbIntrospect.ts
 import { appDataDir, join } from "@tauri-apps/api/path";
-import { Database } from "@tauri-apps/plugin-sql";
+import Database from "@tauri-apps/plugin-sql";
 import schemaSQL from "@/../db/sqlite/001_schema.sql?raw";
 
 async function dbUrl() {
