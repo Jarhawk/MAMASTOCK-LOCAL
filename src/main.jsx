@@ -1,3 +1,4 @@
+import "@/debug/dbIntrospect";
 import { setupPwaGuard } from "@/pwa/guard";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
