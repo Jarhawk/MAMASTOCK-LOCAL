@@ -1,4 +1,4 @@
-import { LoadingSpinner } from "./LoadingSpinner";import { isTauri } from "@/lib/db/sql";
+import { LoadingSpinner } from "./LoadingSpinner";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function LoadingScreen({ message = "Chargement..." }) {
   return (

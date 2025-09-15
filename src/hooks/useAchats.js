@@ -6,7 +6,7 @@ import {
   achat_get,
   achat_insert,
   achat_update } from
-"@/local/achats";import { isTauri } from "@/lib/db/sql";
+"@/local/achats";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useAchats() {
   const { mama_id } = useAuth();

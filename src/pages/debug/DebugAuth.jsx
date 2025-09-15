@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '@/context/AuthContext';import { isTauri } from "@/lib/db/sql";
+import { useAuth } from '@/context/AuthContext';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function DebugAuth() {
   const { session, userData, loading } = useAuth();

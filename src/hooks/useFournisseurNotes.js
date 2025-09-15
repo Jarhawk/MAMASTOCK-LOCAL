@@ -4,7 +4,7 @@ import {
   fournisseur_notes_list,
   fournisseur_notes_add,
   fournisseur_notes_delete } from
-"@/lib/db";import { isTauri } from "@/lib/db/sql";
+"@/lib/db";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useFournisseurNotes() {
   const [notes, setNotes] = useState([]);

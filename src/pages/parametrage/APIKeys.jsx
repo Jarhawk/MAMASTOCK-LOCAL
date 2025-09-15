@@ -7,7 +7,7 @@ import { useApiKeys } from '@/hooks/useApiKeys';
 import { toast } from 'sonner';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import TableContainer from '@/components/ui/TableContainer';
-import GlassCard from '@/components/ui/GlassCard';import { isTauri } from "@/lib/db/sql";
+import GlassCard from '@/components/ui/GlassCard';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function APIKeys() {
   const { keys, loading, listKeys, createKey, revokeKey } = useApiKeys();

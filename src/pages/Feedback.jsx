@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import TableContainer from "@/components/ui/TableContainer";
 import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/db/sql";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Feedback() {
   const { mama_id, loading: authLoading } = useAuth();

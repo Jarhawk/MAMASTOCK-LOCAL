@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export function normalizeAccessKey(k) {
+import { isTauri } from "@/lib/runtime/isTauri";export function normalizeAccessKey(k) {
   if (!k) return null;
   const map = {
     fiches: 'fiches_techniques',

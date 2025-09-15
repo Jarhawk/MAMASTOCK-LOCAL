@@ -1,4 +1,4 @@
-import { isTauri, getDb } from "@/lib/db/sql";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 const APP_DIR = "MamaStock";
 const USERS_FILE = "users.json";
 

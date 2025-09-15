@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/runtime/isTauri"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 
 export default function TableHeader({ children, className = '', ...props }) {
   return (

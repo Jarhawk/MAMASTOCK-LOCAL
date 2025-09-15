@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import PromotionRow from "@/components/promotions/PromotionRow";
 import { toast } from 'sonner';
-import PromotionForm from "./PromotionForm.jsx";import { isTauri } from "@/lib/db/sql";
+import PromotionForm from "./PromotionForm.jsx";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Promotions() {
   const {

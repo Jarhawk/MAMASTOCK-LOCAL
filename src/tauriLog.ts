@@ -8,7 +8,7 @@ export type LogApi = {
 
 let api: Partial<LogApi> | null = null;
 
-import { isTauri, getDb } from "@/lib/db/sql";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 
 export async function initLog() {
   if (isTauri && import.meta.env.PROD) {

@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Button } from "@/components/ui/button";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/db/sql";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function StatsAdvanced() {
   const { data, loading, error, fetchStats } = useAdvancedStats();

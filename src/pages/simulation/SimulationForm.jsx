@@ -1,5 +1,5 @@
 /* @ts-nocheck */
-import React, { useState } from 'react';import { isTauri } from "@/lib/db/sql";
+import React, { useState } from 'react';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function SimulationForm() {
   // TODO: implémentation réelle (entrées, calculs)

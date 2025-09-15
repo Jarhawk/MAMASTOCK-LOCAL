@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export function can(rights = {}, module, action = "read", role = null) {
+import { isTauri } from "@/lib/runtime/isTauri";export function can(rights = {}, module, action = "read", role = null) {
   if (role === "admin") return true;
   const mod = rights?.[module];
   if (!mod) return false;

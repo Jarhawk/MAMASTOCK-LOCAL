@@ -5,7 +5,7 @@ import { useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import * as XLSX from 'xlsx';
 import JSPDF from 'jspdf';
-import 'jspdf-autotable';import { isTauri } from "@/lib/db/sql";
+import 'jspdf-autotable';import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useCostingCarte() {
   const { mama_id } = useAuth();

@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { stats_cost_centers_list } from '@/lib/db';
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useCostCenterStats() {
   const { mama_id } = useAuth();

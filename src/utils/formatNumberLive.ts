@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export type FormatLiveOptions = {
+import { isTauri } from "@/lib/runtime/isTauri";export type FormatLiveOptions = {
   type: 'qty' | 'money';
   locale?: string;
 };

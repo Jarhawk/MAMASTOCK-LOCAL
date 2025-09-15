@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export function registerAbortOnHMR(controller: AbortController) {
+import { isTauri } from "@/lib/runtime/isTauri";export function registerAbortOnHMR(controller: AbortController) {
   if (import.meta.hot) {
     import.meta.hot.dispose(() => {
       try {controller.abort();} catch {}

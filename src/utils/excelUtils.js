@@ -1,5 +1,5 @@
 import { parseProduitsFile, insertProduits, validateProduitRow } from "./importExcelProduits";
-import { exportExcelProduits, downloadProduitsTemplate } from "./exportExcelProduits";import { isTauri } from "@/lib/db/sql";
+import { exportExcelProduits, downloadProduitsTemplate } from "./exportExcelProduits";import { isTauri } from "@/lib/runtime/isTauri";
 
 export {
   parseProduitsFile,

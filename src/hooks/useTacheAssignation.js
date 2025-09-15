@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState, useCallback } from "react";
-import { tache_assign_users, tache_unassign_user } from "@/lib/db";import { isTauri } from "@/lib/db/sql";
+import { tache_assign_users, tache_unassign_user } from "@/lib/db";import { isTauri } from "@/lib/runtime/isTauri";
 
 
 export function useTacheAssignation() {

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
-import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/db/sql";
+import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/runtime/isTauri";
 
 const PAGE_SIZE = 20;
 

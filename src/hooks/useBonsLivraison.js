@@ -7,7 +7,7 @@ import {
   bonLivraison_update } from
 "@/local/bonsLivraison";
 
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useBonsLivraison() {
   const { mama_id } = useAuth();

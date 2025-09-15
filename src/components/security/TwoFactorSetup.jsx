@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import QRCode from 'qrcode.react';
 import { useTwoFactorAuth } from '@/hooks/useTwoFactorAuth';
-import { Button } from '@/components/ui/button';import { isTauri } from "@/lib/db/sql";
+import { Button } from '@/components/ui/button';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function TwoFactorSetup() {
   const {

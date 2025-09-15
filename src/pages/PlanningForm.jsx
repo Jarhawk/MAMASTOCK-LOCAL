@@ -9,7 +9,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { useAuth } from '@/hooks/useAuth';
-import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/db/sql";
+import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function PlanningForm() {
   const navigate = useNavigate();

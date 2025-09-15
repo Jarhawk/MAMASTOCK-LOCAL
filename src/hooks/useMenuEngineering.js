@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { menu_engineering_list, menu_engineering_save_vente } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
+import { menu_engineering_list, menu_engineering_save_vente } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
 
 function median(arr) {
   if (!arr.length) return 0;

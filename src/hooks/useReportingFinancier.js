@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { reporting_financier } from "@/lib/db";
 import { saveText } from "@/local/files";
-import { useAuth } from "@/hooks/useAuth";import { isTauri } from "@/lib/db/sql";
+import { useAuth } from "@/hooks/useAuth";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useReportingFinancier({ start, end }) {
   const { mama_id } = useAuth();

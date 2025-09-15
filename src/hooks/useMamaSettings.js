@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/AuthContext';
 import { deduceEnabledModulesFromRights } from '@/lib/access';
-import { readConfig, writeConfig } from '@/appFs';import { isTauri } from "@/lib/db/sql";
+import { readConfig, writeConfig } from '@/appFs';import { isTauri } from "@/lib/runtime/isTauri";
 
 function safeQueryClient() {
   try {

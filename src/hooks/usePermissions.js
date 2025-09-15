@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useAuth } from '@/hooks/useAuth';
 import * as XLSX from "xlsx";
 import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";
-import { saveAs } from "file-saver";import { isTauri } from "@/lib/db/sql";
+import { saveAs } from "file-saver";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function usePermissions() {
   const { mama_id, role } = useAuth();

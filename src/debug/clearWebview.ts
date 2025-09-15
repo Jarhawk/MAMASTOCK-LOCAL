@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export async function clearWebviewOnDev() {
+import { isTauri } from "@/lib/runtime/isTauri";export async function clearWebviewOnDev() {
   if (!import.meta.env.PROD) {
     try {
       const mod = await import("@tauri-apps/api/webview");

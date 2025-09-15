@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";
+import { isTauri } from "@/lib/runtime/isTauri";
 
 const NOT_TAURI_HINT =
   "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";

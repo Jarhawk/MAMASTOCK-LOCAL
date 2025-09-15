@@ -1,4 +1,4 @@
-import { readText, saveText, existsFile } from "@/local/files";import { isTauri } from "@/lib/db/sql";
+import { readText, saveText, existsFile } from "@/local/files";import { isTauri } from "@/lib/runtime/isTauri";
 
 const FILE_PATH = "config/cost_centers.json";
 

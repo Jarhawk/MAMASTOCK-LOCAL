@@ -1,5 +1,5 @@
 // src/local/db.ts
-import { getDb, isTauri } from "@/lib/db/sql";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 
 export { getDb };
 

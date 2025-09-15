@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { MODULES } from "@/config/modules";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { toast } from 'sonner';
-import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/db/sql";
+import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function AccessRights() {
   const { users, fetchUsers, updateUser } = useUtilisateurs();

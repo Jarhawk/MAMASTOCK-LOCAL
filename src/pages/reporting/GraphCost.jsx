@@ -8,7 +8,7 @@ import {
   CartesianGrid,
   Legend,
   ResponsiveContainer } from
-"recharts";import { isTauri } from "@/lib/db/sql";
+"recharts";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function GraphCost({ data }) {
   return (

@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import Unauthorized from "@/pages/auth/Unauthorized";
-import InventaireLigneRow from "@/components/inventaire/InventaireLigneRow";import { isTauri } from "@/lib/db/sql";
+import InventaireLigneRow from "@/components/inventaire/InventaireLigneRow";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function InventaireForm() {
   const navigate = useNavigate();

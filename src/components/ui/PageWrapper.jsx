@@ -5,7 +5,7 @@ import {
   MouseLight,
   TouchLight } from
 "@/components/LiquidBackground";
-import { useLocation } from "react-router-dom";import { isTauri } from "@/lib/db/sql";
+import { useLocation } from "react-router-dom";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function PageWrapper({ children, className = '', intensity = 1 }) {
   const { search } = useLocation();

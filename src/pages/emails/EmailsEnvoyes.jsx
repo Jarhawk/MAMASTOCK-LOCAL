@@ -17,7 +17,7 @@ import { saveAs } from 'file-saver';
 import { pdf } from '@react-pdf/renderer';
 import CommandePDF from '@/components/pdf/CommandePDF';
 
-import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
+import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function EmailsEnvoyes() {
   const { mama_id, loading: authLoading, role } = useAuth();

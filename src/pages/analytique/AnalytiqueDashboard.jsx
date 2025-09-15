@@ -7,7 +7,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { useAuth } from '@/hooks/useAuth';
 import { useCostCenters } from "@/hooks/useCostCenters";
 import { useFamilles } from "@/hooks/useFamilles";
-import { useAnalytique } from "@/hooks/useAnalytique";import { isTauri } from "@/lib/db/sql";
+import { useAnalytique } from "@/hooks/useAnalytique";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function AnalytiqueDashboard() {
   const { isAuthenticated, loading: authLoading } = useAuth();

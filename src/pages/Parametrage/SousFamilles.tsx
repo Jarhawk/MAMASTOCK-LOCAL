@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getDb, isTauri } from '@/lib/db/sql';
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 
 interface Famille { id: number; nom: string; }
 interface SousFamille { id: number; nom: string; famille_id: number; famille: string; }

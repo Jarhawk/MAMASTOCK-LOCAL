@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from '@/hooks/useAuth';
-import { top_fournisseurs_list } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
+import { top_fournisseurs_list } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function useTopFournisseurs() {
   const { mama_id, loading: authLoading } = useAuth() || {};

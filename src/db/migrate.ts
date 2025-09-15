@@ -1,7 +1,7 @@
 import { getDb } from "./client";
 import { migrations } from "./migrationsList";
 import { inAppDir } from "@/lib/paths";
-import { isTauri } from "@/lib/db/sql";
+import { isTauri } from "@/lib/runtime/isTauri";
 
 /** Splitter SQL qui respecte CREATE TRIGGER ... BEGIN ... END; */
 function splitSql(script: string): string[] {

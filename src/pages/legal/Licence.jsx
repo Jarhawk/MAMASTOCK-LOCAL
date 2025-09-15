@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { Link } from "react-router-dom";
-import LegalLayout from "@/layout/LegalLayout";import { isTauri } from "@/lib/db/sql";
+import LegalLayout from "@/layout/LegalLayout";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Licence() {
   return (

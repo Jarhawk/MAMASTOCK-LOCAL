@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { MODULES as MODULE_LIST } from '@/config/modules';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
+import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ParamAccess() {
   const { permissions, fetchPermissions, updatePermission } = usePermissions();

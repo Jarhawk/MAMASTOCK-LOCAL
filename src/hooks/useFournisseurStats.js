@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { getDb, isTauri } from '@/lib/db/sql';
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 
 // Stats d’évolution d’achats (tous fournisseurs ou par fournisseur)
 export function useFournisseurStats() {

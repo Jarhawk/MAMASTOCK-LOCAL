@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState, useEffect } from "react";
 import Button from "@/components/ui/button";
-import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/db/sql";
+import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);

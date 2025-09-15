@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import useMenuGroupe from '@/hooks/useMenuGroupe';import { isTauri } from "@/lib/db/sql";
+import useMenuGroupe from '@/hooks/useMenuGroupe';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function MenuGroupeDetail() {
   const { id } = useParams();

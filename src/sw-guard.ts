@@ -1,5 +1,5 @@
 // src/sw-guard.ts
-import { isTauri } from "@/lib/db/sql";
+import { isTauri } from "@/lib/runtime/isTauri";
 
 // En contexte Tauri ou http non-sécurisé, on désenregistre tout SW présent
 if (isTauri && "serviceWorker" in navigator) {

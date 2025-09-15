@@ -12,7 +12,7 @@ import {
   inventaire_cloture,
   inventaire_last_closed,
 } from '@/lib/db';
-import { getDb, isTauri } from '@/lib/db/sql';
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useInventaires() {
   const { mama_id } = useAuth();

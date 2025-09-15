@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
 import { getExportDir } from '@/lib/db';
-import { isTauri, getDb } from '@/lib/db/sql';
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 
 async function resolveExportPath(filename) {
   const dir = await getExportDir();

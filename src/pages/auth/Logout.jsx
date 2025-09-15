@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import PageWrapper from "@/components/ui/PageWrapper";
-import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Logout() {
   const navigate = useNavigate();

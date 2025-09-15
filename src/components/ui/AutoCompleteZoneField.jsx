@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect } from 'react';
 import AutoCompleteField from './AutoCompleteField';
-import { useZones } from '@/hooks/useZones';import { isTauri } from "@/lib/db/sql";
+import { useZones } from '@/hooks/useZones';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function AutoCompleteZoneField({ value, onChange, ...props }) {
   const { zones, fetchZones } = useZones();

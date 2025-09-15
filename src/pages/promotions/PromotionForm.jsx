@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import SecondaryButton from "@/components/ui/SecondaryButton";
-import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/db/sql";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function PromotionForm({ promotion = {}, onClose, onSave, saving }) {
   const [form, setForm] = useState({

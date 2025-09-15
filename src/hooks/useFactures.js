@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
-import { facture_create, facture_add_ligne } from "@/lib/db";import { isTauri } from "@/lib/db/sql";
+import { facture_create, facture_add_ligne } from "@/lib/db";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useFactures() {
   const [loading, setLoading] = useState(false);

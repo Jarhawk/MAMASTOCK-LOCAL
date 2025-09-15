@@ -20,7 +20,7 @@ import { useAuth } from '@/hooks/useAuth';
 import ProduitRow from "@/components/produits/ProduitRow";
 import ModalImportProduits from "@/components/produits/ModalImportProduits";
 import useExport from '@/hooks/useExport';
-import { isTauri, getDb } from '@/lib/db/sql';
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 
 const PAGE_SIZE = 50;
 

@@ -4,7 +4,7 @@ import { toast } from "sonner";
 
 import { useAuth } from "@/hooks/useAuth";
 import { readConfig } from "@/appFs";
-import { facture_create, facture_add_ligne } from "@/lib/db";import { isTauri } from "@/lib/db/sql";
+import { facture_create, facture_add_ligne } from "@/lib/db";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useFournisseurAPI() {
   const { mama_id } = useAuth();

@@ -6,7 +6,7 @@ import useFournisseurs from "@/hooks/data/useFournisseurs";
 import { useProduitsFournisseur } from "@/hooks/useProduitsFournisseur";
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import { getTemplatesCommandesActifs } from "@/hooks/useTemplatesCommandes";import { isTauri } from "@/lib/db/sql";
+import { getTemplatesCommandesActifs } from "@/hooks/useTemplatesCommandes";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function CommandeForm() {
   const navigate = useNavigate();

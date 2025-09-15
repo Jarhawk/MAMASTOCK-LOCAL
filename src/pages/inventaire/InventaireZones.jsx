@@ -16,7 +16,7 @@ import { toast } from 'sonner';
 import { useInventaireZones } from "@/hooks/useInventaireZones";
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/db/sql";
+import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function InventaireZones() {
   const { zones, loading, getZones, createZone, updateZone, deleteZone } =

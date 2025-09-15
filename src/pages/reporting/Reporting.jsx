@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useReportingFinancier } from '@/hooks/useReportingFinancier';
 import StatCard from '@/components/ui/StatCard';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/db/sql";
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Reporting() {
   const month = new Date().toISOString().slice(0, 7);

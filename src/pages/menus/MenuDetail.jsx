@@ -3,7 +3,7 @@ import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
-import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
+import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function MenuDetail({ menu, onClose, onDuplicate }) {
   // Export Excel d'un menu

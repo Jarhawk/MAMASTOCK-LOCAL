@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
-import { consolidation_performance } from "@/lib/db";import { isTauri } from "@/lib/db/sql";
+import { consolidation_performance } from "@/lib/db";import { isTauri } from "@/lib/runtime/isTauri";
 
 
 export function useConsolidatedStats() {

@@ -7,7 +7,7 @@ import { mapDbLineToUI } from '@/features/factures/invoiceMappers';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { toast } from 'sonner';
 import { facture_get } from '@/lib/db';
-import PiecesManager from "@/components/factures/PiecesManager";import { isTauri } from "@/lib/db/sql";
+import PiecesManager from "@/components/factures/PiecesManager";import { isTauri } from "@/lib/runtime/isTauri";
 
 function toLabel(v) {
   if (v == null) return '';

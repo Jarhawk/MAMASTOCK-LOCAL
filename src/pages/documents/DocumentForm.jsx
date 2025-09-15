@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
-import { Select } from "@/components/ui/select";import { isTauri } from "@/lib/db/sql";
+import { Select } from "@/components/ui/select";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function DocumentForm({ onUploaded, entiteType = "", entiteId = null, categories = [] }) {
   const [file, setFile] = useState(null);

@@ -6,7 +6,7 @@ import DocumentForm from "./DocumentForm.jsx";
 import DocumentPreview from "@/components/documents/DocumentPreview";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Documents() {
   const { mama_id, loading: authLoading } = useAuth();

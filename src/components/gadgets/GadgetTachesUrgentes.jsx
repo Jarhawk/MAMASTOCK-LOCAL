@@ -1,6 +1,6 @@
 import { motion as Motion } from 'framer-motion';
 import useTachesUrgentes from '@/hooks/gadgets/useTachesUrgentes';
-import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/db/sql";
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function GadgetTachesUrgentes() {
   const { data, loading } = useTachesUrgentes();

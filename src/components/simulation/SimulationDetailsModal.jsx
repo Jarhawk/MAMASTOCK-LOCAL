@@ -3,7 +3,7 @@ import ModalGlass from "@/components/ui/ModalGlass";
 import Button from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";import { isTauri } from "@/lib/db/sql";
+import { saveAs } from "file-saver";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function SimulationDetailsModal({ open, onClose, result }) {
   const exportExcel = () => {

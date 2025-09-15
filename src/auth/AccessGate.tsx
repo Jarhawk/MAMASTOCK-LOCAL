@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
-import { isTauri } from "@/lib/db/sql";
+import { isTauri } from "@/lib/runtime/isTauri";
 
 // Simple gate : en local, on autorise tout (fini les “Accès refusé”)
 export default function AccessGate({ children }: { children: React.ReactNode }) {

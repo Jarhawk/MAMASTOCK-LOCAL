@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useTranslation } from 'react-i18next';import { isTauri } from "@/lib/db/sql";
+import { useTranslation } from 'react-i18next';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function useFormatters() {
   const { i18n } = useTranslation();

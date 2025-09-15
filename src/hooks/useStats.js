@@ -2,7 +2,7 @@
 // src/hooks/useStats.js
 import { useState, useEffect, useCallback } from "react";
 import { one } from "@/local/db";
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/db/sql";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useStats() {
   const { mama_id } = useAuth();

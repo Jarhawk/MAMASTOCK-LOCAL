@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { LiquidBackground } from '@/components/LiquidBackground';
 import ProduitForm from '@/components/produits/ProduitForm';
-import { useEffect } from 'react';import { isTauri } from "@/lib/db/sql";
+import { useEffect } from 'react';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ProduitFormPage() {
   useEffect(() => {

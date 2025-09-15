@@ -1,4 +1,4 @@
-import { openDb } from "@/db/index";import { isTauri } from "@/lib/db/sql";
+import { openDb } from "@/db/index";import { isTauri } from "@/lib/runtime/isTauri";
 
 async function sha256Hex(input: string) {
   const enc = new TextEncoder();

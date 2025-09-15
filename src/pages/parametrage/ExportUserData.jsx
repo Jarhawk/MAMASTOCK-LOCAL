@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
-import { useRGPD } from "@/hooks/useRGPD";import { isTauri } from "@/lib/db/sql";
+import { useRGPD } from "@/hooks/useRGPD";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ExportUserData({ userId = null }) {
   const { user_id, role } = useAuth();

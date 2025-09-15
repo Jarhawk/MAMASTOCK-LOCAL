@@ -1,6 +1,6 @@
 import { Select } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/db/sql";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function FicheLigne({ ligne, products = [], ficheOptions = [], onChange, onRemove }) {
   const prod = products.find((p) => p.id === ligne.produit_id);

@@ -1,6 +1,6 @@
 import { ResponsiveContainer, LineChart, Line, Tooltip } from 'recharts';
 import useEvolutionAchats from '@/hooks/gadgets/useEvolutionAchats';
-import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/db/sql";
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function GadgetEvolutionAchats() {
   const { data, loading } = useEvolutionAchats();

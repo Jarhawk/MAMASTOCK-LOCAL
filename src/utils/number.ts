@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql";export function normalizeNumberString(value: string): string {
+import { isTauri } from "@/lib/runtime/isTauri";export function normalizeNumberString(value: string): string {
   if (typeof value !== 'string') return '';
   return value.replace(/\s+/g, '').replace(',', '.');
 }

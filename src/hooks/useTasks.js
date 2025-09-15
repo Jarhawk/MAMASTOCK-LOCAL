@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState, useCallback } from "react";
 import { taches_list, tache_get, taches_by_status, tache_add, tache_update, tache_delete } from "@/lib/db";
-import { useAuth } from "@/hooks/useAuth";import { isTauri } from "@/lib/db/sql";
+import { useAuth } from "@/hooks/useAuth";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useTasks() {
   const { mama_id } = useAuth();

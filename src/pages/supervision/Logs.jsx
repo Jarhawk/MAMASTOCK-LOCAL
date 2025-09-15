@@ -15,7 +15,7 @@ import {
   DialogTitle } from
 "@/components/ui/SmartDialog";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { Badge } from "@/components/ui/badge";import { isTauri } from "@/lib/db/sql";
+import { Badge } from "@/components/ui/badge";import { isTauri } from "@/lib/runtime/isTauri";
 
 const TYPES = ["login", "update_produit", "delete_facture", "export_pdf"];
 const MODULES = ["produits", "factures", "inventaire"];

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { listUnites, createUnite, deleteUnite } from '@/lib/unites';import { isTauri } from "@/lib/db/sql";
+import { listUnites, createUnite, deleteUnite } from '@/lib/unites';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Unites() {
   const [rows, setRows] = useState([]);

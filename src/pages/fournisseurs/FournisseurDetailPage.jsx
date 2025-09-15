@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import GlassCard from "@/components/ui/GlassCard";
 import { LiquidBackground } from "@/components/LiquidBackground";
-import FournisseurDetail from "./FournisseurDetail";import { isTauri } from "@/lib/db/sql";
+import FournisseurDetail from "./FournisseurDetail";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function FournisseurDetailPage() {
   const { id } = useParams();

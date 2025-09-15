@@ -8,7 +8,7 @@ import TableHeader from '@/components/ui/TableHeader';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
-import { isTauri } from '@/lib/db/sql';
+import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Familles() {
   const { hasAccess, loading: authLoading } = useAuth();

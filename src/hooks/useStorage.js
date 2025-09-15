@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { saveBinary, deleteFile as removeFile, readBinary } from "@/local/files";import { isTauri } from "@/lib/db/sql";
+import { saveBinary, deleteFile as removeFile, readBinary } from "@/local/files";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function pathFromUrl(url) {
   return url || "";

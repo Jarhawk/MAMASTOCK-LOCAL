@@ -6,7 +6,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import TableContainer from "@/components/ui/TableContainer";
 
 // Affiche le comparatif des prix par fournisseur pour un produit
-import { isTauri } from "@/lib/db/sql";
+import { isTauri } from "@/lib/runtime/isTauri";
 export default function PrixFournisseurs({ produitId }) {
   const { lignes, loading, error } = useComparatif(produitId);
 

@@ -6,7 +6,7 @@ import {
   promotions_add,
   promotions_update,
   promotions_delete } from
-"@/local/promotions";import { isTauri } from "@/lib/db/sql";
+"@/local/promotions";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function usePromotions() {
   const { mama_id } = useAuth();

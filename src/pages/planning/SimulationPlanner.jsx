@@ -7,7 +7,7 @@ import { useSimulation } from '@/hooks/useSimulation';
 import SimulationDetailsModal from '@/components/simulation/SimulationDetailsModal';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import TableContainer from '@/components/ui/TableContainer';import { isTauri } from "@/lib/db/sql";
+import TableContainer from '@/components/ui/TableContainer';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function SimulationPlanner() {
   const { mama_id, loading: authLoading } = useAuth();

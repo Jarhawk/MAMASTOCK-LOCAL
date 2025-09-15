@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import * as XLSX from 'xlsx';
-import { Button } from '@/components/ui/button';import { isTauri } from "@/lib/db/sql";
+import { Button } from '@/components/ui/button';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ImportVentesExcel({ onImport }) {
   const handleFile = async (e) => {

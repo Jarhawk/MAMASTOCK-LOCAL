@@ -5,7 +5,7 @@ import PrixFournisseurs from "./PrixFournisseurs";
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Select } from "@/components/ui/select";
-import { produits_list } from '@/lib/db';import { isTauri } from "@/lib/db/sql";
+import { produits_list } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ComparatifPrix() {
   const { mama_id } = useAuth();

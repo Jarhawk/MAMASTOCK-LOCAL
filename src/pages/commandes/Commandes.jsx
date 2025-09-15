@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from '@/hooks/useAuth';
 import { useCommandes } from "@/hooks/useCommandes";
-import useFournisseurs from "@/hooks/data/useFournisseurs";import { isTauri } from "@/lib/db/sql";
+import useFournisseurs from "@/hooks/data/useFournisseurs";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function Commandes() {
   const { mama_id, role } = useAuth();

@@ -8,7 +8,7 @@ import {
   periodes_get,
   periodes_active,
   periodes_close } from
-"@/lib/db";import { isTauri } from "@/lib/db/sql";
+"@/lib/db";import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function usePeriodes() {
   const { mama_id } = useAuth();

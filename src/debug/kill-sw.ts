@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/db/sql"; // src/debug/kill-sw.ts
+import { isTauri } from "@/lib/runtime/isTauri"; // src/debug/kill-sw.ts
 // Désactive TOUT service worker + vide le cache, le plus tôt possible.
 // S’exécute en dev sous localhost:5173 et dans la WebView (tauri.localhost).
 ;(function killSW() {

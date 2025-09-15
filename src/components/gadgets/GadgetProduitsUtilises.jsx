@@ -1,6 +1,6 @@
 import { motion as Motion } from 'framer-motion';
 import useProduitsUtilises from '@/hooks/gadgets/useProduitsUtilises';
-import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/db/sql";
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function GadgetProduitsUtilises() {
   const { data, loading } = useProduitsUtilises();

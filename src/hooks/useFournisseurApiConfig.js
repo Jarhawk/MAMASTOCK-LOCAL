@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { readConfig, writeConfig } from '@/appFs';
-import { toast } from 'sonner';import { isTauri } from "@/lib/db/sql";
+import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useFournisseurApiConfig() {
   const { mama_id } = useAuth();

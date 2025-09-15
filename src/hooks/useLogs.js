@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { logs_list, logs_add, rapports_list } from "@/local/logs";
 import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/db/sql";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/runtime/isTauri";
 
 export function useLogs() {
   const { mama_id } = useAuth();

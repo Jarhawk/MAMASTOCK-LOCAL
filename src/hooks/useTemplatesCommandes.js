@@ -7,7 +7,7 @@ import {
   templates_commandes_update,
   templates_commandes_delete,
   templates_commandes_get_for_fournisseur } from
-"@/local/templatesCommandes";import { isTauri } from "@/lib/db/sql";
+"@/local/templatesCommandes";import { isTauri } from "@/lib/runtime/isTauri";
 
 export async function getTemplatesCommandesActifs() {
   const data = await templates_commandes_list({ actif: true });

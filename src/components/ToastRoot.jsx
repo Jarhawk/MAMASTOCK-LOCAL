@@ -1,4 +1,4 @@
-import { Toaster } from 'sonner';import { isTauri } from "@/lib/db/sql";
+import { Toaster } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
 
 export default function ToastRoot() {
   return (
