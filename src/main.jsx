@@ -7,6 +7,7 @@ import "./globals.css";
 import "nprogress/nprogress.css";
 import { runSqlSelfTest } from "@/debug/sqlSelfTest";
 import { clearWebviewOnDev } from "@/debug/clearWebview";
+import { logTauriBootCheck } from "@/debug/tauriBootCheck";
 import { isTauri } from "@/lib/db/sql";
 
 clearWebviewOnDev();
@@ -29,6 +30,7 @@ if (
 }
 
 const root = createRoot(document.getElementById("root"));
+logTauriBootCheck("[Boot]");
 root.render(
   <StrictMode>
     <ErrorBoundary>
