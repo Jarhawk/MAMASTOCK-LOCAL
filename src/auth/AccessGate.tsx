@@ -1,14 +1,11 @@
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
-
-function isLocal() {
-  return !!(window as any).__TAURI__ || !!import.meta.env.TAURI_PLATFORM;
-}
+import { isTauri } from "@/lib/db/sql";
 
 // Simple gate : en local, on autorise tout (fini les “Accès refusé”)
 export default function AccessGate({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
-  if (isLocal()) return <>{children}</>;
+  if (isTauri) return <>{children}</>;
 
   // Si un jour tu veux remettre RBAC web:
   // const allowed = hasAccess(user, requiredPerms);
