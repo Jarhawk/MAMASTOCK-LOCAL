@@ -1,4 +1,4 @@
-import { getDb as baseGetDb, closeDb as baseCloseDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb as baseGetDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
 import { dataDbPath, inAppDir } from "@/lib/paths";
 import { readConfig, writeConfig } from "@/appFs";
 
@@ -504,9 +504,7 @@ export async function compta_mapping_list(mama_id: string, type: string) {
   );
 }
 
-export async function closeDb() {
-  await baseCloseDb();
-}
+export async function closeDb() {}
 
 
 export async function backupDb() {
