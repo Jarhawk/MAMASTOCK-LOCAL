@@ -2,11 +2,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
-import { getAppDataDbPath } from "./paths.js";
+import { appDataBaseDir } from "./paths.js";
 
 // Même hiérarchie que appDataDir() côté Tauri:
-const dbPath = getAppDataDbPath();
-const appRoot = path.dirname(path.dirname(dbPath));
+const appRoot = appDataBaseDir();
 const usersFile = path.join(appRoot, "users.json");
 
 fs.mkdirSync(appRoot, { recursive: true });
