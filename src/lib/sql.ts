@@ -1,1 +1,1 @@
-export { getDb, closeDb, isTauri, requireTauri } from "./db/sql";
+export { getDb, closeDb, tableCount, isTauri } from "./db/sql";
