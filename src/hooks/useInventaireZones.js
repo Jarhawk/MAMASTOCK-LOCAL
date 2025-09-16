@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { zones_stock_list } from '@/lib/db';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 import { toast } from 'sonner';
 
 export function useInventaireZones() {
@@ -13,7 +13,7 @@ export function useInventaireZones() {
   const [error, setError] = useState(null);
 
     async function getZones() {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useInventaireZones: ignoré hors Tauri');
         return [];
       }
@@ -34,7 +34,7 @@ export function useInventaireZones() {
   }
 
     async function createZone(zone) {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useInventaireZones: ignoré hors Tauri');
         return;
       }
@@ -57,7 +57,7 @@ export function useInventaireZones() {
   }
 
     async function updateZone(id, fields) {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useInventaireZones: ignoré hors Tauri');
         return;
       }
@@ -85,7 +85,7 @@ export function useInventaireZones() {
   }
 
     async function deleteZone(id) {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useInventaireZones: ignoré hors Tauri');
         return;
       }
@@ -108,7 +108,7 @@ export function useInventaireZones() {
   }
 
     async function reactivateZone(id) {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useInventaireZones: ignoré hors Tauri');
         return;
       }

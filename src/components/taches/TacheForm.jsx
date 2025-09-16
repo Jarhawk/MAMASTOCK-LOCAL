@@ -8,7 +8,7 @@ import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { toast } from 'sonner';
-import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/runtime/isTauri";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/tauriEnv";
 
 export default function TacheForm({ task }) {
   const { addTask, updateTask } = useTasks();

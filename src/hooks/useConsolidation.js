@@ -4,7 +4,7 @@ import { consolidation_performance } from "@/lib/db";
 import { readConfig } from "@/appFs";
 import * as XLSX from "xlsx";
 import JSPDF from "jspdf";
-import "jspdf-autotable";import { isTauri } from "@/lib/runtime/isTauri";
+import "jspdf-autotable";import { isTauri } from "@/lib/tauriEnv";
 
 export function useConsolidation() {
   const [sites, setSites] = useState([]);

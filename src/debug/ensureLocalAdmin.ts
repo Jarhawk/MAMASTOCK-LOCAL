@@ -1,5 +1,5 @@
 // src/debug/ensureLocalAdmin.ts
-import { registerLocal, LocalAccountEnv } from "@/auth/localAccount";import { isTauri } from "@/lib/runtime/isTauri";
+import { registerLocal, LocalAccountEnv } from "@/auth/localAccount";import { isTauri } from "@/lib/tauriEnv";
 
 const ADMIN_EMAIL = "admin@mamastock.local";
 const ADMIN_PASS = "Admin123!";

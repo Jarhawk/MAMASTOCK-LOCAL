@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export default function useAlerteStockFaible() {
   const { mama_id } = useAuth();
@@ -10,7 +10,7 @@ export default function useAlerteStockFaible() {
 
   const fetchData = useCallback(
       async (signal) => {
-        if (!isTauri) {
+        if (!isTauri()) {
           console.info('useAlerteStockFaible: ignoré hors Tauri');
           return [];
         }

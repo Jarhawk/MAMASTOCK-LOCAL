@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { readConfig } from "@/appFs";import { isTauri } from "@/lib/runtime/isTauri";
+import { readConfig } from "@/appFs";import { isTauri } from "@/lib/tauriEnv";
 
 export default function AccessMultiSites() {
   const [rows, setRows] = useState([]);

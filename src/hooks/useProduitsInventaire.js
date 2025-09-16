@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState, useCallback } from 'react';
 
-import { produits_list } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
+import { produits_list } from '@/lib/db';import { isTauri } from "@/lib/tauriEnv";
 
 export function useProduitsInventaire() {
   const [produits, setProduits] = useState([]);

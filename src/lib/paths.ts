@@ -1,11 +1,11 @@
 // src/lib/paths.ts
-import { isTauri } from "@/lib/runtime/isTauri";
+import { isTauri } from "@/lib/tauriEnv";
 
 const NOT_TAURI_HINT =
   "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
 export const APP_DIR = "MamaStock";
 export async function getAppDir() {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return "";
   }
@@ -14,7 +14,7 @@ export async function getAppDir() {
   return join(base, APP_DIR);
 }
 export async function inAppDir(...parts: string[]) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return "";
   }

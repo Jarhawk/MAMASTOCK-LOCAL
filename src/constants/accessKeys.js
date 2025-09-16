@@ -1,4 +1,4 @@
-import { MODULES } from '@/config/modules';import { isTauri } from "@/lib/runtime/isTauri";
+import { MODULES } from '@/config/modules';import { isTauri } from "@/lib/tauriEnv";
 
 export const MODULE_KEYS = MODULES.map((m) => m.key);
 

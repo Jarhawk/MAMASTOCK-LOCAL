@@ -1,6 +1,6 @@
 // src/debug/check-capabilities-runtime.ts
 // Testeur runtime des permissions SQL (à exécuter DANS Tauri WebView)
-import { isTauri } from "@/lib/runtime/isTauri";
+import { isTauri } from "@/lib/tauriEnv";
 
 type Step = { ok: boolean; error?: string };
 type Report = {
@@ -50,8 +50,8 @@ function permissionHintFrom(err: string): string[] {
 export async function runCapCheck(): Promise<Report> {
   const report: Report = {
     env: {
-      tauri: isTauri,
-      platform: isTauri ? (import.meta as any).env.TAURI_PLATFORM ?? null : null,
+      tauri: isTauri(),
+      platform: isTauri() ? (import.meta as any).env.TAURI_PLATFORM ?? null : null,
       appName: null,
       appVersion: null,
       windowLabel: null,

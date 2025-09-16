@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { readText, existsFile } from "@/local/files";
 
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/tauriEnv";
 
 const FILE_PATH = "config/consentements.json";
 

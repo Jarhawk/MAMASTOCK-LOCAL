@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export async function openDb() {
   return await getDb();

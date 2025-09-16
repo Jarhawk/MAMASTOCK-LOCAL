@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // src/components/ui/input.jsx
 
-import * as React from 'react';import { isTauri } from "@/lib/runtime/isTauri";
+import * as React from 'react';import { isTauri } from "@/lib/tauriEnv";
 
 const Input = React.forwardRef(
   (

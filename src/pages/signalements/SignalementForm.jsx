@@ -4,7 +4,7 @@ import { useSignalements } from "@/hooks/useSignalements";
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import GlassCard from "@/components/ui/GlassCard";
-import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/runtime/isTauri";
+import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/tauriEnv";
 
 export default function SignalementForm({ onCreated }) {
   const { loading: authLoading } = useAuth();

@@ -5,7 +5,7 @@ import { useProducts } from '@/hooks/useProducts';
 import { useZones } from '@/hooks/useZones';
 import { Button } from '@/components/ui/button';
 import GlassCard from '@/components/ui/GlassCard';
-import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
+import { toast } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function TransfertForm({ onClose, onSaved }) {
   const { createTransfert } = useTransferts();

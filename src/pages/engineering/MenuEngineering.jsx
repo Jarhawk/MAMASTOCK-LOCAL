@@ -10,7 +10,7 @@ import EngineeringChart from '@/components/engineering/EngineeringChart';
 import ImportVentesExcel from '@/components/engineering/ImportVentesExcel';
 import html2canvas from 'html2canvas';
 import JSPDF from 'jspdf';
-import * as XLSX from 'xlsx';import { isTauri } from "@/lib/runtime/isTauri";
+import * as XLSX from 'xlsx';import { isTauri } from "@/lib/tauriEnv";
 
 export default function MenuEngineering() {
   const { mama_id, roles = [], loading: authLoading } = useAuth();

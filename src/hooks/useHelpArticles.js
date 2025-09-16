@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
-import { readText, saveText, existsFile } from "@/local/files";import { isTauri } from "@/lib/runtime/isTauri";
+import { readText, saveText, existsFile } from "@/local/files";import { isTauri } from "@/lib/tauriEnv";
 
 const FILE_PATH = "help/articles.json";
 

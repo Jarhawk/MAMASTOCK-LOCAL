@@ -1,4 +1,4 @@
-import { getDb as baseGetDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb as baseGetDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 import { dataDbPath, inAppDir } from "@/lib/paths";
 import { readConfig, writeConfig } from "@/appFs";
 
@@ -531,7 +531,7 @@ export async function maintenanceDb() {
 
 // Config helpers for data/export directories
 export async function getDataDir() {
-  if (!isTauri) return "";
+  if (!isTauri()) return "";
   const cfg = (await readConfig()) || {};
   return cfg.dataDir || (await inAppDir("data"));
 }
@@ -543,7 +543,7 @@ export async function setDataDir(dir: string) {
 }
 
 export async function getExportDir() {
-  if (!isTauri) return "";
+  if (!isTauri()) return "";
   const cfg = (await readConfig()) || {};
   return cfg.exportDir || (await inAppDir("export"));
 }

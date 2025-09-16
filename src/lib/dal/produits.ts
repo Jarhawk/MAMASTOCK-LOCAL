@@ -1,8 +1,8 @@
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 import type { Produit } from "@/lib/types";
 
 export async function listProduits(actif?: boolean): Promise<Produit[]> {
-  if (!isTauri) return [];
+  if (!isTauri()) return [];
   const db = await getDb();
   if (actif == null)
     return db.select<Produit[]>("SELECT * FROM produits ORDER BY nom ASC");
@@ -13,7 +13,7 @@ export async function listProduits(actif?: boolean): Promise<Produit[]> {
 }
 
 export async function getProduit(id: number): Promise<Produit | null> {
-  if (!isTauri) return null;
+  if (!isTauri()) return null;
   const db = await getDb();
   const rows = await db.select<Produit[]>(
     "SELECT * FROM produits WHERE id = ?",
@@ -23,7 +23,7 @@ export async function getProduit(id: number): Promise<Produit | null> {
 }
 
 export async function saveProduit(p: Partial<Produit> & { id?: number }) {
-  if (!isTauri) return;
+  if (!isTauri()) return;
   const db = await getDb();
   if (p.id)
     return db.execute(

@@ -8,7 +8,7 @@ import MenuDuJourDetail from "./MenuDuJourDetail.jsx";
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { toast } from 'sonner';
-import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/runtime/isTauri";
+import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/tauriEnv";
 
 export default function MenuDuJour() {
   const { menusDuJour, fetchMenusDuJour, deleteMenuDuJour, exportMenusDuJourToExcel } = useMenuDuJour();

@@ -9,7 +9,7 @@ import FamilleForm from '@/forms/FamilleForm';
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
-import { useFamillesWithSousFamilles } from '@/hooks/useFamillesWithSousFamilles';import { isTauri } from "@/lib/runtime/isTauri";
+import { useFamillesWithSousFamilles } from '@/hooks/useFamillesWithSousFamilles';import { isTauri } from "@/lib/tauriEnv";
 
 
 export default function Familles() {

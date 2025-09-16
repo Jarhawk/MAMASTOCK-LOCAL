@@ -15,7 +15,7 @@ import {
   exportToClipboard,
   printView } from
 '@/lib/export/exportHelpers';
-import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
+import { toast } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function useExport() {
   const [loading, setLoading] = useState(false);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { loginLocal, registerLocal } from "@/auth/localAccount";
-import "./login.css";import { isTauri } from "@/lib/runtime/isTauri";
+import "./login.css";import { isTauri } from "@/lib/tauriEnv";
 
 export default function LoginPage() {
   const nav = useNavigate();

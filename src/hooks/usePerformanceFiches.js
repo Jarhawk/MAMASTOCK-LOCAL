@@ -2,7 +2,7 @@
 import { performance_fiches_list } from '@/lib/db';
 import { useState } from 'react';
 
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/tauriEnv";
 
 export default function usePerformanceFiches() {
   const { mama_id } = useAuth();

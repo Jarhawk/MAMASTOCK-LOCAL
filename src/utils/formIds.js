@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri"; // Nettoie une chaîne pour usage en id HTML
+import { isTauri } from "@/lib/tauriEnv"; // Nettoie une chaîne pour usage en id HTML
 const sanitize = (str = '') =>
 str.
 normalize('NFD').

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useMenuDuJour } from "@/hooks/useMenuDuJour";
 import { useFiches } from "@/hooks/useFiches";
 import { Button } from "@/components/ui/button";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/runtime/isTauri";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
 
 const CATEGORIES = ["entrée", "plat", "dessert"];
 const COST_THRESHOLD = 5;

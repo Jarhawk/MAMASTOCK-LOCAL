@@ -7,7 +7,7 @@ import GlassCard from '@/components/ui/GlassCard';
 import { LiquidBackground } from '@/components/LiquidBackground';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import { buildPriceData } from '@/components/produits/priceHelpers';import { isTauri } from "@/lib/runtime/isTauri";
+import { buildPriceData } from '@/components/produits/priceHelpers';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ProduitDetailPage() {
   const { id } = useParams();

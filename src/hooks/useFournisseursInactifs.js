@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
-import { fournisseurs_inactifs } from "@/lib/db";import { isTauri } from "@/lib/runtime/isTauri";
+import { fournisseurs_inactifs } from "@/lib/db";import { isTauri } from "@/lib/tauriEnv";
 
 export function useFournisseursInactifs() {
   const [fournisseurs, setFournisseurs] = useState([]);

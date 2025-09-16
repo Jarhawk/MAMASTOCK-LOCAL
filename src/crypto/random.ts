@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri";export function randomBytes(len: number): Uint8Array {
+import { isTauri } from "@/lib/tauriEnv";export function randomBytes(len: number): Uint8Array {
   const out = new Uint8Array(len);
   // Web Crypto in the browser & Tauri webview
   crypto.getRandomValues(out);

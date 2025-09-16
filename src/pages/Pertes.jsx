@@ -8,7 +8,7 @@ import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Input } from "@/components/ui/input";
 import TableContainer from "@/components/ui/TableContainer";
 import GlassCard from "@/components/ui/GlassCard";
-import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
+import { toast } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function Pertes() {
   const { mama_id } = useAuth();

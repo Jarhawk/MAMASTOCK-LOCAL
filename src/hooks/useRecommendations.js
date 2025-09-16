@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
-import { getRecommendations } from "@/local/recommendations";import { isTauri } from "@/lib/runtime/isTauri";
+import { getRecommendations } from "@/local/recommendations";import { isTauri } from "@/lib/tauriEnv";
 
 export function useRecommendations() {
   const { id: user_id, mama_id } = useAuth();

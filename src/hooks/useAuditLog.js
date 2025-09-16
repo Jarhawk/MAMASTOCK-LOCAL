@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { exec } from '@/local/db';
 
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/tauriEnv";
 
 export function useAuditLog() {
   const { mama_id, user } = useAuth();

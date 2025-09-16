@@ -1,4 +1,4 @@
-import { registerLocal, loginLocal } from "@/auth/localAccount";import { isTauri } from "@/lib/runtime/isTauri";
+import { registerLocal, loginLocal } from "@/auth/localAccount";import { isTauri } from "@/lib/tauriEnv";
 declare global {interface Window {
     mamaRegister?: (email: string, password: string, role?: string) => Promise<any>;
     mamaLogin?: (email: string, password: string) => Promise<any>;

@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 
 
 // Colonnes exportées avec libellés lisibles
-import { isTauri } from "@/lib/runtime/isTauri";const EXPORT_HEADERS = [
+import { isTauri } from "@/lib/tauriEnv";const EXPORT_HEADERS = [
 { key: "nom", header: "Nom" },
 { key: "unite", header: "Unité" },
 { key: "famille", header: "Famille" },

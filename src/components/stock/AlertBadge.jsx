@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Bell } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useRuptureAlerts } from "@/hooks/useRuptureAlerts";import { isTauri } from "@/lib/runtime/isTauri";
+import { useRuptureAlerts } from "@/hooks/useRuptureAlerts";import { isTauri } from "@/lib/tauriEnv";
 
 export default function AlertBadge() {
   const { fetchAlerts } = useRuptureAlerts();

@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useNavigate, useParams } from "react-router-dom";
-import InventaireForm from "@/components/inventaires/InventaireForm";import { isTauri } from "@/lib/runtime/isTauri";
+import InventaireForm from "@/components/inventaires/InventaireForm";import { isTauri } from "@/lib/tauriEnv";
 
 export default function InventaireFormPage() {
   const navigate = useNavigate();

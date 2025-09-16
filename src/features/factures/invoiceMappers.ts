@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri";export function mapDbLineToUI(row: any) {
+import { isTauri } from "@/lib/tauriEnv";export function mapDbLineToUI(row: any) {
   const qte = Number(row.quantite ?? 0);
   const pu = Number(row.prix_unitaire_ht ?? 0);
   const total_ht = Number(row.montant_ht ?? qte * pu);

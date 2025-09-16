@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useProduitsSearch } from '@/hooks/useProduitsSearch';import { isTauri } from "@/lib/runtime/isTauri";
+import { useProduitsSearch } from '@/hooks/useProduitsSearch';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ProduitSearchModal({
   open,

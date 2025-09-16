@@ -1,4 +1,4 @@
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 import { inAppDir } from "@/lib/paths";
 
 type Json = unknown;
@@ -8,7 +8,7 @@ const BROWSER_NS = "mamastock";
 function lsKey(rel: string) { return `${BROWSER_NS}:${rel.replace(/\\/g,'/')}`; }
 
 export async function readJsonFile(rel: string): Promise<Json | null> {
-  if (!isTauri) {
+  if (!isTauri()) {
     const v = localStorage.getItem(lsKey(rel));
     return v ? JSON.parse(v) : null;
   }
@@ -24,7 +24,7 @@ export async function readJsonFile(rel: string): Promise<Json | null> {
 }
 
 export async function writeJsonFile(rel: string, data: Json): Promise<string> {
-  if (!isTauri) {
+  if (!isTauri()) {
     localStorage.setItem(lsKey(rel), JSON.stringify(data));
     return rel;
   }
@@ -39,7 +39,7 @@ export async function writeJsonFile(rel: string, data: Json): Promise<string> {
 }
 
 export async function ensureDataDir(): Promise<string> {
-  if (!isTauri) return "localStorage://" + BROWSER_NS;
+  if (!isTauri()) return "localStorage://" + BROWSER_NS;
   const fs = await import("@tauri-apps/plugin-fs");
   const root = await inAppDir("data");
   const mkdir = (fs as any).createDir ?? (fs as any).mkdir;

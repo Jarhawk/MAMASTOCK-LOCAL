@@ -7,7 +7,7 @@ import { useCommandes } from "@/hooks/useCommandes";
 import { useTemplatesCommandes } from "@/hooks/useTemplatesCommandes";
 import CommandePDF from "@/components/pdf/CommandePDF";
 import { Button } from "@/components/ui/button";
-import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
+import { toast } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
 
 async function generateCommandePDFBase64(commande, template, fournisseur) {
   const blob = await pdf(

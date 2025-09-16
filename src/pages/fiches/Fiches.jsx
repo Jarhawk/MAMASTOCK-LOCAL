@@ -13,7 +13,7 @@ import TableHeader from "@/components/ui/TableHeader";
 import { useFamilles } from "@/hooks/useFamilles";
 import { toast } from 'sonner';
 import { motion as Motion } from "framer-motion";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/runtime/isTauri";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/tauriEnv";
 
 const PAGE_SIZE = 20;
 

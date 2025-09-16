@@ -12,7 +12,7 @@ import JSPDF from 'jspdf';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import 'jspdf-autotable';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';import { isTauri } from "@/lib/runtime/isTauri";
+import { Link } from 'react-router-dom';import { isTauri } from "@/lib/tauriEnv";
 
 export default function Requisitions() {
   const { mama_id, loading: authLoading } = useAuth();

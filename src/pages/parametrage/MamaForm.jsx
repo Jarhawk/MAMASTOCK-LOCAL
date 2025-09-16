@@ -7,7 +7,7 @@ import PrimaryButton from "@/components/ui/PrimaryButton";
 import SecondaryButton from "@/components/ui/SecondaryButton";
 import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
-import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
+import { toast } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function MamaForm({ mama, mamas = [], addMama, updateMama, onClose, onSaved }) {
   const { loading: authLoading } = useAuth();

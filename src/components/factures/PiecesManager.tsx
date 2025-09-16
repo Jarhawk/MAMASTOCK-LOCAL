@@ -1,7 +1,7 @@
 import React from "react";
 import type { FacturePiece } from "@/lib/dal/facturePieces";
 import { attachFromPicker, listPieces, openPiece, removePiece } from "@/lib/dal/facturePieces";
-import { isTauri } from "@/lib/runtime/isTauri";
+import { isTauri } from "@/lib/tauriEnv";
 
 export default function PiecesManager({ factureId }: { factureId: string }) {
   const [items, setItems] = React.useState<FacturePiece[]>([]);
@@ -9,7 +9,7 @@ export default function PiecesManager({ factureId }: { factureId: string }) {
   const [err, setErr] = React.useState<string | null>(null);
 
   const refresh = React.useCallback(async () => {
-    if (!factureId || !isTauri) return;
+    if (!factureId || !isTauri()) return;
     try {
       setErr(null);
       const rows = await listPieces(factureId);
@@ -22,7 +22,7 @@ export default function PiecesManager({ factureId }: { factureId: string }) {
   React.useEffect(() => { refresh(); }, [refresh]);
 
   async function onAttach() {
-    if (!isTauri) return;
+    if (!isTauri()) return;
     try {
       setBusy(true);
       await attachFromPicker(factureId);
@@ -42,7 +42,7 @@ export default function PiecesManager({ factureId }: { factureId: string }) {
     await refresh();
   }
 
-  if (!isTauri) return <div className="text-sm opacity-70">Pièces: disponible en mode Tauri</div>;
+  if (!isTauri()) return <div className="text-sm opacity-70">Pièces: disponible en mode Tauri</div>;
   return (
     <div className="mt-4 border rounded-xl p-3">
       <div className="flex items-center justify-between mb-2">

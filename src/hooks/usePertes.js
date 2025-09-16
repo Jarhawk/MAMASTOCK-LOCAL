@@ -7,7 +7,7 @@ import {
   pertes_add,
   pertes_update,
   pertes_delete } from
-"@/local/pertes";import { isTauri } from "@/lib/runtime/isTauri";
+"@/local/pertes";import { isTauri } from "@/lib/tauriEnv";
 
 export function usePertes() {
   const { mama_id } = useAuth();

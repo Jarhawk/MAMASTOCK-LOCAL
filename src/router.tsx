@@ -1,7 +1,7 @@
 // src/router.tsx
 import React, { Suspense } from "react";
 import { createHashRouter, RouterProvider, Navigate } from "react-router-dom";
-import { routes } from "@/router.autogen";import { isTauri } from "@/lib/runtime/isTauri";
+import { routes } from "@/router.autogen";import { isTauri } from "@/lib/tauriEnv";
 
 const router = createHashRouter([
 // routes autogen

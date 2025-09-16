@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
+import { toast } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ParamMama() {
   const { mama, fetchMama, updateMama } = useMama();

@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { useAuth } from '@/hooks/useAuth';
-import Unauthorized from '@/pages/auth/Unauthorized';import { isTauri } from "@/lib/runtime/isTauri";
+import Unauthorized from '@/pages/auth/Unauthorized';import { isTauri } from "@/lib/tauriEnv";
 
 
 export default function Zones() {

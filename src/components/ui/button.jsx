@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Slot } from '@radix-ui/react-slot';import { isTauri } from "@/lib/runtime/isTauri";
+import { Slot } from '@radix-ui/react-slot';import { isTauri } from "@/lib/tauriEnv";
 
 function cn(...cls) {return cls.filter(Boolean).join(' ');}
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useConsolidation } from "@/hooks/useConsolidation";
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/runtime/isTauri";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/tauriEnv";
 
 export default function Consolidation() {
   const {

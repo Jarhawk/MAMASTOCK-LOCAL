@@ -1,4 +1,4 @@
-import { validateProduitRow } from "@/utils/excelUtils";import { isTauri } from "@/lib/runtime/isTauri";
+import { validateProduitRow } from "@/utils/excelUtils";import { isTauri } from "@/lib/tauriEnv";
 
 export default function ImportPreviewTable({ rows, onUpdate, maps, reference }) {
   const { familles = [], sousFamilles = [], unites = [], zones = [] } =

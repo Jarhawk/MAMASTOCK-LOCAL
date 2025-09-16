@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useCostCenters } from '@/hooks/useCostCenters';
 import { useMouvementCostCenters } from '@/hooks/useMouvementCostCenters';
 import { useCostCenterSuggestions } from '@/hooks/useCostCenterSuggestions';
-import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
+import { toast } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function CostCenterAllocationModal({
   mouvementId,

@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 /**
  * Hook retournant le comparatif des prix par fournisseur pour un produit donné.
  * Calcule le dernier prix connu, le nombre d'achats et le prix moyen (PMP).
- */import { isTauri } from "@/lib/runtime/isTauri";
+ */import { isTauri } from "@/lib/tauriEnv";
 export function useComparatif(productId) {
   const { mama_id } = useAuth();
   const [lignes, setLignes] = useState([]);

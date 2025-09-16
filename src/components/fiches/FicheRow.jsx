@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/runtime/isTauri";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/tauriEnv";
 
 export default function FicheRow({ fiche, onEdit, onDetail, onDuplicate, onDelete, canEdit }) {
   return (

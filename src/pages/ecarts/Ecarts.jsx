@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import GlassCard from "@/components/ui/GlassCard";
 import { saveAs } from "file-saver";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/runtime/isTauri";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/tauriEnv";
 
 export default function Ecarts() {
   const { loading: authLoading } = useAuth();

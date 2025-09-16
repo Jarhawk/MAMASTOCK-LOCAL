@@ -1,11 +1,11 @@
 import { useAuth } from '@/hooks/useAuth';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export function useRuptureAlerts() {
   const { mama_id } = useAuth();
 
     async function fetchAlerts(type = null) {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useRuptureAlerts: ignoré hors Tauri');
         return [];
       }
@@ -28,7 +28,7 @@ export function useRuptureAlerts() {
 
     async function generateSuggestions() {
       // Pas de génération automatique hors ligne
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useRuptureAlerts: ignoré hors Tauri');
         return { suggestions: [] };
       }

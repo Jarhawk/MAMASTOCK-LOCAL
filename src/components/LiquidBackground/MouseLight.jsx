@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useEffect, useState } from 'react';import { isTauri } from "@/lib/runtime/isTauri";
+import { useEffect, useState } from 'react';import { isTauri } from "@/lib/tauriEnv";
 
 export default function MouseLight({ className = '' }) {
   const [pos, setPos] = useState({ x: -9999, y: -9999 });

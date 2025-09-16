@@ -1,4 +1,4 @@
-import { menuGroupes_list, menuGroupes_addLigne } from "@/local/menuGroupes";import { isTauri } from "@/lib/runtime/isTauri";
+import { menuGroupes_list, menuGroupes_addLigne } from "@/local/menuGroupes";import { isTauri } from "@/lib/tauriEnv";
 
 export default function useMenuGroupe() {
   async function fetchMenusGroupes({ q } = {}) {

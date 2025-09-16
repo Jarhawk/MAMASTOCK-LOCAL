@@ -7,7 +7,7 @@ import GadgetEvolutionAchats from '@/components/gadgets/GadgetEvolutionAchats';
 import GadgetTachesUrgentes from '@/components/gadgets/GadgetTachesUrgentes';
 import GadgetConsoMoyenne from '@/components/gadgets/GadgetConsoMoyenne';
 import GadgetDerniersAcces from '@/components/gadgets/GadgetDerniersAcces';
-import React from 'react';import { isTauri } from "@/lib/runtime/isTauri";
+import React from 'react';import { isTauri } from "@/lib/tauriEnv";
 
 export default function Dashboard() {
 

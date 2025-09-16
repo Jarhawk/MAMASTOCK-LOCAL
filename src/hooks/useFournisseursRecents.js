@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect, useState } from 'react';
 import { fournisseurs_recents } from '@/lib/db';
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/tauriEnv";
 
 export default function useFournisseursRecents(limit = 10) {
   const { mama_id } = useAuth();

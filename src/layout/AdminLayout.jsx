@@ -11,7 +11,7 @@ import {
 /**
  * Layout général pour les pages accessibles aux admins/managers.
  * Inclut la Sidebar à gauche, et la Navbar en haut.
- */import { isTauri } from "@/lib/runtime/isTauri";
+ */import { isTauri } from "@/lib/tauriEnv";
 export default function AdminLayout({ children }) {
   return (
     <div className="relative flex min-h-screen text-white text-shadow overflow-hidden">

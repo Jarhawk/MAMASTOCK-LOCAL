@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRGPD } from "@/hooks/useRGPD";
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
+import { toast } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function DeleteAccountButton() {
   const { purgeUserData } = useRGPD();

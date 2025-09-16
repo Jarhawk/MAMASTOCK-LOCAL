@@ -1,4 +1,4 @@
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 const NOT_TAURI_HINT =
   "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
@@ -30,7 +30,7 @@ function guessMime(e?: string | null) {
 }
 
 async function piecesDirForFacture(factureId: string) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return "";
   }
@@ -54,7 +54,7 @@ async function safeCopy(src: string, dst: string) {
 }
 
 export async function listPieces(factureId: string): Promise<FacturePiece[]> {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return [];
   }
@@ -67,7 +67,7 @@ export async function listPieces(factureId: string): Promise<FacturePiece[]> {
 }
 
 export async function attachFromPicker(factureId: string): Promise<FacturePiece[]> {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return [];
   }
@@ -89,7 +89,7 @@ export async function attachFiles(
   factureId: string,
   paths: string[]
 ): Promise<FacturePiece[]> {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return [];
   }
@@ -130,7 +130,7 @@ export async function attachFiles(
 }
 
 export async function removePiece(id: string): Promise<void> {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return;
   }
@@ -151,7 +151,7 @@ export async function removePiece(id: string): Promise<void> {
 }
 
 export async function openPiece(path: string) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return;
   }

@@ -12,7 +12,7 @@ import {
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import JSPDF from "jspdf";
-import "jspdf-autotable";import { isTauri } from "@/lib/runtime/isTauri";
+import "jspdf-autotable";import { isTauri } from "@/lib/tauriEnv";
 
 export function useFiches() {
   const { mama_id } = useAuth();

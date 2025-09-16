@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // fix: avoid ilike.%% on empty search.
 import { useQuery } from '@tanstack/react-query';
-import { fournisseurs_list } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
+import { fournisseurs_list } from '@/lib/db';import { isTauri } from "@/lib/tauriEnv";
 
 function normalizeSearchTerm(q = '') {
   return q.trim();

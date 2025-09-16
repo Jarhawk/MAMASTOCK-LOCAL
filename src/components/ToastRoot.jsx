@@ -1,4 +1,4 @@
-import { Toaster } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
+import { Toaster } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ToastRoot() {
   return (

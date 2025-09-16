@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Form } from '@/components/ui/Form';
 import { FormField } from '@/components/ui/FormField';
 import { FormActions } from '@/components/ui/FormActions';
-import { Input } from '@/components/ui/controls';import { isTauri } from "@/lib/runtime/isTauri";
+import { Input } from '@/components/ui/controls';import { isTauri } from "@/lib/tauriEnv";
 
 export default function PeriodeForm({ onSave, onCancel }) {
   const [debut, setDebut] = useState('');

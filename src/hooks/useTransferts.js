@@ -7,7 +7,7 @@ import {
   transferts_list,
   transfert_create,
   transfert_get } from
-"@/local/transferts";import { isTauri } from "@/lib/runtime/isTauri";
+"@/local/transferts";import { isTauri } from "@/lib/tauriEnv";
 
 export function useTransferts() {
   const { mama_id, user_id } = useAuth();

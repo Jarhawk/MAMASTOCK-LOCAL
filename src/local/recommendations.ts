@@ -1,4 +1,4 @@
-import { query } from "@/lib/db";import { isTauri } from "@/lib/runtime/isTauri";
+import { query } from "@/lib/db";import { isTauri } from "@/lib/tauriEnv";
 
 export async function getRecommendations(user_id: string | null, mama_id: string | null) {
   if (!mama_id) return [] as any[];

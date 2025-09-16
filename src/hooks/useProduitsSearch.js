@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import useDebounce from '@/hooks/useDebounce';
 
 import { getQueryClient } from '@/lib/react-query';
-import { produits_list } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
+import { produits_list } from '@/lib/db';import { isTauri } from "@/lib/tauriEnv";
 
 function normalize(list = []) {
   return list.map((p) => ({

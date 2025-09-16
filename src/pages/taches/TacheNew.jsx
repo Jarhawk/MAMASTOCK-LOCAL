@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import TacheForm from "@/components/taches/TacheForm";import { isTauri } from "@/lib/runtime/isTauri";
+import TacheForm from "@/components/taches/TacheForm";import { isTauri } from "@/lib/tauriEnv";
 
 export default function TacheNew() {
   return (

@@ -1,4 +1,4 @@
-import { readText, existsFile } from "@/local/files";import { isTauri } from "@/lib/runtime/isTauri";
+import { readText, existsFile } from "@/local/files";import { isTauri } from "@/lib/tauriEnv";
 
 const FILE = "stock_requisitionne.json";
 

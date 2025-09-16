@@ -9,7 +9,7 @@ import {
 "@/components/ui/SmartDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/runtime/isTauri";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
 
 export default function FactureImportModal({ open, onClose, onImport }) {
   const [rows, setRows] = useState([]);

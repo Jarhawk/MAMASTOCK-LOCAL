@@ -14,7 +14,7 @@ import { motion as Motion } from 'framer-motion';
 import ListingContainer from '@/components/ui/ListingContainer';
 import PaginationFooter from '@/components/ui/PaginationFooter';
 import TableHeader from '@/components/ui/TableHeader';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/runtime/isTauri";
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function Menus() {
   const { menus, total, getMenus, deleteMenu, loading } = useMenus();

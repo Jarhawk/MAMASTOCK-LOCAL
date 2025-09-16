@@ -1,5 +1,5 @@
 /* @ts-nocheck */
-import React from 'react';import { isTauri } from "@/lib/runtime/isTauri";
+import React from 'react';import { isTauri } from "@/lib/tauriEnv";
 
 export default function Signalements() {
   // TODO: brancher aux vues SQL correspondantes + RLS

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { isTauri } from "@/lib/runtime/isTauri";
+import { isTauri } from "@/lib/tauriEnv";
 
 export default function DossierDonnees() {
   const [path, setPath] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isTauri) return;
+    if (!isTauri()) return;
     (async () => {
       try {
         const { appDataDir, join } = await import('@tauri-apps/api/path');
@@ -20,7 +20,7 @@ export default function DossierDonnees() {
   }, []);
 
   async function handleOpen() {
-    if (!isTauri) {
+    if (!isTauri()) {
       alert('Cette action nécessite Tauri');
       return;
     }
@@ -32,7 +32,7 @@ export default function DossierDonnees() {
     }
   }
 
-  if (!isTauri) return <p>Cette fonction nécessite Tauri (application desktop).</p>;
+  if (!isTauri()) return <p>Cette fonction nécessite Tauri (application desktop).</p>;
   if (error) return <div>{error}</div>;
 
   return (

@@ -8,10 +8,10 @@ export type LogApi = {
 
 let api: Partial<LogApi> | null = null;
 
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export async function initLog() {
-  if (isTauri && import.meta.env.PROD) {
+  if (isTauri() && import.meta.env.PROD) {
     try {
       api = (await import("@tauri-apps/plugin-log")) as any;
     } catch {

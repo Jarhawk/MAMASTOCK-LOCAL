@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { createAsyncState } from '../_shared/createAsyncState';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export default function useEvolutionAchats() {
   const { mama_id, loading: authLoading } = useAuth() || {};
@@ -9,7 +9,7 @@ export default function useEvolutionAchats() {
 
   const fetchData = useCallback(
       async (signal) => {
-        if (!isTauri) {
+        if (!isTauri()) {
           console.info('useEvolutionAchats: ignoré hors Tauri');
           return [];
         }

@@ -8,7 +8,7 @@ import {
   DialogDescription } from
 "@/components/ui/SmartDialog";
 import { AnimatePresence, motion as Motion } from "framer-motion";
-import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
+import { toast } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function MouvementFormModal({
   open,

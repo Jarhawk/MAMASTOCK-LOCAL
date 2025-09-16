@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogTitle,
   DialogDescription } from
-"@/components/ui/SmartDialog";import { isTauri } from "@/lib/runtime/isTauri";
+"@/components/ui/SmartDialog";import { isTauri } from "@/lib/tauriEnv";
 
 export default function DocumentPreview({ url, type = "", open, onClose }) {
   const isPdf = type.includes("pdf") || url?.toLowerCase().endsWith(".pdf");

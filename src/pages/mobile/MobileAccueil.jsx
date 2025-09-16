@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { Link } from "react-router-dom";
-import { LiquidBackground, TouchLight } from "@/components/LiquidBackground";import { isTauri } from "@/lib/runtime/isTauri";
+import { LiquidBackground, TouchLight } from "@/components/LiquidBackground";import { isTauri } from "@/lib/tauriEnv";
 
 export default function MobileAccueil() {
   return (

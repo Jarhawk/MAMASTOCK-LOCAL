@@ -1,12 +1,12 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState, useCallback } from "react";
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export function useProduitsFournisseur() {
   const [cache, setCache] = useState({});
 
     async function query(fournisseur_id) {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useProduitsFournisseur: ignoré hors Tauri');
         return [];
       }
@@ -29,7 +29,7 @@ export function useProduitsFournisseur() {
     const [error, setError] = useState(null);
 
       async function fetch() {
-        if (!isTauri) {
+        if (!isTauri()) {
           console.info('useProduitsFournisseur: ignoré hors Tauri');
           setProducts([]);
           return [];
@@ -58,7 +58,7 @@ export function useProduitsFournisseur() {
 
   const getProduitsDuFournisseur = useCallback(
       async (fournisseur_id) => {
-        if (!isTauri) {
+        if (!isTauri()) {
           console.info('useProduitsFournisseur: ignoré hors Tauri');
           return [];
         }

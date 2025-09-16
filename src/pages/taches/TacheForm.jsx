@@ -5,7 +5,7 @@ import { useTasks } from "@/hooks/useTasks";
 import { useUtilisateurs } from "@/hooks/useUtilisateurs";
 import { Button } from "@/components/ui/button";
 import GlassCard from "@/components/ui/GlassCard";
-import { toast } from 'sonner';import { isTauri } from "@/lib/runtime/isTauri";
+import { toast } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function TacheForm({ task }) {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri"; // src/hooks/useAuth.js
+import { isTauri } from "@/lib/tauriEnv"; // src/hooks/useAuth.js
 export function useAuth() {
   // Bypass complet : renvoie un "admin local" tout le temps.
   return {

@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import defaultLogo from "@/assets/logo-mamastock.png";
-import { useTheme } from "@/context/ThemeProvider";import { isTauri } from "@/lib/runtime/isTauri";
+import { useTheme } from "@/context/ThemeProvider";import { isTauri } from "@/lib/tauriEnv";
 
 export default function MamaLogo({ width = 200, className = "animate-fade-in" }) {
   const { logo } = useTheme();

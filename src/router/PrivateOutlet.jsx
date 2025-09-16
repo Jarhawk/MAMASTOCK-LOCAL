@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';import { isTauri } from "@/lib/runtime/isTauri";
+import { useAuth } from '@/context/AuthContext';import { isTauri } from "@/lib/tauriEnv";
 
 export default function PrivateOutlet() {
   const { user } = useAuth();

@@ -1,4 +1,4 @@
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/runtime/isTauri";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
 
 export async function safeImportXLSX(file, sheetName = null, maxSize = 1000000) {
   if (!file || file.size > maxSize) throw new Error("Fichier invalide ou trop volumineux");

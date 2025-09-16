@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ResetAuthButton({ className = "" }) {
   const { resetAuth } = useAuth() || {};

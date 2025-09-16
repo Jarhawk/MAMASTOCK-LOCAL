@@ -13,7 +13,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import AutoCompleteField from "@/components/ui/AutoCompleteField";
-import { Badge } from "@/components/ui/badge";import { isTauri } from "@/lib/runtime/isTauri";
+import { Badge } from "@/components/ui/badge";import { isTauri } from "@/lib/tauriEnv";
 
 export default function ProduitForm({
   produit,

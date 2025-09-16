@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { fiches_actives_list, familles_list } from "@/lib/db";
 
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/runtime/isTauri";
+import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/tauriEnv";
 
 const FOOD_COST_SEUIL = 35;
 

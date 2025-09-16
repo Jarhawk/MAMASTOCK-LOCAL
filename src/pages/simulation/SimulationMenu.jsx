@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import SimulationForm from "./SimulationForm";
 import SimulationResult from "./SimulationResult";
-import { useSimulation } from "@/hooks/useSimulation";import { isTauri } from "@/lib/runtime/isTauri";
+import { useSimulation } from "@/hooks/useSimulation";import { isTauri } from "@/lib/tauriEnv";
 
 export default function SimulationMenu() {
   const { selection, results, addRecipe, setPrix } = useSimulation();

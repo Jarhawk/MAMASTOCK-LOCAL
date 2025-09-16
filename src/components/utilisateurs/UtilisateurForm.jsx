@@ -12,7 +12,7 @@ import PrimaryButton from "@/components/ui/PrimaryButton";
 import SecondaryButton from "@/components/ui/SecondaryButton";
 import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
-import { MODULES } from "@/config/modules";import { isTauri } from "@/lib/runtime/isTauri";
+import { MODULES } from "@/config/modules";import { isTauri } from "@/lib/tauriEnv";
 
 export default function UtilisateurForm({ utilisateur, onClose }) {
   const { addUser, updateUser } = useUtilisateurs();

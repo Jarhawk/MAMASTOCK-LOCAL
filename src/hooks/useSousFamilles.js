@@ -6,7 +6,7 @@ import {
   sous_familles_list,
   sous_familles_insert,
   sous_familles_update } from
-"@/lib/db";import { isTauri } from "@/lib/runtime/isTauri";
+"@/lib/db";import { isTauri } from "@/lib/tauriEnv";
 
 export function useSousFamilles() {
   const { mama_id } = useAuth();

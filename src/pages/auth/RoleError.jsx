@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import GlassCard from "@/components/ui/GlassCard";
 import PageWrapper from "@/components/ui/PageWrapper";
-import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/runtime/isTauri";
+import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/tauriEnv";
 
 export default function RoleError() {
   const navigate = useNavigate();

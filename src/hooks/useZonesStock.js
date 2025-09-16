@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { zones_stock_list } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
+import { zones_stock_list } from '@/lib/db';import { isTauri } from "@/lib/tauriEnv";
 
 export function useZonesStock(mamaId, { onlyActive = true } = {}) {
   return useQuery({

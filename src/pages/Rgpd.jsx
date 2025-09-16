@@ -4,7 +4,7 @@ import { motion as Motion } from "framer-motion";
 import GlassCard from "@/components/ui/GlassCard";
 import ExportUserData from "@/pages/parametrage/ExportUserData";
 import DeleteAccountButton from "@/components/DeleteAccountButton";
-import LegalLayout from "@/layout/LegalLayout";import { isTauri } from "@/lib/runtime/isTauri";
+import LegalLayout from "@/layout/LegalLayout";import { isTauri } from "@/lib/tauriEnv";
 
 export default function Rgpd() {
   return (

@@ -11,7 +11,7 @@ import {
 "@/lib/db";
 import * as XLSX from "xlsx";
 import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";
-import { saveAs } from "file-saver";import { isTauri } from "@/lib/runtime/isTauri";
+import { saveAs } from "file-saver";import { isTauri } from "@/lib/tauriEnv";
 
 export function useInvoices() {
   const [invoices, setInvoices] = useState([]);

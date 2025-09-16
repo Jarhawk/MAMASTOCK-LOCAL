@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { unites_list } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
+import { unites_list } from '@/lib/db';import { isTauri } from "@/lib/tauriEnv";
 
 export async function listUnites(mamaId) {
   return await unites_list(mamaId);

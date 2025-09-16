@@ -8,7 +8,7 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
 import { useAuth } from '@/hooks/useAuth';
 import usePeriodes from '@/hooks/usePeriodes';
-import PeriodeForm from '@/forms/PeriodeForm';import { isTauri } from "@/lib/runtime/isTauri";
+import PeriodeForm from '@/forms/PeriodeForm';import { isTauri } from "@/lib/tauriEnv";
 
 export default function Periodes() {
   const { hasAccess, loading: authLoading } = useAuth();
