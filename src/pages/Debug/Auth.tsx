@@ -1,1 +1,3 @@
-export { default } from "@/pages/Debug/Auth";
+import Auth from "../debug/Auth";
+
+export default Auth;
