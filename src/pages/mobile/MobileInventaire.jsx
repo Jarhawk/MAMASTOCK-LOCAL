@@ -15,6 +15,11 @@ export default function MobileInventaire() {
 
   useEffect(() => {
     if (authLoading || !mama_id) return;
+    if (!isTauri()) {
+      console.info('MobileInventaire: ignoré hors Tauri');
+      setProduits([]);
+      return;
+    }
     produits_list("", false, 1, 1000).then((rows) => setProduits(rows || []));
   }, [mama_id, authLoading]);
 
@@ -24,6 +29,10 @@ export default function MobileInventaire() {
 
   const handleSave = async () => {
     if (authLoading || !mama_id) return;
+    if (!isTauri()) {
+      console.info('MobileInventaire: save ignoré hors Tauri');
+      return;
+    }
     const lignes = Object.entries(stockFinal).map(([produit_id, q]) => ({
       produit_id,
       quantite: parseFloat(q)
@@ -36,6 +45,10 @@ export default function MobileInventaire() {
     });
     setStockFinal({});
   };
+
+  if (!isTauri()) {
+    return <div className="p-6">Ouvrez l’app Tauri pour réaliser un inventaire.</div>;
+  }
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden p-4 text-white">

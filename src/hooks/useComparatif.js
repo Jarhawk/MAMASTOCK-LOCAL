@@ -19,6 +19,12 @@ export function useComparatif(productId) {
       setLignes([]);
       return [];
     }
+    if (!isTauri()) {
+      console.info("useComparatif: ignoré hors Tauri");
+      setLignes([]);
+      setLoading(false);
+      return [];
+    }
     setLoading(true);
     setError(null);
     try {

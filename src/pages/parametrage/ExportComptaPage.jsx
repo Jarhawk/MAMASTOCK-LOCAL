@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import TableContainer from '@/components/ui/TableContainer';
 import useExportCompta from '@/hooks/useExportCompta';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { isTauri } from "@/lib/tauriEnv";
 
 export default function ExportComptaPage() {
   const { generateJournalCsv, exportToERP, loading } = useExportCompta();
@@ -13,6 +13,11 @@ export default function ExportComptaPage() {
   const [preview, setPreview] = useState([]);
   const [endpoint, setEndpoint] = useState('');
   const [token, setToken] = useState('');
+
+  if (!isTauri()) {
+    console.log("ExportComptaPage: ignoré hors Tauri");
+    return <div className="p-6">Ouvrez l’app Tauri pour accéder à l’export comptable.</div>;
+  }
 
   const handlePreview = async () => {
     const rows = await generateJournalCsv(mois, false);

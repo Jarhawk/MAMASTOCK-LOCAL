@@ -12,6 +12,12 @@ export function useProduitsAutocomplete() {
 
   const searchProduits = useCallback(async (query = "") => {
     if (!mama_id) return [];
+    if (!isTauri()) {
+      console.info("useProduitsAutocomplete: ignoré hors Tauri");
+      setResults([]);
+      setLoading(false);
+      return [];
+    }
     setLoading(true);
     setError(null);
     try {

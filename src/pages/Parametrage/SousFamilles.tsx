@@ -18,7 +18,8 @@ export default function SousFamilles() {
         .then(setDb)
         .catch(() => setError('Base de données indisponible'));
     } else {
-      setError('Base de données indisponible');
+      console.info('Parametrage/SousFamilles: ignoré hors Tauri');
+      setError("Ouvrez l’app Tauri pour gérer les sous-familles.");
     }
   }, []);
 

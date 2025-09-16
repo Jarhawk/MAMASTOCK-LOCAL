@@ -17,7 +17,7 @@ import FournisseurRow from '@/components/fournisseurs/FournisseurRow';
 import { Dialog, DialogContent } from '@/components/ui/SmartDialog';
 import { toast } from 'sonner';
 import useExport from '@/hooks/useExport';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { isTauri } from "@/lib/tauriEnv";
 import {
   ResponsiveContainer,
   LineChart,
@@ -104,6 +104,11 @@ export default function Fournisseurs() {
   const handleExport = (format) => {
     exportData({ type: 'fournisseurs', format });
   };
+
+  if (!isTauri()) {
+    console.log("Fournisseurs: ignoré hors Tauri");
+    return <div className="p-8">Ouvrez l’app Tauri pour gérer les fournisseurs.</div>;
+  }
 
   async function handleDiag() {
     try {

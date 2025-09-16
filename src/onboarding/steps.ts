@@ -1,4 +1,6 @@
-import { getDb, getMeta, setMeta } from "@/db/connection";import { isTauri } from "@/lib/tauriEnv";
+import { getMeta, setMeta } from "@/db/connection";
+import { getDb } from "@/lib/db/sql";
+import { isTauri } from "@/lib/tauriEnv";
 
 export type Step = {
   id: string;
@@ -9,6 +11,10 @@ export type Step = {
 };
 
 export async function hasAny(table: string) {
+  if (!isTauri()) {
+    console.log(`onboarding/steps: ${table} ignoré hors Tauri`);
+    return false;
+  }
   const db = await getDb();
   const r = await db.select<{n: number;}[]>(
     `SELECT COUNT(1) as n FROM ${table} LIMIT 1`
@@ -22,9 +28,13 @@ export const steps: Step[] = [
   title: "Créer votre établissement",
   description: "Renseignez le nom de l’établissement.",
   ensure: async () => {
+    if (!isTauri()) {
+      console.log("onboarding/steps:mama ignoré hors Tauri");
+      return;
+    }
     const db = await getDb();
     await db.execute(`
-        INSERT INTO mama (id, nom) 
+        INSERT INTO mama (id, nom)
         SELECT 'local', 'MamaStock Local'
         WHERE NOT EXISTS (SELECT 1 FROM mama LIMIT 1);
       `);
@@ -36,6 +46,10 @@ export const steps: Step[] = [
   title: "Unités par défaut",
   description: "Ajout des unités g, kg, ml, L, pièce si absentes.",
   ensure: async () => {
+    if (!isTauri()) {
+      console.log("onboarding/steps:unites ignoré hors Tauri");
+      return;
+    }
     const db = await getDb();
     await db.execute(`
         INSERT INTO unites (code, libelle) VALUES
@@ -52,6 +66,10 @@ export const steps: Step[] = [
   title: "Familles & sous-familles",
   description: "Crée une famille par défaut si rien n’existe.",
   ensure: async () => {
+    if (!isTauri()) {
+      console.log("onboarding/steps:familles ignoré hors Tauri");
+      return;
+    }
     const db = await getDb();
     await db.execute(`
         INSERT INTO familles (code, libelle)
@@ -70,10 +88,14 @@ export const steps: Step[] = [
   title: "Fournisseurs",
   description: "Ajoute un fournisseur générique.",
   ensure: async () => {
+    if (!isTauri()) {
+      console.log("onboarding/steps:fournisseurs ignoré hors Tauri");
+      return;
+    }
     const db = await getDb();
     await db.execute(`
-        INSERT INTO fournisseurs (nom) 
-        SELECT 'Fournisseur Local' 
+        INSERT INTO fournisseurs (nom)
+        SELECT 'Fournisseur Local'
         WHERE NOT EXISTS (SELECT 1 FROM fournisseurs);
       `);
   },
@@ -83,6 +105,18 @@ export const steps: Step[] = [
   id: "flag",
   title: "Terminer",
   description: "Marque l’onboarding comme terminé.",
-  ensure: async () => {await setMeta("onboarded", "1");},
-  isDone: async () => (await getMeta("onboarded")) === "1"
+  ensure: async () => {
+    if (!isTauri()) {
+      console.log("onboarding/steps:flag ignoré hors Tauri");
+      return;
+    }
+    await setMeta("onboarded", "1");
+  },
+  isDone: async () => {
+    if (!isTauri()) {
+      console.log("onboarding/steps:flag isDone ignoré hors Tauri");
+      return false;
+    }
+    return (await getMeta("onboarded")) === "1";
+  }
 }];

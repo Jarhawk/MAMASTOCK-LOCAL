@@ -15,11 +15,21 @@ export default function MobileRequisition() {
 
   useEffect(() => {
     if (authLoading || !mama_id) return;
+    if (!isTauri()) {
+      console.info('MobileRequisition: ignoré hors Tauri');
+      setProduits([]);
+      return;
+    }
     produits_list("", false, 1, 1000).then((rows) => setProduits(rows || []));
   }, [mama_id, authLoading]);
 
   const handleSubmit = async () => {
     if (authLoading || !mama_id) return;
+    if (!isTauri()) {
+      console.info('MobileRequisition: submit ignoré hors Tauri');
+      toast.error("Ouvrez l’app Tauri pour créer une réquisition.");
+      return;
+    }
     if (!selectedId || quantite <= 0) {
       toast.error("Sélectionnez un produit et une quantité valide");
       return;
@@ -35,6 +45,10 @@ export default function MobileRequisition() {
       toast.error("Erreur lors de l'ajout du produit");
     }
   };
+
+  if (!isTauri()) {
+    return <div className="p-6">Ouvrez l’app Tauri pour gérer les réquisitions.</div>;
+  }
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden p-4 text-white">

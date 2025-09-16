@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Menu } from 'lucide-react';
 import useExport from '@/hooks/useExport';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { isTauri } from "@/lib/tauriEnv";
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import TableHeader from '@/components/ui/TableHeader';
 import GlassCard from '@/components/ui/GlassCard';
@@ -48,6 +48,11 @@ export default function Factures() {
   const pageSize = 10;
   const [loading, setLoading] = useState(false);
   const { exportData, loading: exporting } = useExport();
+
+  if (!isTauri()) {
+    console.log("Factures: ignoré hors Tauri");
+    return <div className="p-6">Ouvrez l’app Tauri pour gérer vos factures.</div>;
+  }
 
   const STATUTS = [
     { label: 'Tous', value: '' },

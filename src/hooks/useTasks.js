@@ -11,6 +11,12 @@ export function useTasks() {
 
   const fetchTasks = useCallback(async () => {
     if (!mama_id) return [];
+    if (!isTauri()) {
+      console.info("useTasks: fetch ignoré hors Tauri");
+      setTasks([]);
+      setLoading(false);
+      return [];
+    }
     setLoading(true);
     setError(null);
     try {
@@ -27,6 +33,10 @@ export function useTasks() {
 
   const fetchTaskById = useCallback(async (id) => {
     if (!mama_id || !id) return null;
+    if (!isTauri()) {
+      console.info("useTasks: fetchTaskById ignoré hors Tauri");
+      return null;
+    }
     try {
       return await tache_get(id, mama_id);
     } catch (e) {
@@ -37,6 +47,10 @@ export function useTasks() {
 
   const fetchTasksByStatus = useCallback(async (statut) => {
     if (!mama_id) return [];
+    if (!isTauri()) {
+      console.info("useTasks: fetchTasksByStatus ignoré hors Tauri");
+      return [];
+    }
     setLoading(true);
     setError(null);
     try {
@@ -52,6 +66,10 @@ export function useTasks() {
 
   const addTask = useCallback(async (values) => {
     if (!mama_id) return { error: "Aucun mama_id" };
+    if (!isTauri()) {
+      console.info("useTasks: addTask ignoré hors Tauri");
+      return { error: new Error("Disponible uniquement dans l’app Tauri") };
+    }
     setLoading(true);
     setError(null);
     try {
@@ -67,6 +85,10 @@ export function useTasks() {
   }, [mama_id, fetchTasks]);
 
   const updateTask = useCallback(async (id, values) => {
+    if (!isTauri()) {
+      console.info("useTasks: updateTask ignoré hors Tauri");
+      return { error: new Error("Disponible uniquement dans l’app Tauri") };
+    }
     setLoading(true);
     setError(null);
     try {
@@ -82,6 +104,10 @@ export function useTasks() {
   }, [mama_id, fetchTasks]);
 
   const deleteTask = useCallback(async (id) => {
+    if (!isTauri()) {
+      console.info("useTasks: deleteTask ignoré hors Tauri");
+      return { error: new Error("Disponible uniquement dans l’app Tauri") };
+    }
     setLoading(true);
     setError(null);
     try {

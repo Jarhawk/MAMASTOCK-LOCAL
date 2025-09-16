@@ -7,6 +7,12 @@ export function useFactures() {
   const [error, setError] = useState(null);
 
   async function createFacture(facture, lignes) {
+    if (!isTauri()) {
+      console.info("useFactures: ignoré hors Tauri");
+      const err = new Error("Disponible uniquement dans l’app Tauri");
+      setError(err);
+      return { error: err };
+    }
     setLoading(true);
     try {
       const facture_id = await facture_create({

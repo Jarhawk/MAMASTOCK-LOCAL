@@ -39,6 +39,13 @@ export default function FournisseurDetail({ id }) {
   useEffect(() => {
     if (!id || !mama_id) return;
     setLoading(true);
+    if (!isTauri()) {
+      console.info('FournisseurDetail: ignoré hors Tauri');
+      setStats([]);
+      setInvoices([]);
+      setLoading(false);
+      return;
+    }
     Promise.all([
     fetchStatsForFournisseur(id).then(setStats),
     factures_by_fournisseur(id).then(setInvoices),
@@ -63,6 +70,9 @@ export default function FournisseurDetail({ id }) {
   }, [id]);
 
   if (loading) return <LoadingSpinner message="Chargement..." />;
+  if (!isTauri()) {
+    return <div className="p-4">Ouvrez l’app Tauri pour consulter le détail fournisseur.</div>;
+  }
 
   return (
     <div className="space-y-8">

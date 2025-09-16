@@ -80,6 +80,10 @@ export default function FactureForm({ facture = null, onSaved } = {}) {
   const setFournisseurId = (val) =>
   setValue('fournisseur_id', val, { shouldDirty: true });
 
+  if (!isTauri()) {
+    return <div className="p-6">Ouvrez l’app Tauri pour créer des factures.</div>;
+  }
+
   const sum = (arr) => arr.reduce((acc, n) => acc + n, 0);
 
   const sumHT = useMemo(
@@ -150,6 +154,11 @@ export default function FactureForm({ facture = null, onSaved } = {}) {
 
   const onSubmit = async (values) => {
     if (saving) return;
+    if (!isTauri()) {
+      console.info('FactureForm: onSubmit ignoré hors Tauri');
+      toast.error("Ouvrez l’app Tauri pour enregistrer une facture.");
+      return;
+    }
     setSaving(true);
     try {
       if (!values.fournisseur_id) {

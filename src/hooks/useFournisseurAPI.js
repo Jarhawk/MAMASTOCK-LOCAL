@@ -11,6 +11,20 @@ export function useFournisseurAPI() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  if (!isTauri()) {
+    console.info("useFournisseurAPI: ignoré hors Tauri");
+    return {
+      loading: false,
+      error: null,
+      importFacturesFournisseur: async () => [],
+      syncCatalogue: async () => [],
+      envoyerCommande: async () => ({ error: "tauri_required" }),
+      getCommandeStatus: async () => ({ error: "tauri_required" }),
+      cancelCommande: async () => ({ error: "tauri_required" }),
+      testConnection: async () => false,
+    };
+  }
+
   async function getConfig(fournisseur_id) {
     if (!mama_id || !fournisseur_id) return null;
     const cfg = (await readConfig()) || {};

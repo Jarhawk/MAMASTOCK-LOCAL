@@ -18,7 +18,8 @@ export default function Familles() {
         .then(setDb)
         .catch(() => setError('Base de données indisponible'));
     } else {
-      setError('Base de données indisponible');
+      console.info('Parametrage/Familles: ignoré hors Tauri');
+      setError("Ouvrez l’app Tauri pour gérer les familles.");
     }
   }, []);
 

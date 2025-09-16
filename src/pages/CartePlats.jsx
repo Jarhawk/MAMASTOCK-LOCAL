@@ -18,6 +18,12 @@ export default function CartePlats() {
 
   useEffect(() => {
     if (!mama_id || authLoading) return;
+    if (!isTauri()) {
+      console.info('CartePlats: ignoré hors Tauri');
+      setFiches([]);
+      setFamilles([]);
+      return;
+    }
     Promise.all([
     fiches_actives_list(mama_id),
     familles_list(mama_id)]
@@ -39,6 +45,9 @@ export default function CartePlats() {
   });
 
 
+  if (!isTauri()) {
+    return <div className="p-8">Ouvrez l’app Tauri pour consulter la carte des plats.</div>;
+  }
   if (authLoading) return <LoadingSpinner message="Chargement..." />;
   if (!mama_id) return null;
 

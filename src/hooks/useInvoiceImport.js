@@ -7,6 +7,12 @@ export function useInvoiceImport() {
   const [error, setError] = useState(null);
 
   async function importFromFile(file) {
+    if (!isTauri()) {
+      console.info("useInvoiceImport: ignoré hors Tauri");
+      const err = new Error("Disponible uniquement dans l’app Tauri");
+      setError(err.message);
+      return null;
+    }
     setLoading(true);
     setError(null);
     try {
