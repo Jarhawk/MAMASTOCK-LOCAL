@@ -1,22 +1,43 @@
 {
-  "$schema": "https://schema.tauri.app/config/2",
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "productName": "MamaStock Local",
   "version": "0.1.0",
   "identifier": "com.mamastock.local",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
   "app": {
+    "withGlobalTauri": true,
+    "security": {
+      "csp": null
+    },
     "windows": [
-      {"label": "main",
+      {
+        "label": "main",
         "title": "MamaStock",
         "width": 1280,
         "height": 800,
         "resizable": true,
         "fullscreen": false,
-        "visible": true}],
-    "security": {
-      "csp": null
-    },
-  "build": {
-  "beforeBuildCommand": "npm run build",
-  "frontendDist": "../dist"
+        "visible": true
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "nsis",
+      "msi"
+    ]
+  },
+  "plugins": {
+    "fs": {},
+    "shell": {},
+    "dialog": {},
+    "process": {},
+    "log": {},
+    "devtools": {},
+    "sql": {}
+  }
 }
-
