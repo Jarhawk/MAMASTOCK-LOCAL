@@ -1,61 +1,142 @@
 // src/lib/db/sql.ts
 import Database from "@tauri-apps/plugin-sql";
-import { homeDir, join } from "@tauri-apps/api/path";
+import schemaSQL from "@/../db/sqlite/001_schema.sql?raw";
 import { isTauri } from "@/lib/tauriEnv";
 
-let _db: any | null = null;
+export type SqliteDatabase = {
+  select<T = unknown>(sql: string, params?: unknown[]): Promise<T[]>;
+  execute(sql: string, params?: unknown[]): Promise<unknown>;
+  close?: () => Promise<void>;
+};
 
-async function dbFsPath(): Promise<string> {
-  // Chemin aligné avec scripts Node (move-db-once/sqlite-apply):
-  // %USERPROFILE%/MamaStock/data/mamastock.db
-  const h = await homeDir();
-  return await join(h, "MamaStock", "data", "mamastock.db");
+let tauriDb: SqliteDatabase | null = null;
+let devStub: SqliteDatabase | null = null;
+let schemaInitPromise: Promise<void> | null = null;
+
+function ensureDevStub(): SqliteDatabase {
+  if (devStub) return devStub;
+  let notified = false;
+  const notify = () => {
+    if (!notified) {
+      console.info(
+        "[sqlite] Mode navigateur détecté : les requêtes SQLite renvoient des résultats vides (DEV)."
+      );
+      notified = true;
+    }
+  };
+  devStub = {
+    async select() {
+      notify();
+      return [];
+    },
+    async execute() {
+      notify();
+    },
+    async close() {
+      /* noop */
+    }
+  };
+  return devStub;
 }
 
-function toSqliteUrl(p: string): string {
-  return "sqlite:///" + p.replace(/\\/g, "/");
+async function ensureDataDir() {
+  const { appDataDir, join } = await import("@tauri-apps/api/path");
+  const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
+  const base = await appDataDir();
+  const appDir = await join(base, "MamaStock");
+  if (!(await exists(appDir))) await mkdir(appDir, { recursive: true });
+  const dataDir = await join(appDir, "data");
+  if (!(await exists(dataDir))) await mkdir(dataDir, { recursive: true });
+  const file = await join(dataDir, "mamastock.db");
+  const normalized = file.replace(/\\/g, "/");
+  return { file, url: `sqlite:${normalized}` };
 }
 
-export async function getDb() {
-  if (!isTauri()) {
-    throw new Error("Vous êtes dans le navigateur. Ouvrez la fenêtre Tauri pour SQLite.");
+async function initDbIfNeeded(db: SqliteDatabase) {
+  if (schemaInitPromise) {
+    await schemaInitPromise;
+    return;
   }
-  if (_db) return _db;
-  const fsPath = await dbFsPath();
-  const url = toSqliteUrl(fsPath);
-  _db = await Database.load(url);
-  return _db!;
+
+  schemaInitPromise = (async () => {
+    try {
+      const rows = await db.select<{ name: string }[]>(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='meta' LIMIT 1"
+      );
+      if (Array.isArray(rows) && rows.length > 0) {
+        return;
+      }
+    } catch (err) {
+      console.warn("[sqlite] Impossible de vérifier la présence du schéma initial:", err);
+    }
+
+    try {
+      await db.execute("BEGIN;");
+      await db.execute(schemaSQL);
+      await db.execute("COMMIT;");
+      console.info("[sqlite] Schéma 001_schema.sql appliqué");
+    } catch (err) {
+      try {
+        await db.execute("ROLLBACK;");
+      } catch {}
+      console.error("[sqlite] Erreur lors de l'initialisation de la base SQLite:", err);
+    }
+  })();
+
+  await schemaInitPromise;
+}
+
+export async function getDb(): Promise<SqliteDatabase> {
+  if (!isTauri()) {
+    return ensureDevStub();
+  }
+
+  if (tauriDb) return tauriDb;
+
+  try {
+    const { url } = await ensureDataDir();
+    const db = await Database.load(url);
+    await initDbIfNeeded(db);
+    tauriDb = db;
+    return tauriDb;
+  } catch (err) {
+    console.error("[sqlite] Ouverture de la base locale impossible, fallback stub:", err);
+    return ensureDevStub();
+  }
 }
 
 export async function closeDb() {
   try {
-    if (_db && typeof _db.close === "function") await _db.close();
+    if (tauriDb && typeof tauriDb.close === "function") {
+      await tauriDb.close();
+    }
   } catch (e) {
-    console.warn("[closeDb] ignoré:", e);
+    console.warn("[closeDb] Ignoré:", e);
   } finally {
-    _db = null;
+    tauriDb = null;
+    schemaInitPromise = null;
+    devStub = null;
   }
 }
 
-// ==== Stubs de compat pour anciens imports (Onboarding, etc.) ====
-// Évitent les erreurs "does not provide an export named ..."
 export async function locateDb(): Promise<string> {
-  const p = await dbFsPath();
-  return p;
+  if (!isTauri()) {
+    console.warn("[sqlite] locateDb appelé hors contexte Tauri (DEV navigateur)");
+    return "";
+  }
+  const { file } = await ensureDataDir();
+  return file;
 }
 
 export async function openDb() {
-  // alias de compat
   return await getDb();
 }
 
 export async function ensureSeeds(): Promise<void> {
-  // no-op côté frontend : les seeds se font via scripts Node (db:apply / 002_seed.sql)
   return;
 }
 
 export async function getMigrationsState(): Promise<Array<{ name: string; applied: boolean }>> {
-  // Si besoin, à implémenter via SELECT sur __migrations__ ; on renvoie vide par défaut
   return [];
 }
 

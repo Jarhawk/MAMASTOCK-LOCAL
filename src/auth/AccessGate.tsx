@@ -1,21 +1,16 @@
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
 import { isTauri } from "@/lib/tauriEnv";
+import { shouldBypassAccessGuards } from "@/lib/runtime/devFlags";
 
 // Simple gate : en local, on autorise tout (fini les “Accès refusé”)
 export default function AccessGate({ children }: { children: React.ReactNode }) {
   const { user, access_rights } = useAuth();
-  if (isTauri()) return <>{children}</>;
+  const devBypass = shouldBypassAccessGuards();
 
-  // Si un jour tu veux remettre RBAC web:
-  // const allowed = hasAccess(user, requiredPerms);
-  // if (!allowed) ...
+  if (devBypass || isTauri()) return <>{children}</>;
 
-  const devBypass =
-    import.meta.env.DEV &&
-    (import.meta.env.VITE_DEV_FAKE_AUTH === "1" || import.meta.env.VITE_DEV_FORCE_SIDEBAR === "1");
-
-  if (!user && !access_rights && !devBypass) {
+  if (!user && !access_rights) {
     return (
       <div className="p-8">
         <h2 className="text-xl font-semibold mb-2">Accès refusé</h2>

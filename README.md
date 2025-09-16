@@ -86,14 +86,21 @@ Ce script installe Node.js LTS, Rustup, le toolchain `stable-x86_64-pc-windows-
 
 ## Mode DEV (fallback droits)
 
-En environnement de développement, la base Tauri peut être vide : la navigation est alors bloquée faute de droits. Pour simuler un profil administrateur et forcer l’affichage de la sidebar, créez un fichier local `.env.development.local` (non versionné) avec :
+En développement local, la base SQLite peut être vierge et aucun compte n'est encore provisionné. Pour que l'interface reste navigable et que la sidebar s'affiche quoi qu'il arrive, créez un fichier `.env.development.local` (non versionné) contenant :
 
 ```
-VITE_DEV_FAKE_AUTH=1
-VITE_DEV_FORCE_SIDEBAR=1
+VITE_DATA_SOURCE=sqlite
+VITE_ALLOW_ALL_ROUTES=1
 ```
 
-Ces variables ne sont prises en compte que lorsque `import.meta.env.DEV` est vrai. `VITE_DEV_FAKE_AUTH` injecte un profil admin éphémère doté de droits complets tandis que `VITE_DEV_FORCE_SIDEBAR` force l’ouverture de la barre latérale. Après avoir posé ce fichier, lancez `npm run dev` puis `npx tauri dev` : la sidebar reste visible avec le ruban « Mode DEV — droits simulés » et toutes les pages deviennent accessibles (les listes restent vides tant que la base est vide). Les builds de production n’exposent pas ces variables et ne déclenchent aucun fallback.
+`VITE_ALLOW_ALL_ROUTES=1` neutralise temporairement les gardes d'accès lorsque `import.meta.env.DEV` vaut `true`. Passez la variable à `0` (ou supprimez-la) pour retrouver le comportement RBAC réel. `VITE_DATA_SOURCE=sqlite` rappelle que le frontend doit utiliser la base locale embarquée.
+
+Ensuite :
+
+1. lancez `npm run dev` ;
+2. dans une deuxième console, exécutez `npx tauri dev` pour ouvrir la fenêtre native.
+
+En mode DEV, un badge **DEV** s'affiche dans la sidebar et toutes les routes deviennent accessibles. Si la fenêtre Tauri n'est pas ouverte, la couche SQLite retourne simplement des tableaux vides sans lever d'erreur (un message d'information est émis en console). Dès que l'application tourne hors DEV (build ou variables absentes), les restrictions classiques se réappliquent automatiquement.
 
 ## Parcours test
 
