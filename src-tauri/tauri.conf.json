@@ -5,22 +5,18 @@
   "identifier": "com.mamastock.local",
   "app": {
     "windows": [
-      {
-        "label": "main",
+      {"label": "main",
         "title": "MamaStock",
         "width": 1280,
         "height": 800,
         "resizable": true,
         "fullscreen": false,
-        "visible": true
-      }
-    ],
+        "visible": true}],
     "security": {
       "csp": null
-    }
-  },
+    },
   "build": {
-    "devUrl": "http://localhost:5173/",
-    "frontendDist": "../dist"
-  }
+  "beforeBuildCommand": "npm run build",
+  "frontendDist": "../dist"
 }
+

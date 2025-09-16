@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite --strictPort",
-    "tauri:dev": "cross-env TAURI_DEV_URL=http://localhost:5173/ npx tauri dev",
+    "tauri:dev": "powershell -Command \\=http://localhost:5173/",
     "build": "vite build",
     "lint:node": "node scripts/check-node-native.js",
     "preview": "vite preview",
@@ -28,7 +28,8 @@
     "nav:gen": "node scripts/generate-navigation.cjs",
     "pwa:reset": "node scripts/pwa-reset.js",
     "webview:reset": "powershell -ExecutionPolicy Bypass -File scripts/reset-webview-cache.ps1",
-    "codemod:isTauri": "node scripts/codemod-unify-isTauri.cjs"
+    "codemod:isTauri": "node scripts/codemod-unify-isTauri.cjs",
+    "tauri:build": "npm run build && npx tauri build"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
