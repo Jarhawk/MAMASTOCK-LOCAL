@@ -1,8 +1,17 @@
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
-const APP_DIR = "MamaStock";
-const USERS_FILE = "users.json";
+import { isTauri } from "@/lib/tauriEnv";
 
-export const LocalAccountEnv = { isTauri() };
+const APP_DIR = "MamaStock";
+export const USERS_FILE = "users.json";
+
+// Objet valide (méthode + getter) — évite la syntaxe invalide { isTauri() }
+export const LocalAccountEnv = {
+  isTauri(): boolean {
+    return isTauri();
+  },
+  get isTauriFlag(): boolean {
+    return isTauri();
+  },
+};
 
 export type LocalUser = {
   id: string;
@@ -26,6 +35,7 @@ async function usersPath() {
 
   const target = await join(dir, USERS_FILE);
 
+  // Migration éventuelle d'un ancien emplacement (roaming)
   const roaming = base.replace(/\\com\.mamastock\.local\\?$/i, "");
   const legacy = await join(roaming, APP_DIR, USERS_FILE);
   if (!(await exists(target)) && (await exists(legacy))) {
@@ -46,7 +56,9 @@ async function usersPath() {
         });
         await writeTextFile(target, JSON.stringify(norm, null, 2));
       }
-    } catch {}
+    } catch {
+      // ignore migration errors, keep going
+    }
   }
 
   return target;
@@ -55,7 +67,9 @@ async function usersPath() {
 async function sha256Hex(input: string) {
   const enc = new TextEncoder();
   const digest = await crypto.subtle.digest("SHA-256", enc.encode(input));
-  return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2,"0")).join("");
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 async function readUsers(): Promise<LocalUser[]> {
@@ -63,12 +77,20 @@ async function readUsers(): Promise<LocalUser[]> {
   if (path.startsWith("browser://")) {
     const txt = localStorage.getItem("mama.users.json");
     if (!txt) return [];
-    try { return JSON.parse(txt) as LocalUser[]; } catch { return []; }
+    try {
+      return JSON.parse(txt) as LocalUser[];
+    } catch {
+      return [];
+    }
   }
   const { exists, readTextFile } = await import("@tauri-apps/plugin-fs");
   if (!(await exists(path))) return [];
   const txt = await readTextFile(path);
-  try { return JSON.parse(txt) as LocalUser[]; } catch { return []; }
+  try {
+    return JSON.parse(txt) as LocalUser[];
+  } catch {
+    return [];
+  }
 }
 
 async function writeUsers(list: LocalUser[]) {
@@ -92,7 +114,7 @@ export async function registerLocal(
 ) {
   email = email.trim().toLowerCase();
   const users = await readUsers();
-  if (users.some(u => u.email === email)) throw new Error("Email déjà utilisé.");
+  if (users.some((u) => u.email === email)) throw new Error("Email déjà utilisé.");
   const salt = crypto.randomUUID();
   const hash = await sha256Hex(`${password}:${salt}`);
   const user: LocalUser = {
@@ -112,7 +134,7 @@ export async function registerLocal(
 export async function loginLocal(email: string, password: string) {
   email = email.trim().toLowerCase();
   const users = await readUsers();
-  const u = users.find(x => x.email === email);
+  const u = users.find((x) => x.email === email);
   if (!u) throw new Error("Utilisateur introuvable.");
   const stored = (u as any).passwordHash ?? (u as any).password_hash ?? null;
   if (!stored) throw new Error("Utilisateur corrompu.");
