@@ -8,6 +8,12 @@ export function useProducts() {
   const [error, setError] = useState(null);
 
   const fetchProducts = useCallback(async () => {
+    if (!isTauri()) {
+      console.info("useProducts: ignoré hors Tauri");
+      setProducts([]);
+      setLoading(false);
+      return [];
+    }
     setLoading(true);
     try {
       const rows = await produits_list();
@@ -25,6 +31,10 @@ export function useProducts() {
 
   const addProduct = useCallback(
     async (product) => {
+      if (!isTauri()) {
+        console.info("useProducts: addProduct ignoré hors Tauri");
+        return { error: new Error("Disponible uniquement dans l’app Tauri") };
+      }
       await produits_create(product);
       await fetchProducts();
       return { error: null };
@@ -34,6 +44,10 @@ export function useProducts() {
 
   const updateProduct = useCallback(
     async (id, fields) => {
+      if (!isTauri()) {
+        console.info("useProducts: updateProduct ignoré hors Tauri");
+        return { error: new Error("Disponible uniquement dans l’app Tauri") };
+      }
       await produits_update(id, fields);
       await fetchProducts();
       return { error: null };

@@ -7,6 +7,12 @@ export function useFacturesAutocomplete() {
   const [error, setError] = useState(null);
 
   const searchFactures = useCallback(async (query = "") => {
+    if (!isTauri()) {
+      console.info("useFacturesAutocomplete: ignoré hors Tauri");
+      setResults([]);
+      setLoading(false);
+      return [];
+    }
     setLoading(true);
     setError(null);
     try {

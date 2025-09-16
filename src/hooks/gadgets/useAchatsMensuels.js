@@ -15,6 +15,12 @@ export default function useAchatsMensuels() {
       setLoading(false);
       return;
     }
+    if (!isTauri()) {
+      console.info("useAchatsMensuels: ignoré hors Tauri");
+      setData([]);
+      setLoading(false);
+      return;
+    }
     (async () => {
       setLoading(true);
       setError(null);

@@ -20,7 +20,7 @@ import { useAuth } from '@/hooks/useAuth';
 import ProduitRow from "@/components/produits/ProduitRow";
 import ModalImportProduits from "@/components/produits/ModalImportProduits";
 import useExport from '@/hooks/useExport';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { isTauri } from "@/lib/tauriEnv";
 
 const PAGE_SIZE = 50;
 
@@ -60,6 +60,11 @@ export default function Produits() {
   const canEdit = hasAccess("produits", "peut_modifier");
   const canView = hasAccess("produits", "peut_voir");
   const [showImport, setShowImport] = useState(false);
+
+  if (!isTauri()) {
+    console.log("Produits: ignoré hors Tauri");
+    return <div className="p-8">Ouvrez l’app Tauri pour gérer les produits.</div>;
+  }
 
   const rows = useMemo(
     () =>

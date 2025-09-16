@@ -8,6 +8,11 @@ export function useTacheAssignation() {
   const [error, setError] = useState(null);
 
   const assignUsers = useCallback(async (tacheId, userIds = []) => {
+    if (!isTauri()) {
+      console.info("useTacheAssignation: ignoré hors Tauri");
+      setLoading(false);
+      return { error: new Error("Disponible uniquement dans l’app Tauri") };
+    }
     setLoading(true);
     setError(null);
     try {
@@ -22,6 +27,11 @@ export function useTacheAssignation() {
   }, []);
 
   const unassignUser = useCallback(async (tacheId, userId) => {
+    if (!isTauri()) {
+      console.info("useTacheAssignation: ignoré hors Tauri");
+      setLoading(false);
+      return { error: new Error("Disponible uniquement dans l’app Tauri") };
+    }
     setLoading(true);
     setError(null);
     try {

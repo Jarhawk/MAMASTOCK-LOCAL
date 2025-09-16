@@ -7,7 +7,7 @@ import LanguageSelector from "@/components/ui/LanguageSelector";
 import { shutdownDbSafely } from "@/lib/shutdown";
 import { releaseLock } from "@/lib/lock";
 import { getDataDir } from "@/lib/db";
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { isTauri } from "@/lib/tauriEnv";
 
 export default function Navbar() {
   const { t } = useTranslation();

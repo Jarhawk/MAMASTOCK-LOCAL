@@ -19,6 +19,12 @@ export default function ComparatifPrix() {
       setLoading(true);
       setError(null);
       try {
+        if (!isTauri()) {
+          console.info('ComparatifPrix: ignoré hors Tauri');
+          setProduits([]);
+          setLoading(false);
+          return;
+        }
         const { rows } = await produits_list("", true, 1, 1000);
         setProduits(rows || []);
       } catch (err) {
@@ -32,6 +38,10 @@ export default function ComparatifPrix() {
 
     if (mama_id) fetchProduits();
   }, [mama_id]);
+
+  if (!isTauri()) {
+    return <div className="p-4">Ouvrez l’app Tauri pour comparer les prix fournisseurs.</div>;
+  }
 
   if (loading) {
     return <LoadingSpinner message="Chargement..." />;

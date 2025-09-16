@@ -12,6 +12,12 @@ export function useAlerts() {
 
   const fetchRules = useCallback(async ({ search = "", actif = null } = {}) => {
     if (!mama_id) return [];
+    if (!isTauri()) {
+      console.info("useAlerts: fetch ignoré hors Tauri");
+      setRules([]);
+      setLoading(false);
+      return [];
+    }
     setLoading(true);
     setError(null);
     try {
@@ -30,6 +36,10 @@ export function useAlerts() {
 
   async function addRule(values) {
     if (!mama_id) return { error: "Aucun mama_id" };
+    if (!isTauri()) {
+      console.info("useAlerts: addRule ignoré hors Tauri");
+      return { error: new Error("Disponible uniquement dans l’app Tauri") };
+    }
     setLoading(true);
     setError(null);
     try {
@@ -43,6 +53,10 @@ export function useAlerts() {
 
   async function updateRule(id, values) {
     if (!mama_id) return { error: "Aucun mama_id" };
+    if (!isTauri()) {
+      console.info("useAlerts: updateRule ignoré hors Tauri");
+      return { error: new Error("Disponible uniquement dans l’app Tauri") };
+    }
     setLoading(true);
     setError(null);
     try {
@@ -56,6 +70,10 @@ export function useAlerts() {
 
   async function deleteRule(id) {
     if (!mama_id) return { error: "Aucun mama_id" };
+    if (!isTauri()) {
+      console.info("useAlerts: deleteRule ignoré hors Tauri");
+      return { error: new Error("Disponible uniquement dans l’app Tauri") };
+    }
     setLoading(true);
     setError(null);
     try {

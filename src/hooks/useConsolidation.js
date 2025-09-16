@@ -30,6 +30,12 @@ export function useConsolidation() {
 
   const fetchConsoMensuelle = useCallback(
     async ({ mamaIds = [], start, end } = {}) => {
+      if (!isTauri()) {
+        console.info("useConsolidation: ignoré hors Tauri");
+        setRows([]);
+        setLoading(false);
+        return [];
+      }
       setLoading(true);
       try {
         const data = await consolidation_performance({ start, end });

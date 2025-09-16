@@ -38,6 +38,11 @@ export default function FactureDetail() {
   useEffect(() => {
     let isMounted = true;
     async function load() {
+      if (!isTauri()) {
+        console.info('FactureDetail: ignoré hors Tauri');
+        if (isMounted) setLoading(false);
+        return;
+      }
       setLoading(true);
       try {
         const data = await facture_get(Number(id));
@@ -63,6 +68,10 @@ export default function FactureDetail() {
       isMounted = false;
     };
   }, [id]);
+
+  if (!isTauri()) {
+    return <div className="p-6">Ouvrez l’app Tauri pour consulter cette facture.</div>;
+  }
 
   if (loading) return <LoadingSpinner message="Chargement..." />;
   const selectedFactureId = id;

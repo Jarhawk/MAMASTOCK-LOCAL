@@ -6,6 +6,11 @@ export function useFournisseursInactifs() {
   const [fournisseurs, setFournisseurs] = useState([]);
 
   async function fetchInactifs() {
+    if (!isTauri()) {
+      console.info("useFournisseursInactifs: ignoré hors Tauri");
+      setFournisseurs([]);
+      return [];
+    }
     const rows = await fournisseurs_inactifs();
     setFournisseurs(Array.isArray(rows) ? rows : []);
     return rows || [];

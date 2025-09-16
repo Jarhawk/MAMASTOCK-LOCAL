@@ -9,6 +9,12 @@ export function useConsolidatedStats() {
   const [error, setError] = useState(null);
 
   async function fetchStats() {
+    if (!isTauri()) {
+      console.info("useConsolidatedStats: ignoré hors Tauri");
+      setStats([]);
+      setLoading(false);
+      return [];
+    }
     setLoading(true);
     try {
       const end = new Date().toISOString().slice(0, 10);

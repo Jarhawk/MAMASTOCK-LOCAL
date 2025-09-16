@@ -8,11 +8,19 @@ export default function useOnboarding() {
 
   async function fetchProgress() {
     if (!user_id || !mama_id) return null;
+    if (!isTauri()) {
+      console.info("useOnboarding: ignoré hors Tauri");
+      return null;
+    }
     return onboarding_fetch(user_id, mama_id);
   }
 
   async function startOnboarding() {
     if (!user_id || !mama_id) return;
+    if (!isTauri()) {
+      console.info("useOnboarding: start ignoré hors Tauri");
+      return;
+    }
     await onboarding_start(user_id, mama_id);
   }
 

@@ -12,6 +12,12 @@ export function useReportingFinancier({ start, end }) {
 
   useEffect(() => {
     if (!mama_id || !start || !end) return;
+    if (!isTauri()) {
+      console.info("useReportingFinancier: ignoré hors Tauri");
+      setData(null);
+      setLoading(false);
+      return;
+    }
     (async () => {
       setLoading(true);
       setError(null);
@@ -28,6 +34,10 @@ export function useReportingFinancier({ start, end }) {
   }, [mama_id, start, end]);
 
   async function exportCsv(path) {
+    if (!isTauri()) {
+      console.info("useReportingFinancier: export ignoré hors Tauri");
+      return;
+    }
     if (!data) return;
     const csv = [
     "poste,montant",
