@@ -13,7 +13,7 @@ import PaginationFooter from "@/components/ui/PaginationFooter";
 import TableHeader from "@/components/ui/TableHeader";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/components/ui/Card";
 import { Plus as PlusIcon, FileDown as FileDownIcon } from "lucide-react";
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';

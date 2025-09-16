@@ -1468,7 +1468,7 @@
       ],
       "missing": []
     },
-    "src/components/ui/card.jsx": {
+    "src/components/ui/Card.jsx": {
       "internal": [],
       "external": [],
       "missing": []
@@ -4644,7 +4644,7 @@
         "src/hooks/useProduitsFournisseur.js",
         "src/hooks/useProducts.js",
         "src/hooks/useFournisseursInactifs.js",
-        "src/components/ui/card.jsx",
+        "src/components/ui/Card.jsx",
         "src/components/ui/button.jsx",
         "src/components/ui/ListingContainer.jsx",
         "src/components/ui/PaginationFooter.jsx",
@@ -5493,7 +5493,7 @@
         "src/components/ui/TableHeader.jsx",
         "src/components/ui/input.jsx",
         "src/components/ui/select.jsx",
-        "src/components/ui/card.jsx",
+        "src/components/ui/Card.jsx",
         "src/hooks/useAuth.ts",
         "src/components/produits/ProduitRow.jsx",
         "src/components/produits/ModalImportProduits.jsx",
@@ -10269,7 +10269,7 @@
     },
     {
       "from": "src/pages/fournisseurs/Fournisseurs.jsx",
-      "to": "src/components/ui/card.jsx"
+      "to": "src/components/ui/Card.jsx"
     },
     {
       "from": "src/pages/fournisseurs/Fournisseurs.jsx",
@@ -11385,7 +11385,7 @@
     },
     {
       "from": "src/pages/produits/Produits.jsx",
-      "to": "src/components/ui/card.jsx"
+      "to": "src/components/ui/Card.jsx"
     },
     {
       "from": "src/pages/produits/Produits.jsx",
