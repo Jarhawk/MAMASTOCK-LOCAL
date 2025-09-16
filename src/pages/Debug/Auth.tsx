@@ -1,3 +1,5 @@
-import Auth from "../debug/Auth";
+import AuthDebug from "./AuthDebug.jsx";
 
-export default Auth;
+export default function Auth(): JSX.Element {
+  return <AuthDebug />;
+}

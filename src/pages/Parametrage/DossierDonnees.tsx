@@ -1,3 +1,3 @@
-import DossierDonnees from "@/pages/parametrage/DossierDonnees";
+import DossierDonnees from "@/pages/DossierDonnees";
 
 export default DossierDonnees;
