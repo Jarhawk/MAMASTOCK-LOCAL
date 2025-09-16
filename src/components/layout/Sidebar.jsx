@@ -3,31 +3,39 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 // Le menu latéral n'affiche que les modules pour lesquels
 // l'utilisateur possède le droit "peut_voir". Les droits proviennent
 // du contexte d'authentification (merge utilisateur + rôle).
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from "@/hooks/useAuth";
 import logo from "@/assets/logo-mamastock.png";
+import { shouldBypassAccessGuards } from "@/lib/runtime/devFlags";
 
 export default function Sidebar() {
   const { loading, hasAccess, userData, access_rights, devFakeAuth } = useAuth();
   const { pathname } = useLocation();
 
+  const devBypass = devFakeAuth || shouldBypassAccessGuards();
+
   if (loading) return null;
 
-  const forceSidebar = import.meta.env.DEV && import.meta.env.VITE_DEV_FORCE_SIDEBAR === "1";
-  const showSidebar = Boolean(access_rights) || forceSidebar;
+  const showSidebar = devBypass || Boolean(access_rights) || Boolean(userData?.access_rights);
   if (!showSidebar) return null;
 
   const rights = access_rights ?? userData?.access_rights ?? {};
-  const has = (key) => hasAccess(key);
-  const canAnalyse = has("analyse");
+  const has = (key) => (devBypass ? true : hasAccess(key));
+  const canAnalyse = devBypass || has("analyse");
   const canConfigure =
-  rights?.enabledModules?.includes?.("parametrage") ||
-  userData?.can_configurer ||
-  has("parametrage");
+    devBypass ||
+    rights?.enabledModules?.includes?.("parametrage") ||
+    userData?.can_configurer ||
+    has("parametrage");
 
-  const showDevRibbon = devFakeAuth || forceSidebar;
+  const showDevRibbon = devBypass;
 
   return (
-    <aside className="w-64 bg-white/10 border border-white/10 backdrop-blur-xl text-white p-4 h-screen shadow-md text-shadow">
+    <aside className="relative w-64 bg-white/10 border border-white/10 backdrop-blur-xl text-white p-4 h-screen shadow-md text-shadow">
+      {devBypass && (
+        <div className="absolute right-3 top-3 flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-white/80">
+          DEV
+        </div>
+      )}
       <img
         src={logo}
         alt="MamaStock"
@@ -35,7 +43,7 @@ export default function Sidebar() {
 
       {showDevRibbon && (
         <div className="mb-4 text-[10px] uppercase tracking-widest text-mamastockGold text-center">
-          Mode DEV — droits simulés
+          Mode DEV — accès libre
         </div>
       )}
 

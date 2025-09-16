@@ -11,6 +11,7 @@ import { readConfig, writeConfig } from "@/appFs";
 import { normalizeAccessKey } from "@/lib/access";
 import { can } from "@/utils/permissions";
 import { DEFAULT_ROLES } from "@/constants/roles";
+import { shouldBypassAccessGuards } from "@/lib/runtime/devFlags";
 
 export type User = {
   id: string;
@@ -59,7 +60,7 @@ const DEV_FAKE_USER = {
   id: "00000000-0000-0000-0000-000000000000",
   email: "dev@local",
   nom: "Dev Admin",
-  mama_id: "11111111-1111-1111-1111-111111111111",
+  mama_id: "dev-local",
   role: "admin",
   actif: true
 } as const;
@@ -106,10 +107,7 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
   const [roles, setRoles] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const devEnv = import.meta.env.DEV;
-  const envFakeAuth = import.meta.env.VITE_DEV_FAKE_AUTH === "1";
-  const envForceSidebar = import.meta.env.VITE_DEV_FORCE_SIDEBAR === "1";
-  const devFallbackRequested = devEnv && (envFakeAuth || envForceSidebar);
+  const devBypass = shouldBypassAccessGuards();
 
   const loadUser = useCallback(async (u: NonNullable<User>) => {
     const cfg = (await readConfig()) || {};
@@ -153,47 +151,66 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
     try {localStorage.removeItem("auth.user");} catch {}
   }, []);
 
-  const shouldApplyDevFallback = useMemo(() => {
-    if (!devFallbackRequested) return false;
-    if (user && userData?.access_rights) return false;
-    return true;
-  }, [devFallbackRequested, user, userData]);
-
-  const devFakeAuthActive = shouldApplyDevFallback && envFakeAuth;
-
   const fallbackUserData = useMemo(() => {
-    if (!shouldApplyDevFallback) return null;
-    if (devFakeAuthActive) return DEV_FAKE_USER_DATA;
-    return {
-      role: "admin",
-      actif: true,
-      access_rights: DEV_FAKE_ACCESS_RIGHTS
-    };
-  }, [shouldApplyDevFallback, devFakeAuthActive]);
+    if (!devBypass) return null;
+    const rights = userData?.access_rights;
+    if (!userData || !rights || Object.keys(rights).length === 0) {
+      return DEV_FAKE_USER_DATA;
+    }
+    return null;
+  }, [devBypass, userData]);
 
   const resolvedUserData = fallbackUserData ?? userData;
-  const resolvedUser: User = fallbackUserData
-    ? {
-        id: devFakeAuthActive ? DEV_FAKE_USER.id : null,
-        email: devFakeAuthActive ? DEV_FAKE_USER.email : null,
+  const resolvedUser: User = useMemo(() => {
+    if (fallbackUserData) {
+      return {
+        id: DEV_FAKE_USER.id,
+        email: DEV_FAKE_USER.email,
         mama_id: DEV_FAKE_USER.mama_id,
         role: "admin"
-      }
-    : user;
+      };
+    }
+    if (user) return user;
+    if (devBypass) {
+      return {
+        id: null,
+        email: null,
+        mama_id: DEV_FAKE_USER.mama_id,
+        role: "admin"
+      };
+    }
+    return null;
+  }, [devBypass, fallbackUserData, user]);
 
-  const resolvedRoles = fallbackUserData ? ["admin"] : roles;
-  const resolvedAccessRights: AccessRights = resolvedUserData?.access_rights ?? null;
-  const resolvedRole = resolvedUserData?.role ?? resolvedUser?.role ?? null;
+  const resolvedRoles = useMemo(() => {
+    if (devBypass) {
+      const base = new Set<string>(["admin"]);
+      roles.forEach((r) => base.add(r));
+      if (resolvedUser?.role) base.add(resolvedUser.role);
+      return Array.from(base);
+    }
+    return roles;
+  }, [devBypass, resolvedUser?.role, roles]);
+
+  const resolvedAccessRights: AccessRights = useMemo(() => {
+    const rights = resolvedUserData?.access_rights;
+    if (devBypass) {
+      return { ...DEV_FAKE_ACCESS_RIGHTS, ...(rights || {}) };
+    }
+    return rights ?? null;
+  }, [devBypass, resolvedUserData]);
+
+  const resolvedRole = resolvedUserData?.role ?? resolvedUser?.role ?? (devBypass ? "admin" : null);
 
   const hasAccess = useCallback(
     (key: string, action = "lecture") => {
       const k = normalizeAccessKey(key);
-      if (!resolvedAccessRights && devFallbackRequested) {
+      if (devBypass) {
         return true;
       }
       return can(resolvedAccessRights || {}, k, action, resolvedRole ?? null);
     },
-    [resolvedAccessRights, resolvedRole, devFallbackRequested]
+    [devBypass, resolvedAccessRights, resolvedRole]
   );
 
   const value = useMemo<Ctx>(() => ({
@@ -205,7 +222,7 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
     user: resolvedUser,
     userData: resolvedUserData,
     access_rights: resolvedAccessRights,
-    devFakeAuth: devFakeAuthActive,
+    devFakeAuth: devBypass,
     loading,
     signIn,
     signOut,
@@ -216,7 +233,7 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
     resolvedRoles,
     resolvedUserData,
     resolvedAccessRights,
-    devFakeAuthActive,
+    devBypass,
     loading,
     signIn,
     signOut,

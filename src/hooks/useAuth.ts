@@ -1,4 +1,4 @@
-import { useAuth as useAuthContext } from '@/context/AuthContext';import { isTauri } from "@/lib/tauriEnv";
+import { useAuth as useAuthContext } from "@/context/AuthContext";
 
 export function useAuth() {
   return useAuthContext();
