@@ -84,6 +84,17 @@ S'assurer que **VS Build Tools (C++ x64)** et le **Windows 11 SDK** sont instal
 
 Ce script installe Node.js LTS, Rustup, le toolchain `stable-x86_64-pc-windows-msvc`, les Build Tools C++ de Visual Studio, le Windows 11 SDK et le WiX Toolset via `winget`, puis lance `npm ci`, `npm run build` et `npx tauri build` (qui génère `src-tauri/icons` si nécessaire).
 
+## Mode DEV (fallback droits)
+
+En environnement de développement, la base Tauri peut être vide : la navigation est alors bloquée faute de droits. Pour simuler un profil administrateur et forcer l’affichage de la sidebar, créez un fichier local `.env.development.local` (non versionné) avec :
+
+```
+VITE_DEV_FAKE_AUTH=1
+VITE_DEV_FORCE_SIDEBAR=1
+```
+
+Ces variables ne sont prises en compte que lorsque `import.meta.env.DEV` est vrai. `VITE_DEV_FAKE_AUTH` injecte un profil admin éphémère doté de droits complets tandis que `VITE_DEV_FORCE_SIDEBAR` force l’ouverture de la barre latérale. Après avoir posé ce fichier, lancez `npm run dev` puis `npx tauri dev` : la sidebar reste visible avec le ruban « Mode DEV — droits simulés » et toutes les pages deviennent accessibles (les listes restent vides tant que la base est vide). Les builds de production n’exposent pas ces variables et ne déclenchent aucun fallback.
+
 ## Parcours test
 
 1. `npm run seed:admin` (admin@mamastock.local / Admin123!)

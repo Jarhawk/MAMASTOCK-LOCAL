@@ -9,7 +9,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/tauriEnv";
 
 export default function Analyse() {
-  const { isAuthenticated, loading: authLoading, access_rights } = useAuth();
+  const { isAuthenticated, loading: authLoading, hasAccess } = useAuth();
   const { getMonthlyPurchases, getEvolutionAchats } = useAnalyse();
   const { results, searchProduits } = useProduitsAutocomplete();
   const [filters, setFilters] = useState({ produit_id: "", debut: "", fin: "" });
@@ -29,7 +29,7 @@ export default function Analyse() {
   }, [isAuthenticated, authLoading, filters, getMonthlyPurchases, getEvolutionAchats]);
 
   if (authLoading) return <LoadingSpinner message="Chargement..." />;
-  if (!access_rights?.analyse?.peut_voir) return <Navigate to="/unauthorized" replace />;
+  if (!hasAccess("analyse", "peut_voir")) return <Navigate to="/unauthorized" replace />;
 
   return (
     <div className="p-6 space-y-6">

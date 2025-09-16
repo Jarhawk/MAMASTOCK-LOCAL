@@ -28,7 +28,7 @@ export default function Fiches() {
     exportFichesToExcel,
     exportFichesToPDF
   } = useFiches();
-  const { mama_id, loading: authLoading, access_rights, hasAccess } = useAuth();
+  const { mama_id, loading: authLoading, hasAccess } = useAuth();
   const [showForm, setShowForm] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -67,7 +67,7 @@ export default function Fiches() {
     return <LoadingSpinner message="Chargement..." />;
   }
 
-  if (!access_rights?.fiches_techniques?.peut_voir) {
+  if (!hasAccess("fiches_techniques", "peut_voir")) {
     return <Navigate to="/unauthorized" replace />;
   }
 
