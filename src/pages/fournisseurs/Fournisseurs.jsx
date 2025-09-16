@@ -8,7 +8,7 @@ import { useFournisseurStats } from '@/hooks/useFournisseurStats';
 import { useProduitsFournisseur } from '@/hooks/useProduitsFournisseur';
 import { useProducts } from '@/hooks/useProducts';
 import { useFournisseursInactifs } from '@/hooks/useFournisseursInactifs';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Button } from '@/components/ui/button';
 import ListingContainer from '@/components/ui/ListingContainer';
 import PaginationFooter from '@/components/ui/PaginationFooter';

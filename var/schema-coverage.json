@@ -135,7 +135,7 @@
     "src/components/ui/TableHeader.jsx",
     "src/components/ui/badge.jsx",
     "src/components/ui/button.jsx",
-    "src/components/ui/card.jsx",
+    "src/components/ui/Card.jsx",
     "src/components/ui/checkbox.jsx",
     "src/components/ui/controls/index.jsx",
     "src/components/ui/dialog.jsx",

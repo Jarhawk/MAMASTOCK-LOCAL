@@ -16,6 +16,14 @@ Cette variante, basée sur **Tauri v2**, embarque une base SQLite locale pour f
 - Sous Tauri les comptes sont stockés dans `appDataDir/MamaStock/users.json`.
 - En navigateur DEV, c’est dans `localStorage` (`mama.users.json`).
 
+## Comptes locaux (Paramétrage)
+- Navigation : **Paramétrage > Comptes locaux**.
+- Fonctions disponibles : lister les comptes locaux, créer un utilisateur, réinitialiser un mot de passe, changer un rôle, supprimer un compte.
+- Stockage :
+  - **Tauri** : fichier `appDataDir/MamaStock/users.json`.
+  - **Navigateur DEV** : clé `localStorage` `mama.users.json`.
+- Rôles proposés : `admin`, `manager`, `chef_site`.
+
 ## Vérification post-installation
 Après l'installation, le script suivant vérifie Node, npm, Rust (MSVC), WebView2 et la présence/lecture de la configuration et de la base de données :
 
