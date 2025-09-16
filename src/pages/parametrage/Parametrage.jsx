@@ -6,7 +6,6 @@ import ParamRoles from "@/components/parametrage/ParamRoles";
 import ParamAccess from "@/components/parametrage/ParamAccess";
 import ParamMama from "@/components/parametrage/ParamMama";
 import ParamCostCenters from "@/components/parametrage/ParamCostCenters";
-import ParamSecurity from "@/components/parametrage/ParamSecurity";
 import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/tauriEnv";
 
 export default function Parametrage() {
@@ -21,8 +20,7 @@ export default function Parametrage() {
         { name: "Rôles", content: <ParamRoles /> },
         { name: "Accès", content: <ParamAccess /> },
         { name: "Centres de coûts", content: <ParamCostCenters /> },
-        { name: "Établissement", content: <ParamMama /> },
-        { name: "Sécurité", content: <ParamSecurity /> }]
+        { name: "Établissement", content: <ParamMama /> }]
         } />
       
     </div>);
