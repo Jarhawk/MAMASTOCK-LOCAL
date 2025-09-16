@@ -11,6 +11,11 @@ Cette variante, basée sur **Tauri v2**, embarque une base SQLite locale pour f
 - Télécharger l'installateur **MSI** produit par la CI.
 - L'exécuter.
 
+## Première ouverture (local)
+- Au premier lancement, un écran de création de compte admin s’affiche.
+- Sous Tauri les comptes sont stockés dans `appDataDir/MamaStock/users.json`.
+- En navigateur DEV, c’est dans `localStorage` (`mama.users.json`).
+
 ## Vérification post-installation
 Après l'installation, le script suivant vérifie Node, npm, Rust (MSVC), WebView2 et la présence/lecture de la configuration et de la base de données :
 

@@ -1,35 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { loginLocal, registerLocal } from "@/auth/localAccount";
-import "./login.css";import { isTauri } from "@/lib/tauriEnv";
+import { Link, useNavigate } from "react-router-dom";
+import { loginLocal, listLocalUsers } from "@/auth/localAccount";
+import "./login.css";
 
 export default function LoginPage() {
-  const nav = useNavigate();
+  const navigate = useNavigate();
   const { signIn } = useAuth();
   const [email, setEmail] = useState("admin@mamastock.local");
   const [password, setPassword] = useState("Admin123!");
   const [error, setError] = useState("");
+  const [canCreateAccount, setCanCreateAccount] = useState(false);
 
-  async function onSubmit(e) {
-    e.preventDefault();
+  useEffect(() => {
+    let mounted = true;
+
+    listLocalUsers()
+      .then((users) => {
+        if (mounted) setCanCreateAccount(users.length > 0);
+      })
+      .catch(() => {
+        if (mounted) setCanCreateAccount(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  async function onSubmit(event) {
+    event.preventDefault();
     setError("");
     try {
-      const u = await loginLocal(email, password);
-      signIn(u);
-      nav("/");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    }
-  }
-
-  async function onRegister(e) {
-    e.preventDefault();
-    setError("");
-    try {
-      const u = await registerLocal(email, password);
-      signIn(u);
-      nav("/");
+      const user = await loginLocal(email, password);
+      signIn(user);
+      navigate("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     }
@@ -43,39 +48,53 @@ export default function LoginPage() {
           alt="MamaStock"
           className="login-logo"
           width={72}
-          height={72} />
-        
+          height={72}
+        />
+
         <h1 className="login-title">Connexion</h1>
 
         {error ? <div className="login-error">{error}</div> : null}
 
         <form onSubmit={onSubmit} className="login-form">
-          <label className="login-label">Email</label>
+          <label className="login-label" htmlFor="login-email">
+            Email
+          </label>
           <input
+            id="login-email"
             className="login-input"
             type="email"
             placeholder="email@exemple.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
             autoComplete="username"
-            required />
-          
+            required
+          />
 
-          <label className="login-label">Mot de passe</label>
+          <label className="login-label" htmlFor="login-password">
+            Mot de passe
+          </label>
           <input
+            id="login-password"
             className="login-input"
             type="password"
             placeholder="••••••••"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
             autoComplete="current-password"
-            required />
-          
+            required
+          />
 
-          <button type="submit" className="login-btn">Se connecter</button>
-          <button className="login-btn secondary" onClick={onRegister}>Créer un compte local</button>
+          <button type="submit" className="login-btn">
+            Se connecter
+          </button>
         </form>
-      </div>
-    </div>);
 
+        {canCreateAccount ? (
+          <Link to="/setup" className="login-link">
+            Créer un compte
+          </Link>
+        ) : null}
+      </div>
+    </div>
+  );
 }
