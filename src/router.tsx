@@ -1,21 +1,67 @@
 // src/router.tsx
-import React, { Suspense } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { createHashRouter, RouterProvider, Navigate } from "react-router-dom";
-import { routes } from "@/router.autogen";import { isTauri } from "@/lib/tauriEnv";
+import { routes } from "@/router.autogen";
+import { listLocalUsers } from "@/auth/localAccount";
+
+const FirstRunSetupPage = lazy(() => import("@/pages/setup/FirstRun"));
 
 const router = createHashRouter([
-// routes autogen
-...routes,
-// route par défaut ("/" => /dashboard si présent, sinon première route dispo)
-{ path: "/", element: <Navigate to="/dashboard" replace /> },
-// catch-all
-{ path: "*", element: <Navigate to="/dashboard" replace /> }]
-);
+  { path: "/setup", element: <FirstRunSetupPage /> },
+  // routes autogen
+  ...routes,
+  // route par défaut ("/" => /dashboard si présent, sinon première route dispo)
+  { path: "/", element: <Navigate to="/dashboard" replace /> },
+  // catch-all
+  { path: "*", element: <Navigate to="/dashboard" replace /> }
+]);
+
+function useFirstRunRedirect() {
+  useEffect(() => {
+    let cancelled = false;
+
+    const ensureSetupRoute = () => {
+      if (typeof window === "undefined") return;
+      const hash = window.location.hash || "";
+      const currentPath = hash.startsWith("#") ? hash.slice(1) : hash;
+      if (!currentPath.startsWith("/setup")) {
+        router.navigate("/setup", { replace: true });
+      }
+    };
+
+    async function ensureAdminAccount() {
+      try {
+        const users = await listLocalUsers();
+        if (cancelled) return;
+        if (users.length === 0) {
+          ensureSetupRoute();
+        }
+      } catch (error) {
+        console.warn("[setup] Impossible de lire les comptes locaux", error);
+        if (!cancelled) {
+          ensureSetupRoute();
+        }
+      }
+    }
+
+    ensureAdminAccount();
+    const unsubscribe = router.subscribe(() => {
+      void ensureAdminAccount();
+    });
+
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
+  }, []);
+}
 
 export default function AppRouter() {
+  useFirstRunRedirect();
+
   return (
     <Suspense fallback={<div style={{ padding: 16 }}>Chargement…</div>}>
       <RouterProvider router={router} />
-    </Suspense>);
-
+    </Suspense>
+  );
 }
