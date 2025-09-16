@@ -84,23 +84,18 @@ S'assurer que **VS Build Tools (C++ x64)** et le **Windows 11 SDK** sont instal
 
 Ce script installe Node.js LTS, Rustup, le toolchain `stable-x86_64-pc-windows-msvc`, les Build Tools C++ de Visual Studio, le Windows 11 SDK et le WiX Toolset via `winget`, puis lance `npm ci`, `npm run build` et `npx tauri build` (qui génère `src-tauri/icons` si nécessaire).
 
-## Mode DEV (fallback droits)
+## Mode DEV (Hard Unlock)
 
-En développement local, la base SQLite peut être vierge et aucun compte n'est encore provisionné. Pour que l'interface reste navigable et que la sidebar s'affiche quoi qu'il arrive, créez un fichier `.env.development.local` (non versionné) contenant :
+En développement (`npm run dev`, avec ou sans `npx tauri dev`), la sidebar reste visible et tous les écrans sont accessibles sans compte. Aucun fichier `.env` n'est nécessaire : si la base SQLite est absente, les hooks renvoient simplement des listes vides et un message `[sqlite] Browser DEV — returning empty results` apparaît dans la console.
 
-```
-VITE_DATA_SOURCE=sqlite
-VITE_ALLOW_ALL_ROUTES=1
-```
+- Un badge **DEV** (coin inférieur gauche) indique la raison du déblocage (`devDefault` ou `forceSidebar`) ainsi que la plateforme utilisée (`Browser` ou `Tauri`).
+- Le raccourci **Ctrl+Alt+D** ouvre un panneau "Dev Overrides" qui permet d'activer ou de retirer deux bascules persistées dans `localStorage` :
+  - `Force Sidebar` (`DEV_FORCE_SIDEBAR = "1"`)
+  - `Allow All Routes` (`DEV_ALLOW_ALL_ROUTES = "1"`)
+  Chaque changement recharge automatiquement la page. Les mêmes overrides peuvent être passés en URL (`?sidebar=1&allowRoutes=1`).
+- Hors Tauri (simple onglet navigateur), les requêtes SQLite retournent toujours des tableaux vides plutôt que de provoquer une erreur.
 
-`VITE_ALLOW_ALL_ROUTES=1` neutralise temporairement les gardes d'accès lorsque `import.meta.env.DEV` vaut `true`. Passez la variable à `0` (ou supprimez-la) pour retrouver le comportement RBAC réel. `VITE_DATA_SOURCE=sqlite` rappelle que le frontend doit utiliser la base locale embarquée.
-
-Ensuite :
-
-1. lancez `npm run dev` ;
-2. dans une deuxième console, exécutez `npx tauri dev` pour ouvrir la fenêtre native.
-
-En mode DEV, un badge **DEV** s'affiche dans la sidebar et toutes les routes deviennent accessibles. Si la fenêtre Tauri n'est pas ouverte, la couche SQLite retourne simplement des tableaux vides sans lever d'erreur (un message d'information est émis en console). Dès que l'application tourne hors DEV (build ou variables absentes), les restrictions classiques se réappliquent automatiquement.
+En production, ces bypass sont désactivés : la logique RBAC et la détection Tauri restent inchangées.
 
 ## Parcours test
 
