@@ -29,7 +29,8 @@
     "pwa:reset": "node scripts/pwa-reset.js",
     "webview:reset": "powershell -ExecutionPolicy Bypass -File scripts/reset-webview-cache.ps1",
     "codemod:isTauri": "node scripts/codemod-unify-isTauri.cjs",
-    "tauri:build": "npm run build && npx tauri build"
+    "tauri:build": "npm run build && npx tauri build",
+    "icons:generate": "npx @tauri-apps/cli icon src-tauri/icons/icon.png --output src-tauri/icons"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
