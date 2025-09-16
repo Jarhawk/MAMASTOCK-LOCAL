@@ -156,6 +156,12 @@ export default function Sidebar() {
                   Dossier données
                 </NavLink>
               )}
+              <NavLink
+                to="/parametrage/comptes-locaux"
+                className={({ isActive }) => (isActive ? "text-mamastockGold" : "")}
+              >
+                Comptes locaux
+              </NavLink>
               {has("utilisateurs") && <Link to="/parametrage/utilisateurs">Utilisateurs</Link>}
               {has("roles") && <Link to="/parametrage/roles">Rôles</Link>}
               {has("mamas") && <Link to="/parametrage/mamas">Mamas</Link>}
