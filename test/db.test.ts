@@ -5,23 +5,35 @@ vi.mock('@tauri-apps/plugin-sql', () => ({
   default: { load: vi.fn() },
 }));
 
+vi.mock('@/lib/tauriEnv', () => ({
+  isTauri: () => true,
+}));
+
 import * as dal from '@/lib/db';
+
+const mockDb = {
+  select: vi.fn(),
+  execute: vi.fn(),
+  close: vi.fn(),
+};
+
+beforeEach(() => {
+  mockDb.select.mockReset();
+  mockDb.execute.mockReset();
+  mockDb.close.mockReset();
+  (Sql.load as any).mockResolvedValue(mockDb);
+});
 
 afterEach(async () => {
   await dal.closeDb();
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('DAL produits', () => {
   it('produits_list returns rows and total', async () => {
-    const mockDb = {
-      select: vi
-        .fn()
-        .mockResolvedValueOnce([{ id: 1 }])
-        .mockResolvedValueOnce([{ count: 1 }]),
-      close: vi.fn(),
-    };
-    (Sql.load as any).mockResolvedValue(mockDb);
+    mockDb.select
+      .mockResolvedValueOnce([{ id: 1 }])
+      .mockResolvedValueOnce([{ count: 1 }]);
 
     const result = await dal.produits_list('', true, 1, 20);
 
@@ -31,26 +43,19 @@ describe('DAL produits', () => {
   });
 
   it('produits_create inserts product', async () => {
-    const mockDb = {
-      execute: vi.fn().mockResolvedValue(undefined),
-      close: vi.fn(),
-    };
-    (Sql.load as any).mockResolvedValue(mockDb);
+    mockDb.execute.mockResolvedValue(undefined);
+    mockDb.select.mockResolvedValue([{ id: 1 }]);
 
     await dal.produits_create({ nom: 'Test' });
 
     expect(mockDb.execute).toHaveBeenCalledWith(
-      'INSERT INTO produits (nom, unite, famille, actif) VALUES (?,?,?,?)',
-      ['Test', null, null, 1]
+      'INSERT INTO produits (mama_id, nom, unite, famille, zone_id, actif) VALUES (?,?,?,?,?,1)',
+      [null, 'Test', null, null, null]
     );
   });
 
   it('produits_update updates product', async () => {
-    const mockDb = {
-      execute: vi.fn().mockResolvedValue(undefined),
-      close: vi.fn(),
-    };
-    (Sql.load as any).mockResolvedValue(mockDb);
+    mockDb.execute.mockResolvedValue(undefined);
 
     await dal.produits_update('1', { nom: 'New' });
 

@@ -4,14 +4,19 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 // l'utilisateur possède le droit "peut_voir". Les droits proviennent
 // du contexte d'authentification (merge utilisateur + rôle).
 import { useAuth } from '@/hooks/useAuth';
-import logo from "@/assets/logo-mamastock.png";import { isTauri } from "@/lib/tauriEnv";
+import logo from "@/assets/logo-mamastock.png";
 
 export default function Sidebar() {
-  const { loading, hasAccess, userData } = useAuth();
+  const { loading, hasAccess, userData, access_rights, devFakeAuth } = useAuth();
   const { pathname } = useLocation();
 
   if (loading) return null;
-  const rights = userData?.access_rights || {};
+
+  const forceSidebar = import.meta.env.DEV && import.meta.env.VITE_DEV_FORCE_SIDEBAR === "1";
+  const showSidebar = Boolean(access_rights) || forceSidebar;
+  if (!showSidebar) return null;
+
+  const rights = access_rights ?? userData?.access_rights ?? {};
   const has = (key) => hasAccess(key);
   const canAnalyse = has("analyse");
   const canConfigure =
@@ -19,13 +24,21 @@ export default function Sidebar() {
   userData?.can_configurer ||
   has("parametrage");
 
+  const showDevRibbon = devFakeAuth || forceSidebar;
+
   return (
     <aside className="w-64 bg-white/10 border border-white/10 backdrop-blur-xl text-white p-4 h-screen shadow-md text-shadow">
       <img
         src={logo}
         alt="MamaStock"
         className="h-20 mx-auto mt-4 mb-6" />
-      
+
+      {showDevRibbon && (
+        <div className="mb-4 text-[10px] uppercase tracking-widest text-mamastockGold text-center">
+          Mode DEV — droits simulés
+        </div>
+      )}
+
       <nav className="flex flex-col gap-2 text-sm">
         {has("dashboard") && <Link to="/dashboard">Dashboard</Link>}
 

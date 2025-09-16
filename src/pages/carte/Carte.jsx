@@ -125,12 +125,12 @@ function CarteTable({ type }) {
 }
 
 export default function Carte() {
-  const { isAuthenticated, access_rights, loading: authLoading } = useAuth();
+  const { isAuthenticated, loading: authLoading, hasAccess } = useAuth();
   const [tab, setTab] = useState("nourriture");
 
   if (authLoading) return <LoadingSpinner message="Chargement..." />;
   if (!isAuthenticated) return null;
-  if (!access_rights?.menus?.peut_voir) {
+  if (!hasAccess("menus", "peut_voir")) {
     return <Navigate to="/unauthorized" replace />;
   }
 

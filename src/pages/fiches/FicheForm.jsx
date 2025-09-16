@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 import FicheLigne from "@/components/fiches/FicheLigne.jsx";import { isTauri } from "@/lib/tauriEnv";
 
 export default function FicheForm({ fiche, onClose }) {
-  const { access_rights, loading: authLoading } = useAuth();
+  const { hasAccess, loading: authLoading } = useAuth();
   const { createFiche, updateFiche } = useFiches();
   const { products, fetchProducts } = useProducts();
   const { familles, fetchFamilles } = useFamilles();
@@ -32,7 +32,7 @@ export default function FicheForm({ fiche, onClose }) {
   const [prixVente, setPrixVente] = useState(fiche?.prix_vente || 0);
   const [loading, setLoading] = useState(false);
 
-  const allowed = access_rights?.fiches_techniques?.peut_voir;
+  const allowed = hasAccess("fiches_techniques", "peut_voir");
   const { results: ficheOptions, searchFiches } = useFichesAutocomplete();
 
   useEffect(() => {

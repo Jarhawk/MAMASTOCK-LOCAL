@@ -18,7 +18,7 @@ export default function Promotions() {
     updatePromotion,
     deletePromotion
   } = usePromotions();
-  const { mama_id, loading: authLoading, access_rights, hasAccess } = useAuth();
+  const { mama_id, loading: authLoading, hasAccess } = useAuth();
   const [showForm, setShowForm] = useState(false);
   const [editRow, setEditRow] = useState(null);
   const [search, setSearch] = useState("");
@@ -45,7 +45,7 @@ export default function Promotions() {
 
   if (authLoading) return null;
   if (!mama_id) return null;
-  if (!access_rights?.promotions?.peut_voir) {
+  if (!hasAccess("promotions", "peut_voir")) {
     return <Navigate to="/unauthorized" replace />;
   }
 

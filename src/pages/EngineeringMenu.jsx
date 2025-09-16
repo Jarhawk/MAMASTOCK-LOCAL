@@ -6,13 +6,13 @@ import usePerformanceFiches from '@/hooks/usePerformanceFiches';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function EngineeringMenu() {
-  const { access_rights, mama_id, loading: authLoading } = useAuth();
+  const { hasAccess, mama_id, loading: authLoading } = useAuth();
   const { data, fetchData, loading } = usePerformanceFiches();
 
   useEffect(() => {if (mama_id) fetchData();}, [mama_id, fetchData]);
 
   if (authLoading || loading) return <LoadingSpinner message="Chargement..." />;
-  if (!access_rights?.analyse?.peut_voir) return <Navigate to="/unauthorized" replace />;
+  if (!hasAccess("analyse", "peut_voir")) return <Navigate to="/unauthorized" replace />;
 
   return (
     <div className="p-6 space-y-4 text-shadow">
