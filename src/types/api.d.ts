@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri";export type MamaSettings = {
+import { isTauri } from "@/lib/tauriEnv";export type MamaSettings = {
   logo_url: string | null;
   primary_color: string | null;
   secondary_color: string | null;

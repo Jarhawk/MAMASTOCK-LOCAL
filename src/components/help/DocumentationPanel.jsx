@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogDescription } from
 '@/components/ui/SmartDialog';
-import { useHelp } from '@/context/HelpProvider';import { isTauri } from "@/lib/runtime/isTauri";
+import { useHelp } from '@/context/HelpProvider';import { isTauri } from "@/lib/tauriEnv";
 
 export default function DocumentationPanel({ open, onOpenChange }) {
   const { docs, fetchDocs } = useHelp();

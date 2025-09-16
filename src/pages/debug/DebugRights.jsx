@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '@/context/AuthContext';import { isTauri } from "@/lib/runtime/isTauri";
+import { useAuth } from '@/context/AuthContext';import { isTauri } from "@/lib/tauriEnv";
 export default function DebugRights() {
   const { userData } = useAuth();
   const rights = userData?.access_rights || {};

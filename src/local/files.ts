@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri";
+import { isTauri } from "@/lib/tauriEnv";
 
 const NOT_TAURI_HINT =
   "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
@@ -6,7 +6,7 @@ const NOT_TAURI_HINT =
 const APP_DIR = "MamaStock";
 
 async function baseDir() {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return "";
   }
@@ -19,7 +19,7 @@ async function baseDir() {
 }
 
 async function resolve(path: string) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return path;
   }
@@ -29,7 +29,7 @@ async function resolve(path: string) {
 }
 
 export async function saveText(relPath: string, content: string) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return;
   }
@@ -42,7 +42,7 @@ export async function saveText(relPath: string, content: string) {
 }
 
 export async function readText(relPath: string) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return "";
   }
@@ -52,7 +52,7 @@ export async function readText(relPath: string) {
 }
 
 export async function existsFile(relPath: string) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return false;
   }
@@ -62,7 +62,7 @@ export async function existsFile(relPath: string) {
 }
 
 export async function mkdirp(relDir: string) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return;
   }
@@ -72,7 +72,7 @@ export async function mkdirp(relDir: string) {
 }
 
 export async function saveBinary(relPath: string, data: Uint8Array) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return;
   }
@@ -85,7 +85,7 @@ export async function saveBinary(relPath: string, data: Uint8Array) {
 }
 
 export async function readBinary(relPath: string) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return new Uint8Array();
   }
@@ -95,7 +95,7 @@ export async function readBinary(relPath: string) {
 }
 
 export async function deleteFile(relPath: string) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return;
   }

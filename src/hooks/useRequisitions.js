@@ -6,7 +6,7 @@ import {
   requisition_create,
   requisition_update,
   requisition_delete } from
-"@/local/requisitions";import { isTauri } from "@/lib/runtime/isTauri";
+"@/local/requisitions";import { isTauri } from "@/lib/tauriEnv";
 
 export function useRequisitions() {
   const { mama_id } = useAuth();

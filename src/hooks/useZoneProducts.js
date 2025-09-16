@@ -5,7 +5,7 @@ import {
   zone_products_move,
   zone_products_copy,
   zone_products_merge } from
-"@/lib/db";import { isTauri } from "@/lib/runtime/isTauri";
+"@/lib/db";import { isTauri } from "@/lib/tauriEnv";
 
 export function useZoneProducts() {
   const { mama_id } = useAuth();

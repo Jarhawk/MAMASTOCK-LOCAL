@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri";export interface User {
+import { isTauri } from "@/lib/tauriEnv";export interface User {
   id: number;
   email: string;
   mot_de_passe_hash: string;

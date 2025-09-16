@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useAuth } from '@/hooks/useAuth';
-import { onboarding_fetch, onboarding_start } from "@/lib/db";import { isTauri } from "@/lib/runtime/isTauri";
+import { onboarding_fetch, onboarding_start } from "@/lib/db";import { isTauri } from "@/lib/tauriEnv";
 
 export default function useOnboarding() {
   const { mama_id, user } = useAuth();

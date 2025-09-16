@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Form } from '@/components/ui/Form';
 import { FormField } from '@/components/ui/FormField';
 import { FormActions } from '@/components/ui/FormActions';
-import { Input, Checkbox } from '@/components/ui/controls';import { isTauri } from "@/lib/runtime/isTauri";
+import { Input, Checkbox } from '@/components/ui/controls';import { isTauri } from "@/lib/tauriEnv";
 
 export default function UniteForm({ unite, onSave, onCancel }) {
   const [nom, setNom] = useState(unite?.nom || '');

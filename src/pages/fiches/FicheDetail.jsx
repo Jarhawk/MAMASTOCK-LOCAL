@@ -9,7 +9,7 @@ import "jspdf-autotable";
 import { useFiches } from "@/hooks/useFiches";
 import { useFicheCoutHistory } from "@/hooks/useFicheCoutHistory";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";import { isTauri } from "@/lib/runtime/isTauri";
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";import { isTauri } from "@/lib/tauriEnv";
 
 export default function FicheDetail({ fiche: ficheProp, onClose }) {
   const { id: routeId } = useParams();

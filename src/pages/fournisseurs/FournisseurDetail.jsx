@@ -22,7 +22,7 @@ import {
 'recharts';
 import { Button } from '@/components/ui/button';
 import GlassCard from '@/components/ui/GlassCard';
-import TableContainer from '@/components/ui/TableContainer';import { isTauri } from "@/lib/runtime/isTauri";
+import TableContainer from '@/components/ui/TableContainer';import { isTauri } from "@/lib/tauriEnv";
 
 export default function FournisseurDetail({ id }) {
   const { mama_id } = useAuth();

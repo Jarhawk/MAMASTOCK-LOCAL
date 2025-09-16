@@ -9,7 +9,7 @@ import PageWrapper from "@/components/ui/PageWrapper";
 import { Input } from "@/components/ui/input";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { updatePasswordLocal } from "@/auth/localAccount";
-import { useAuth } from "@/hooks/useAuth";import { isTauri } from "@/lib/runtime/isTauri";
+import { useAuth } from "@/hooks/useAuth";import { isTauri } from "@/lib/tauriEnv";
 
 export default function UpdatePassword() {
   const [password, setPassword] = useState("");

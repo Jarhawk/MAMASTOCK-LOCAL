@@ -1,6 +1,6 @@
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/runtime/isTauri";
+import GlassCard from "@/components/ui/GlassCard";import { isTauri } from "@/lib/tauriEnv";
 
 export default function AccessExample() {
   const { loading, hasAccess } = useAuth();

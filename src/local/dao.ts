@@ -2,7 +2,7 @@
 import { query, exec, one } from "./db";
 
 // Exemples : adapte aux tables de ton schéma SQLite
-import { isTauri } from "@/lib/runtime/isTauri";export async function listProducts() {
+import { isTauri } from "@/lib/tauriEnv";export async function listProducts() {
   return await query("SELECT * FROM produits ORDER BY nom");
 }
 export async function getProduct(id: string) {

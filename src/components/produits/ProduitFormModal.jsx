@@ -2,7 +2,7 @@
 // src/components/produits/ProduitFormModal.jsx
 import ModalGlass from "@/components/ui/ModalGlass";
 import ProduitForm from "./ProduitForm";
-import { useEffect } from "react";import { isTauri } from "@/lib/runtime/isTauri";
+import { useEffect } from "react";import { isTauri } from "@/lib/tauriEnv";
 
 export default function ProduitFormModal({ open, produit, onClose, onSuccess }) {
   // Fermer avec ESC

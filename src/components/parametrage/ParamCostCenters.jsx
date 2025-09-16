@@ -7,7 +7,7 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Button } from '@/components/ui/button';
 import TableContainer from '@/components/ui/TableContainer';
 import { toast } from 'sonner';
-import * as XLSX from 'xlsx';import { isTauri } from "@/lib/runtime/isTauri";
+import * as XLSX from 'xlsx';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ParamCostCenters() {
   const {

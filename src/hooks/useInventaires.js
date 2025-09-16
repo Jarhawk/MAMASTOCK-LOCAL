@@ -12,7 +12,7 @@ import {
   inventaire_cloture,
   inventaire_last_closed,
 } from '@/lib/db';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export function useInventaires() {
   const { mama_id } = useAuth();
@@ -136,7 +136,7 @@ export function useInventaires() {
   }
 
     async function validateInventaireStock(inventaireId) {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useInventaires: ignoré hors Tauri');
         return false;
       }

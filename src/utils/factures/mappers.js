@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri"; /**
+import { isTauri } from "@/lib/tauriEnv"; /**
  * mapDbLineToUI
  * Convertit une ligne issue de la base (facture_lignes + jointures produit/zone éventuelles)
  * en format attendu par le formulaire UI sans ajouter de données inventées.

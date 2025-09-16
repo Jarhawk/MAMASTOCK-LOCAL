@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { dashboards_list, gadget_add, gadget_update, gadget_delete } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
+import { dashboards_list, gadget_add, gadget_update, gadget_delete } from '@/lib/db';import { isTauri } from "@/lib/tauriEnv";
 
 export function useGadgets() {
   const { id: user_id, mama_id } = useAuth();

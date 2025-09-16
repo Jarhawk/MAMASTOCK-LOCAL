@@ -10,7 +10,7 @@ import {
 /**
  * Layout pour les utilisateurs en lecture seule (viewer).
  * Pas de sidebar, uniquement la navbar + contenu centré.
- */import { isTauri } from "@/lib/runtime/isTauri";
+ */import { isTauri } from "@/lib/tauriEnv";
 export default function ViewerLayout({ children }) {
   return (
     <div className="relative flex flex-col min-h-screen text-white text-shadow overflow-hidden">

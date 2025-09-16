@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri";export type FormatLiveOptions = {
+import { isTauri } from "@/lib/tauriEnv";export type FormatLiveOptions = {
   type: 'qty' | 'money';
   locale?: string;
 };

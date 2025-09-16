@@ -20,7 +20,7 @@ import useProduitLineDefaults from '@/hooks/useProduitLineDefaults';
 import { useZonesStock } from '@/hooks/useZonesStock';
 import { formatMoneyFR } from '@/utils/numberFormat';
 import { facture_create, facture_add_ligne } from '@/lib/db';
-import { useQueryClient } from '@tanstack/react-query';import { isTauri } from "@/lib/runtime/isTauri";
+import { useQueryClient } from '@tanstack/react-query';import { isTauri } from "@/lib/tauriEnv";
 
 const FN_UPDATE_FACTURE_EXISTS = false;
 

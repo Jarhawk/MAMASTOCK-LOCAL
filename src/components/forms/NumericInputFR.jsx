@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';import { isTauri } from "@/lib/runtime/isTauri";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';import { isTauri } from "@/lib/tauriEnv";
 
 function normalize(raw) {
   return raw.

@@ -1,6 +1,6 @@
 import { motion as Motion } from 'framer-motion';
 import useBudgetMensuel from '@/hooks/gadgets/useBudgetMensuel';
-import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/runtime/isTauri";
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/tauriEnv";
 
 export default function GadgetBudgetMensuel() {
   const { cible, reel, loading } = useBudgetMensuel();

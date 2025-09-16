@@ -1,10 +1,10 @@
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 let done = false;
 export async function runSqlSelfTest() {
   if (done) return;
   done = true;
-  if (!isTauri) {
+  if (!isTauri()) {
     console.log("[SQL SelfTest] hors Tauri -> ok (skip)");
     return;
   }

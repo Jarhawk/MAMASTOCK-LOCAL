@@ -1,4 +1,4 @@
-import { useAuth } from './useAuth';import { isTauri } from "@/lib/runtime/isTauri";
+import { useAuth } from './useAuth';import { isTauri } from "@/lib/tauriEnv";
 
 export default function useAccess(module, right = 'peut_voir') {
   const { hasAccess, loading, pending, isSuperadmin } = useAuth();

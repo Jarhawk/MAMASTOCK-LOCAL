@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';import { isTauri } from "@/lib/runtime/isTauri";
+import { useState, useEffect } from 'react';import { isTauri } from "@/lib/tauriEnv";
 
 export default function useDebounce(value, delay = 300) {
   const [debounced, setDebounced] = useState(value);

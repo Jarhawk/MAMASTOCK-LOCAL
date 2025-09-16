@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
 import { uploadFile, deleteFile, pathFromUrl } from "@/hooks/useStorage";
-import { documents_list, document_add, document_delete, document_get } from "@/local/documents";import { isTauri } from "@/lib/runtime/isTauri";
+import { documents_list, document_add, document_delete, document_get } from "@/local/documents";import { isTauri } from "@/lib/tauriEnv";
 
 export function useDocuments() {
   const { mama_id } = useAuth();

@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAnalyse } from "@/hooks/useAnalyse";
 import { useProduitsAutocomplete } from "@/hooks/useProduitsAutocomplete";
 import GlassCard from "@/components/ui/GlassCard";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/runtime/isTauri";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/tauriEnv";
 
 export default function Analyse() {
   const { isAuthenticated, loading: authLoading, access_rights } = useAuth();

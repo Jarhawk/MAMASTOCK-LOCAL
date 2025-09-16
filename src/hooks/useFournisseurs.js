@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   listFournisseurs,
   createFournisseur as dalCreateFournisseur } from
-"@/lib/dal/fournisseurs";import { isTauri } from "@/lib/runtime/isTauri";
+"@/lib/dal/fournisseurs";import { isTauri } from "@/lib/tauriEnv";
 
 export function useFournisseurs() {
   const [fournisseurs, setFournisseurs] = useState([]);

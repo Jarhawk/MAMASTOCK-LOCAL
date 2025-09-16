@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useFournisseurAPI } from "@/hooks/useFournisseurAPI";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import GlassCard from "@/components/ui/GlassCard";
-import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/runtime/isTauri";
+import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/tauriEnv";
 
 export default function CommandesEnvoyees() {
   const { mama_id, loading: authLoading } = useAuth();

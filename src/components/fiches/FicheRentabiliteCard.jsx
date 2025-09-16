@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import Card from '@/components/ui/Card';import { isTauri } from "@/lib/runtime/isTauri";
+import Card from '@/components/ui/Card';import { isTauri } from "@/lib/tauriEnv";
 
 export default function FicheRentabiliteCard({ fiche }) {
   const {

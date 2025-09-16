@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { toast } from 'sonner';
 import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';import { isTauri } from "@/lib/runtime/isTauri";
+import * as XLSX from 'xlsx';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ParamUnites() {
   const { unites, listUnites, addUnite, updateUnite, deleteUnite } =

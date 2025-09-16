@@ -1,4 +1,4 @@
-import { getDb, getMeta, setMeta } from "@/db/connection";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb, getMeta, setMeta } from "@/db/connection";import { isTauri } from "@/lib/tauriEnv";
 
 export type Step = {
   id: string;

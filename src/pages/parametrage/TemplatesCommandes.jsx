@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useTemplatesCommandes } from "@/hooks/useTemplatesCommandes";
 import useFournisseurs from "@/hooks/data/useFournisseurs";
 import TemplateCommandeForm from "./TemplateCommandeForm";
-import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/runtime/isTauri";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/tauriEnv";
 
 export default function TemplatesCommandes() {
   const { fetchTemplates, deleteTemplate } = useTemplatesCommandes();

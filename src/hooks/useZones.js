@@ -9,7 +9,7 @@ import {
   zones_accessible } from
 "@/lib/db";
 import { toast } from "sonner";
-import { useState } from "react";import { isTauri } from "@/lib/runtime/isTauri";
+import { useState } from "react";import { isTauri } from "@/lib/tauriEnv";
 
 export default function useZones() {
   const [zones, setZones] = useState([]);

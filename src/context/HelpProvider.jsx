@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
-import { readConfig, writeConfig } from '@/appFs';import { isTauri } from "@/lib/runtime/isTauri";
+import { readConfig, writeConfig } from '@/appFs';import { isTauri } from "@/lib/tauriEnv";
 
 const HelpContext = createContext();
 

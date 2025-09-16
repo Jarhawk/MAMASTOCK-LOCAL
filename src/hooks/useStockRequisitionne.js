@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
-import { stock_requisitionne_list } from '@/local/stockRequisitionne';import { isTauri } from "@/lib/runtime/isTauri";
+import { stock_requisitionne_list } from '@/local/stockRequisitionne';import { isTauri } from "@/lib/tauriEnv";
 
 export function useStockRequisitionne() {
   const { mama_id } = useAuth();

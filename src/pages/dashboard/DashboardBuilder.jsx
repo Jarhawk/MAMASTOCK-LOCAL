@@ -4,7 +4,7 @@ import { Reorder } from "framer-motion";
 import { useDashboards } from "@/hooks/useDashboards";
 import WidgetRenderer from "@/components/dashboard/WidgetRenderer";
 import { Button } from "@/components/ui/button";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/runtime/isTauri";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";import { isTauri } from "@/lib/tauriEnv";
 
 export default function DashboardBuilder() {
   const {

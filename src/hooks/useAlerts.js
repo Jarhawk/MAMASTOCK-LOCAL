@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { alertes_list, alertes_add, alertes_update, alertes_delete } from "@/lib/db";
 
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/tauriEnv";
 
 export function useAlerts() {
   const { mama_id } = useAuth();

@@ -7,7 +7,7 @@ import LanguageSelector from "@/components/ui/LanguageSelector";
 import { shutdownDbSafely } from "@/lib/shutdown";
 import { releaseLock } from "@/lib/lock";
 import { getDataDir } from "@/lib/db";
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -43,7 +43,7 @@ export default function Navbar() {
     }, []);
 
     const handleQuit = useCallback(async () => {
-      if (isTauri) {
+      if (isTauri()) {
         const { appWindow } = await import("@tauri-apps/api/window");
         const dir = await getDataDir();
         await shutdownDbSafely();

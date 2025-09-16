@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import GlassCard from './GlassCard';
-import TableContainer from './TableContainer';import { isTauri } from "@/lib/runtime/isTauri";
+import TableContainer from './TableContainer';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ListingContainer({ children, className = '', ...props }) {
   return (

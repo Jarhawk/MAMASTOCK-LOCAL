@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import FactureForm from "./FactureForm.jsx";
 import GlassCard from "@/components/ui/GlassCard";
-import { LiquidBackground } from "@/components/LiquidBackground";import { isTauri } from "@/lib/runtime/isTauri";
+import { LiquidBackground } from "@/components/LiquidBackground";import { isTauri } from "@/lib/tauriEnv";
 
 export default function FactureCreate() {
   const navigate = useNavigate();

@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { readConfig, writeConfig } from '@/appFs';
 import * as XLSX from "xlsx";
 import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";
-import { saveAs } from "file-saver";import { isTauri } from "@/lib/runtime/isTauri";
+import { saveAs } from "file-saver";import { isTauri } from "@/lib/tauriEnv";
 
 export function useMamas() {
   const { mama_id, role } = useAuth();

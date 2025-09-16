@@ -1,4 +1,4 @@
-import { readText, saveText, existsFile } from "./files";import { isTauri } from "@/lib/runtime/isTauri";
+import { readText, saveText, existsFile } from "./files";import { isTauri } from "@/lib/tauriEnv";
 
 const FILE = "stats/budget_mensuel.json";
 

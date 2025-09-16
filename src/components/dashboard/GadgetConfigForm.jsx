@@ -3,7 +3,7 @@ import { useGadgets } from '@/hooks/useGadgets';
 import InputField from '@/components/ui/InputField';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import GlassCard from '@/components/ui/GlassCard';import { isTauri } from "@/lib/runtime/isTauri";
+import GlassCard from '@/components/ui/GlassCard';import { isTauri } from "@/lib/tauriEnv";
 
 export default function GadgetConfigForm({ gadget, onSave, onCancel }) {
   const editing = !!gadget;

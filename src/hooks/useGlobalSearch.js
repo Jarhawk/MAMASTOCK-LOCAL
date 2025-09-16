@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { query } from '@/local/db';import { isTauri } from "@/lib/runtime/isTauri";
+import { query } from '@/local/db';import { isTauri } from "@/lib/tauriEnv";
 
 
 export function useGlobalSearch() {

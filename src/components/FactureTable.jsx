@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { motion as Motion } from "framer-motion";
 import FactureRow from "@/components/factures/FactureRow.jsx";
-import ListingContainer from "@/components/ui/ListingContainer";import { isTauri } from "@/lib/runtime/isTauri";
+import ListingContainer from "@/components/ui/ListingContainer";import { isTauri } from "@/lib/tauriEnv";
 
 export default function FactureTable({
   factures = [],

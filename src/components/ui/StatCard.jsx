@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/tauriEnv"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 export default function StatCard({ label, value, variation = null, icon: Icon }) {
   return (
     <div className="bg-white/10 border border-white/20 backdrop-blur-xl rounded-xl shadow p-4 flex items-center gap-3">

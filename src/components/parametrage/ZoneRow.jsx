@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Button } from '@/components/ui/button';import { isTauri } from "@/lib/runtime/isTauri";
+import { Button } from '@/components/ui/button';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ZoneRow({ zone, onEdit, onDelete, onToggle }) {
   return (

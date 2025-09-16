@@ -7,7 +7,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import TransfertForm from "./TransfertForm";import { isTauri } from "@/lib/runtime/isTauri";
+import TransfertForm from "./TransfertForm";import { isTauri } from "@/lib/tauriEnv";
 
 export default function Transferts() {
   const { isAuthenticated, loading: authLoading } = useAuth();

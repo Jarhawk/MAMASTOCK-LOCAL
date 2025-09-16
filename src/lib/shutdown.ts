@@ -1,4 +1,4 @@
-import { getDb } from "./db";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "./db";import { isTauri } from "@/lib/tauriEnv";
 
 export async function shutdownDbSafely() {
   const db = await getDb();

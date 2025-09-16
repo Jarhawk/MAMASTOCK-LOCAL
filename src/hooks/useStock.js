@@ -7,7 +7,7 @@ import {
   inventaires_list,
   inventaire_create,
 } from '@/lib/db';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export function useStock() {
   const { mama_id } = useAuth();
@@ -16,7 +16,7 @@ export function useStock() {
   const [error, setError] = useState(null);
 
     const fetchStocks = useCallback(async () => {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useStock: ignoré hors Tauri');
         setStocks([]);
         return [];
@@ -41,7 +41,7 @@ export function useStock() {
   }
 
     const getStockTheorique = useCallback(async (produit_id) => {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useStock: ignoré hors Tauri');
         return 0;
       }
@@ -55,7 +55,7 @@ export function useStock() {
     }, []);
 
     const getInventaires = useCallback(async () => {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useStock: ignoré hors Tauri');
         return [];
       }
@@ -65,7 +65,7 @@ export function useStock() {
 
   const createInventaire = useCallback(
       async (payload) => {
-        if (!isTauri) {
+        if (!isTauri()) {
           console.info('useStock: ignoré hors Tauri');
           return null;
         }

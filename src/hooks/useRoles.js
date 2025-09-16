@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect, useState } from "react";
 import { readConfig, writeConfig } from "@/appFs";
-import { DEFAULT_ROLES } from "@/constants/roles";import { isTauri } from "@/lib/runtime/isTauri";
+import { DEFAULT_ROLES } from "@/constants/roles";import { isTauri } from "@/lib/tauriEnv";
 
 export function useRoles() {
   const [roles, setRoles] = useState([]);

@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri";export function normalizeAccessKey(k?: string | null) {
+import { isTauri } from "@/lib/tauriEnv";export function normalizeAccessKey(k?: string | null) {
   if (!k) return null;
   const map: Record<string, string> = {
     // alias -> clé réelle dans access_rights

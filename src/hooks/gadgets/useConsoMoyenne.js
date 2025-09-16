@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export async function fetchConsoMoyenne(mamaId, sinceISO) {
-  if (!isTauri) {
+  if (!isTauri()) {
     console.info('fetchConsoMoyenne: ignoré hors Tauri');
     return { conso: 0 };
   }

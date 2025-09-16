@@ -1,3 +1,3 @@
-import { isTauri } from "@/lib/runtime/isTauri";export default {
+import { isTauri } from "@/lib/tauriEnv";export default {
   validateLicense: () => true
 };

@@ -7,7 +7,7 @@ import ParamAccess from "@/components/parametrage/ParamAccess";
 import ParamMama from "@/components/parametrage/ParamMama";
 import ParamCostCenters from "@/components/parametrage/ParamCostCenters";
 import ParamSecurity from "@/components/parametrage/ParamSecurity";
-import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/runtime/isTauri";
+import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/tauriEnv";
 
 export default function Parametrage() {
   const { isAuthenticated } = useAuth();

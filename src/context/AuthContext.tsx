@@ -10,7 +10,7 @@ import React, {
 import { readConfig, writeConfig } from "@/appFs";
 import { normalizeAccessKey } from "@/lib/access";
 import { can } from "@/utils/permissions";
-import { DEFAULT_ROLES } from "@/constants/roles";import { isTauri } from "@/lib/runtime/isTauri";
+import { DEFAULT_ROLES } from "@/constants/roles";import { isTauri } from "@/lib/tauriEnv";
 
 export type User = {id: string;email: string;mama_id: string;role: string;} | null;
 

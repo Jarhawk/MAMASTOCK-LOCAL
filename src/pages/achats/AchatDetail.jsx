@@ -5,7 +5,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { useAchats } from "@/hooks/useAchats";
 import { useAuth } from '@/hooks/useAuth';
-import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/runtime/isTauri";
+import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/tauriEnv";
 
 export default function AchatDetail({ achat: achatProp, onClose }) {
   const { fetchAchatById } = useAchats();

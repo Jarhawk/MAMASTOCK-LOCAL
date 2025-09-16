@@ -8,12 +8,12 @@ import "./globals.css";
 import "nprogress/nprogress.css";
 import { runSqlSelfTest } from "@/debug/sqlSelfTest";
 import { clearWebviewOnDev } from "@/debug/clearWebview";
-import { isTauri } from "@/lib/runtime/isTauri";
+import { isTauri } from "@/lib/tauriEnv";
 
 clearWebviewOnDev();
 setupPwaGuard();
 
-if (import.meta.env.DEV && isTauri) {
+if (import.meta.env.DEV && isTauri()) {
   import("@/debug/check-capabilities-runtime");
 }
 
@@ -22,7 +22,7 @@ runSqlSelfTest().catch(() => {});
 if (
   typeof window !== "undefined" &&
   window.location.hostname === "localhost" &&
-  !isTauri
+  !isTauri()
 ) {
   console.warn(
     "Vous êtes dans le navigateur. Ouvrez l’app dans la fenêtre Tauri pour activer SQLite."

@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import PageWrapper from "@/components/ui/PageWrapper";import { isTauri } from "@/lib/runtime/isTauri";
+import PageWrapper from "@/components/ui/PageWrapper";import { isTauri } from "@/lib/tauriEnv";
 
 export default function CatalogueSyncViewer() {
   return (

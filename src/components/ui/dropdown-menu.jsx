@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { forwardRef } from "react";
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";import { isTauri } from "@/lib/runtime/isTauri";
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";import { isTauri } from "@/lib/tauriEnv";
 
 export const DropdownMenu = DropdownMenuPrimitive.Root;
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;

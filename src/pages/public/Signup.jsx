@@ -8,7 +8,7 @@ import PageWrapper from "@/components/ui/PageWrapper";
 import GlassCard from "@/components/ui/GlassCard";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/runtime/isTauri";
+import PrimaryButton from "@/components/ui/PrimaryButton";import { isTauri } from "@/lib/tauriEnv";
 
 export default function Signup() {
   const [email, setEmail] = useState("");

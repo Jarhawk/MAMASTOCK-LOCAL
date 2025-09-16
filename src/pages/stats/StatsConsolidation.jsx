@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/runtime/isTauri";
+import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
 
 export default function StatsConsolidation() {
   const { stats, loading, error, fetchStats } = useConsolidatedStats();

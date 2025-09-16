@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export default function DossierDonnees() {
   const [baseDir, setBaseDir] = useState('');
@@ -8,7 +8,7 @@ export default function DossierDonnees() {
   const [dbExists, setDbExists] = useState(false);
 
   const refresh = async () => {
-    if (isTauri) {
+    if (isTauri()) {
       const { appDataDir, join } = await import('@tauri-apps/api/path');
       const { exists, mkdir } = await import('@tauri-apps/plugin-fs');
       const root = await appDataDir();
@@ -28,14 +28,14 @@ export default function DossierDonnees() {
   }, []);
 
   const openDir = async () => {
-    if (isTauri) {
+    if (isTauri()) {
       const { open } = await import('@tauri-apps/plugin-shell');
       await open(baseDir);
     }
   };
 
   const ensureDir = async () => {
-    if (isTauri) {
+    if (isTauri()) {
       const { mkdir, exists } = await import('@tauri-apps/plugin-fs');
       const { join } = await import('@tauri-apps/api/path');
       await mkdir(baseDir, { recursive: true });
@@ -44,7 +44,7 @@ export default function DossierDonnees() {
       setDbExists(await exists(dbPath));
     }
   };
-  if (!isTauri) return <p>Cette fonction nécessite Tauri (application desktop).</p>;
+  if (!isTauri()) return <p>Cette fonction nécessite Tauri (application desktop).</p>;
 
   return (
     <div className="p-6 space-y-4">

@@ -1,4 +1,4 @@
-import { openDb, sumStock } from "@/db/index";import { isTauri } from "@/lib/runtime/isTauri";
+import { openDb, sumStock } from "@/db/index";import { isTauri } from "@/lib/tauriEnv";
 
 export type Item = {id: string;sku: string;name: string;category?: string | null;created_at: string;};
 

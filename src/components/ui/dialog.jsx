@@ -6,7 +6,7 @@ import {
   DialogTitle as RadixDialogTitle,
   DialogDescription as RadixDialogDescription,
   DialogClose as RadixDialogClose } from
-"@radix-ui/react-dialog";import { isTauri } from "@/lib/runtime/isTauri";
+"@radix-ui/react-dialog";import { isTauri } from "@/lib/tauriEnv";
 
 export function Dialog(props) {
   return <RadixDialog {...props} />;

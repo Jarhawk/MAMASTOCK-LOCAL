@@ -5,7 +5,7 @@ import {
   WavesBackground,
   MouseLight,
   TouchLight } from
-"@/components/LiquidBackground";import { isTauri } from "@/lib/runtime/isTauri";
+"@/components/LiquidBackground";import { isTauri } from "@/lib/tauriEnv";
 
 export default function NotFound() {
   return (

@@ -1,1 +1,1 @@
-import { isTauri } from "@/lib/runtime/isTauri";export { getDb, closeDb, tableCount, isTauri } from "./db/sql";
+import { isTauri } from "@/lib/tauriEnv";export { getDb, closeDb, tableCount, isTauri } from "./db/sql";

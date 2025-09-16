@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';import { isTauri } from "@/lib/runtime/isTauri";
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';import { isTauri } from "@/lib/tauriEnv";
 
 const styles = StyleSheet.create({
   page: { padding: 24, fontSize: 12 },

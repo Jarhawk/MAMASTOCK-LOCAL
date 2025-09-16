@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import TwoFactorSetup from "@/components/security/TwoFactorSetup";import { isTauri } from "@/lib/runtime/isTauri";
+import TwoFactorSetup from "@/components/security/TwoFactorSetup";import { isTauri } from "@/lib/tauriEnv";
 
 export default function ParamSecurity() {
   return (

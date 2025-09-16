@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { isTauri } from "@/lib/tauriEnv"; // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 export function Form({ children, title, description, onSubmit, className = "" }) {
   return (
     <form onSubmit={onSubmit} className={`mx-auto w-full max-w-3xl space-y-6 ${className}`}>

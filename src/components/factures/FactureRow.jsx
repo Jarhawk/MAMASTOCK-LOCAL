@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { FACTURE_STATUT_BADGES } from "@/constants/factures";import { isTauri } from "@/lib/runtime/isTauri";
+import { FACTURE_STATUT_BADGES } from "@/constants/factures";import { isTauri } from "@/lib/tauriEnv";
 
 export default function FactureRow({ facture, onEdit, onDetail, onToggleActive, onArchive, canEdit }) {
   return (

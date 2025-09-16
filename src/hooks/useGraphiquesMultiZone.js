@@ -2,7 +2,7 @@
 import { useState } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
-import { zones_stock_list, inventaires_list } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
+import { zones_stock_list, inventaires_list } from '@/lib/db';import { isTauri } from "@/lib/tauriEnv";
 
 export function useGraphiquesMultiZone() {
   const { mama_id } = useAuth();

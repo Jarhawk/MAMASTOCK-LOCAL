@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useTemplatesCommandes } from "@/hooks/useTemplatesCommandes";
 import { Button } from "@/components/ui/button";
 import { saveBinary } from "@/local/files";
-import { isTauri } from "@/lib/runtime/isTauri";
+import { isTauri } from "@/lib/tauriEnv";
 
 export default function TemplateCommandeForm({ template = {}, onClose, fournisseurs = [] }) {
   const { createTemplate, updateTemplate } = useTemplatesCommandes();
@@ -25,14 +25,14 @@ export default function TemplateCommandeForm({ template = {}, onClose, fournisse
   const [convertFileSrcFn, setConvertFileSrcFn] = useState((p) => p);
 
   useEffect(() => {
-    if (isTauri) {
+    if (isTauri()) {
       import("@tauri-apps/api/core").then((m) =>
         setConvertFileSrcFn(() => m.convertFileSrc)
       );
     }
   }, []);
 
-  if (!isTauri)
+  if (!isTauri())
     return <p>Cette fonction nécessite Tauri (application desktop).</p>;
 
   const handleLogoUpload = async (e) => {

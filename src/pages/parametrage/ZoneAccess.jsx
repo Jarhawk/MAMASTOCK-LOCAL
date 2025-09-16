@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import GlassCard from '@/components/ui/GlassCard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/runtime/isTauri";
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ZoneAccess() {
   const { id } = useParams();

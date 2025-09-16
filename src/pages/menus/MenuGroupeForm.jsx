@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from 'react';
 import useMenuGroupe from '@/hooks/useMenuGroupe';
-import { useFiches } from '@/hooks/useFiches';import { isTauri } from "@/lib/runtime/isTauri";
+import { useFiches } from '@/hooks/useFiches';import { isTauri } from "@/lib/tauriEnv";
 
 export default function MenuGroupeForm() {
   const { createMenuGroupe, addLigne, exportPdf, exportExcel } = useMenuGroupe();

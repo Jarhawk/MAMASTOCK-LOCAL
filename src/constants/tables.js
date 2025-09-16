@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri";export const TABLES = {
+import { isTauri } from "@/lib/tauriEnv";export const TABLES = {
   // Legacy mapping to avoid test breakage
   MOUVEMENTS: "requisition_lignes",
   REQUISITIONS: "requisitions",

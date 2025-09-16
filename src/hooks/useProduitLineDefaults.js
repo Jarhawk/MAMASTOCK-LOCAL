@@ -1,12 +1,12 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 // Returns defaults for an invoice line when a product is selected.
 // In the local offline mode we only provide PMP from the produits table.
 
 export function useProduitLineDefaults() {
     const fetchDefaults = async ({ produit_id } = {}) => {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useProduitLineDefaults: ignoré hors Tauri');
         return { unite_id: null, unite: '', pmp: 0 };
       }

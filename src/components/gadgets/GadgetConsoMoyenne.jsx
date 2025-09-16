@@ -1,6 +1,6 @@
 import { motion as Motion } from 'framer-motion';
 import useConsoMoyenne from '@/hooks/gadgets/useConsoMoyenne';
-import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/runtime/isTauri";
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/tauriEnv";
 
 export default function GadgetConsoMoyenne() {
   const { avg, loading } = useConsoMoyenne();

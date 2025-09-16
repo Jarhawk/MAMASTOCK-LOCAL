@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/runtime/isTauri";
+import { Button } from "@/components/ui/button";import { isTauri } from "@/lib/tauriEnv";
 
 export default function BonLivraisonRow({ bon, onEdit, onDetail, onToggleActive, canEdit }) {
   const montant = (bon.lignes || []).reduce((s, l) => s + (l.quantite_recue || 0) * (l.prix_unitaire || 0) * (1 + (l.tva || 0) / 100), 0);

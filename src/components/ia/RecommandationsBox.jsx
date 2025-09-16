@@ -1,6 +1,6 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { useRecommendations } from "@/hooks/useRecommendations";import { isTauri } from "@/lib/runtime/isTauri";
+import { useRecommendations } from "@/hooks/useRecommendations";import { isTauri } from "@/lib/tauriEnv";
 
 export default function RecommandationsBox({ filter }) {
   const { recommendations, loading, refresh } = useRecommendations();

@@ -1,4 +1,4 @@
-import { existsFile, readText, saveText } from "@/local/files";import { isTauri } from "@/lib/runtime/isTauri";
+import { existsFile, readText, saveText } from "@/local/files";import { isTauri } from "@/lib/tauriEnv";
 
 const FILE = "templates_commandes.json";
 

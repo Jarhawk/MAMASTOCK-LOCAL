@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useFournisseurs } from "@/hooks/useFournisseurs";
 import { Button } from "@/components/ui/button";
 import { toast } from 'sonner';
-import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/runtime/isTauri";
+import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/tauriEnv";
 
 export default function FournisseurFormModal({ fournisseur, onClose }) {
   const { createFournisseur, updateFournisseur } = useFournisseurs();

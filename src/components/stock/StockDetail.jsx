@@ -1,4 +1,4 @@
-import React from "react";import { isTauri } from "@/lib/runtime/isTauri";
+import React from "react";import { isTauri } from "@/lib/tauriEnv";
 
 export function buildRotationData(mvts) {
   const byMonth = {};

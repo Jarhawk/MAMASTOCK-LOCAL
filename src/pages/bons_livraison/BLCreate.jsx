@@ -6,7 +6,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { LiquidBackground } from "@/components/LiquidBackground";
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/runtime/isTauri";
+import Unauthorized from "@/pages/auth/Unauthorized";import { isTauri } from "@/lib/tauriEnv";
 
 export default function BLCreate() {
   const navigate = useNavigate();

@@ -13,7 +13,7 @@ import {
   notifications_get,
   preferences_get,
   preferences_update } from
-'@/local/notifications';import { isTauri } from "@/lib/runtime/isTauri";
+'@/local/notifications';import { isTauri } from "@/lib/tauriEnv";
 
 export default function useNotifications() {
   const { mama_id, user_id } = useAuthContext();

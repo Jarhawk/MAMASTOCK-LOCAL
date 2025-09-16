@@ -13,7 +13,7 @@ import { useAuth } from '@/hooks/useAuth';
  *   pageSize: nombre de lignes par page (défaut 30)
  *   params: params SQL additionnels pour la fonction (objet)
  * }
- */import { isTauri } from "@/lib/runtime/isTauri";
+ */import { isTauri } from "@/lib/tauriEnv";
 export function useDashboardStats(options = {}) {
   const { mama_id, loading: authLoading } = useAuth();
   const {

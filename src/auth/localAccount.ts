@@ -1,8 +1,8 @@
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 const APP_DIR = "MamaStock";
 const USERS_FILE = "users.json";
 
-export const LocalAccountEnv = { isTauri };
+export const LocalAccountEnv = { isTauri() };
 
 export type LocalUser = {
   id: string;
@@ -15,7 +15,7 @@ export type LocalUser = {
 };
 
 async function usersPath() {
-  if (!isTauri) return "browser://users.json";
+  if (!isTauri()) return "browser://users.json";
 
   const { appDataDir, join } = await import("@tauri-apps/api/path");
   const { exists, mkdir, rename, readTextFile, writeTextFile } = await import("@tauri-apps/plugin-fs");

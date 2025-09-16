@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import useNotifications from "@/hooks/useNotifications";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/runtime/isTauri";
+import TableContainer from "@/components/ui/TableContainer";import { isTauri } from "@/lib/tauriEnv";
 
 export default function NotificationsInbox() {
   const {

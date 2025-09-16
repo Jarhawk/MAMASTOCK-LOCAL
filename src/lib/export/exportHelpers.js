@@ -5,11 +5,11 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
 import { getExportDir } from '@/lib/db';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 async function resolveExportPath(filename) {
   const dir = await getExportDir();
-  if (!isTauri) return filename;
+  if (!isTauri()) return filename;
   const fs = await import('@tauri-apps/plugin-fs');
   const { join } = await import('@tauri-apps/api/path');
   await fs.mkdir(dir, { recursive: true });
@@ -17,7 +17,7 @@ async function resolveExportPath(filename) {
 }
 
 async function saveBlob(blob, filename, useDialog = true) {
-  if (isTauri) {
+  if (isTauri()) {
     const fs = await import('@tauri-apps/plugin-fs');
     const { save } = await import('@tauri-apps/plugin-dialog');
     const defaultPath = await resolveExportPath(filename);

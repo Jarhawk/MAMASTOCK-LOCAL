@@ -1,2 +1,2 @@
-import { isTauri } from "@/lib/runtime/isTauri";export const addWatermark = (pdf) => pdf;
+import { isTauri } from "@/lib/tauriEnv";export const addWatermark = (pdf) => pdf;
 export const clearWatermark = (pdf) => pdf;

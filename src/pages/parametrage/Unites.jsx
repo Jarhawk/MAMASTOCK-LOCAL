@@ -8,7 +8,7 @@ import TableHeader from '@/components/ui/TableHeader';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
-import { isTauri } from "@/lib/runtime/isTauri";
+import { isTauri } from "@/lib/tauriEnv";
 
 export default function Unites() {
   const { hasAccess, loading: authLoading } = useAuth();
@@ -23,7 +23,7 @@ export default function Unites() {
   const refresh = async () => {
     try {
       setLoading(true);
-      if (isTauri || forceTauri) {
+      if (isTauri() || forceTauri) {
         const data = await listUnites();
         setUnites(data);
       }
@@ -80,7 +80,7 @@ export default function Unites() {
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Unités</h1>
-      {!isTauri && !forceTauri && (
+      {!isTauri() && !forceTauri && (
         <p className="mb-2 text-sm text-yellow-700">Ouvre dans Tauri pour activer le SQL</p>
       )}
       <TableHeader className="gap-2">

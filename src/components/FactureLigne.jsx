@@ -12,7 +12,7 @@ import { Trash2 } from "lucide-react";
 import ProduitSearchModal from "@/components/factures/ProduitSearchModal";
 import PriceDelta from "@/components/factures/PriceDelta";
 import NumericInputFR from "@/components/forms/NumericInputFR";
-import MoneyInputFR from "@/components/forms/MoneyInputFR";import { isTauri } from "@/lib/runtime/isTauri";
+import MoneyInputFR from "@/components/forms/MoneyInputFR";import { isTauri } from "@/lib/tauriEnv";
 export default function FactureLigne({
   value: line,
   onChange,

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { useTasks } from "@/hooks/useTasks";import { isTauri } from "@/lib/runtime/isTauri";
+import { useTasks } from "@/hooks/useTasks";import { isTauri } from "@/lib/tauriEnv";
 
 export default function TacheDetail() {
   const { id } = useParams();

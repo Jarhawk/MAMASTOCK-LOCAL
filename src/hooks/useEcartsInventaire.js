@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
-import { ecarts_inventaire_list } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
+import { ecarts_inventaire_list } from '@/lib/db';import { isTauri } from "@/lib/tauriEnv";
 
 export function useEcartsInventaire() {
   const { mama_id } = useAuth();

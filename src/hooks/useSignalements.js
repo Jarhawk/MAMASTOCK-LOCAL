@@ -5,7 +5,7 @@ import {
   signalements_list,
   signalement_insert,
   signalement_get } from
-"@/local/signalements";import { isTauri } from "@/lib/runtime/isTauri";
+"@/local/signalements";import { isTauri } from "@/lib/tauriEnv";
 
 export function useSignalements() {
   const { mama_id, user_id, loading: authLoading } = useAuth();

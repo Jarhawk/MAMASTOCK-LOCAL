@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { exportToCSV } from '@/lib/export/exportHelpers';
 import { toast } from 'sonner';
-import { compta_journal_lines, compta_mapping_list } from '@/lib/db';import { isTauri } from "@/lib/runtime/isTauri";
+import { compta_journal_lines, compta_mapping_list } from '@/lib/db';import { isTauri } from "@/lib/tauriEnv";
 
 export default function useExportCompta() {
   const { mama_id } = useAuth();

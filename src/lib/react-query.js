@@ -1,4 +1,4 @@
-import { QueryClient, useQueryClient } from '@tanstack/react-query';import { isTauri } from "@/lib/runtime/isTauri";
+import { QueryClient, useQueryClient } from '@tanstack/react-query';import { isTauri } from "@/lib/tauriEnv";
 
 let client;
 export function getQueryClient() {

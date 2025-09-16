@@ -1,7 +1,7 @@
-import { isTauri } from "@/lib/runtime/isTauri";
+import { isTauri } from "@/lib/tauriEnv";
 
 export function setupPwaGuard() {
-  if (isTauri) {
+  if (isTauri()) {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .getRegistrations?.()

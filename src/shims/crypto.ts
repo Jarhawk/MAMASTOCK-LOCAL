@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri";const cryptoObj = globalThis.crypto;
+import { isTauri } from "@/lib/tauriEnv";const cryptoObj = globalThis.crypto;
 
 function toHex(bytes: Uint8Array): string {
   return Array.from(bytes).

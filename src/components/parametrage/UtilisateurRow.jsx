@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
 import { toast } from 'sonner';
-import { updatePasswordLocal } from '@/auth/localAccount';import { isTauri } from "@/lib/runtime/isTauri";
+import { updatePasswordLocal } from '@/auth/localAccount';import { isTauri } from "@/lib/tauriEnv";
 
 
 export default function UtilisateurRow({

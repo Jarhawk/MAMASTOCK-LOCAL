@@ -1,11 +1,11 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 // Stats d’évolution d’achats (tous fournisseurs ou par fournisseur)
 export function useFournisseurStats() {
   // Stats tous fournisseurs (évolution mensuelle)
     async function fetchStatsAll() {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useFournisseurStats: ignoré hors Tauri');
         return [];
       }
@@ -22,7 +22,7 @@ export function useFournisseurStats() {
 
   // Stats pour 1 fournisseur précis (évolution mensuelle)
     async function fetchStatsForFournisseur(fournisseur_id) {
-      if (!isTauri) {
+      if (!isTauri()) {
         console.info('useFournisseurStats: ignoré hors Tauri');
         return [];
       }

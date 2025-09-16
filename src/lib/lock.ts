@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { shutdownDbSafely } from "./shutdown";
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 import { locksPath, inAppDir } from "@/lib/paths";
 
 const TTL = 20_000; // 20s
@@ -11,7 +11,7 @@ const instanceId = uuidv4();
 let heartbeat: ReturnType<typeof setInterval> | null = null;
 
 async function readLock() {
-  if (!isTauri) {
+  if (!isTauri()) {
     const v = localStorage.getItem(`${BROWSER_NS}:db.lock.json`);
     return v ? JSON.parse(v) : null;
   }
@@ -23,7 +23,7 @@ async function readLock() {
 }
 
 async function writeLock(data: any) {
-  if (!isTauri) {
+  if (!isTauri()) {
     localStorage.setItem(`${BROWSER_NS}:db.lock.json`, JSON.stringify(data));
     return;
   }
@@ -34,7 +34,7 @@ async function writeLock(data: any) {
 }
 
 async function removeLock() {
-  if (!isTauri) {
+  if (!isTauri()) {
     localStorage.removeItem(`${BROWSER_NS}:db.lock.json`);
     return;
   }
@@ -44,7 +44,7 @@ async function removeLock() {
 }
 
 async function readShutdownRequest() {
-  if (!isTauri) {
+  if (!isTauri()) {
     const v = localStorage.getItem(`${BROWSER_NS}:shutdown.request.json`);
     return v ? JSON.parse(v) : null;
   }
@@ -56,7 +56,7 @@ async function readShutdownRequest() {
 }
 
 async function writeShutdownRequest(data: any) {
-  if (!isTauri) {
+  if (!isTauri()) {
     localStorage.setItem(`${BROWSER_NS}:shutdown.request.json`, JSON.stringify(data));
     return;
   }
@@ -67,7 +67,7 @@ async function writeShutdownRequest(data: any) {
 }
 
 async function removeShutdownRequest() {
-  if (!isTauri) {
+  if (!isTauri()) {
     localStorage.removeItem(`${BROWSER_NS}:shutdown.request.json`);
     return;
   }
@@ -77,7 +77,7 @@ async function removeShutdownRequest() {
 }
 
 export async function ensureSingleOwner(waitMs = 30_000) {
-  if (!isTauri) {
+  if (!isTauri()) {
     return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
   }
   const start = Date.now();
@@ -116,7 +116,7 @@ export async function ensureSingleOwner(waitMs = 30_000) {
 }
 
 export async function monitorShutdownRequests() {
-  if (!isTauri) {
+  if (!isTauri()) {
     return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
   }
   const { getCurrentWebviewWindow } = await import("@tauri-apps/api/webviewWindow");
@@ -139,14 +139,14 @@ export async function monitorShutdownRequests() {
 }
 
 export async function requestRemoteShutdown() {
-  if (!isTauri) {
+  if (!isTauri()) {
     return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
   }
   await writeShutdownRequest({ ts: Date.now(), requester: instanceId });
 }
 
 export async function releaseLock() {
-  if (!isTauri) {
+  if (!isTauri()) {
     return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
   }
   if (heartbeat) {

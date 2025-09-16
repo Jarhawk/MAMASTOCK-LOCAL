@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { useFournisseurApiConfig } from "@/hooks/useFournisseurApiConfig";import { isTauri } from "@/lib/runtime/isTauri";
+import { useFournisseurApiConfig } from "@/hooks/useFournisseurApiConfig";import { isTauri } from "@/lib/tauriEnv";
 
 export default function FournisseurApiSettingsForm({ fournisseur_id }) {
   const { mama_id } = useAuth();

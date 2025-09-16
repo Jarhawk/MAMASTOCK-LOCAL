@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri";export type NavItem = {
+import { isTauri } from "@/lib/tauriEnv";export type NavItem = {
   label: string;
   path: string;
   icon?: string;

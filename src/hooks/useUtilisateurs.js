@@ -5,7 +5,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { exportToCSV } from "@/lib/export/exportHelpers";
 import { DEFAULT_ROLES } from "@/constants/roles";
-import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";import { isTauri } from "@/lib/runtime/isTauri";
+import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";import { isTauri } from "@/lib/tauriEnv";
 
 export function useUtilisateurs() {
   const [users, setUsers] = useState([]);

@@ -14,7 +14,7 @@ import TableHeader from '@/components/ui/TableHeader';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import Unauthorized from '@/pages/auth/Unauthorized';
-import { isTauri } from "@/lib/runtime/isTauri";
+import { isTauri } from "@/lib/tauriEnv";
 
 export default function SousFamilles() {
   const { hasAccess, loading: authLoading } = useAuth();
@@ -32,7 +32,7 @@ export default function SousFamilles() {
   const refresh = async () => {
     try {
       setLoading(true);
-      if (isTauri || forceTauri) {
+      if (isTauri() || forceTauri) {
         const [sf, f] = await Promise.all([listSousFamilles(), listFamilles()]);
         setSousFamilles(sf);
         setFamilles(f);
@@ -98,7 +98,7 @@ export default function SousFamilles() {
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Sous-familles</h1>
-      {!isTauri && !forceTauri && (
+      {!isTauri() && !forceTauri && (
         <p className="mb-2 text-sm text-yellow-700">Ouvre dans Tauri pour activer le SQL</p>
       )}
       <TableHeader className="gap-2">

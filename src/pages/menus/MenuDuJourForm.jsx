@@ -6,7 +6,7 @@ import SecondaryButton from "@/components/ui/SecondaryButton";
 import { Input } from "@/components/ui/input";
 import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
-import { uploadFile, deleteFile, pathFromUrl } from "@/hooks/useStorage";import { isTauri } from "@/lib/runtime/isTauri";
+import { uploadFile, deleteFile, pathFromUrl } from "@/hooks/useStorage";import { isTauri } from "@/lib/tauriEnv";
 
 export default function MenuDuJourForm({ menu, fiches = [], onClose }) {
   const { addMenuDuJour, editMenuDuJour } = useMenuDuJour();

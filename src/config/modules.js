@@ -1,4 +1,4 @@
-import { isTauri } from "@/lib/runtime/isTauri";export const MODULES = [
+import { isTauri } from "@/lib/tauriEnv";export const MODULES = [
 { label: "Dashboard", key: "dashboard" },
 { label: "Produits", key: "produits" },
 { label: "Fournisseurs", key: "fournisseurs" },

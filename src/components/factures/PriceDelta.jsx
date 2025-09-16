@@ -1,4 +1,4 @@
-import { ArrowUpRight, ArrowDownRight } from 'lucide-react';import { isTauri } from "@/lib/runtime/isTauri";
+import { ArrowUpRight, ArrowDownRight } from 'lucide-react';import { isTauri } from "@/lib/tauriEnv";
 
 const formatMoneyFR = (n) =>
 new Intl.NumberFormat('fr-FR', {

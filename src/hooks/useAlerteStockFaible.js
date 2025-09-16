@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 /**
  * Hook for low stock alerts based on v_alertes_rupture_api view.
@@ -17,7 +17,7 @@ export function useAlerteStockFaible({ page = 1, pageSize = 20 } = {}) {
 
   const fetchData = useCallback(
       async (signal) => {
-        if (!isTauri) {
+        if (!isTauri()) {
           console.info('useAlerteStockFaible: ignoré hors Tauri');
           return [];
         }

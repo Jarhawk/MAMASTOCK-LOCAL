@@ -1,8 +1,8 @@
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/runtime/isTauri";
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 import type { Fournisseur } from "@/lib/types";
 
 export async function listFournisseurs(): Promise<Fournisseur[]> {
-  if (!isTauri) return [];
+  if (!isTauri()) return [];
   const db = await getDb();
   return db.select<Fournisseur[]>(
     "SELECT id, nom, email, actif FROM fournisseurs ORDER BY nom"
@@ -10,7 +10,7 @@ export async function listFournisseurs(): Promise<Fournisseur[]> {
 }
 
 export async function createFournisseur({ nom, email }: { nom: string; email?: string }) {
-  if (!isTauri) return;
+  if (!isTauri()) return;
   const db = await getDb();
   return db.execute(
     "INSERT INTO fournisseurs (nom, email, actif) VALUES (?,?,1)",
@@ -19,7 +19,7 @@ export async function createFournisseur({ nom, email }: { nom: string; email?: s
 }
 
 export async function getFournisseur(id: number): Promise<Fournisseur | null> {
-  if (!isTauri) return null;
+  if (!isTauri()) return null;
   const db = await getDb();
   const rows = await db.select<Fournisseur[]>(
     "SELECT id, nom, email, actif FROM fournisseurs WHERE id = ?",

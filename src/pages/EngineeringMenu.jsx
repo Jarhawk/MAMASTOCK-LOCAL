@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import usePerformanceFiches from '@/hooks/usePerformanceFiches';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/runtime/isTauri";
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';import { isTauri } from "@/lib/tauriEnv";
 
 export default function EngineeringMenu() {
   const { access_rights, mama_id, loading: authLoading } = useAuth();
