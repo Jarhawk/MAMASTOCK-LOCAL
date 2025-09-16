@@ -9,6 +9,20 @@ vi.mock('@/lib/tauriEnv', () => ({
   isTauri: () => true,
 }));
 
+vi.mock('@/lib/devFlags', () => ({
+  devFlags: {
+    isDev: false,
+    isTauri: true,
+    forceSidebar: false,
+    allowAllRoutes: false,
+    reason: { sidebar: false, routes: false }
+  },
+  isDev: false,
+  isTauri: true,
+  forceSidebar: false,
+  allowAllRoutes: false
+}));
+
 import * as dal from '@/lib/db';
 
 const mockDb = {
@@ -32,12 +46,13 @@ afterEach(async () => {
 describe('DAL produits', () => {
   it('produits_list returns rows and total', async () => {
     mockDb.select
+      .mockResolvedValueOnce([{ name: 'meta' }])
       .mockResolvedValueOnce([{ id: 1 }])
       .mockResolvedValueOnce([{ count: 1 }]);
 
     const result = await dal.produits_list('', true, 1, 20);
 
-    expect(mockDb.select).toHaveBeenCalledTimes(2);
+    expect(mockDb.select).toHaveBeenCalledTimes(3);
     expect(result.rows).toEqual([{ id: 1 }]);
     expect(result.total).toBe(1);
   });

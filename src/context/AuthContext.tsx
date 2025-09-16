@@ -11,13 +11,13 @@ import { readConfig, writeConfig } from "@/appFs";
 import { normalizeAccessKey } from "@/lib/access";
 import { can } from "@/utils/permissions";
 import { DEFAULT_ROLES } from "@/constants/roles";
-import { shouldBypassAccessGuards } from "@/lib/runtime/devFlags";
+import { devFlags } from "@/lib/devFlags";
 
 export type User = {
-  id: string;
-  email: string;
-  mama_id: string;
-  role?: string;
+  id: string | null;
+  email: string | null;
+  mama_id: string | null;
+  role?: string | null;
 } | null;
 
 type AccessRights = Record<string, any> | null;
@@ -38,6 +38,30 @@ type Ctx = {
   hasAccess: (k: string, action?: string) => boolean;
 };
 
+const DEV_ACCESS_RIGHTS: any = new Proxy(
+  {},
+  {
+    get: () => true
+  }
+);
+
+const DEV_USER_DATA = {
+  id: "00000000-0000-0000-0000-000000000000",
+  email: "dev@local",
+  nom: "Dev",
+  mama_id: "dev-local",
+  role: "admin",
+  actif: true,
+  access_rights: DEV_ACCESS_RIGHTS
+} as const;
+
+const DEV_USER = {
+  id: DEV_USER_DATA.id,
+  email: DEV_USER_DATA.email,
+  mama_id: DEV_USER_DATA.mama_id,
+  role: DEV_USER_DATA.role
+} as const;
+
 const defaultCtx: Ctx = {
   id: null,
   email: null,
@@ -47,67 +71,22 @@ const defaultCtx: Ctx = {
   user: null,
   userData: null,
   access_rights: null,
-  devFakeAuth: false,
-  loading: true,
+  devFakeAuth: devFlags.isDev,
+  loading: devFlags.isDev ? false : true,
   signIn: () => {},
   signOut: () => {},
-  hasAccess: () => false
+  hasAccess: () => devFlags.isDev
 };
 
 const AuthContext = createContext<Ctx>(defaultCtx);
 
-const DEV_FAKE_USER = {
-  id: "00000000-0000-0000-0000-000000000000",
-  email: "dev@local",
-  nom: "Dev Admin",
-  mama_id: "dev-local",
-  role: "admin",
-  actif: true
-} as const;
-
-const DEV_FAKE_ACCESS_RIGHTS: Record<string, true> = {
-  dashboard: true,
-  produits: true,
-  fournisseurs: true,
-  factures: true,
-  fiches: true,
-  fiches_techniques: true,
-  inventaire: true,
-  inventaires: true,
-  transferts: true,
-  taches: true,
-  parametrage: true,
-  commandes: true,
-  requisitions: true,
-  menus: true,
-  menu_du_jour: true,
-  menu_engineering: true,
-  documents: true,
-  analyse: true,
-  promotions: true,
-  notifications: true,
-  alertes: true,
-  access: true,
-  permissions: true,
-  roles: true,
-  utilisateurs: true,
-  mamas: true,
-  costing_carte: true,
-  stock: true
-} as const;
-
-const DEV_FAKE_USER_DATA = {
-  ...DEV_FAKE_USER,
-  access_rights: DEV_FAKE_ACCESS_RIGHTS
-};
-
-export function AuthProvider({ children }: {children: React.ReactNode;}) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User>(null);
   const [userData, setUserData] = useState<any>(null);
   const [roles, setRoles] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!devFlags.isDev);
 
-  const devBypass = shouldBypassAccessGuards();
+  const devBypass = devFlags.isDev;
 
   const loadUser = useCallback(async (u: NonNullable<User>) => {
     const cfg = (await readConfig()) || {};
@@ -117,16 +96,25 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
     }
     const roleDef = (cfg.roles || []).find((r: any) => r.id === u.role);
     const access_rights = roleDef?.access_rights || {};
-    const aliases: string[] = [u.role];
+    const aliases: string[] = [];
+    if (u.role) aliases.push(u.role);
     if (u.role === "chef_site") aliases.push("manager");
     if (u.role === "siege") aliases.push("admin");
-    setUser(u);
+    setUser({
+      id: u.id ?? null,
+      email: u.email ?? null,
+      mama_id: u.mama_id ?? null,
+      role: u.role ?? null
+    });
     setUserData({ ...u, access_rights });
     setRoles(aliases.filter(Boolean));
-    try {localStorage.setItem("auth.user", JSON.stringify(u));} catch {}
+    try {
+      localStorage.setItem("auth.user", JSON.stringify(u));
+    } catch {}
   }, []);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     (async () => {
       try {
         const raw = localStorage.getItem("auth.user");
@@ -139,106 +127,115 @@ export function AuthProvider({ children }: {children: React.ReactNode;}) {
     })();
   }, [loadUser]);
 
-  const signIn = useCallback(async (u: NonNullable<User>) => {
-    await loadUser(u);
-    setLoading(false);
-  }, [loadUser]);
+  const signIn = useCallback(
+    async (u: NonNullable<User>) => {
+      await loadUser(u);
+      setLoading(false);
+    },
+    [loadUser]
+  );
 
   const signOut = useCallback(() => {
     setUser(null);
     setUserData(null);
     setRoles([]);
-    try {localStorage.removeItem("auth.user");} catch {}
+    try {
+      localStorage.removeItem("auth.user");
+    } catch {}
+    setLoading(!devFlags.isDev);
   }, []);
 
-  const fallbackUserData = useMemo(() => {
-    if (!devBypass) return null;
-    const rights = userData?.access_rights;
-    if (!userData || !rights || Object.keys(rights).length === 0) {
-      return DEV_FAKE_USER_DATA;
+  const safeUserData = useMemo(() => {
+    if (userData) {
+      if (devBypass && !userData.access_rights) {
+        return { ...userData, access_rights: DEV_ACCESS_RIGHTS };
+      }
+      return userData;
+    }
+    if (devBypass) {
+      return DEV_USER_DATA;
     }
     return null;
   }, [devBypass, userData]);
 
-  const resolvedUserData = fallbackUserData ?? userData;
-  const resolvedUser: User = useMemo(() => {
-    if (fallbackUserData) {
-      return {
-        id: DEV_FAKE_USER.id,
-        email: DEV_FAKE_USER.email,
-        mama_id: DEV_FAKE_USER.mama_id,
-        role: "admin"
-      };
-    }
-    if (user) return user;
-    if (devBypass) {
-      return {
-        id: null,
-        email: null,
-        mama_id: DEV_FAKE_USER.mama_id,
-        role: "admin"
-      };
-    }
+  const resolvedAccessRights: AccessRights = useMemo(() => {
+    if (safeUserData?.access_rights) return safeUserData.access_rights;
+    if (devBypass) return DEV_ACCESS_RIGHTS;
     return null;
-  }, [devBypass, fallbackUserData, user]);
+  }, [devBypass, safeUserData]);
+
+  const resolvedUser: User = useMemo(() => {
+    if (user) return user;
+    if (safeUserData) {
+      return {
+        id: safeUserData.id ?? DEV_USER.id,
+        email: safeUserData.email ?? DEV_USER.email,
+        mama_id: safeUserData.mama_id ?? DEV_USER.mama_id,
+        role: safeUserData.role ?? DEV_USER.role
+      };
+    }
+    if (devBypass) return DEV_USER;
+    return null;
+  }, [devBypass, safeUserData, user]);
+
+  const resolvedRole =
+    safeUserData?.role ?? resolvedUser?.role ?? (devBypass ? "admin" : null);
 
   const resolvedRoles = useMemo(() => {
     if (devBypass) {
       const base = new Set<string>(["admin"]);
-      roles.forEach((r) => base.add(r));
-      if (resolvedUser?.role) base.add(resolvedUser.role);
+      roles.forEach((r) => r && base.add(r));
+      if (resolvedRole) base.add(resolvedRole);
       return Array.from(base);
     }
     return roles;
-  }, [devBypass, resolvedUser?.role, roles]);
-
-  const resolvedAccessRights: AccessRights = useMemo(() => {
-    const rights = resolvedUserData?.access_rights;
-    if (devBypass) {
-      return { ...DEV_FAKE_ACCESS_RIGHTS, ...(rights || {}) };
-    }
-    return rights ?? null;
-  }, [devBypass, resolvedUserData]);
-
-  const resolvedRole = resolvedUserData?.role ?? resolvedUser?.role ?? (devBypass ? "admin" : null);
+  }, [devBypass, resolvedRole, roles]);
 
   const hasAccess = useCallback(
     (key: string, action = "lecture") => {
-      const k = normalizeAccessKey(key);
+      const normalized = normalizeAccessKey(key);
       if (devBypass) {
         return true;
       }
-      return can(resolvedAccessRights || {}, k, action, resolvedRole ?? null);
+      return can(
+        resolvedAccessRights || {},
+        normalized,
+        action,
+        resolvedRole ?? null
+      );
     },
     [devBypass, resolvedAccessRights, resolvedRole]
   );
 
-  const value = useMemo<Ctx>(() => ({
-    id: resolvedUser?.id ?? null,
-    email: resolvedUser?.email ?? null,
-    mama_id: resolvedUser?.mama_id ?? null,
-    role: resolvedRole ?? null,
-    roles: resolvedRoles,
-    user: resolvedUser,
-    userData: resolvedUserData,
-    access_rights: resolvedAccessRights,
-    devFakeAuth: devBypass,
-    loading,
-    signIn,
-    signOut,
-    hasAccess
-  }), [
-    resolvedUser,
-    resolvedRole,
-    resolvedRoles,
-    resolvedUserData,
-    resolvedAccessRights,
-    devBypass,
-    loading,
-    signIn,
-    signOut,
-    hasAccess
-  ]);
+  const value = useMemo<Ctx>(
+    () => ({
+      id: resolvedUser?.id ?? null,
+      email: resolvedUser?.email ?? null,
+      mama_id: resolvedUser?.mama_id ?? null,
+      role: resolvedRole ?? null,
+      roles: resolvedRoles,
+      user: resolvedUser,
+      userData: safeUserData,
+      access_rights: resolvedAccessRights,
+      devFakeAuth: devBypass,
+      loading: devBypass ? false : loading,
+      signIn,
+      signOut,
+      hasAccess
+    }),
+    [
+      devBypass,
+      hasAccess,
+      loading,
+      resolvedAccessRights,
+      resolvedRole,
+      resolvedRoles,
+      resolvedUser,
+      safeUserData,
+      signIn,
+      signOut
+    ]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
