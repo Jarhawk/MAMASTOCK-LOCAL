@@ -1,10 +1,17 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use serde::Serialize;
-use serde_json::{Map, Value};
-use std::{fs, path::{Path, PathBuf}};
+use serde_json::{json, Map, Value};
+use std::{
+    fs, io,
+    path::{Path, PathBuf},
+};
+use tauri::Manager;
 use tauri_plugin_fs;
 use tauri_plugin_sql;
+
+const DEFAULT_PG_URL: &str =
+    "postgresql://neondb_owner:npg_bM8mxANEGzd7@ep-falling-field-a9ppe70d-pooler.gwc.azure.neon.tech/neondb?sslmode=require&channel_binding=require";
 
 #[allow(dead_code)]
 #[derive(Serialize)]
@@ -43,6 +50,12 @@ fn config_file_path() -> PathBuf {
 }
 
 fn read_url_from_value(value: &Value) -> Option<String> {
+    if let Some(url) = value.get("pgUrl").and_then(|v| v.as_str()) {
+        let trimmed = url.trim();
+        if !trimmed.is_empty() {
+            return Some(trimmed.to_string());
+        }
+    }
     if let Some(url) = value.get("dbUrl").and_then(|v| v.as_str()) {
         let trimmed = url.trim();
         if !trimmed.is_empty() {
@@ -66,17 +79,46 @@ fn read_config_url_from_path(path: &Path) -> Option<String> {
     read_url_from_value(&parsed)
 }
 
+fn ensure_default_config() -> io::Result<()> {
+    let path = config_file_path();
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent)?;
+    }
+
+    if !path.exists() {
+        let payload = json!({
+            "pgUrl": DEFAULT_PG_URL,
+            "dbUrl": DEFAULT_PG_URL,
+            "db": {
+                "type": "postgres",
+                "url": DEFAULT_PG_URL,
+            }
+        });
+        let formatted = serde_json::to_string_pretty(&payload)?;
+        fs::write(&path, formatted)?;
+    }
+
+    Ok(())
+}
+
 #[tauri::command]
 fn get_db_url() -> Option<String> {
-    if let Ok(url) = std::env::var("MAMASTOCK_PGURL") {
-        let trimmed = url.trim();
-        if !trimmed.is_empty() {
-            return Some(trimmed.to_string());
+    let path = config_file_path();
+    if let Some(url) = read_config_url_from_path(&path) {
+        return Some(url);
+    }
+
+    let env_vars = ["MAMASTOCK_PGURL", "PGURL", "DATABASE_URL"];
+    for key in env_vars {
+        if let Ok(url) = std::env::var(key) {
+            let trimmed = url.trim();
+            if !trimmed.is_empty() {
+                return Some(trimmed.to_string());
+            }
         }
     }
 
-    let path = config_file_path();
-    read_config_url_from_path(&path)
+    None
 }
 
 #[tauri::command]
@@ -106,6 +148,7 @@ fn set_db_url(url: String) -> Result<(), String> {
     }
 
     let obj = root.as_object_mut().expect("root ensured to be object");
+    obj.insert("pgUrl".into(), Value::String(trimmed.to_string()));
     obj.insert("dbUrl".into(), Value::String(trimmed.to_string()));
 
     let db_entry = obj
@@ -127,13 +170,26 @@ fn set_db_url(url: String) -> Result<(), String> {
 }
 
 fn main() {
+    if let Err(err) = ensure_default_config() {
+        eprintln!("[config] Failed to prepare default config: {err}");
+    }
+
     let mut builder = tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_sql::Builder::new().build())
-        .invoke_handler(tauri::generate_handler![get_db_url, get_db_config_path, set_db_url]);
+        .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.set_focus();
+            }
+        }))
+        .invoke_handler(tauri::generate_handler![
+            get_db_url,
+            get_db_config_path,
+            set_db_url
+        ]);
 
     #[cfg(debug_assertions)]
     {

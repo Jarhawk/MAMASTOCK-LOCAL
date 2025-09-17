@@ -26,23 +26,22 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis", "msi"],
+    "targets": "all",
     "icon": ["icons/256x256.png", "icons/512x512.png", "icons/icon.ico"],
     "resources": ["src-tauri/installer/config.json"],
     "publisher": "Quentin Vanel",
     "windows": {
       "webviewInstallMode": {
-        "type": "downloadBootstrapper",
-        "silent": false
+        "type": "offlineInstaller"
       },
       "nsis": {
+        "languages": ["fr-FR", "en-US"],
         "displayLanguageSelector": true,
-        "languages": ["French", "English"],
+        "installMode": "perMachine",
         "installerIcon": "src-tauri/icons/icon.ico",
         "headerImage": "src-tauri/installer/nsis/header.bmp",
         "sidebarImage": "src-tauri/installer/nsis/sidebar.bmp",
         "template": "src-tauri/installer/nsis/tauri.nsis",
-        "installMode": "perMachine",
         "startMenuFolder": "MAMASTOCK"
       },
       "wix": {
@@ -55,7 +54,6 @@
           }
         },
         "template": "src-tauri/installer/wix/main.wxs",
-        "extensions": ["WixUtilExtension"],
         "bannerPath": "src-tauri/installer/wix/banner.bmp",
         "dialogImagePath": "src-tauri/installer/wix/dialog.bmp"
       }

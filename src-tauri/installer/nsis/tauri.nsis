@@ -2,6 +2,7 @@
 !include "01_write_config.nsh"
 
 !define MUI_ICON "${INSTALLER_ICON}"
+!define MUI_UNICON "${INSTALLER_ICON}"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP "src-tauri\\installer\\nsis\\header.bmp"
 !define MUI_HEADERIMAGE_RIGHT
