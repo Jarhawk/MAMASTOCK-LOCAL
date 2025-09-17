@@ -5,13 +5,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";import { isTauri } from "@/lib/tauriEnv";
 
 export default function StatsConsolidation() {
   const { stats, loading, error, fetchStats } = useConsolidatedStats();
   const { isAuthenticated, loading: authLoading } = useAuth();
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(stats), "Stats");
     XLSX.writeFile(wb, "consolidation_stats.xlsx");

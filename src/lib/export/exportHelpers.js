@@ -1,12 +1,10 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import JSPDF from 'jspdf';
-import 'jspdf-autotable';
-import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
 import { join } from '@tauri-apps/api/path';
 import { getExportDir } from '@/lib/db';
 import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { loadJsPDF, loadXLSX } from '@/lib/lazy/vendors';
 
 async function resolveExportPath(filename) {
   const dir = await getExportDir();
@@ -40,6 +38,7 @@ export async function exportToPDF(data = [], config = {}) {
   const orient = ['portrait', 'landscape'].includes(String(orientation).toLowerCase())
     ? String(orientation).toLowerCase()
     : 'portrait';
+  const JSPDF = await loadJsPDF();
   const doc = new JSPDF({ orientation: orient });
   if (!Array.isArray(data)) data = [data];
   const headers = columns.length
@@ -73,6 +72,7 @@ export async function exportToExcel(data = [], config = {}) {
     }
     return item;
   });
+  const XLSX = await loadXLSX();
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.json_to_sheet(arr);
   XLSX.utils.book_append_sheet(wb, ws, sheet);

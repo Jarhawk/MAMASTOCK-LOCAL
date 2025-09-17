@@ -1,13 +1,14 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useEffect, useState } from "react";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell } from "recharts";
-import * as XLSX from "xlsx";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import GlassCard from "@/components/ui/GlassCard";
 import { useAuth } from '@/hooks/useAuth';
 import { useCostCenters } from "@/hooks/useCostCenters";
 import { useFamilles } from "@/hooks/useFamilles";
 import { useAnalytique } from "@/hooks/useAnalytique";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";
+
+const RechartsWrapper = lazy(() => import("@/components/charts/RechartsWrapper"));
 
 export default function AnalytiqueDashboard() {
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -35,7 +36,8 @@ export default function AnalytiqueDashboard() {
     });
   }, [isAuthenticated, authLoading, filters, getConsommationParActivite, getVentilationProduits]);
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dataProduits), "Ventilation");
     XLSX.writeFile(wb, "analytique.xlsx");
@@ -63,27 +65,39 @@ export default function AnalytiqueDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <GlassCard className="p-4">
           <h3 className="font-semibold mb-2">Consommation par activité</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={dataActivite}>
-              <XAxis dataKey="activite" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="sumv" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
+          <Suspense fallback={null}>
+            <RechartsWrapper>
+              {({ ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip }) => (
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={dataActivite}>
+                    <XAxis dataKey="activite" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="sumv" fill="#8884d8" />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
+            </RechartsWrapper>
+          </Suspense>
         </GlassCard>
         <GlassCard className="p-4">
           <h3 className="font-semibold mb-2">Ventilation produits</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie data={dataProduits} dataKey="sumv" nameKey="famille" label>
-                {dataProduits.map((_, i) =>
-                <Cell key={i} fill={["#0088FE", "#00C49F", "#FFBB28", "#FF8042"][i % 4]} />
-                )}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+          <Suspense fallback={null}>
+            <RechartsWrapper>
+              {({ ResponsiveContainer, PieChart, Pie, Cell, Tooltip }) => (
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie data={dataProduits} dataKey="sumv" nameKey="famille" label>
+                      {dataProduits.map((_, i) => (
+                        <Cell key={i} fill={["#0088FE", "#00C49F", "#FFBB28", "#FF8042"][i % 4]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              )}
+            </RechartsWrapper>
+          </Suspense>
         </GlassCard>
       </div>
     </div>);

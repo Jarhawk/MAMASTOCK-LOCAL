@@ -8,9 +8,9 @@ import {
 import { useState } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
-import * as XLSX from "xlsx";
 import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";
 import { saveAs } from "file-saver";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";
 
 export function usePermissions() {
   const { mama_id, role } = useAuth();
@@ -85,7 +85,7 @@ export function usePermissions() {
   }
 
   // 5. Export Excel
-  function exportPermissionsToExcel() {
+  async function exportPermissionsToExcel() {
     const datas = (permissions || []).map((p) => ({
       id: p.id,
       role_id: p.role_id,
@@ -94,6 +94,7 @@ export function usePermissions() {
       actif: p.actif,
       mama_id: p.mama_id
     }));
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(datas), "Permissions");
     const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });

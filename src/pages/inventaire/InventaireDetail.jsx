@@ -5,10 +5,8 @@ import { useInventaires } from "@/hooks/useInventaires";
 import TableContainer from "@/components/ui/TableContainer";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import * as XLSX from "xlsx";
-import JSPDF from "jspdf";
-import "jspdf-autotable";
 import { useAuth } from '@/hooks/useAuth';import { isTauri } from "@/lib/tauriEnv";
+import { loadJsPDF, loadXLSX } from "@/lib/lazy/vendors";
 
 export default function InventaireDetail() {
   const { id } = useParams();
@@ -27,7 +25,7 @@ export default function InventaireDetail() {
 
   if (!inventaire) return <LoadingSpinner message="Chargement..." />;
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
     const rows = (inventaire.lignes || []).map((l) => {
       const ecart = l.quantite_reelle - (l.product?.stock_theorique || 0);
       const valeurEcart = ecart * (l.product?.pmp || 0);
@@ -51,12 +49,14 @@ export default function InventaireDetail() {
         Mois_2: l.mois_m2
       };
     });
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), "Inventaire");
     XLSX.writeFile(wb, `inventaire_${id}.xlsx`);
   };
 
-  const exportPDF = () => {
+  const exportPDF = async () => {
+    const JSPDF = await loadJsPDF();
     const doc = new JSPDF();
     doc.text(
       `Inventaire ${inventaire.date_inventaire} – Zone ${inventaire.zone || ''}`,

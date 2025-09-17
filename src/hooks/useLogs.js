@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { logs_list, logs_add, rapports_list } from "@/local/logs";
-import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
+import { saveAs } from "file-saver";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";
 
 export function useLogs() {
   const { mama_id } = useAuth();
@@ -57,8 +57,9 @@ export function useLogs() {
     }
   }
 
-  function exportLogs(format = "csv") {
+  async function exportLogs(format = "csv") {
     if (format === "xlsx") {
+      const XLSX = await loadXLSX();
       const ws = XLSX.utils.json_to_sheet(logs);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Logs");

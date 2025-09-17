@@ -2,9 +2,7 @@
 import { useState, useCallback } from "react";
 import { consolidation_performance } from "@/lib/db";
 import { readConfig } from "@/appFs";
-import * as XLSX from "xlsx";
-import JSPDF from "jspdf";
-import "jspdf-autotable";import { isTauri } from "@/lib/tauriEnv";
+import { loadJsPDF, loadXLSX } from "@/lib/lazy/vendors";import { isTauri } from "@/lib/tauriEnv";
 
 export function useConsolidation() {
   const [sites, setSites] = useState([]);
@@ -55,13 +53,15 @@ export function useConsolidation() {
     []
   );
 
-  const exportExcel = useCallback((data) => {
+  const exportExcel = useCallback(async (data) => {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Consolidation");
     XLSX.writeFile(wb, "consolidation.xlsx");
   }, []);
 
-  const exportPdf = useCallback((data) => {
+  const exportPdf = useCallback(async (data) => {
+    const JSPDF = await loadJsPDF();
     const doc = new JSPDF();
     if (data && data.length > 0) {
       const head = [Object.keys(data[0])];

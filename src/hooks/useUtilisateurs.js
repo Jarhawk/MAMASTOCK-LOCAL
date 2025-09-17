@@ -1,11 +1,11 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
 import { listLocalUsers, registerLocal, updateRoleLocal, deleteUserLocal } from "@/auth/localAccount";
-import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { exportToCSV } from "@/lib/export/exportHelpers";
 import { DEFAULT_ROLES } from "@/constants/roles";
 import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";
 
 export function useUtilisateurs() {
   const [users, setUsers] = useState([]);
@@ -62,7 +62,8 @@ export function useUtilisateurs() {
     await getUtilisateurs();
   }
 
-  function exportUsersToExcel(data = users) {
+  async function exportUsersToExcel(data = users) {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), "Utilisateurs");
     const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });

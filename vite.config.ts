@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, splitVendorChunkPlugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "node:path";
 import { VitePWA as pwa } from "vite-plugin-pwa";
@@ -9,6 +9,7 @@ const isTauri =
 export default defineConfig(({ mode }) => {
   const plugins = [
     react(),
+    splitVendorChunkPlugin(),
     !isTauri &&
       pwa({
         registerType: "autoUpdate",

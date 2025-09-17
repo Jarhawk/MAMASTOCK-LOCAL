@@ -9,7 +9,7 @@ import {
 "@/components/ui/SmartDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";import { isTauri } from "@/lib/tauriEnv";
 
 export default function FactureImportModal({ open, onClose, onImport }) {
   const [rows, setRows] = useState([]);
@@ -20,6 +20,7 @@ export default function FactureImportModal({ open, onClose, onImport }) {
     if (!file) return;
     setFileName(file.name);
     const data = await file.arrayBuffer();
+    const XLSX = await loadXLSX();
     const wb = XLSX.read(data, { type: "array" });
     const ws = wb.Sheets[wb.SheetNames[0]];
     const json = XLSX.utils.sheet_to_json(ws, { defval: "" });

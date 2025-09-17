@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";import { isTauri } from "@/lib/tauriEnv";
 
 export default function StatsCostCentersPivot() {
   const { fetchMonthly } = useCostCenterMonthlyStats();
@@ -13,12 +13,13 @@ export default function StatsCostCentersPivot() {
   const [rows, setRows] = useState([]);
   const [months, setMonths] = useState([]);
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
     const data = rows.map((r) => {
       const obj = { nom: r.nom };
       months.forEach((m) => {obj[m] = r[m] || 0;});
       return obj;
     });
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), 'Stats');
     XLSX.writeFile(wb, 'cost_center_monthly.xlsx');

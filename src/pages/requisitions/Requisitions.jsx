@@ -7,12 +7,10 @@ import { useRequisitions } from '@/hooks/useRequisitions';
 import { useProducts } from '@/hooks/useProducts';
 import { useUtilisateurs } from '@/hooks/useUtilisateurs';
 import { toast } from 'sonner';
-import * as XLSX from 'xlsx';
-import JSPDF from 'jspdf';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import 'jspdf-autotable';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';import { isTauri } from "@/lib/tauriEnv";
+import { loadJsPDF, loadXLSX } from '@/lib/lazy/vendors';
 
 export default function Requisitions() {
   const { mama_id, loading: authLoading } = useAuth();
@@ -70,7 +68,8 @@ export default function Requisitions() {
   const filtered = requisitions;
 
   // Export Excel
-  const handleExportExcel = () => {
+  const handleExportExcel = async () => {
+    const XLSX = await loadXLSX();
     const ws = XLSX.utils.json_to_sheet(
       filtered.map((r) => ({
         Numero: r.id,
@@ -86,7 +85,8 @@ export default function Requisitions() {
   };
 
   // Export PDF
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
+    const JSPDF = await loadJsPDF();
     const doc = new JSPDF();
     doc.text('Historique Réquisitions', 10, 12);
     doc.autoTable({
