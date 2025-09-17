@@ -1,4 +1,5 @@
 !include "MUI2.nsh"
+!include "01_write_config.nsh"
 
 !define MUI_ICON "${INSTALLER_ICON}"
 !define MUI_HEADERIMAGE
@@ -48,6 +49,10 @@ Section "Install"
   SetOutPath "$INSTDIR"
   ; Tauri will inject files here
   CreateShortCut "$SMPROGRAMS\\MAMASTOCK.lnk" "$INSTDIR\\MAMASTOCK.exe"
+SectionEnd
+
+Section -Post
+  Call WriteConfigJson
 SectionEnd
 
 Section "Uninstall"

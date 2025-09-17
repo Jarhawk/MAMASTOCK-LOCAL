@@ -28,6 +28,7 @@
     "active": true,
     "targets": ["nsis", "msi"],
     "icon": ["icons/256x256.png", "icons/512x512.png", "icons/icon.ico"],
+    "resources": ["src-tauri/installer/config.json"],
     "publisher": "Quentin Vanel",
     "windows": {
       "webviewInstallMode": {
@@ -54,6 +55,7 @@
           }
         },
         "template": "src-tauri/installer/wix/main.wxs",
+        "extensions": ["WixUtilExtension"],
         "bannerPath": "src-tauri/installer/wix/banner.bmp",
         "dialogImagePath": "src-tauri/installer/wix/dialog.bmp"
       }
