@@ -31,11 +31,24 @@
       "msi"
     ],
     "icon": [
+      "icons/256x256.png",
+      "icons/512x512.png",
       "icons/icon.ico"
-    ]
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      }
+    }
   },
   "plugins": {
-    "fs": {},
+    "fs": {
+      "scope": [
+        "$APPDATA/**",
+        "$LOCALAPPDATA/**",
+        "$RESOURCE/**"
+      ]
+    },
     "shell": {},
     "dialog": {},
     "process": {},

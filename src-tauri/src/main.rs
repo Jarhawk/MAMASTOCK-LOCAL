@@ -20,7 +20,12 @@ fn main() {
     // Prod only
     #[cfg(not(debug_assertions))]
     {
-        builder = builder.plugin(tauri_plugin_log::Builder::default().build());
+        // CODEREVIEW: enable logs in release to diagnose startup issues
+        builder = builder.plugin(
+            tauri_plugin_log::Builder::default()
+                .level(log::LevelFilter::Debug)
+                .build(),
+        );
     }
 
     builder

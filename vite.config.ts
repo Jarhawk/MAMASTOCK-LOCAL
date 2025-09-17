@@ -1,6 +1,6 @@
 import { defineConfig, splitVendorChunkPlugin } from "vite";
 import react from "@vitejs/plugin-react";
-import { resolve } from "node:path";
+import path from "node:path";
 import { VitePWA as pwa } from "vite-plugin-pwa";
 
 const isTauri =
@@ -20,7 +20,8 @@ export default defineConfig(({ mode }) => {
     base: isTauri ? "./" : "/",
     plugins,
     resolve: {
-      alias: { "@": resolve(__dirname, "src") },
+      // CODEREVIEW: normalize absolute imports with @/*
+      alias: { "@": path.resolve(__dirname, "src") },
     },
     server: {
       port: 5173,
@@ -41,17 +42,22 @@ export default defineConfig(({ mode }) => {
       ],
     },
     build: {
-      chunkSizeWarningLimit: 1600,
+      target: "es2020",
+      chunkSizeWarningLimit: 1500,
       rollupOptions: {
-        input: resolve(__dirname, "index.html"),
+        input: path.resolve(__dirname, "index.html"),
         output: {
+          // CODEREVIEW: split heavy vendors to speed up load and avoid 500k warnings
           manualChunks(id) {
-            if (id.includes("xlsx")) return "xlsx";
-            if (id.includes("jspdf")) return "jspdf";
-            if (id.includes("html2canvas")) return "html2canvas";
+            if (!id.includes("node_modules")) return;
             if (id.includes("recharts")) return "recharts";
-            if (id.includes("dompurify")) return "purify";
+            if (id.includes("xlsx")) return "xlsx";
+            if (id.includes("jspdf")) return "pdf";
+            if (id.includes("html2canvas")) return "html2canvas";
             if (id.includes("@tauri-apps")) return "tauri";
+            if (id.includes("react") || id.includes("react-dom")) return "react";
+            if (id.includes("dompurify")) return "purify";
+            return "vendor";
           },
         },
       },

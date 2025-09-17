@@ -1,20 +1,17 @@
-import { appDataDir, dirname, join } from "@tauri-apps/api/path";
+import { dirname, join } from "@tauri-apps/api/path";
 import { isTauri } from "@/lib/tauriEnv";
+import { getAppDir } from "@/lib/paths";
 
 const NOT_TAURI_HINT =
   "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
-
-const APP_DIR = "MamaStock";
 
 async function baseDir() {
   if (!isTauri()) {
     console.warn(NOT_TAURI_HINT);
     return "";
   }
-  const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
-  const base = await appDataDir();
-  const dir = await join(base, APP_DIR);
-  if (!(await exists(dir))) await mkdir(dir, { recursive: true });
+  // CODEREVIEW: unify base directory resolution with AppData helper
+  const dir = await getAppDir();
   return dir;
 }
 

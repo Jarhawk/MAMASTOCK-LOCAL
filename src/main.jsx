@@ -12,6 +12,38 @@ import { isTauri } from "@/lib/tauriEnv";
 clearWebviewOnDev();
 setupPwaGuard();
 
+// CODEREVIEW: warn when WebView2 runtime is missing to help support teams
+function setupWebviewDiagnostics() {
+  if (!isTauri()) return;
+  let warned = false;
+  const logHint = (source, detail) => {
+    if (warned) return;
+    warned = true;
+    console.error(
+      `[webview] ${source}: le runtime Microsoft Edge WebView2 semble manquant. ` +
+        "L'installateur est configuré pour télécharger automatiquement le bootstrapper (webviewInstallMode: \"downloadBootstrapper\").",
+      detail
+    );
+  };
+  const matches = (value) => {
+    if (!value) return false;
+    const text = String(value).toLowerCase();
+    return text.includes("webview2") || text.includes("createwebview");
+  };
+  window.addEventListener("error", (event) => {
+    if (matches(event?.message) || matches(event?.error)) {
+      logHint("error", event?.error ?? event?.message);
+    }
+  });
+  window.addEventListener("unhandledrejection", (event) => {
+    if (matches(event?.reason)) {
+      logHint("unhandledrejection", event?.reason);
+    }
+  });
+}
+
+setupWebviewDiagnostics();
+
 if (import.meta.env.DEV && isTauri()) {
   import("@/debug/dbIntrospect");
   import("@/debug/check-capabilities-runtime");

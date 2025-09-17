@@ -1,5 +1,10 @@
-import { getDb as baseGetDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
-import { dataDbPath, inAppDir } from "@/lib/paths";
+import { getDb as baseGetDb } from "@/lib/db/sql";
+import { isTauri } from "@/lib/tauriEnv";
+import {
+  getDbPath,
+  getDataDir as getSafeDataDir,
+  getExportsDir as getSafeExportsDir,
+} from "@/lib/paths";
 import { readConfig, writeConfig } from "@/appFs";
 
 export async function getDb() {
@@ -508,7 +513,8 @@ export async function closeDb() {}
 
 
 export async function backupDb() {
-  const src = await dataDbPath();
+  // CODEREVIEW: use centralized AppData helper for SQLite path resolution
+  const src = await getDbPath();
   const { save } = await import("@tauri-apps/plugin-dialog");
   const dest = await save({ defaultPath: "mamastock-backup.db", filters: [{ name: "DB", extensions: ["db"] }] });
   if (!dest) throw new Error("Sauvegarde annulée");
@@ -518,7 +524,8 @@ export async function backupDb() {
 }
 
 export async function restoreDb(file: string) {
-  const dest = await dataDbPath();
+  // CODEREVIEW: use centralized AppData helper for SQLite path resolution
+  const dest = await getDbPath();
   const { copyFile } = await import("@tauri-apps/plugin-fs");
   await copyFile(file, dest);
 }
@@ -533,7 +540,9 @@ export async function maintenanceDb() {
 export async function getDataDir() {
   if (!isTauri()) return "";
   const cfg = (await readConfig()) || {};
-  return cfg.dataDir || (await inAppDir("data"));
+  if (cfg.dataDir) return cfg.dataDir;
+  // CODEREVIEW: fall back to AppData-managed location when no override
+  return await getSafeDataDir();
 }
 
 export async function setDataDir(dir: string) {
@@ -545,7 +554,9 @@ export async function setDataDir(dir: string) {
 export async function getExportDir() {
   if (!isTauri()) return "";
   const cfg = (await readConfig()) || {};
-  return cfg.exportDir || (await inAppDir("export"));
+  if (cfg.exportDir) return cfg.exportDir;
+  // CODEREVIEW: fall back to AppData-managed exports folder when no override
+  return await getSafeExportsDir();
 }
 
 export async function setExportDir(dir: string) {
