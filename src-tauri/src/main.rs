@@ -1,4 +1,4 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+﻿#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use serde::Serialize;
 use serde_json::{json, Map, Value};
@@ -152,7 +152,7 @@ fn set_db_url(url: String) -> Result<(), String> {
     obj.insert("dbUrl".into(), Value::String(trimmed.to_string()));
 
     let db_entry = obj
-        .entry("db".into())
+        .entry("db")
         .or_insert_with(|| Value::Object(Map::new()));
     if let Some(db_obj) = db_entry.as_object_mut() {
         db_obj.insert("type".into(), Value::String("postgres".into()));
