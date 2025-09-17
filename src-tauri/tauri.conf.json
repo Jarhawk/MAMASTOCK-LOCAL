@@ -27,6 +27,7 @@
   "bundle": {
     "active": true,
     "targets": ["nsis", "msi"],
+    "resources": ["../migrations/**"],
     "icon": ["icons/256x256.png", "icons/512x512.png", "icons/icon.ico"],
     "publisher": "Quentin Vanel",
     "windows": {
@@ -61,7 +62,12 @@
   },
   "plugins": {
     "fs": {
-      "scope": ["$APPDATA/**", "$LOCALAPPDATA/**", "$RESOURCE/**"]
+      "scope": [
+        "$APPDATA/**",
+        "$LOCALAPPDATA/**",
+        "$RESOURCE/**",
+        "C:/ProgramData/MAMASTOCK/**"
+      ]
     },
     "shell": {},
     "dialog": {},

@@ -8,6 +8,8 @@ import "nprogress/nprogress.css";
 import { runSqlSelfTest } from "@/debug/sqlSelfTest";
 import { clearWebviewOnDev } from "@/debug/clearWebview";
 import { isTauri } from "@/lib/tauriEnv";
+import { loadDb } from "@/lib/db";
+import { migratePostgres } from "@/lib/migrate";
 
 clearWebviewOnDev();
 setupPwaGuard();
@@ -43,6 +45,21 @@ function setupWebviewDiagnostics() {
 }
 
 setupWebviewDiagnostics();
+
+async function bootDb() {
+  if (!isTauri()) return;
+
+  try {
+    const { db, cfg } = await loadDb();
+    if (cfg.database.driver === "postgres") {
+      await migratePostgres(db);
+    }
+  } catch (error) {
+    console.error("[db] boot failure", error);
+  }
+}
+
+bootDb().catch((error) => console.error("[db] boot rejection", error));
 
 if (import.meta.env.DEV && isTauri()) {
   import("@/debug/dbIntrospect");

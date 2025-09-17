@@ -7,11 +7,13 @@ import { routes } from "@/router.autogen";
 
 const FirstRunSetupPage = lazy(() => import("@/pages/setup/FirstRun"));
 const LocalAccountsPage = lazy(() => import("@/pages/parametrage/ComptesLocaux"));
+const DatabaseSettingsPage = lazy(() => import("@/pages/Settings/Database"));
 
 const router = createHashRouter([
   { path: "/setup", element: <FirstRunSetupPage /> },
   // routes autogen
   ...routes,
+  { path: "/parametrage/base-de-donnees", element: <DatabaseSettingsPage /> },
   { path: "/parametrage/comptes-locaux", element: <LocalAccountsPage /> },
   // route par défaut ("/" => /dashboard si présent, sinon première route dispo)
   { path: "/", element: <Navigate to="/dashboard" replace /> },

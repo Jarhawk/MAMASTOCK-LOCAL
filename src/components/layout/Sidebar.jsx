@@ -157,6 +157,12 @@ export default function Sidebar() {
                 </NavLink>
               )}
               <NavLink
+                to="/parametrage/base-de-donnees"
+                className={({ isActive }) => (isActive ? "text-mamastockGold" : "")}
+              >
+                Base de données
+              </NavLink>
+              <NavLink
                 to="/parametrage/comptes-locaux"
                 className={({ isActive }) => (isActive ? "text-mamastockGold" : "")}
               >

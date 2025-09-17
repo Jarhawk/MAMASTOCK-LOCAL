@@ -1,4 +1,7 @@
-import { readConfig, writeConfig } from "@/appFs";
+import Database from "@tauri-apps/plugin-sql";
+import { exists, mkdir, readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
+
+import { readConfig as readAppConfig, writeConfig as writeAppConfig } from "@/appFs";
 import { getDb as baseGetDb } from "@/lib/db/sql";
 import {
   getDbPath,
@@ -6,6 +9,94 @@ import {
   getExportsDir as getSafeExportsDir,
 } from "@/lib/paths";
 import { isTauri } from "@/lib/tauriEnv";
+
+export type Driver = "sqlite" | "postgres";
+
+export type AppConfig = {
+  database: {
+    driver: Driver;
+    url: string;
+  };
+};
+
+const CFG_DIR = "C:\\ProgramData\\MAMASTOCK";
+const CFG_PATH = `${CFG_DIR}\\config.json`;
+const LS_KEY = "mamastock:db-config";
+
+const DEFAULT_PG_URL =
+  "postgresql://neondb_owner:npg_bM8mxANEGzd7@ep-falling-field-a9ppe70d-pooler.gwc.azure.neon.tech/neondb?sslmode=require&channel_binding=require";
+
+const DEFAULT_DB_CONFIG: AppConfig = {
+  database: { driver: "postgres", url: DEFAULT_PG_URL }
+};
+
+async function ensureDbConfig() {
+  if (!isTauri()) {
+    if (typeof localStorage === "undefined") {
+      return;
+    }
+    if (!localStorage.getItem(LS_KEY)) {
+      localStorage.setItem(LS_KEY, JSON.stringify(DEFAULT_DB_CONFIG, null, 2));
+    }
+    return;
+  }
+
+  const hasDir = await exists(CFG_DIR);
+  if (!hasDir) {
+    await mkdir(CFG_DIR, { recursive: true });
+  }
+
+  const hasFile = await exists(CFG_PATH);
+  if (!hasFile) {
+    await writeTextFile(CFG_PATH, JSON.stringify(DEFAULT_DB_CONFIG, null, 2));
+  }
+}
+
+export async function readConfig(): Promise<AppConfig> {
+  await ensureDbConfig();
+
+  if (!isTauri()) {
+    if (typeof localStorage === "undefined") {
+      return DEFAULT_DB_CONFIG;
+    }
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : DEFAULT_DB_CONFIG;
+  }
+
+  const raw = await readTextFile(CFG_PATH);
+  return JSON.parse(raw);
+}
+
+export async function writeConfig(cfg: AppConfig) {
+  if (!isTauri()) {
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem(LS_KEY, JSON.stringify(cfg, null, 2));
+    }
+    return;
+  }
+
+  await writeTextFile(CFG_PATH, JSON.stringify(cfg, null, 2));
+}
+
+export async function loadDb() {
+  if (!isTauri()) {
+    throw new Error("Database available only in Tauri context");
+  }
+
+  const cfg = await readConfig();
+  const db = await Database.load(cfg.database.url);
+
+  if (cfg.database.driver === "sqlite") {
+    try {
+      await db.execute("PRAGMA journal_mode=WAL;");
+      await db.execute("PRAGMA busy_timeout=5000;");
+    } catch (_) {
+      // Ignore pragma errors when unsupported.
+    }
+  }
+
+  return { db, cfg };
+}
 
 export async function getDb() {
   return baseGetDb();
@@ -539,30 +630,30 @@ export async function maintenanceDb() {
 // Config helpers for data/export directories
 export async function getDataDir() {
   if (!isTauri()) return "";
-  const cfg = (await readConfig()) || {};
+  const cfg = (await readAppConfig()) || {};
   if (cfg.dataDir) return cfg.dataDir;
   // CODEREVIEW: fall back to AppData-managed location when no override
   return await getSafeDataDir();
 }
 
 export async function setDataDir(dir: string) {
-  const cfg = (await readConfig()) || {};
+  const cfg = (await readAppConfig()) || {};
   cfg.dataDir = dir;
-  await writeConfig(cfg);
+  await writeAppConfig(cfg);
 }
 
 export async function getExportDir() {
   if (!isTauri()) return "";
-  const cfg = (await readConfig()) || {};
+  const cfg = (await readAppConfig()) || {};
   if (cfg.exportDir) return cfg.exportDir;
   // CODEREVIEW: fall back to AppData-managed exports folder when no override
   return await getSafeExportsDir();
 }
 
 export async function setExportDir(dir: string) {
-  const cfg = (await readConfig()) || {};
+  const cfg = (await readAppConfig()) || {};
   cfg.exportDir = dir;
-  await writeConfig(cfg);
+  await writeAppConfig(cfg);
 }
 
 export async function factures_list(opts: {
