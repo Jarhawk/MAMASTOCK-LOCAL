@@ -1,3 +1,6 @@
+-- Silence les NOTICE (ex: DROP IF EXISTS)
+SET client_min_messages = WARNING;
+
 CREATE TABLE IF NOT EXISTS facture_pieces (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   facture_id BIGINT NOT NULL REFERENCES factures(id) ON DELETE CASCADE,

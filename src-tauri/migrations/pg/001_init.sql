@@ -1,3 +1,6 @@
+-- Silence les NOTICE (ex: DROP IF EXISTS)
+SET client_min_messages = WARNING;
+
 -- Côté Neon, reste dans le schéma public
 -- Optionnel si tu veux des UUID:
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
