@@ -21,7 +21,7 @@ tauri-plugin-dialog = "2"
 tauri-plugin-process = "2"
 tauri-plugin-log = "2"
 tauri-plugin-devtools = "2"
-tauri-plugin-sql = { version = "2.3", features = ["sqlite"] }
+tauri-plugin-sql = { version = "2.3", features = ["sqlite", "postgres"] }
 log = "0.4"
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
