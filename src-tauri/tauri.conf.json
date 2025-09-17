@@ -1,74 +1,47 @@
 ﻿{
-  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "$schema": "https://schema.tauri.app/config/2",
   "productName": "MAMASTOCK",
   "version": "0.1.0",
   "identifier": "com.mamastock.local",
+
   "build": {
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist"
   },
+
   "app": {
-    "withGlobalTauri": true,
-    "security": {
-      "csp": null
-    },
+    "security": { "csp": null },
     "windows": [
-      {
-        "label": "main",
-        "title": "MAMASTOCK",
-        "width": 1280,
-        "height": 800,
-        "resizable": true,
-        "fullscreen": false,
-        "visible": true
-      }
+      { "title": "MAMASTOCK", "width": 1280, "height": 800, "resizable": true }
     ]
   },
+
   "bundle": {
     "active": true,
-    "targets": "all",
-    "icon": ["icons/256x256.png", "icons/512x512.png", "icons/icon.ico"],
-    "resources": ["src-tauri/installer/config.json"],
-    "publisher": "Quentin Vanel",
+    "targets": ["nsis", "msi"],
+    "icon": [
+      "icons/icon.ico",
+      "icons/256x256.png",
+      "icons/512x512.png",
+      "icons/1024x1024.png"
+    ],
+    "resources": [
+      "installer/config.json",
+      "installer/nsis/**",
+      "installer/wix/**"
+    ],
     "windows": {
-      "webviewInstallMode": {
-        "type": "offlineInstaller"
+      "wix": {
+        "bannerPath": "installer/wix/banner.bmp",
+        "dialogImagePath": "installer/wix/dialog.bmp",
+        "template": "installer/wix/main.wxs"
       },
       "nsis": {
-        "languages": ["fr-FR", "en-US"],
-        "displayLanguageSelector": true,
-        "installMode": "perMachine",
-        "installerIcon": "src-tauri/icons/icon.ico",
-        "headerImage": "src-tauri/installer/nsis/header.bmp",
-        "sidebarImage": "src-tauri/installer/nsis/sidebar.bmp",
-        "template": "src-tauri/installer/nsis/tauri.nsis",
-        "startMenuFolder": "MAMASTOCK"
-      },
-      "wix": {
-        "language": {
-          "fr-FR": {
-            "localePath": "src-tauri/installer/wix/fr-FR.wxl"
-          },
-          "en-US": {
-            "localePath": "src-tauri/installer/wix/en-US.wxl"
-          }
-        },
-        "template": "src-tauri/installer/wix/main.wxs",
-        "bannerPath": "src-tauri/installer/wix/banner.bmp",
-        "dialogImagePath": "src-tauri/installer/wix/dialog.bmp"
+        "template": "installer/nsis/tauri.nsis",
+        "headerImage": "installer/nsis/header.bmp",
+        "sidebarImage": "installer/nsis/sidebar.bmp",
+        "displayLanguageSelector": true
       }
     }
-  },
-  "plugins": {
-    "fs": {
-      "scope": ["$APPDATA/**", "$LOCALAPPDATA/**", "$RESOURCE/**"]
-    },
-    "shell": {},
-    "dialog": {},
-    "process": {},
-    "log": {},
-    "devtools": {},
-    "sql": {}
   }
 }
-
