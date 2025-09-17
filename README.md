@@ -11,6 +11,17 @@ Cette variante, basée sur **Tauri v2**, embarque une base SQLite locale pour f
 - Télécharger l'installateur **MSI** produit par la CI.
 - L'exécuter.
 
+<!-- CODEREVIEW: document WebView2 auto-install and release logging paths -->
+### Dépendance Windows (automatique)
+Le runtime **Microsoft Edge WebView2** est requis. L’installateur est configuré avec  
+`webviewInstallMode: "downloadBootstrapper"` donc si le runtime manque, il est proposé automatiquement.
+
+### Lancer en console pour logs
+```powershell
+"C:\\Program Files\\MamaStock Local\\mamastock.exe"
+```
+Des logs détaillés sont écrits dans `%APPDATA%\MamaStock Local\logs\`.
+
 ## Première ouverture (local)
 - Au premier lancement, un écran de création de compte admin s’affiche.
 - Sous Tauri les comptes sont stockés dans `appDataDir/MamaStock/users.json`.

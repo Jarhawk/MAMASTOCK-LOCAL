@@ -1,5 +1,7 @@
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
-import { appDataDir, join } from "@tauri-apps/api/path";
+import { getDb } from "@/lib/db/sql";
+import { isTauri } from "@/lib/tauriEnv";
+import { join } from "@tauri-apps/api/path";
+import { getDataDir } from "@/lib/paths";
 
 const NOT_TAURI_HINT =
   "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
@@ -36,8 +38,9 @@ async function piecesDirForFacture(factureId: string) {
     return "";
   }
   const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
-  const base = await appDataDir();
-  const dir = await join(base, "MamaStock", "pieces", "factures", factureId);
+  // CODEREVIEW: store facture pieces under the shared AppData data directory
+  const dataDir = await getDataDir();
+  const dir = await join(dataDir, "pieces", "factures", factureId);
   if (!(await exists(dir))) await mkdir(dir, { recursive: true });
   return dir;
 }

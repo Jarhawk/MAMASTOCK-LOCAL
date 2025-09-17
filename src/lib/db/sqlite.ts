@@ -1,7 +1,7 @@
 import Database from "@tauri-apps/plugin-sql";
-import { appDataDir, join } from "@tauri-apps/api/path";
 import schemaSQL from "@/../db/sqlite/001_schema.sql?raw";
 import { devFlags } from "@/lib/devFlags";
+import { getDbPath } from "@/lib/paths";
 
 export type SqliteDatabase = {
   select<T = unknown>(sql: string, params?: unknown[]): Promise<T[]>;
@@ -46,14 +46,9 @@ async function createTauriDb(url: string): Promise<SqliteDatabase> {
   return DatabaseAny.load(url);
 }
 
-async function ensureDataDir() {
-  const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
-  const base = await appDataDir();
-  const appDir = await join(base, "MamaStock");
-  if (!(await exists(appDir))) await mkdir(appDir, { recursive: true });
-  const dataDir = await join(appDir, "data");
-  if (!(await exists(dataDir))) await mkdir(dataDir, { recursive: true });
-  const file = await join(dataDir, "mamastock.db");
+// CODEREVIEW: centralize sqlite data location under AppData helper
+async function resolveDbPath() {
+  const file = await getDbPath();
   const normalized = file.replace(/\\/g, "/");
   return { file, url: `sqlite:${normalized}` };
 }
@@ -102,7 +97,7 @@ export async function getDb(): Promise<SqliteDatabase> {
   }
 
   try {
-    const { url } = await ensureDataDir();
+    const { url } = await resolveDbPath();
     const db = (await createTauriDb(url)) as SqliteDatabase;
     await initDbIfNeeded(db);
     tauriDb = db;
@@ -132,8 +127,7 @@ export async function locateDb(): Promise<string> {
     console.info("[sqlite] locateDb appelé hors contexte Tauri (mode navigateur)");
     return "";
   }
-  const { file } = await ensureDataDir();
-  return file;
+  return getDbPath();
 }
 
 export async function openDb() {

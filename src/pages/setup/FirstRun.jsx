@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerLocal, listLocalUsers } from "@/auth/localAccount";
 import { useAuth } from "@/context/AuthContext";
-import "../login.css";
+import '@/pages/login.css';
 
 export default function FirstRun() {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { createAsyncState } from '../_shared/createAsyncState';
+import { createAsyncState } from '@/hooks/_shared/createAsyncState';
 import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export default function useEvolutionAchats() {
