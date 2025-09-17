@@ -9,6 +9,7 @@ import { runSqlSelfTest } from "@/debug/sqlSelfTest";
 import { clearWebviewOnDev } from "@/debug/clearWebview";
 import { isTauri } from "@/lib/tauriEnv";
 import { initLog } from "@/tauriLog";
+import { testPg } from "@/lib/db/postgres";
 
 clearWebviewOnDev();
 setupPwaGuard();
@@ -55,6 +56,16 @@ if (import.meta.env.DEV && isTauri()) {
 }
 
 runSqlSelfTest().catch(() => {});
+
+if (isTauri()) {
+  testPg()
+    .then((ok) => {
+      console.log(ok ? "PG OK (Neon)" : "PG KO (voir config)");
+    })
+    .catch(() => {
+      console.log("PG KO (voir config)");
+    });
+}
 
 if (
   typeof window !== "undefined" &&
