@@ -9,8 +9,9 @@ import ToastRoot from "@/components/ToastRoot";
 import { MultiMamaProvider } from "@/context/MultiMamaContext";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import { devFlags } from "@/lib/devFlags";
-import { loadConfig } from "@/local/config";
-import FirstRunDb from "@/pages/FirstRunDb";
+import { getDbUrl } from "@/lib/appConfig";
+import { getPg } from "@/lib/db/pg";
+import DbSetup from "@/pages/DbSetup";
 import Router from "@/router";
 import { testRandom } from "@/shims/selftest";
 
@@ -31,6 +32,7 @@ const queryClient = new QueryClient({
 export default function App() {
   const [devPanelOpen, setDevPanelOpen] = useState(false);
   const [dbConfigStatus, setDbConfigStatus] = useState("checking");
+  const [dbError, setDbError] = useState(null);
 
   console.log("[debug] App mounted");
 
@@ -46,17 +48,20 @@ export default function App() {
   useEffect(() => {
     if (!devFlags.isTauri) {
       setDbConfigStatus("ready");
+      setDbError(null);
       return;
     }
     let cancelled = false;
-    loadConfig()
-      .then(({ dbUrl }) => {
+    getDbUrl()
+      .then((url) => {
         if (cancelled) return;
-        setDbConfigStatus(dbUrl ? "ready" : "missing");
+        setDbError(null);
+        setDbConfigStatus(url ? "ready" : "missing");
       })
       .catch((err) => {
         console.error("[config] Impossible de charger config.json", err);
         if (!cancelled) {
+          setDbError(null);
           setDbConfigStatus("missing");
         }
       });
@@ -64,6 +69,30 @@ export default function App() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (!devFlags.isTauri) return undefined;
+    if (dbConfigStatus !== "ready") return undefined;
+    if (!import.meta.env.PROD) return undefined;
+
+    let cancelled = false;
+    getPg()
+      .then(() => {
+        if (!cancelled) {
+          setDbError(null);
+        }
+      })
+      .catch((err) => {
+        console.error("[db] Connexion PostgreSQL impossible", err);
+        if (!cancelled) {
+          setDbError(err?.message ?? "Connexion PostgreSQL impossible");
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [dbConfigStatus]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !devFlags.isDev) return undefined;
@@ -140,6 +169,7 @@ export default function App() {
 
   const loadingConfig = dbConfigStatus === "checking";
   const needsSetup = dbConfigStatus === "missing";
+  const hasDbError = Boolean(dbError);
 
   let mainContent = <Router />;
   if (loadingConfig) {
@@ -149,7 +179,9 @@ export default function App() {
       </div>
     );
   } else if (needsSetup) {
-    mainContent = <FirstRunDb />;
+    mainContent = <DbSetup />;
+  } else if (hasDbError) {
+    mainContent = <DbSetup initialError={dbError ?? ""} />;
   }
 
   return (
