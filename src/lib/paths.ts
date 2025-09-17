@@ -1,4 +1,5 @@
 // src/lib/paths.ts
+import { appDataDir, join } from "@tauri-apps/api/path";
 import { isTauri } from "@/lib/tauriEnv";
 
 const NOT_TAURI_HINT =
@@ -9,7 +10,6 @@ export async function getAppDir() {
     console.warn(NOT_TAURI_HINT);
     return "";
   }
-  const { appDataDir, join } = await import("@tauri-apps/api/path");
   const base = await appDataDir();
   return join(base, APP_DIR);
 }
@@ -19,7 +19,6 @@ export async function inAppDir(...parts: string[]) {
     return "";
   }
   const root = await getAppDir();
-  const { join } = await import("@tauri-apps/api/path");
   let p = root;
   for (const part of parts) p = await join(p, part);
   return p;

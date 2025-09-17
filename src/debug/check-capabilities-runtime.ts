@@ -1,5 +1,6 @@
 // src/debug/check-capabilities-runtime.ts
 // Testeur runtime des permissions SQL (à exécuter DANS Tauri WebView)
+import Database from "@tauri-apps/plugin-sql";
 import { isTauri } from "@/lib/tauriEnv";
 
 type Step = { ok: boolean; error?: string };
@@ -90,7 +91,6 @@ export async function runCapCheck(): Promise<Report> {
 
   // 1) load
   try {
-    const Database = (await import("@tauri-apps/plugin-sql")).default;
     db = await Database.load("sqlite:mamastock.db");
     report.tests.load.ok = true;
   } catch (e) {

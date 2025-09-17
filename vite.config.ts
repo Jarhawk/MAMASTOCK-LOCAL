@@ -40,8 +40,19 @@ export default defineConfig(({ mode }) => {
       ],
     },
     build: {
+      chunkSizeWarningLimit: 1600,
       rollupOptions: {
         input: resolve(__dirname, "index.html"),
+        output: {
+          manualChunks(id) {
+            if (id.includes("xlsx")) return "xlsx";
+            if (id.includes("jspdf")) return "jspdf";
+            if (id.includes("html2canvas")) return "html2canvas";
+            if (id.includes("recharts")) return "recharts";
+            if (id.includes("dompurify")) return "purify";
+            if (id.includes("@tauri-apps")) return "tauri";
+          },
+        },
       },
     },
     appType: "spa",

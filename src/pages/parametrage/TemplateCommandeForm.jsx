@@ -5,6 +5,7 @@ import { useTemplatesCommandes } from "@/hooks/useTemplatesCommandes";
 import { Button } from "@/components/ui/button";
 import { saveBinary } from "@/local/files";
 import { isTauri } from "@/lib/tauriEnv";
+import { appDataDir, join } from "@tauri-apps/api/path";
 
 export default function TemplateCommandeForm({ template = {}, onClose, fournisseurs = [] }) {
   const { createTemplate, updateTemplate } = useTemplatesCommandes();
@@ -41,7 +42,6 @@ export default function TemplateCommandeForm({ template = {}, onClose, fournisse
     const array = new Uint8Array(await file.arrayBuffer());
     const rel = `templates/${Date.now()}-${file.name}`;
     await saveBinary(rel, array);
-    const { appDataDir, join } = await import("@tauri-apps/api/path");
     const base = await appDataDir();
     const full = await join(base, "MamaStock", rel);
     setLogoUrl(full);

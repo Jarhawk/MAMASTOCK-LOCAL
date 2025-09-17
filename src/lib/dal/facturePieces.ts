@@ -1,4 +1,5 @@
 import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { appDataDir, join } from "@tauri-apps/api/path";
 
 const NOT_TAURI_HINT =
   "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";
@@ -34,7 +35,6 @@ async function piecesDirForFacture(factureId: string) {
     console.warn(NOT_TAURI_HINT);
     return "";
   }
-  const { appDataDir, join } = await import("@tauri-apps/api/path");
   const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
   const base = await appDataDir();
   const dir = await join(base, "MamaStock", "pieces", "factures", factureId);
@@ -103,7 +103,6 @@ export async function attachFiles(
     const mime = guessMime(ex);
     const id = crypto.randomUUID();
     const targetName = `${id}-${base}`;
-    const { join } = await import("@tauri-apps/api/path");
     const dst = await join(dir, targetName);
 
     // copie physique dans AppData

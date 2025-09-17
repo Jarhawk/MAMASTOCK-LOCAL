@@ -1,4 +1,5 @@
 import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { appDataDir, join } from "@tauri-apps/api/path";
 
 export default function DebugRibbon() {
   const show = import.meta.env.DEV || window.DEBUG;
@@ -19,7 +20,6 @@ export default function DebugRibbon() {
       return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
     }
     try {
-      const { appDataDir, join } = await import("@tauri-apps/api/path");
       const { open } = await import("@tauri-apps/plugin-shell");
       const dir = await appDataDir();
       const logDir = await join(dir, "logs");

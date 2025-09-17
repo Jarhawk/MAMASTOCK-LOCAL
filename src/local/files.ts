@@ -1,3 +1,4 @@
+import { appDataDir, dirname, join } from "@tauri-apps/api/path";
 import { isTauri } from "@/lib/tauriEnv";
 
 const NOT_TAURI_HINT =
@@ -10,7 +11,6 @@ async function baseDir() {
     console.warn(NOT_TAURI_HINT);
     return "";
   }
-  const { appDataDir, join } = await import("@tauri-apps/api/path");
   const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
   const base = await appDataDir();
   const dir = await join(base, APP_DIR);
@@ -24,7 +24,6 @@ async function resolve(path: string) {
     return path;
   }
   const root = await baseDir();
-  const { join } = await import("@tauri-apps/api/path");
   return await join(root, path);
 }
 
@@ -34,7 +33,6 @@ export async function saveText(relPath: string, content: string) {
     return;
   }
   const file = await resolve(relPath);
-  const { dirname } = await import("@tauri-apps/api/path");
   const { exists, mkdir, writeTextFile } = await import("@tauri-apps/plugin-fs");
   const dir = await dirname(file);
   if (!(await exists(dir))) await mkdir(dir, { recursive: true });
@@ -77,7 +75,6 @@ export async function saveBinary(relPath: string, data: Uint8Array) {
     return;
   }
   const file = await resolve(relPath);
-  const { dirname } = await import("@tauri-apps/api/path");
   const { exists, mkdir, writeFile } = await import("@tauri-apps/plugin-fs");
   const dir = await dirname(file);
   if (!(await exists(dir))) await mkdir(dir, { recursive: true });

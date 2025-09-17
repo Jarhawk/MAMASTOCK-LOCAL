@@ -1,4 +1,5 @@
 import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { join } from "@tauri-apps/api/path";
 import { inAppDir } from "@/lib/paths";
 
 type Json = unknown;
@@ -12,7 +13,6 @@ export async function readJsonFile(rel: string): Promise<Json | null> {
     const v = localStorage.getItem(lsKey(rel));
     return v ? JSON.parse(v) : null;
   }
-  const { join } = await import("@tauri-apps/api/path");
   const fs = await import("@tauri-apps/plugin-fs");
   const root = await inAppDir("data");
   const mkdir = (fs as any).createDir ?? (fs as any).mkdir; // support both names
@@ -28,7 +28,6 @@ export async function writeJsonFile(rel: string, data: Json): Promise<string> {
     localStorage.setItem(lsKey(rel), JSON.stringify(data));
     return rel;
   }
-  const { join } = await import("@tauri-apps/api/path");
   const fs = await import("@tauri-apps/plugin-fs");
   const root = await inAppDir("data");
   const mkdir = (fs as any).createDir ?? (fs as any).mkdir;

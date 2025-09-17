@@ -1,3 +1,4 @@
+import { appDataDir, join } from "@tauri-apps/api/path";
 import { isTauri } from "@/lib/tauriEnv";
 
 const APP_DIR = "MamaStock";
@@ -26,7 +27,6 @@ export type LocalUser = {
 async function usersPath() {
   if (!isTauri()) return "browser://users.json";
 
-  const { appDataDir, join } = await import("@tauri-apps/api/path");
   const { exists, mkdir, rename, readTextFile, writeTextFile } = await import("@tauri-apps/plugin-fs");
 
   const base = await appDataDir();

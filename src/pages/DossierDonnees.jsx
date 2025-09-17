@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { appDataDir, join } from '@tauri-apps/api/path';
 import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export default function DossierDonnees() {
@@ -9,7 +10,6 @@ export default function DossierDonnees() {
 
   const refresh = async () => {
     if (isTauri()) {
-      const { appDataDir, join } = await import('@tauri-apps/api/path');
       const { exists, mkdir } = await import('@tauri-apps/plugin-fs');
       const root = await appDataDir();
       const appDir = await join(root, 'MamaStock');
@@ -37,7 +37,6 @@ export default function DossierDonnees() {
   const ensureDir = async () => {
     if (isTauri()) {
       const { mkdir, exists } = await import('@tauri-apps/plugin-fs');
-      const { join } = await import('@tauri-apps/api/path');
       await mkdir(baseDir, { recursive: true });
       const dbDir = await join(baseDir, 'databases');
       await mkdir(dbDir, { recursive: true });
