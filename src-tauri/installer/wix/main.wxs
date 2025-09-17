@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <Product
     Id="*"
     Name="MAMASTOCK"
@@ -45,4 +46,25 @@
 
     <!-- Tauri will generate component and files in a separate fragment -->
   </Product>
+
+  <Fragment>
+    <DirectoryRef Id="ProgramDataFolder">
+      <Directory Id="DIR_MAMASTOCK_PD" Name="MAMASTOCK">
+        <Component Id="CMP_ConfigJson" Guid="*">
+          <File Id="FIL_ConfigJson"
+                Name="config.json"
+                Source="$(var.ProjectDir)src-tauri\installer\config.json"
+                Vital="yes"
+                KeyPath="yes"
+                NeverOverwrite="yes" />
+        </Component>
+      </Directory>
+    </DirectoryRef>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents">
+      <ComponentRef Id="CMP_ConfigJson" />
+    </ComponentGroup>
+  </Fragment>
 </Wix>
