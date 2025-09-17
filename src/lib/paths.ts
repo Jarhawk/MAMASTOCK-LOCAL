@@ -1,6 +1,7 @@
 // src/lib/paths.ts
 import { appDataDir, join } from "@tauri-apps/api/path";
 import { mkdir } from "@tauri-apps/plugin-fs";
+
 import { isTauri } from "@/lib/tauriEnv";
 
 const NOT_TAURI_HINT =

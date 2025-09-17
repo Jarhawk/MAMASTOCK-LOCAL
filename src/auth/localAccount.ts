@@ -1,4 +1,5 @@
 import { appDataDir, join } from "@tauri-apps/api/path";
+
 import { APP_DIR, getAppDir } from "@/lib/paths";
 import { isTauri } from "@/lib/tauriEnv";
 export const USERS_FILE = "users.json";

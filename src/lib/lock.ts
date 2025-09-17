@@ -1,8 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
-import { shutdownDbSafely } from "./shutdown";
+
 import { getDb } from "@/lib/db/sql";
-import { isTauri } from "@/lib/tauriEnv";
 import { locksPath, shutdownRequestPath } from "@/lib/paths";
+import { isTauri } from "@/lib/tauriEnv";
+
+import { shutdownDbSafely } from "./shutdown";
 
 const TTL = 20_000; // 20s
 const HEARTBEAT = 5_000; // 5s

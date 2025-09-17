@@ -1,15 +1,14 @@
-import { defineConfig, splitVendorChunkPlugin } from "vite";
-import react from "@vitejs/plugin-react";
 import path from "node:path";
+
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 import { VitePWA as pwa } from "vite-plugin-pwa";
 
-const isTauri =
-  !!process.env.TAURI_PLATFORM || process.env.VITE_TAURI === "1";
+const isTauri = !!process.env.TAURI_PLATFORM || process.env.VITE_TAURI === "1";
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(() => {
   const plugins = [
     react(),
-    splitVendorChunkPlugin(),
     !isTauri &&
       pwa({
         registerType: "autoUpdate",
@@ -21,7 +20,10 @@ export default defineConfig(({ mode }) => {
     plugins,
     resolve: {
       // CODEREVIEW: normalize absolute imports with @/*
-      alias: { "@": path.resolve(__dirname, "src") },
+      alias: {
+        "@": path.resolve(__dirname, "src"),
+        "#db": path.resolve(__dirname, "db"),
+      },
     },
     server: {
       port: 5173,
@@ -48,16 +50,21 @@ export default defineConfig(({ mode }) => {
         input: path.resolve(__dirname, "index.html"),
         output: {
           // CODEREVIEW: split heavy vendors to speed up load and avoid 500k warnings
-          manualChunks(id) {
-            if (!id.includes("node_modules")) return;
-            if (id.includes("recharts")) return "recharts";
-            if (id.includes("xlsx")) return "xlsx";
-            if (id.includes("jspdf")) return "pdf";
-            if (id.includes("html2canvas")) return "html2canvas";
-            if (id.includes("@tauri-apps")) return "tauri";
-            if (id.includes("react") || id.includes("react-dom")) return "react";
-            if (id.includes("dompurify")) return "purify";
-            return "vendor";
+          manualChunks: {
+            react: ["react", "react-dom"],
+            recharts: ["recharts"],
+            xlsx: ["xlsx"],
+            pdf: ["jspdf", "jspdf-autotable", "html2canvas"],
+            sanitize: ["dompurify"],
+            tauri: [
+              "@tauri-apps/api",
+              "@tauri-apps/plugin-dialog",
+              "@tauri-apps/plugin-fs",
+              "@tauri-apps/plugin-log",
+              "@tauri-apps/plugin-process",
+              "@tauri-apps/plugin-shell",
+              "@tauri-apps/plugin-sql",
+            ],
           },
         },
       },

@@ -1,5 +1,5 @@
-import { readText, existsFile } from "@/local/files";import { isTauri } from "@/lib/tauriEnv";
-
+import { isTauri } from "@/lib/tauriEnv";
+import { readText, existsFile } from "@/local/files";
 const FILE = "stock_requisitionne.json";
 
 async function readAll() {

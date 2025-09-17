@@ -1,5 +1,6 @@
-import { existsFile, readText, saveText } from "./files";import { isTauri } from "@/lib/tauriEnv";
+import { isTauri } from "@/lib/tauriEnv";
 
+import { existsFile, readText, saveText } from "./files";
 const FILE = "documents.json";
 
 async function readAll(): Promise<any[]> {

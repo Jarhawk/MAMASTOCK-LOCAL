@@ -1,7 +1,8 @@
-import { getDb } from "@/lib/db/sql";
-import { isTauri } from "@/lib/tauriEnv";
 import { join } from "@tauri-apps/api/path";
+
+import { getDb } from "@/lib/db/sql";
 import { getDataDir } from "@/lib/paths";
+import { isTauri } from "@/lib/tauriEnv";
 
 type Json = unknown;
 

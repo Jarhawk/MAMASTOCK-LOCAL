@@ -1,6 +1,7 @@
 import { dirname, join } from "@tauri-apps/api/path";
-import { isTauri } from "@/lib/tauriEnv";
+
 import { getAppDir } from "@/lib/paths";
+import { isTauri } from "@/lib/tauriEnv";
 
 const NOT_TAURI_HINT =
   "Vous êtes dans le navigateur de développement. Ouvrez la fenêtre Tauri pour activer SQLite.";

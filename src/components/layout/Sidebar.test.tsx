@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { resolveSidebarState } from "./Sidebar.jsx";
 
 describe("resolveSidebarState", () => {

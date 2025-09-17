@@ -1,11 +1,12 @@
 // src/debug/dbIntrospect.ts
 import { appDataDir, join } from "@tauri-apps/api/path";
 import Database from "@tauri-apps/plugin-sql";
-import schemaSQL from "@/../db/sqlite/001_schema.sql?raw";
+
+import schemaSQL from "#db/sqlite/001_schema.sql?raw";
 
 async function dbUrl() {
   const base = await appDataDir();
-  const dir  = await join(base, "MamaStock", "data");
+  const dir = await join(base, "MamaStock", "data");
   const file = await join(dir, "mamastock.db");
   return { file, url: "sqlite:" + file };
 }
@@ -17,7 +18,9 @@ async function openDb() {
 
 async function listTables() {
   const db = await openDb();
-  const rows = await db.select("SELECT name, type FROM sqlite_master WHERE type IN ('table','view') ORDER BY type, name");
+  const rows = await db.select(
+    "SELECT name, type FROM sqlite_master WHERE type IN ('table','view') ORDER BY type, name",
+  );
   return rows;
 }
 

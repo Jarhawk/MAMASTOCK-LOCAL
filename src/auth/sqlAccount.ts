@@ -1,15 +1,19 @@
-import { openDb } from "@/db/index";import { isTauri } from "@/lib/tauriEnv";
+import { openDb } from "@/db/index";
 
 async function sha256Hex(input: string) {
   const enc = new TextEncoder();
   const digest = await crypto.subtle.digest("SHA-256", enc.encode(input));
-  return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 export async function registerSql(email: string, password: string) {
   email = email.trim().toLowerCase();
   const db = await openDb();
-  const exists = await db.select("SELECT 1 as ok FROM users WHERE email = $1", [email]);
+  const exists = await db.select("SELECT 1 as ok FROM users WHERE email = $1", [
+    email,
+  ]);
   if (exists.length) throw new Error("Email déjà utilisé.");
   const id = crypto.randomUUID();
   const mama_id = "local-" + Math.random().toString(36).slice(2, 8);
@@ -18,7 +22,7 @@ export async function registerSql(email: string, password: string) {
   const created_at = new Date().toISOString();
   await db.execute(
     "INSERT INTO users (id,email,mama_id,password_hash,salt,created_at) VALUES ($1,$2,$3,$4,$5,$6)",
-    [id, email, mama_id, password_hash, salt, created_at]
+    [id, email, mama_id, password_hash, salt, created_at],
   );
   return { id, email, mama_id };
 }

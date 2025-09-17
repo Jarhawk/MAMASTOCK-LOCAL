@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-US" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="ProductLanguage" Value="1033" />
+  <String Id="WixUIBannerBmp" Value="src-tauri\installer\wix\banner.bmp" />
+  <String Id="WixUIDialogBmp" Value="src-tauri\installer\wix\dialog.bmp" />
+  <String Id="WixUILicenseRtf" Value="src-tauri\installer\wix\license-en.rtf" />
+  <String Id="ProductTagline" Value="Inventory management, made simple." />
+  <String Id="ExitCheckboxText" Value="Launch MAMASTOCK now" />
+  <String Id="ExitDialogText" Value="Setup has finished installing MAMASTOCK." />
+</WixLocalization>

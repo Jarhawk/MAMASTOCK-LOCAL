@@ -1,5 +1,6 @@
 import Database from "@tauri-apps/plugin-sql";
-import schemaSQL from "@/../db/sqlite/001_schema.sql?raw";
+
+import schemaSQL from "#db/sqlite/001_schema.sql?raw";
 import { devFlags } from "@/lib/devFlags";
 import { getDbPath } from "@/lib/paths";
 
@@ -33,7 +34,7 @@ function ensureDevStub(): SqliteDatabase {
     },
     async close() {
       notify();
-    }
+    },
   };
   return devStub;
 }
@@ -62,13 +63,16 @@ async function initDbIfNeeded(db: SqliteDatabase) {
   schemaInitPromise = (async () => {
     try {
       const rows = await db.select<{ name: string }[]>(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='meta' LIMIT 1"
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='meta' LIMIT 1",
       );
       if (Array.isArray(rows) && rows.length > 0) {
         return;
       }
     } catch (err) {
-      console.warn("[sqlite] Impossible de vérifier la présence du schéma initial:", err);
+      console.warn(
+        "[sqlite] Impossible de vérifier la présence du schéma initial:",
+        err,
+      );
     }
 
     try {
@@ -80,7 +84,10 @@ async function initDbIfNeeded(db: SqliteDatabase) {
       try {
         await db.execute("ROLLBACK;");
       } catch {}
-      console.error("[sqlite] Erreur lors de l'initialisation de la base SQLite:", err);
+      console.error(
+        "[sqlite] Erreur lors de l'initialisation de la base SQLite:",
+        err,
+      );
     }
   })();
 
@@ -103,7 +110,10 @@ export async function getDb(): Promise<SqliteDatabase> {
     tauriDb = db;
     return tauriDb;
   } catch (err) {
-    console.error("[sqlite] Ouverture de la base locale impossible, fallback stub:", err);
+    console.error(
+      "[sqlite] Ouverture de la base locale impossible, fallback stub:",
+      err,
+    );
     return ensureDevStub();
   }
 }
@@ -124,7 +134,9 @@ export async function closeDb() {
 
 export async function locateDb(): Promise<string> {
   if (!devFlags.isTauri) {
-    console.info("[sqlite] locateDb appelé hors contexte Tauri (mode navigateur)");
+    console.info(
+      "[sqlite] locateDb appelé hors contexte Tauri (mode navigateur)",
+    );
     return "";
   }
   return getDbPath();
@@ -138,7 +150,9 @@ export async function ensureSeeds(): Promise<void> {
   return;
 }
 
-export async function getMigrationsState(): Promise<Array<{ name: string; applied: boolean }>> {
+export async function getMigrationsState(): Promise<
+  Array<{ name: string; applied: boolean }>
+> {
   return [];
 }
 
