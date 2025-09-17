@@ -1,0 +1,28 @@
+!include "MUI2.nsh"
+
+!define MUI_ICON "${INSTALLER_ICON}"
+!define MUI_HEADERIMAGE
+!define MUI_HEADERIMAGE_BITMAP "src-tauri\installer\nsis\header.bmp"
+!define MUI_HEADERIMAGE_RIGHT
+!define MUI_WELCOMEFINISHPAGE_BITMAP "src-tauri\installer\nsis\sidebar.bmp"
+!define MUI_WELCOMEPAGE_TITLE "Bienvenue dans l'installation de MAMASTOCK"
+!define MUI_FINISHPAGE_TITLE "MAMASTOCK est installé"
+!define MUI_ABORTWARNING
+
+!define MUI_LANGDLL_ALLLANGUAGES
+!define MUI_LANGDLL_ALWAYSSHOW
+
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "src-tauri\installer\nsis\license-fr.rtf"
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!define MUI_FINISHPAGE_RUN "$INSTDIR\MAMASTOCK.exe"
+!insertmacro MUI_PAGE_FINISH
+
+!insertmacro MUI_LANGUAGE "French"
+!insertmacro MUI_LANGUAGE "English"
+
+Section "Install"
+  SetOutPath "$INSTDIR"
+  ; Tauri will inject files here
+SectionEnd
