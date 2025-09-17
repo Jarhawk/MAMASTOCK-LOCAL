@@ -1,13 +1,14 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useProducts } from '@/hooks/useProducts';
 import ProduitFormModal from '@/components/produits/ProduitFormModal';
 import GlassCard from '@/components/ui/GlassCard';
 import { LiquidBackground } from '@/components/LiquidBackground';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { buildPriceData } from '@/components/produits/priceHelpers';import { isTauri } from "@/lib/tauriEnv";
+
+const RechartsWrapper = lazy(() => import('@/components/charts/RechartsWrapper'));
 
 export default function ProduitDetailPage() {
   const { id } = useParams();
@@ -177,21 +178,27 @@ export default function ProduitDetailPage() {
             </table>
           </>
         }
-        {chartData.length > 0 &&
+        {chartData.length > 0 && (
         <div className="mt-6">
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                <XAxis dataKey="date" fontSize={11} />
-                <YAxis fontSize={11} />
-                <Tooltip />
-                <Legend />
-                {Object.keys(chartData[0]).filter((k) => k !== 'date').map((key) =>
-              <Line key={key} type="monotone" dataKey={key} stroke="#bfa14d" />
-              )}
-              </LineChart>
-            </ResponsiveContainer>
+            <Suspense fallback={null}>
+              <RechartsWrapper>
+                {({ ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend }) => (
+                  <ResponsiveContainer width="100%" height={200}>
+                    <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                      <XAxis dataKey="date" fontSize={11} />
+                      <YAxis fontSize={11} />
+                      <Tooltip />
+                      <Legend />
+                      {Object.keys(chartData[0]).filter((k) => k !== 'date').map((key) => (
+                        <Line key={key} type="monotone" dataKey={key} stroke="#bfa14d" />
+                      ))}
+                    </LineChart>
+                  </ResponsiveContainer>
+                )}
+              </RechartsWrapper>
+            </Suspense>
           </div>
-        }
+        )}
       </GlassCard>
       <ProduitFormModal
         open={showForm}

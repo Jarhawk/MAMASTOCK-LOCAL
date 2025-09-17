@@ -1,11 +1,12 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useAdvancedStats } from "@/hooks/useAdvancedStats";
 import { useAuth } from '@/hooks/useAuth';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Button } from "@/components/ui/button";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";import { isTauri } from "@/lib/tauriEnv";
+
+const RechartsWrapper = lazy(() => import("@/components/charts/RechartsWrapper"));
 
 export default function StatsAdvanced() {
   const { data, loading, error, fetchStats } = useAdvancedStats();
@@ -20,7 +21,8 @@ export default function StatsAdvanced() {
 
   const refresh = () => fetchStats({ start, end });
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
+    const XLSX = await loadXLSX();
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Stats');
@@ -47,15 +49,21 @@ export default function StatsAdvanced() {
         <Button onClick={refresh}>Rafraîchir</Button>
         <Button variant="outline" onClick={exportExcel}>Export Excel</Button>
       </div>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
-          <XAxis dataKey="month" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="purchases" stroke="#8884d8" />
-        </LineChart>
-      </ResponsiveContainer>
+      <Suspense fallback={null}>
+        <RechartsWrapper>
+          {({ ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend }) => (
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="purchases" stroke="#8884d8" />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
+        </RechartsWrapper>
+      </Suspense>
     </div>);
 
 }

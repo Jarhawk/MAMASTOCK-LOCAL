@@ -9,9 +9,9 @@ import {
   facture_delete,
   factures_update_status } from
 "@/lib/db";
-import * as XLSX from "xlsx";
 import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";
 import { saveAs } from "file-saver";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";
 
 export function useInvoices() {
   const [invoices, setInvoices] = useState([]);
@@ -127,7 +127,7 @@ export function useInvoices() {
   }
 
   // 8. Export Excel
-  function exportInvoicesToExcel() {
+  async function exportInvoicesToExcel() {
     const datas = (invoices || []).map((f) => ({
       id: f.id,
       numero: f.numero,
@@ -136,6 +136,7 @@ export function useInvoices() {
       montant: f.montant,
       statut: f.statut
     }));
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(datas), "Factures");
     const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });

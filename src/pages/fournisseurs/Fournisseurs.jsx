@@ -1,7 +1,7 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 /* eslint-disable react-hooks/exhaustive-deps */
 // src/pages/Fournisseurs.jsx
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { useFournisseurs as useFournisseursData } from '@/hooks/data/useFournisseurs';
 import { useFournisseurs as useFournisseursActions } from '@/hooks/useFournisseurs';
 import { useFournisseurStats } from '@/hooks/useFournisseurStats';
@@ -18,17 +18,7 @@ import { Dialog, DialogContent } from '@/components/ui/SmartDialog';
 import { toast } from 'sonner';
 import useExport from '@/hooks/useExport';
 import { isTauri } from "@/lib/tauriEnv";
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-} from 'recharts';
+const RechartsWrapper = lazy(() => import('@/components/charts/RechartsWrapper'));
 import FournisseurDetail from './FournisseurDetail';
 import FournisseurForm from './FournisseurForm';
 import { PlusCircle, Search } from 'lucide-react';
@@ -265,20 +255,32 @@ export default function Fournisseurs() {
                 Aucune donnée disponible pour le moment
               </div>
             ) : (
-              <ResponsiveContainer width="100%" height={180}>
-                <LineChart data={stats}>
-                  <XAxis dataKey="mois" fontSize={11} />
-                  <YAxis fontSize={11} />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="total_achats"
-                    stroke="#bfa14d"
-                    name="Total Achats"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              <Suspense
+                fallback={
+                  <div className="min-h-[180px] bg-white/5 rounded-xl flex items-center justify-center text-white/50">
+                    Chargement du graphique…
+                  </div>
+                }
+              >
+                <RechartsWrapper>
+                  {({ ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend }) => (
+                    <ResponsiveContainer width="100%" height={180}>
+                      <LineChart data={stats}>
+                        <XAxis dataKey="mois" fontSize={11} />
+                        <YAxis fontSize={11} />
+                        <Tooltip />
+                        <Legend />
+                        <Line
+                          type="monotone"
+                          dataKey="total_achats"
+                          stroke="#bfa14d"
+                          name="Total Achats"
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  )}
+                </RechartsWrapper>
+              </Suspense>
             )}
           </CardContent>
         </Card>
@@ -292,15 +294,27 @@ export default function Fournisseurs() {
                 Aucune donnée disponible pour le moment
               </div>
             ) : (
-              <ResponsiveContainer width="100%" height={180}>
-                <BarChart data={topProducts}>
-                  <XAxis dataKey="nom" fontSize={11} />
-                  <YAxis fontSize={11} />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="total" fill="#0f1c2e" name="Quantité achetée" />
-                </BarChart>
-              </ResponsiveContainer>
+              <Suspense
+                fallback={
+                  <div className="min-h-[180px] bg-white/5 rounded-xl flex items-center justify-center text-white/50">
+                    Chargement du graphique…
+                  </div>
+                }
+              >
+                <RechartsWrapper>
+                  {({ ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend }) => (
+                    <ResponsiveContainer width="100%" height={180}>
+                      <BarChart data={topProducts}>
+                        <XAxis dataKey="nom" fontSize={11} />
+                        <YAxis fontSize={11} />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="total" fill="#0f1c2e" name="Quantité achetée" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  )}
+                </RechartsWrapper>
+              </Suspense>
             )}
           </CardContent>
         </Card>

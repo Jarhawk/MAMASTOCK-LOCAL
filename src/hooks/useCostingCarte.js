@@ -3,9 +3,7 @@ import { costing_carte_list, settings_get } from '@/lib/db';
 import { useState, useCallback } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
-import * as XLSX from 'xlsx';
-import JSPDF from 'jspdf';
-import 'jspdf-autotable';import { isTauri } from "@/lib/tauriEnv";
+import { loadJsPDF, loadXLSX } from '@/lib/lazy/vendors';import { isTauri } from "@/lib/tauriEnv";
 
 export function useCostingCarte() {
   const { mama_id } = useAuth();
@@ -49,13 +47,15 @@ export function useCostingCarte() {
     [mama_id]
   );
 
-  const exportExcel = useCallback((rows) => {
+  const exportExcel = useCallback(async (rows) => {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), 'Costing');
     XLSX.writeFile(wb, 'costing_carte.xlsx');
   }, []);
 
-  const exportPdf = useCallback((rows) => {
+  const exportPdf = useCallback(async (rows) => {
+    const JSPDF = await loadJsPDF();
     const doc = new JSPDF();
     const headers = [
     ['Nom fiche', 'Type', 'Coût/portion', 'Prix vente', 'Marge €', 'Marge %', 'Food cost %']];

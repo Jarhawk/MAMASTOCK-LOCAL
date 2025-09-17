@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
 import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";
+import { loadXLSX } from "@/lib/lazy/vendors";
 import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/tauriEnv";
 
 const PAGE_SIZE = 20;
@@ -28,7 +28,8 @@ export default function Stock() {
   const nbPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(filtered);
     XLSX.utils.book_append_sheet(wb, ws, "Stock");

@@ -7,7 +7,7 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Button } from '@/components/ui/button';
 import TableContainer from '@/components/ui/TableContainer';
 import { toast } from 'sonner';
-import * as XLSX from 'xlsx';import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from '@/lib/lazy/vendors';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ParamCostCenters() {
   const {
@@ -96,7 +96,8 @@ export default function ParamCostCenters() {
     }
   };
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(filtered);
     XLSX.utils.book_append_sheet(wb, ws, 'CostCenters');

@@ -1,9 +1,10 @@
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";
 
 export async function safeImportXLSX(file, sheetName = null, maxSize = 1000000) {
   if (!file || file.size > maxSize) throw new Error("Fichier invalide ou trop volumineux");
 
   const buffer = await file.arrayBuffer();
+  const XLSX = await loadXLSX();
   const workbook = XLSX.read(buffer, { type: "array" });
   const sheet = workbook.Sheets[sheetName || workbook.SheetNames[0]];
   if (!sheet) throw new Error("Onglet introuvable");

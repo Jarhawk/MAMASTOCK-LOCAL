@@ -1,11 +1,11 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useEffect, useState } from 'react';
-import { ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMenuEngineering } from '@/hooks/useMenuEngineering';
 import FicheRentabiliteCard from '@/components/fiches/FicheRentabiliteCard';
-import html2canvas from 'html2canvas';
-import JSPDF from 'jspdf';import { isTauri } from "@/lib/tauriEnv";
+import { loadHtml2Canvas, loadJsPDF } from '@/lib/lazy/vendors';import { isTauri } from "@/lib/tauriEnv";
+
+const RechartsWrapper = lazy(() => import('@/components/charts/RechartsWrapper'));
 
 export default function MenuEngineering() {
   const { data, fetchData } = useMenuEngineering();
@@ -24,6 +24,8 @@ export default function MenuEngineering() {
   const exportPdf = async () => {
     const el = document.getElementById('matrix');
     if (!el) return;
+    const html2canvas = await loadHtml2Canvas();
+    const JSPDF = await loadJsPDF();
     const canvas = await html2canvas(el);
     const pdf = new JSPDF();
     const img = canvas.toDataURL('image/png');
@@ -42,17 +44,23 @@ export default function MenuEngineering() {
         <Button variant="outline" onClick={exportPdf}>Export</Button>
       </div>
       <div id="matrix" className="w-full h-80 bg-white/10 border border-white/20 backdrop-blur-xl rounded">
-        <ResponsiveContainer width="100%" height="100%">
-          <ScatterChart>
-            <CartesianGrid />
-            <XAxis type="number" dataKey="x" name="Popularité" unit="%" />
-            <YAxis type="number" dataKey="y" name="Marge" unit="%" />
-            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-            <ReferenceLine x={medianPop} stroke="grey" />
-            <ReferenceLine y={medianMarge} stroke="grey" />
-            <Scatter data={data} fill="#8884d8" />
-          </ScatterChart>
-        </ResponsiveContainer>
+        <Suspense fallback={null}>
+          <RechartsWrapper>
+            {({ ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine }) => (
+              <ResponsiveContainer width="100%" height="100%">
+                <ScatterChart>
+                  <CartesianGrid />
+                  <XAxis type="number" dataKey="x" name="Popularité" unit="%" />
+                  <YAxis type="number" dataKey="y" name="Marge" unit="%" />
+                  <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                  <ReferenceLine x={medianPop} stroke="grey" />
+                  <ReferenceLine y={medianMarge} stroke="grey" />
+                  <Scatter data={data} fill="#8884d8" />
+                </ScatterChart>
+              </ResponsiveContainer>
+            )}
+          </RechartsWrapper>
+        </Suspense>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.map((f) => <FicheRentabiliteCard key={f.id} fiche={f} />)}

@@ -1,6 +1,6 @@
 import { query, getDb } from '@/local/db';
-import * as XLSX from "xlsx";
 import { v4 as uuidv4 } from "uuid";
+import { loadXLSX } from "@/lib/lazy/vendors";
 
 import { fetchFamillesForValidation } from "@/hooks/useFamilles";
 import { listUnitesForValidation } from "@/hooks/useUnites";
@@ -49,6 +49,7 @@ export function validateProduitRow(row, maps) {
 
 export async function parseProduitsFile(file, mama_id) {
   const data = await file.arrayBuffer();
+  const XLSX = await loadXLSX();
   const workbook = XLSX.read(data, { type: "array" });
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
   const raw = XLSX.utils.sheet_to_json(sheet, { defval: "" });

@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from 'sonner';
 import TableContainer from "@/components/ui/TableContainer";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";import { isTauri } from "@/lib/tauriEnv";
 
 const FOOD_COST_SEUIL = 35;
 
@@ -51,7 +51,7 @@ function CarteTable({ type }) {
     return true;
   });
 
-  const handleExport = () => {
+  const handleExport = async () => {
     const rows = filtered.map((f) => ({
       Nom: f.nom,
       Famille: f.famille || "",
@@ -60,6 +60,7 @@ function CarteTable({ type }) {
       "Marge (€)": f.prix_vente && f.cout_portion ? (f.prix_vente - f.cout_portion).toFixed(2) : "",
       "Food cost (%)": f.prix_vente && f.cout_portion ? (f.cout_portion / f.prix_vente * 100).toFixed(1) : ""
     }));
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), "Carte");
     XLSX.writeFile(wb, "carte_plats.xlsx");

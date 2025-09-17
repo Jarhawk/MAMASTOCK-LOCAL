@@ -1,15 +1,15 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from "@/components/ui/button";
-import * as XLSX from "xlsx";
-import JSPDF from "jspdf";
-import "jspdf-autotable";
 import { useFiches } from "@/hooks/useFiches";
 import { useFicheCoutHistory } from "@/hooks/useFicheCoutHistory";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";import { isTauri } from "@/lib/tauriEnv";
+import { isTauri } from "@/lib/tauriEnv";
+import { loadJsPDF, loadXLSX } from "@/lib/lazy/vendors";
+
+const RechartsWrapper = lazy(() => import("@/components/charts/RechartsWrapper"));
 
 export default function FicheDetail({ fiche: ficheProp, onClose }) {
   const { id: routeId } = useParams();
@@ -33,13 +33,18 @@ export default function FicheDetail({ fiche: ficheProp, onClose }) {
     }
   }, [fiche?.id, fetchFicheCoutHistory, fiche?.prix_vente]);
 
+  const chartData = (history || []).map((h) => ({
+    date: new Date(h.date).toLocaleDateString('fr-FR'),
+    marge: h.prix_vente && h.cout_portion ? (h.prix_vente - h.cout_portion) / h.prix_vente * 100 : null
+  }));
+
   if (authLoading || !fiche) return <LoadingSpinner message="Chargement..." />;
 
   if (!hasAccess("fiches_techniques", "peut_voir")) {
     return <Navigate to="/unauthorized" replace />;
   }
 
-  function exportExcel() {
+  async function exportExcel() {
     const rows = fiche.lignes?.map((l) => ({
       Produit: l.produit_nom || l.sous_fiche?.nom,
       Quantite: l.quantite,
@@ -50,12 +55,14 @@ export default function FicheDetail({ fiche: ficheProp, onClose }) {
       (l.sous_fiche.cout_par_portion * l.quantite).toFixed(2) :
       ""
     })) || [];
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), "Fiche");
     XLSX.writeFile(wb, `fiche_${fiche.id}.xlsx`);
   }
 
-  function exportPDF() {
+  async function exportPDF() {
+    const JSPDF = await loadJsPDF();
     const doc = new JSPDF();
     doc.text(fiche.nom, 10, 10);
     const rows = fiche.lignes?.map((l) => [
@@ -121,14 +128,20 @@ export default function FicheDetail({ fiche: ficheProp, onClose }) {
         <div className="mt-6">
           <h3 className="font-semibold mb-2">Analyse rentabilité</h3>
           <div className="h-32 bg-white/10 border border-white/20 backdrop-blur-xl rounded mb-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={(history || []).map((h) => ({ date: new Date(h.date).toLocaleDateString('fr-FR'), marge: h.prix_vente && h.cout_portion ? (h.prix_vente - h.cout_portion) / h.prix_vente * 100 : null }))}>
-                <XAxis dataKey="date" hide />
-                <YAxis domain={[0, 'dataMax']} />
-                <Tooltip />
-                <Line type="monotone" dataKey="marge" stroke="#8884d8" dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
+            <Suspense fallback={null}>
+              <RechartsWrapper>
+                {({ ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip }) => (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartData}>
+                      <XAxis dataKey="date" hide />
+                      <YAxis domain={[0, 'dataMax']} />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="marge" stroke="#8884d8" dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                )}
+              </RechartsWrapper>
+            </Suspense>
           </div>
           <div className="flex items-center gap-2">
             <input type="number" className="input w-24" value={simPrix ?? ''} onChange={(e) => setSimPrix(Number(e.target.value))} />

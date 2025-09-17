@@ -9,7 +9,7 @@ import MenuDetail from './MenuDetail.jsx';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
+import { loadXLSX } from '@/lib/lazy/vendors';
 import { motion as Motion } from 'framer-motion';
 import ListingContainer from '@/components/ui/ListingContainer';
 import PaginationFooter from '@/components/ui/PaginationFooter';
@@ -84,7 +84,8 @@ export default function Menus() {
     return <LoadingSpinner message="Chargement..." />;
   }
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(
       menus.map((m) => ({

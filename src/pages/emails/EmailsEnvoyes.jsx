@@ -12,12 +12,12 @@ import { Button } from '@/components/ui/button';
 import PaginationFooter from '@/components/ui/PaginationFooter';
 import { Badge } from '@/components/ui/badge';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { pdf } from '@react-pdf/renderer';
 import CommandePDF from '@/components/pdf/CommandePDF';
 
 import { toast } from 'sonner';import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";
 
 export default function EmailsEnvoyes() {
   const { mama_id, loading: authLoading, role } = useAuth();
@@ -54,13 +54,14 @@ export default function EmailsEnvoyes() {
     await load();
   };
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
     const rows = emails.map((e) => ({
       envoye_le: e.envoye_le,
       email: e.email,
       commande: e.commandes?.reference || e.commande_id,
       statut: e.statut
     }));
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), 'Emails');
     const buf = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });

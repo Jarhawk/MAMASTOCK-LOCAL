@@ -9,10 +9,8 @@ import {
   fiches_delete,
   fiches_duplicate } from
 '@/lib/db';
-import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import JSPDF from "jspdf";
-import "jspdf-autotable";import { isTauri } from "@/lib/tauriEnv";
+import { loadJsPDF, loadXLSX } from "@/lib/lazy/vendors";import { isTauri } from "@/lib/tauriEnv";
 
 export function useFiches() {
   const { mama_id } = useAuth();
@@ -138,7 +136,7 @@ export function useFiches() {
     }
   }
 
-  function exportFichesToExcel() {
+  async function exportFichesToExcel() {
     const datas = (fiches || []).map((f) => ({
       id: f.id,
       nom: f.nom,
@@ -147,13 +145,15 @@ export function useFiches() {
       cout_par_portion: f.cout_par_portion,
       actif: f.actif
     }));
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(datas), "Fiches");
     const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     saveAs(new Blob([buf]), "fiches_mamastock.xlsx");
   }
 
-  function exportFichesToPDF() {
+  async function exportFichesToPDF() {
+    const JSPDF = await loadJsPDF();
     const doc = new JSPDF();
     const rows = (fiches || []).map((f) => [
     f.nom,
