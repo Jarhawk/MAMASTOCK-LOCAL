@@ -2,6 +2,7 @@
 // Testeur runtime des permissions SQL (à exécuter DANS Tauri WebView)
 import Database from "@tauri-apps/plugin-sql";
 
+import { loadConfig } from "@/local/config";
 import { isTauri } from "@/lib/tauriEnv";
 
 type Step = { ok: boolean; error?: string };
@@ -89,10 +90,15 @@ export async function runCapCheck(): Promise<Report> {
   } catch {}
 
   let db: any | null = null;
+  const tempTable = `_ping_${Math.random().toString(36).slice(2, 10)}`;
 
   // 1) load
   try {
-    db = await Database.load("sqlite:mamastock.db");
+    const { dbUrl } = await loadConfig();
+    if (!dbUrl) {
+      throw new Error("Aucune URL PostgreSQL configurée");
+    }
+    db = await Database.load(dbUrl);
     report.tests.load.ok = true;
   } catch (e) {
     const err = stringErr(e);
@@ -121,7 +127,9 @@ export async function runCapCheck(): Promise<Report> {
 
   // 3) EXECUTE (CREATE TABLE)
   try {
-    await db.execute("CREATE TABLE IF NOT EXISTS _ping (id INTEGER PRIMARY KEY, ts TEXT)");
+    await db.execute(
+      `CREATE TEMP TABLE ${tempTable} (id SERIAL PRIMARY KEY, ts TIMESTAMPTZ DEFAULT now())`
+    );
     report.tests.execute.ok = true;
   } catch (e) {
     const err = stringErr(e);
@@ -132,7 +140,7 @@ export async function runCapCheck(): Promise<Report> {
   // 4) TRANSACTION (BEGIN/INSERT/COMMIT)
   try {
     await db.execute("BEGIN");
-    await db.execute("INSERT INTO _ping(ts) VALUES (CURRENT_TIMESTAMP)");
+    await db.execute(`INSERT INTO ${tempTable}(ts) VALUES (now())`);
     await db.execute("COMMIT");
     report.tests.transaction.ok = true;
   } catch (e) {

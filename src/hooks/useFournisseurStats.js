@@ -11,7 +11,7 @@ export function useFournisseurStats() {
       }
       const db = await getDb();
     const rows = await db.select(
-      `SELECT substr(f.date_iso,1,7) as mois, IFNULL(SUM(fl.quantite * fl.prix_unitaire),0) as total_achats
+      `SELECT substr(f.date_iso,1,7) as mois, COALESCE(SUM(fl.quantite * fl.prix_unitaire),0) as total_achats
          FROM factures f
          JOIN facture_lignes fl ON fl.facture_id = f.id
          GROUP BY mois
@@ -28,7 +28,7 @@ export function useFournisseurStats() {
       }
       const db = await getDb();
     const rows = await db.select(
-      `SELECT substr(f.date_iso,1,7) as mois, IFNULL(SUM(fl.quantite * fl.prix_unitaire),0) as total_achats
+      `SELECT substr(f.date_iso,1,7) as mois, COALESCE(SUM(fl.quantite * fl.prix_unitaire),0) as total_achats
          FROM factures f
          JOIN facture_lignes fl ON fl.facture_id = f.id
          WHERE f.fournisseur_id = ?

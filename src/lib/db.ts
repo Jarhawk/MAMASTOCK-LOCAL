@@ -1,7 +1,6 @@
 import { readConfig, writeConfig } from "@/appFs";
 import { getDb as baseGetDb } from "@/lib/db/sql";
 import {
-  getDbPath,
   getDataDir as getSafeDataDir,
   getExportsDir as getSafeExportsDir,
 } from "@/lib/paths";
@@ -35,7 +34,7 @@ export async function factures_by_fournisseur(fournisseurId: string | number) {
   return db.select(
     `SELECT f.id,
             f.date_iso AS date_facture,
-            IFNULL(SUM(l.quantite * l.prix_unitaire), 0) AS montant_total,
+            COALESCE(SUM(l.quantite * l.prix_unitaire), 0) AS montant_total,
             COUNT(DISTINCT l.produit_id) AS nb_produits
      FROM factures f
      LEFT JOIN facture_lignes l ON l.facture_id = f.id
@@ -284,7 +283,7 @@ export async function menu_engineering_list({
   const db = await getDb();
   let sql = `
     SELECT f.id, f.nom, f.prix_vente, f.cout_par_portion,
-           IFNULL(v.ventes,0) AS ventes
+           COALESCE(v.ventes,0) AS ventes
     FROM fiches_techniques f
     LEFT JOIN (
       SELECT fiche_id, SUM(quantite) AS ventes
@@ -513,27 +512,15 @@ export async function closeDb() {}
 
 
 export async function backupDb() {
-  // CODEREVIEW: use centralized AppData helper for SQLite path resolution
-  const src = await getDbPath();
-  const { save } = await import("@tauri-apps/plugin-dialog");
-  const dest = await save({ defaultPath: "mamastock-backup.db", filters: [{ name: "DB", extensions: ["db"] }] });
-  if (!dest) throw new Error("Sauvegarde annulée");
-  const { copyFile } = await import("@tauri-apps/plugin-fs");
-  await copyFile(src, dest);
-  return dest;
+  throw new Error("Sauvegarde indisponible avec PostgreSQL");
 }
 
-export async function restoreDb(file: string) {
-  // CODEREVIEW: use centralized AppData helper for SQLite path resolution
-  const dest = await getDbPath();
-  const { copyFile } = await import("@tauri-apps/plugin-fs");
-  await copyFile(file, dest);
+export async function restoreDb() {
+  throw new Error("Restauration indisponible avec PostgreSQL");
 }
 
 export async function maintenanceDb() {
-  const db = await getDb();
-  await db.execute("VACUUM");
-  await db.execute("ANALYZE");
+  throw new Error("Maintenance manuelle indisponible avec PostgreSQL");
 }
 
 // Config helpers for data/export directories
@@ -1510,17 +1497,6 @@ export async function inventaire_cloture(
 ) {
   await ensureInventaireTables();
   const db = await getDb();
-  const lignes = await db.select(
-    `SELECT produit_id, quantite_reelle FROM produits_inventaire
-     WHERE inventaire_id = ? AND mama_id = ? AND actif = 1`,
-    [id, mama_id]
-  );
-  for (const l of lignes) {
-    await db.execute(
-      `UPDATE produits SET stock_theorique = ? WHERE id = ? AND mama_id = ?`,
-      [l.quantite_reelle, l.produit_id, mama_id]
-    );
-  }
   await db.execute(
     `UPDATE inventaires SET cloture = 1 WHERE id = ? AND mama_id = ?`,
     [id, mama_id]
@@ -1583,10 +1559,10 @@ export async function reporting_financier({
   const db = await getDb();
   const [row] = await db.select(
     `SELECT
-       (SELECT IFNULL(SUM(quantite * IFNULL(prix_vente_unitaire,0)),0)
+       (SELECT COALESCE(SUM(quantite * COALESCE(prix_vente_unitaire,0)),0)
           FROM ventes_fiches
           WHERE mama_id = ? AND date_vente BETWEEN ? AND ?) AS total_ventes,
-       (SELECT IFNULL(SUM(l.quantite * l.prix_unitaire),0)
+       (SELECT COALESCE(SUM(l.quantite * l.prix_unitaire),0)
           FROM factures f
           JOIN facture_lignes l ON l.facture_id = f.id
           WHERE f.date_iso BETWEEN ? AND ?) AS total_achats`,
@@ -1596,7 +1572,7 @@ export async function reporting_financier({
   const total_achats = row?.total_achats ?? 0;
   const marge = total_ventes - total_achats;
   const [{ valeur_stock = 0 } = {}] = await db.select(
-    `SELECT IFNULL(SUM(valeur_stock),0) as valeur_stock FROM produits WHERE mama_id = ?`,
+    `SELECT COALESCE(SUM(valeur_stock),0) as valeur_stock FROM produits WHERE mama_id = ?`,
     [mama_id]
   );
   return { total_ventes, total_achats, marge, valeur_stock };
@@ -1617,7 +1593,7 @@ export async function consolidation_performance({
             SUM(valeur_stock) AS valeur_stock
      FROM (
        SELECT mama_id,
-              SUM(quantite * IFNULL(prix_vente_unitaire,0)) AS total_ventes,
+              SUM(quantite * COALESCE(prix_vente_unitaire,0)) AS total_ventes,
               0 AS total_achats,
               0 AS valeur_stock
        FROM ventes_fiches
@@ -1813,7 +1789,7 @@ export async function gadget_add({
 }) {
   const db = await getDb();
   const [{ max }] = await db.select(
-    "SELECT IFNULL(MAX(ordre),0) as max FROM gadgets WHERE tableau_id = ?",
+    "SELECT COALESCE(MAX(ordre),0) as max FROM gadgets WHERE tableau_id = ?",
     [tableau_id]
   );
   const ordre = (max || 0) + 1;

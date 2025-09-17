@@ -8,7 +8,6 @@ export async function shutdownDbSafely() {
   }
 
   const db = await getDb();
-  await db.execute("PRAGMA wal_checkpoint(TRUNCATE)");
   if (typeof db.close === "function") {
     await db.close();
   }

@@ -45,7 +45,7 @@ export async function registerSqlite(email: string, password: string) {
   const id = crypto.randomUUID();
 
   await db.execute(
-    "INSERT INTO users(id,email,mama_id,mot_de_passe_hash,salt,created_at) VALUES(?,?,?,?,?,datetime('now'))",
+    "INSERT INTO users(id,email,mama_id,mot_de_passe_hash,salt,created_at) VALUES(?,?,?,?,?,now())",
     [id, email, mama_id, hash, ""]
   );
 

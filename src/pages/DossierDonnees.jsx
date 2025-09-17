@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { getDataDir, getDbPath } from '@/lib/paths';
+import { loadConfig } from '@/local/config';
+import { getDataDir } from '@/lib/paths';
 import { isTauri } from '@/lib/tauriEnv';
 
 export default function DossierDonnees() {
   const [baseDir, setBaseDir] = useState('');
-  const [dbPath, setDbPath] = useState('');
-  const [dbExists, setDbExists] = useState(false);
+  const [configPath, setConfigPath] = useState('');
+  const [configExists, setConfigExists] = useState(false);
+  const [dbUrl, setDbUrl] = useState('');
 
   const refresh = async () => {
     if (isTauri()) {
@@ -14,10 +16,20 @@ export default function DossierDonnees() {
       // CODEREVIEW: rely on AppData helpers to avoid writing under Program Files
       const dataDir = await getDataDir();
       setBaseDir(dataDir);
-      const file = await getDbPath();
-      setDbPath(file);
-      setDbExists(await exists(file));
       await mkdir(dataDir, { recursive: true }).catch(() => {});
+      const { configDir } = await import('@tauri-apps/api/path');
+      const dir = await configDir();
+      const file = dir + 'MamaStock/config.json';
+      setConfigPath(file);
+      const existsConfig = await exists(file);
+      setConfigExists(existsConfig);
+      try {
+        const { dbUrl } = await loadConfig();
+        setDbUrl(dbUrl);
+      } catch (err) {
+        console.warn('[dossier] Impossible de charger la configuration DB', err);
+        setDbUrl('');
+      }
     }
   };
 
@@ -36,7 +48,9 @@ export default function DossierDonnees() {
     if (isTauri()) {
       const { mkdir, exists } = await import('@tauri-apps/plugin-fs');
       await mkdir(baseDir, { recursive: true });
-      setDbExists(await exists(dbPath));
+      if (configPath) {
+        setConfigExists(await exists(configPath));
+      }
     }
   };
   if (!isTauri()) return <p>Cette fonction nécessite Tauri (application desktop).</p>;
@@ -46,10 +60,15 @@ export default function DossierDonnees() {
       <h1 className="text-2xl font-bold">Dossier données</h1>
       <div>
         <p className="text-sm break-all">{baseDir || 'Tauri indisponible'}</p>
-        {dbPath && (
+        {configPath && (
           <p className="text-sm break-all">
-            Base de données : {dbExists ? dbPath : `${dbPath} (absente)`}
+            Configuration : {configExists ? configPath : `${configPath} (absente)`}
           </p>
+        )}
+        {dbUrl ? (
+          <p className="text-sm break-all">URL PostgreSQL : {dbUrl}</p>
+        ) : (
+          <p className="text-sm">URL PostgreSQL non configurée.</p>
         )}
       </div>
       <div className="flex gap-2">
