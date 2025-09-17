@@ -3,7 +3,7 @@ import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
 import { join } from '@tauri-apps/api/path';
 import { getExportDir } from '@/lib/db';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { getDb } from "@/lib/db/database";import { isTauri } from "@/lib/tauriEnv";
 import { loadJsPDF, loadXLSX } from '@/lib/lazy/vendors';
 
 async function resolveExportPath(filename) {

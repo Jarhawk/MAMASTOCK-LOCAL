@@ -1,5 +1,22 @@
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { useState } from "react";
+
+import { pingDb } from "@/lib/db/database";
+import { isTauri } from "@/lib/tauriEnv";
 import { appDataDir, join } from "@tauri-apps/api/path";
+
+export function PingDbButton() {
+  const [state, setState] = useState("idle");
+  return (
+    <button
+      className="px-2 py-1 hover:bg-black/30 rounded"
+      onClick={async () => {
+        setState((await pingDb()) ? "ok" : "ko");
+      }}
+    >
+      Tester connexion DB {state === "ok" ? "✅" : state === "ko" ? "❌" : ""}
+    </button>
+  );
+}
 
 export default function DebugRibbon() {
   const show = import.meta.env.DEV || window.DEBUG;
@@ -37,6 +54,7 @@ export default function DebugRibbon() {
       <button className="px-2 py-1 hover:bg-black/30 rounded" onClick={openLogs} disabled={!isTauri()}>
         Voir le fichier de logs
       </button>
+      <PingDbButton />
     </div>
   );
 }

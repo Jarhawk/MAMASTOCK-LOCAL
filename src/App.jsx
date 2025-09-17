@@ -10,7 +10,7 @@ import { MultiMamaProvider } from "@/context/MultiMamaContext";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import { devFlags } from "@/lib/devFlags";
 import { getDbUrl } from "@/lib/appConfig";
-import { getPg } from "@/lib/db/pg";
+import { pingDb } from "@/lib/db/database";
 import DbSetup from "@/pages/DbSetup";
 import Router from "@/router";
 import { testRandom } from "@/shims/selftest";
@@ -76,16 +76,19 @@ export default function App() {
     if (!import.meta.env.PROD) return undefined;
 
     let cancelled = false;
-    getPg()
-      .then(() => {
-        if (!cancelled) {
+    pingDb()
+      .then((ok) => {
+        if (cancelled) return;
+        if (ok) {
           setDbError(null);
+        } else {
+          setDbError("Connexion à la base de données impossible");
         }
       })
       .catch((err) => {
-        console.error("[db] Connexion PostgreSQL impossible", err);
+        console.error("[db] Vérification de la base de données impossible", err);
         if (!cancelled) {
-          setDbError(err?.message ?? "Connexion PostgreSQL impossible");
+          setDbError(err?.message ?? "Connexion à la base de données impossible");
         }
       });
 
