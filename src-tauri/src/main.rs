@@ -23,6 +23,12 @@ fn main() {
         // CODEREVIEW: enable logs in release to diagnose startup issues
         builder = builder.plugin(
             tauri_plugin_log::Builder::default()
+                .clear_targets()
+                .target(tauri_plugin_log::Target::new(
+                    tauri_plugin_log::TargetKind::LogDir {
+                        file_name: Some("app".into()),
+                    },
+                ))
                 .level(log::LevelFilter::Debug)
                 .build(),
         );

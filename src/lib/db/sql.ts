@@ -1,7 +1,9 @@
 import Database from "@tauri-apps/plugin-sql";
 
-import { loadConfig } from "@/local/config";
+import { getDbConfig, getPostgresUrl } from "@/lib/appConfig";
+import { getPg } from "@/lib/db/pg";
 import { isTauri } from "@/lib/tauriEnv";
+import { log } from "@/tauriLog";
 
 export type SqlDatabase = {
   select<T = unknown>(sql: string, params?: unknown[]): Promise<T[]>;
@@ -47,6 +49,18 @@ async function createTauriDb(url: string): Promise<SqlDatabase> {
   return DatabaseAny.load(url);
 }
 
+async function openSqliteIfConfigured(): Promise<SqlDatabase | null> {
+  const cfg = await getDbConfig();
+  if (!cfg) return null;
+  const type = cfg.type.toLowerCase();
+  if (type === "sqlite" || cfg.url.toLowerCase().startsWith("sqlite:")) {
+    const db = await createTauriDb(cfg.url);
+    log.info("[sql] Ouverture SQLite (mode développement)");
+    return db as SqlDatabase;
+  }
+  return null;
+}
+
 export async function getDb(): Promise<SqlDatabase> {
   if (!isTauri()) {
     return ensureDevStub();
@@ -56,13 +70,26 @@ export async function getDb(): Promise<SqlDatabase> {
     return tauriDb;
   }
 
-  const { dbUrl } = await loadConfig();
-  if (!dbUrl) {
-    throw new Error("Aucune URL PostgreSQL configurée");
+  if (import.meta.env.PROD) {
+    const pg = (await getPg()) as SqlDatabase;
+    tauriDb = pg;
+    return pg;
   }
-  const db = (await createTauriDb(dbUrl)) as SqlDatabase;
-  tauriDb = db;
-  return tauriDb;
+
+  const sqliteDb = await openSqliteIfConfigured();
+  if (sqliteDb) {
+    tauriDb = sqliteDb;
+    return sqliteDb;
+  }
+
+  const pgUrl = await getPostgresUrl();
+  if (pgUrl) {
+    const pg = (await getPg()) as SqlDatabase;
+    tauriDb = pg;
+    return pg;
+  }
+
+  throw new Error("Aucune base de données configurée");
 }
 
 export async function openDb() {
@@ -87,8 +114,10 @@ export async function locateDb(): Promise<string> {
     console.info("[sql] locateDb hors Tauri");
     return "";
   }
-  const { dbUrl } = await loadConfig();
-  return dbUrl;
+  const pgUrl = await getPostgresUrl();
+  if (pgUrl) return pgUrl;
+  const cfg = await getDbConfig();
+  return cfg?.url ?? "";
 }
 
 export async function ensureSeeds(): Promise<void> {

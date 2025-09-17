@@ -8,9 +8,14 @@ import "nprogress/nprogress.css";
 import { runSqlSelfTest } from "@/debug/sqlSelfTest";
 import { clearWebviewOnDev } from "@/debug/clearWebview";
 import { isTauri } from "@/lib/tauriEnv";
+import { initLog } from "@/tauriLog";
 
 clearWebviewOnDev();
 setupPwaGuard();
+
+initLog().catch((err) => {
+  console.warn("[log] Initialisation du plugin de log échouée", err);
+});
 
 // CODEREVIEW: warn when WebView2 runtime is missing to help support teams
 function setupWebviewDiagnostics() {

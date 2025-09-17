@@ -1,33 +1,47 @@
+import { isTauri } from "@/lib/tauriEnv";
+
 export type LogApi = {
-  info: (...a: any[]) => any;
-  warn: (...a: any[]) => any;
-  error: (...a: any[]) => any;
-  debug?: (...a: any[]) => any;
-  trace?: (...a: any[]) => any;
+  info: (...args: any[]) => any;
+  warn: (...args: any[]) => any;
+  error: (...args: any[]) => any;
+  debug?: (...args: any[]) => any;
+  trace?: (...args: any[]) => any;
 };
 
 let api: Partial<LogApi> | null = null;
+let initPromise: Promise<void> | null = null;
 
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+async function loadPlugin() {
+  if (!isTauri() || !import.meta.env.PROD) {
+    api = null;
+    return;
+  }
 
-export async function initLog() {
-  if (isTauri() && import.meta.env.PROD) {
-    try {
-      api = (await import("@tauri-apps/plugin-log")) as any;
-    } catch {
-      api = null;
-    }
+  try {
+    api = (await import("@tauri-apps/plugin-log")) as unknown as LogApi;
+  } catch (err) {
+    console.warn("[log] Plugin log indisponible:", err);
+    api = null;
   }
 }
 
-function passToConsole(fn: keyof Console, ...a: any[]) {
-  (console[fn] ?? console.log)(...a);
+export async function initLog() {
+  if (initPromise) return initPromise;
+  initPromise = loadPlugin();
+  return initPromise;
+}
+
+function passToConsole(fn: keyof Console, ...args: any[]) {
+  const method = console[fn] ?? console.log;
+  return method.apply(console, args);
 }
 
 export const log: LogApi = {
-  info:  (...a) => (api && (api as any).info)  ? (api as any).info(...a)  : passToConsole("info",  ...a),
-  warn:  (...a) => (api && (api as any).warn)  ? (api as any).warn(...a)  : passToConsole("warn",  ...a),
-  error: (...a) => (api && (api as any).error) ? (api as any).error(...a) : passToConsole("error", ...a),
-  debug: (...a) => (api && (api as any).debug) ? (api as any).debug(...a) : passToConsole("debug", ...a),
-  trace: (...a) => (api && (api as any).trace) ? (api as any).trace(...a) : passToConsole("trace", ...a),
+  info: (...args) => (api && api.info ? api.info(...args) : passToConsole("info", ...args)),
+  warn: (...args) => (api && api.warn ? api.warn(...args) : passToConsole("warn", ...args)),
+  error: (...args) => (api && api.error ? api.error(...args) : passToConsole("error", ...args)),
+  debug: (...args) =>
+    (api && api.debug ? api.debug(...args) : passToConsole("debug", ...args)),
+  trace: (...args) =>
+    (api && api.trace ? api.trace(...args) : passToConsole("trace", ...args)),
 };
