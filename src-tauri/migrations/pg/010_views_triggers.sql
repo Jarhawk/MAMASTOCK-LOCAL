@@ -1,3 +1,6 @@
+-- Silence les NOTICE (ex: DROP IF EXISTS)
+SET client_min_messages = WARNING;
+
 -- Vues coûts & KPI (COALESCE à la place de IFNULL)
 CREATE OR REPLACE VIEW v_produits_stock AS
 SELECT id, nom, pmp, stock_theorique, valeur_stock, stock_min
@@ -69,20 +72,21 @@ BEGIN
   RETURN NULL;
 END; $$ LANGUAGE plpgsql;
 
+-- facture_lignes
 DROP TRIGGER IF EXISTS trg_facture_ligne_insert ON facture_lignes;
 CREATE TRIGGER trg_facture_ligne_insert
 AFTER INSERT ON facture_lignes
-FOR EACH ROW EXECUTE FUNCTION fn_facture_ligne_after_insert();
+FOR EACH ROW EXECUTE FUNCTION public.fn_facture_ligne_after_insert();
 
 DROP TRIGGER IF EXISTS trg_facture_ligne_update ON facture_lignes;
 CREATE TRIGGER trg_facture_ligne_update
 AFTER UPDATE ON facture_lignes
-FOR EACH ROW EXECUTE FUNCTION fn_facture_ligne_after_update();
+FOR EACH ROW EXECUTE FUNCTION public.fn_facture_ligne_after_update();
 
 DROP TRIGGER IF EXISTS trg_facture_ligne_delete ON facture_lignes;
 CREATE TRIGGER trg_facture_ligne_delete
 AFTER DELETE ON facture_lignes
-FOR EACH ROW EXECUTE FUNCTION fn_facture_ligne_after_delete();
+FOR EACH ROW EXECUTE FUNCTION public.fn_facture_ligne_after_delete();
 
 -- Inventaire → remet le stock à la réalité
 CREATE OR REPLACE FUNCTION fn_inventaire_ligne_after_insert() RETURNS TRIGGER AS $$
@@ -94,10 +98,11 @@ BEGIN
   RETURN NULL;
 END; $$ LANGUAGE plpgsql;
 
+-- inventaire_lignes (même pattern)
 DROP TRIGGER IF EXISTS trg_inventaire_ligne_insert ON inventaire_lignes;
 CREATE TRIGGER trg_inventaire_ligne_insert
 AFTER INSERT ON inventaire_lignes
-FOR EACH ROW EXECUTE FUNCTION fn_inventaire_ligne_after_insert();
+FOR EACH ROW EXECUTE FUNCTION public.fn_inventaire_ligne_after_insert();
 
 -- Réquisition → décrémente
 CREATE OR REPLACE FUNCTION fn_requisition_ligne_after_insert() RETURNS TRIGGER AS $$
@@ -109,7 +114,8 @@ BEGIN
   RETURN NULL;
 END; $$ LANGUAGE plpgsql;
 
+-- requisition_lignes (même pattern)
 DROP TRIGGER IF EXISTS trg_requisition_ligne_insert ON requisition_lignes;
 CREATE TRIGGER trg_requisition_ligne_insert
 AFTER INSERT ON requisition_lignes
-FOR EACH ROW EXECUTE FUNCTION fn_requisition_ligne_after_insert();
+FOR EACH ROW EXECUTE FUNCTION public.fn_requisition_ligne_after_insert();
