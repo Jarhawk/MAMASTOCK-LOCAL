@@ -1,10 +1,10 @@
+import { isTauri } from "@/lib/tauriEnv";
 import {
   formatMoneyFR,
   parseMoneyToNumberFR,
   normalizeDecimalFR,
   roundTo } from
-'@/utils/numberFormat';import { isTauri } from "@/lib/tauriEnv";
-
+'@/utils/numberFormat';
 describe('numberFormat', () => {
   test('formatMoneyFR', () => {
     expect(formatMoneyFR(0)).toBe('0,00 €');

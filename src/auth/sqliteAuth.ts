@@ -1,6 +1,7 @@
 // src/auth/sqliteAuth.ts
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 import bcrypt from "bcryptjs";
+
+import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
 export type DbUser = {
   id: string;

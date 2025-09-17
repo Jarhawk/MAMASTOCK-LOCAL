@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+
 import { normalizeNumberString, parseNumber, formatNumberFR } from '@/utils/number';
 
 describe('utils/number', () => {

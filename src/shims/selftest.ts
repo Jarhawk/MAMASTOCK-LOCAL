@@ -1,5 +1,5 @@
-import { isTauri } from "@/lib/tauriEnv";export async function testRandom() {
-  const shim = (window as any).cryptoShim ?? (await import("/src/shims/crypto"));
+export async function testRandom() {
+  const shim = (window as any).cryptoShim ?? (await import("@/shims/crypto"));
   const uuid = shim.randomUUID();
   if (!(uuid && typeof uuid === "string")) throw new Error("randomUUID failed");
   const hash = await shim.sha256Hex("test");

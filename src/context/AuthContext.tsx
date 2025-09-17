@@ -7,11 +7,12 @@ import React, {
   useMemo,
   useState
 } from "react";
+
 import { readConfig, writeConfig } from "@/appFs";
-import { normalizeAccessKey } from "@/lib/access";
-import { can } from "@/utils/permissions";
 import { DEFAULT_ROLES } from "@/constants/roles";
+import { normalizeAccessKey } from "@/lib/access";
 import { devFlags } from "@/lib/devFlags";
+import { can } from "@/utils/permissions";
 
 export type User = {
   id: string | null;

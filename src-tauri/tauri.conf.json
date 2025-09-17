@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
-  "productName": "MamaStock Local",
+  "productName": "MAMASTOCK",
   "version": "0.1.0",
   "identifier": "com.mamastock.local",
   "build": {
@@ -15,7 +15,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "MamaStock",
+        "title": "MAMASTOCK",
         "width": 1280,
         "height": 800,
         "resizable": true,
@@ -26,28 +26,42 @@
   },
   "bundle": {
     "active": true,
-    "targets": [
-      "nsis",
-      "msi"
-    ],
-    "icon": [
-      "icons/256x256.png",
-      "icons/512x512.png",
-      "icons/icon.ico"
-    ],
+    "targets": ["nsis", "msi"],
+    "icon": ["icons/256x256.png", "icons/512x512.png", "icons/icon.ico"],
+    "publisher": "Quentin Vanel",
     "windows": {
       "webviewInstallMode": {
-        "type": "downloadBootstrapper"
+        "type": "downloadBootstrapper",
+        "silent": false
+      },
+      "nsis": {
+        "displayLanguageSelector": true,
+        "languages": ["French", "English"],
+        "installerIcon": "src-tauri/icons/icon.ico",
+        "headerImage": "src-tauri/installer/nsis/header.bmp",
+        "sidebarImage": "src-tauri/installer/nsis/sidebar.bmp",
+        "template": "src-tauri/installer/nsis/tauri.nsis",
+        "installMode": "perMachine",
+        "startMenuFolder": "MAMASTOCK"
+      },
+      "wix": {
+        "language": {
+          "fr-FR": {
+            "localePath": "src-tauri/installer/wix/fr-FR.wxl"
+          },
+          "en-US": {
+            "localePath": "src-tauri/installer/wix/en-US.wxl"
+          }
+        },
+        "template": "src-tauri/installer/wix/main.wxs",
+        "bannerPath": "src-tauri/installer/wix/banner.bmp",
+        "dialogImagePath": "src-tauri/installer/wix/dialog.bmp"
       }
     }
   },
   "plugins": {
     "fs": {
-      "scope": [
-        "$APPDATA/**",
-        "$LOCALAPPDATA/**",
-        "$RESOURCE/**"
-      ]
+      "scope": ["$APPDATA/**", "$LOCALAPPDATA/**", "$RESOURCE/**"]
     },
     "shell": {},
     "dialog": {},

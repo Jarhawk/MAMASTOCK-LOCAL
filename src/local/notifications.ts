@@ -1,5 +1,5 @@
-import { existsFile, readText, saveText } from "@/local/files";import { isTauri } from "@/lib/tauriEnv";
-
+import { isTauri } from "@/lib/tauriEnv";
+import { existsFile, readText, saveText } from "@/local/files";
 const FILE = "notifications.json";
 const PREF_FILE = "notification_preferences.json";
 

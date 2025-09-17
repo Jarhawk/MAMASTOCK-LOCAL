@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { listUnites, createUnite, deleteUnite } from '@/lib/unites';import { isTauri } from "@/lib/tauriEnv";
 
+import { isTauri } from "@/lib/tauriEnv";
+import { listUnites, createUnite, deleteUnite } from '@/lib/unites';
 export default function Unites() {
   const [rows, setRows] = useState([]);
   const [code, setCode] = useState('');

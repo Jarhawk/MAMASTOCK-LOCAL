@@ -1,5 +1,6 @@
-import { readText, saveText, existsFile } from "./files";import { isTauri } from "@/lib/tauriEnv";
+import { isTauri } from "@/lib/tauriEnv";
 
+import { readText, saveText, existsFile } from "./files";
 const FILE = "stats/budget_mensuel.json";
 
 async function readAll() {

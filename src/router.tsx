@@ -1,8 +1,9 @@
 // src/router.tsx
 import React, { Suspense, lazy, useEffect } from "react";
 import { createHashRouter, RouterProvider, Navigate } from "react-router-dom";
-import { routes } from "@/router.autogen";
+
 import { listLocalUsers } from "@/auth/localAccount";
+import { routes } from "@/router.autogen";
 
 const FirstRunSetupPage = lazy(() => import("@/pages/setup/FirstRun"));
 const LocalAccountsPage = lazy(() => import("@/pages/parametrage/ComptesLocaux"));

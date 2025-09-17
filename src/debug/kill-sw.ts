@@ -1,7 +1,7 @@
 import { isTauri } from "@/lib/tauriEnv"; // src/debug/kill-sw.ts
 // Désactive TOUT service worker + vide le cache, le plus tôt possible.
 // S’exécute en dev sous localhost:5173 et dans la WebView (tauri.localhost).
-;(function killSW() {
+(function killSW() {
   try {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations?.().then((regs) => {

@@ -1,6 +1,7 @@
 // src/debug/check-capabilities-runtime.ts
 // Testeur runtime des permissions SQL (à exécuter DANS Tauri WebView)
 import Database from "@tauri-apps/plugin-sql";
+
 import { isTauri } from "@/lib/tauriEnv";
 
 type Step = { ok: boolean; error?: string };

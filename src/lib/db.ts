@@ -1,11 +1,11 @@
+import { readConfig, writeConfig } from "@/appFs";
 import { getDb as baseGetDb } from "@/lib/db/sql";
-import { isTauri } from "@/lib/tauriEnv";
 import {
   getDbPath,
   getDataDir as getSafeDataDir,
   getExportsDir as getSafeExportsDir,
 } from "@/lib/paths";
-import { readConfig, writeConfig } from "@/appFs";
+import { isTauri } from "@/lib/tauriEnv";
 
 export async function getDb() {
   return baseGetDb();

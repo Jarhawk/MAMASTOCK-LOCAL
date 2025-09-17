@@ -1,8 +1,11 @@
+import { join } from "@tauri-apps/api/path";
+
+import { getDataDir } from "@/lib/paths";
+import { isTauri } from "@/lib/tauriEnv";
+
 import { getDb } from "./client";
 import { migrations } from "./migrationsList";
-import { getDataDir } from "@/lib/paths";
-import { join } from "@tauri-apps/api/path";
-import { isTauri } from "@/lib/tauriEnv";
+
 
 /** Splitter SQL qui respecte CREATE TRIGGER ... BEGIN ... END; */
 function splitSql(script: string): string[] {

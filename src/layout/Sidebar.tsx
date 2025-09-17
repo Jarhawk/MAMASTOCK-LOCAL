@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+
 import { SIDEBAR, NavItem } from "@/config/sidebar";import { isTauri } from "@/lib/tauriEnv";
 
 function Item({ item }: {item: NavItem;}) {

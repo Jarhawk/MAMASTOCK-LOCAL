@@ -1,15 +1,16 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import Router from "@/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import nprogress from "nprogress";
 import { useEffect, useState } from "react";
+
+import CookieConsent from "@/components/CookieConsent";
+import DebugRibbon from "@/components/DebugRibbon";
+import ToastRoot from "@/components/ToastRoot";
 import { MultiMamaProvider } from "@/context/MultiMamaContext";
 import { ThemeProvider } from "@/context/ThemeProvider";
-import CookieConsent from "@/components/CookieConsent";
-import ToastRoot from "@/components/ToastRoot";
-import DebugRibbon from "@/components/DebugRibbon";
-import { testRandom } from "/src/shims/selftest";
 import { devFlags } from "@/lib/devFlags";
+import Router from "@/router";
+import { testRandom } from "@/shims/selftest";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,9 +21,9 @@ const queryClient = new QueryClient({
       refetchOnReconnect: false,
       refetchOnMount: false,
       retry: 1,
-      keepPreviousData: true
-    }
-  }
+      keepPreviousData: true,
+    },
+  },
 });
 
 export default function App() {
@@ -32,7 +33,7 @@ export default function App() {
 
   useEffect(() => {
     console.info(
-      `[dev] isDev=${devFlags.isDev} isTauri=${devFlags.isTauri} forceSidebar=${devFlags.forceSidebar} allowAllRoutes=${devFlags.allowAllRoutes}`
+      `[dev] isDev=${devFlags.isDev} isTauri=${devFlags.isTauri} forceSidebar=${devFlags.forceSidebar} allowAllRoutes=${devFlags.allowAllRoutes}`,
     );
     if (devFlags.isDev) {
       console.info("[dev] reasons", devFlags.reason);
@@ -42,7 +43,11 @@ export default function App() {
   useEffect(() => {
     if (typeof window === "undefined" || !devFlags.isDev) return undefined;
     const handler = (event) => {
-      if (event.ctrlKey && event.altKey && (event.key === "d" || event.key === "D")) {
+      if (
+        event.ctrlKey &&
+        event.altKey &&
+        (event.key === "d" || event.key === "D")
+      ) {
         event.preventDefault();
         setDevPanelOpen((prev) => !prev);
       }
@@ -52,7 +57,9 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    testRandom().catch((err) => console.error("crypto shim selftest failed", err));
+    testRandom().catch((err) =>
+      console.error("crypto shim selftest failed", err),
+    );
   }, []);
   useEffect(() => {
     nprogress.configure({ showSpinner: false });
@@ -81,7 +88,7 @@ export default function App() {
             if (node.matches('input[type="number"]')) applyAttrs(node);
             node.querySelectorAll?.('input[type="number"]').forEach(applyAttrs);
           }
-        })
+        }),
       );
     });
     observer.observe(document.body, { childList: true, subtree: true });
@@ -148,7 +155,8 @@ export default function App() {
                 </label>
               </div>
               <p className="mt-3 text-[11px] text-white/60">
-                Les bascules sont stockées dans localStorage et la page se recharge automatiquement.
+                Les bascules sont stockées dans localStorage et la page se
+                recharge automatiquement.
               </p>
             </div>
           )}
