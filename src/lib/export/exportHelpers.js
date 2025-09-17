@@ -4,6 +4,7 @@ import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { dump } from 'js-yaml';
+import { join } from '@tauri-apps/api/path';
 import { getExportDir } from '@/lib/db';
 import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
 
@@ -11,7 +12,6 @@ async function resolveExportPath(filename) {
   const dir = await getExportDir();
   if (!isTauri()) return filename;
   const fs = await import('@tauri-apps/plugin-fs');
-  const { join } = await import('@tauri-apps/api/path');
   await fs.mkdir(dir, { recursive: true });
   return await join(dir, filename);
 }

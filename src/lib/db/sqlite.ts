@@ -1,3 +1,5 @@
+import Database from "@tauri-apps/plugin-sql";
+import { appDataDir, join } from "@tauri-apps/api/path";
 import schemaSQL from "@/../db/sqlite/001_schema.sql?raw";
 import { devFlags } from "@/lib/devFlags";
 
@@ -37,16 +39,14 @@ function ensureDevStub(): SqliteDatabase {
 }
 
 async function createTauriDb(url: string): Promise<SqliteDatabase> {
-  const mod = await import("@tauri-apps/plugin-sql");
-  const Database: any = mod.default ?? mod;
-  if (typeof Database?.load !== "function") {
+  const DatabaseAny = Database as any;
+  if (typeof DatabaseAny?.load !== "function") {
     throw new Error("[@tauri-apps/plugin-sql] load() missing");
   }
-  return Database.load(url);
+  return DatabaseAny.load(url);
 }
 
 async function ensureDataDir() {
-  const { appDataDir, join } = await import("@tauri-apps/api/path");
   const { exists, mkdir } = await import("@tauri-apps/plugin-fs");
   const base = await appDataDir();
   const appDir = await join(base, "MamaStock");

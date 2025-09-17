@@ -1,4 +1,3 @@
-import "@/debug/dbIntrospect";
 import { setupPwaGuard } from "@/pwa/guard";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -14,6 +13,7 @@ clearWebviewOnDev();
 setupPwaGuard();
 
 if (import.meta.env.DEV && isTauri()) {
+  import("@/debug/dbIntrospect");
   import("@/debug/check-capabilities-runtime");
 }
 
