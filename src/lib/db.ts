@@ -1,5 +1,5 @@
 import { readConfig, writeConfig } from "@/appFs";
-import { getDb as baseGetDb } from "@/lib/db/sql";
+import { getDb as baseGetDb } from "@/lib/db/database";
 import {
   getDataDir as getSafeDataDir,
   getExportsDir as getSafeExportsDir,

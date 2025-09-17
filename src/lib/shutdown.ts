@@ -1,4 +1,4 @@
-import { getDb } from "@/lib/db/sql";
+import { getDb } from "@/lib/db/database";
 import { isTauri } from "@/lib/tauriEnv";
 
 export async function shutdownDbSafely() {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { getDb } from "@/lib/db/database";import { isTauri } from "@/lib/tauriEnv";
 
 interface Famille {
   id: number;

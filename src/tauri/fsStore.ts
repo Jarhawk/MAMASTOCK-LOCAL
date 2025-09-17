@@ -1,6 +1,6 @@
 import { join } from "@tauri-apps/api/path";
 
-import { getDb } from "@/lib/db/sql";
+import { getDb } from "@/lib/db/database";
 import { getDataDir } from "@/lib/paths";
 import { isTauri } from "@/lib/tauriEnv";
 

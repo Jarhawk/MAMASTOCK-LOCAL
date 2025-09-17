@@ -8,7 +8,7 @@ import {
   isTauriRuntime,
   type SqliteDatabase,
   type SqlDatabase,
-} from "@/lib/db/sql";
+} from "@/lib/db/database";
 
 export {
   getDb,

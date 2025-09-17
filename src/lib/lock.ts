@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { getDb } from "@/lib/db/sql";
+import { getDb } from "@/lib/db/database";
 import { locksPath, shutdownRequestPath } from "@/lib/paths";
 import { isTauri } from "@/lib/tauriEnv";
 

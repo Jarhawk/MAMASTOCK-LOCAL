@@ -12,7 +12,7 @@ edition = "2021"
 # path = "src/main.rs"
 
 [dependencies]
-tauri = { version = "2", features = ["tray-icon"] }
+tauri = { version = "2", features = ["tray-icon", "macos-private-api"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tauri-plugin-fs = "2"
@@ -21,7 +21,7 @@ tauri-plugin-dialog = "2"
 tauri-plugin-process = "2"
 tauri-plugin-log = "2"
 tauri-plugin-devtools = "2"
-tauri-plugin-sql = { version = "2.3", features = ["sqlite", "postgres"] }
+tauri-plugin-sql = { version = "2", features = ["sqlite", "postgres"] }
 log = "0.4"
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
