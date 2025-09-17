@@ -11,7 +11,7 @@ import TableHeader from "@/components/ui/TableHeader";
 import GlassCard from "@/components/ui/GlassCard";
 import { toast } from 'sonner';
 import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";
+import { loadXLSX } from "@/lib/lazy/vendors";
 import { motion as Motion } from "framer-motion";import { isTauri } from "@/lib/tauriEnv";
 
 const PAGE_SIZE = 20;
@@ -39,7 +39,8 @@ export default function Utilisateurs() {
   const nbPages = Math.ceil(filtres.length / PAGE_SIZE);
   const paged = filtres.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(filtres);
     XLSX.utils.book_append_sheet(wb, ws, "Utilisateurs");

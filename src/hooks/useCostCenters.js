@@ -1,13 +1,14 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useState } from "react";
 import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";
+import { loadXLSX } from "@/lib/lazy/vendors";
 
 import { useAuditLog } from "@/hooks/useAuditLog";
 import { readCostCenters, writeCostCenters } from "@/local/costCenters";import { isTauri } from "@/lib/tauriEnv";
 
 export async function importCostCentersFromExcel(file, sheetName) {
   const buf = await file.arrayBuffer();
+  const XLSX = await loadXLSX();
   const wb = XLSX.read(buf, { type: "array" });
   const pick = sheetName && wb.Sheets[sheetName] ? sheetName : wb.SheetNames[0];
   const ws = wb.Sheets[pick];
@@ -100,11 +101,12 @@ export function useCostCenters() {
     }
   }
 
-  function exportCostCentersToExcel() {
+  async function exportCostCentersToExcel() {
     const datas = (costCenters || []).map((c) => ({
       nom: c.nom,
       actif: c.actif
     }));
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(datas), "CostCenters");
     const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });

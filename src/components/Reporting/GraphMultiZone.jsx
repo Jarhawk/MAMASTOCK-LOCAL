@@ -1,18 +1,10 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // src/components/Reporting/GraphMultiZone.jsx
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer } from
-"recharts";
-import { useRef, useState, useMemo } from "react";
-import html2canvas from "html2canvas";
+import { useRef, useState, useMemo, lazy, Suspense } from "react";
 import { makeId } from "@/utils/formIds";import { isTauri } from "@/lib/tauriEnv";
+import { loadHtml2Canvas } from "@/lib/lazy/vendors";
+
+const RechartsWrapper = lazy(() => import("@/components/charts/RechartsWrapper"));
 
 const allZones = [
 { key: "cost_cuisine", label: "Cuisine", color: "#bfa14d" },
@@ -34,6 +26,7 @@ export default function GraphMultiZone({ data }) {
 
   const exportImage = async () => {
     if (chartRef.current) {
+      const html2canvas = await loadHtml2Canvas();
       const canvas = await html2canvas(chartRef.current);
       const link = document.createElement("a");
       link.download = "comparatif_zones.png";
@@ -72,28 +65,34 @@ export default function GraphMultiZone({ data }) {
       </div>
 
       <div ref={chartRef}>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="periode" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            {allZones.
-            filter((z) => selectedZones.includes(z.key)).
-            map((zone) =>
-            <Line
-              key={zone.key}
-              type="monotone"
-              dataKey={zone.key}
-              name={zone.label}
-              stroke={zone.color}
-              strokeWidth={2}
-              dot={false} />
-
+        <Suspense fallback={null}>
+          <RechartsWrapper>
+            {({ ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend }) => (
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={data}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="periode" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  {allZones
+                    .filter((z) => selectedZones.includes(z.key))
+                    .map((zone) => (
+                      <Line
+                        key={zone.key}
+                        type="monotone"
+                        dataKey={zone.key}
+                        name={zone.label}
+                        stroke={zone.color}
+                        strokeWidth={2}
+                        dot={false}
+                      />
+                    ))}
+                </LineChart>
+              </ResponsiveContainer>
             )}
-          </LineChart>
-        </ResponsiveContainer>
+          </RechartsWrapper>
+        </Suspense>
       </div>
     </div>);
 

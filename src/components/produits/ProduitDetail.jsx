@@ -1,13 +1,14 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 // src/components/produits/ProduitDetail.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useProducts } from "@/hooks/useProducts";
 import ModalGlass from "@/components/ui/ModalGlass";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { buildPriceData } from "./priceHelpers";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";
+
+const RechartsWrapper = lazy(() => import("@/components/charts/RechartsWrapper"));
 
 export default function ProduitDetail({ produitId, produit, open, onClose }) {
   const { fetchProductPrices, fetchProductMouvements, fetchProductStock } =
@@ -43,6 +44,7 @@ export default function ProduitDetail({ produitId, produit, open, onClose }) {
   const histData = historique ?? [];
   const mouvData = mouvements ?? [];
   const chartData = buildPriceData(histData);
+  const chartKeys = chartData.length > 0 ? Object.keys(chartData[0]).filter((k) => k !== "date") : [];
   const summary = Object.values(
     histData.reduce((acc, h) => {
       const idF = h.fournisseur?.id || "";
@@ -71,7 +73,8 @@ export default function ProduitDetail({ produitId, produit, open, onClose }) {
     prix_moyen: s.count ? s.total / s.count : null
   }));
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(historique), "Prix");
     const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });
@@ -154,26 +157,27 @@ export default function ProduitDetail({ produitId, produit, open, onClose }) {
             }
             </tbody>
           </table>
-          {chartData.length > 0 &&
+          {chartData.length > 0 && (
         <div className="mt-6">
-              <ResponsiveContainer width="100%" height={200}>
-                <LineChart
-              data={chartData}
-              margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-              
-                  <XAxis dataKey="date" fontSize={11} />
-                  <YAxis fontSize={11} />
-                  <Tooltip />
-                  <Legend />
-                  {Object.keys(chartData[0]).
-              filter((k) => k !== "date").
-              map((key) =>
-              <Line key={key} type="monotone" dataKey={key} stroke="#bfa14d" />
-              )}
-                </LineChart>
-              </ResponsiveContainer>
+              <Suspense fallback={null}>
+                <RechartsWrapper>
+                  {({ ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend }) => (
+                    <ResponsiveContainer width="100%" height={200}>
+                      <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                        <XAxis dataKey="date" fontSize={11} />
+                        <YAxis fontSize={11} />
+                        <Tooltip />
+                        <Legend />
+                        {chartKeys.map((key) => (
+                          <Line key={key} type="monotone" dataKey={key} stroke="#bfa14d" />
+                        ))}
+                      </LineChart>
+                    </ResponsiveContainer>
+                  )}
+                </RechartsWrapper>
+              </Suspense>
             </div>
-        }
+        )}
           <h3 className="font-semibold mt-6 mb-2">Historique des mouvements</h3>
           <table className="min-w-full text-sm">
             <thead>

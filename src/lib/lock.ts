@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
 import { shutdownDbSafely } from "./shutdown";
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
-import { locksPath, inAppDir } from "@/lib/paths";
+import { getDb } from "@/lib/db/sql";
+import { isTauri } from "@/lib/tauriEnv";
+import { locksPath, shutdownRequestPath } from "@/lib/paths";
 
 const TTL = 20_000; // 20s
 const HEARTBEAT = 5_000; // 5s
@@ -28,7 +29,7 @@ async function writeLock(data: any) {
     return;
   }
   const fs = await import("@tauri-apps/plugin-fs");
-  await fs.mkdir(await inAppDir("data"), { recursive: true });
+  // CODEREVIEW: path resolved via centralized helper to stay within AppData scope
   const path = await locksPath();
   await fs.writeTextFile(path, JSON.stringify(data));
 }
@@ -49,7 +50,8 @@ async function readShutdownRequest() {
     return v ? JSON.parse(v) : null;
   }
   const fs = await import("@tauri-apps/plugin-fs");
-  const path = await inAppDir("data", "shutdown.request.json");
+  // CODEREVIEW: shared shutdown marker now reuses centralized AppData helper
+  const path = await shutdownRequestPath();
   if (!(await fs.exists(path))) return null;
   const txt = await fs.readTextFile(path);
   return JSON.parse(txt);
@@ -61,8 +63,8 @@ async function writeShutdownRequest(data: any) {
     return;
   }
   const fs = await import("@tauri-apps/plugin-fs");
-  await fs.mkdir(await inAppDir("data"), { recursive: true });
-  const path = await inAppDir("data", "shutdown.request.json");
+  // CODEREVIEW: ensure shutdown signal stays within managed AppData folder
+  const path = await shutdownRequestPath();
   await fs.writeTextFile(path, JSON.stringify(data));
 }
 
@@ -72,7 +74,7 @@ async function removeShutdownRequest() {
     return;
   }
   const fs = await import("@tauri-apps/plugin-fs");
-  const path = await inAppDir("data", "shutdown.request.json");
+  const path = await shutdownRequestPath();
   if (await fs.exists(path)) await fs.remove(path);
 }
 

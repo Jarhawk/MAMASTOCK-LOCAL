@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { appDataDir, join } from '@tauri-apps/api/path';
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { getDataDir, getDbPath } from '@/lib/paths';
+import { isTauri } from '@/lib/tauriEnv';
 
 export default function DossierDonnees() {
   const [baseDir, setBaseDir] = useState('');
@@ -11,15 +11,13 @@ export default function DossierDonnees() {
   const refresh = async () => {
     if (isTauri()) {
       const { exists, mkdir } = await import('@tauri-apps/plugin-fs');
-      const root = await appDataDir();
-      const appDir = await join(root, 'MamaStock');
-      setBaseDir(appDir);
-      const dbDir = await join(appDir, 'databases');
-      const file = await join(dbDir, 'mamastock.db');
+      // CODEREVIEW: rely on AppData helpers to avoid writing under Program Files
+      const dataDir = await getDataDir();
+      setBaseDir(dataDir);
+      const file = await getDbPath();
       setDbPath(file);
       setDbExists(await exists(file));
-      // ensure directories exist when checking
-      await mkdir(appDir, { recursive: true }).catch(() => {});
+      await mkdir(dataDir, { recursive: true }).catch(() => {});
     }
   };
 
@@ -38,8 +36,6 @@ export default function DossierDonnees() {
     if (isTauri()) {
       const { mkdir, exists } = await import('@tauri-apps/plugin-fs');
       await mkdir(baseDir, { recursive: true });
-      const dbDir = await join(baseDir, 'databases');
-      await mkdir(dbDir, { recursive: true });
       setDbExists(await exists(dbPath));
     }
   };

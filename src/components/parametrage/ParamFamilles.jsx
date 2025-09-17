@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { toast } from 'sonner';
 import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from '@/lib/lazy/vendors';import { isTauri } from "@/lib/tauriEnv";
 
 export default function ParamFamilles() {
   const {
@@ -75,7 +75,8 @@ export default function ParamFamilles() {
     }
   };
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(filtered);
     XLSX.utils.book_append_sheet(wb, ws, 'Familles');

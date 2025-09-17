@@ -2,12 +2,13 @@
 import ModalGlass from "@/components/ui/ModalGlass";
 import Button from "@/components/ui/button";
 import TableContainer from "@/components/ui/TableContainer";
-import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";
 
 export default function SimulationDetailsModal({ open, onClose, result }) {
-  const exportExcel = () => {
+  const exportExcel = async () => {
     if (!result) return;
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(
       wb,

@@ -3,9 +3,9 @@ import { useState } from "react";
 
 import { useAuth } from '@/hooks/useAuth';
 import { readConfig, writeConfig } from '@/appFs';
-import * as XLSX from "xlsx";
 import { safeImportXLSX } from "@/lib/xlsx/safeImportXLSX";
 import { saveAs } from "file-saver";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";
 
 export function useMamas() {
   const { mama_id, role } = useAuth();
@@ -105,13 +105,14 @@ export function useMamas() {
 
 
   // 5. Export Excel
-  function exportMamasToExcel() {
+  async function exportMamasToExcel() {
     const datas = (mamas || []).map((m) => ({
       id: m.id,
       nom: m.nom,
       ville: m.ville,
       email: m.email
     }));
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(datas), "Mamas");
     const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });

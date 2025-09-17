@@ -1,6 +1,7 @@
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+import { getDb } from "@/lib/db/sql";
+import { isTauri } from "@/lib/tauriEnv";
 import { join } from "@tauri-apps/api/path";
-import { inAppDir } from "@/lib/paths";
+import { getDataDir } from "@/lib/paths";
 
 type Json = unknown;
 
@@ -14,9 +15,7 @@ export async function readJsonFile(rel: string): Promise<Json | null> {
     return v ? JSON.parse(v) : null;
   }
   const fs = await import("@tauri-apps/plugin-fs");
-  const root = await inAppDir("data");
-  const mkdir = (fs as any).createDir ?? (fs as any).mkdir; // support both names
-  await mkdir(root, { recursive: true });
+  const root = await getDataDir();
   const path = await join(root, rel);
   if (!(await fs.exists(path))) return null;
   const txt = await fs.readTextFile(path);
@@ -29,9 +28,7 @@ export async function writeJsonFile(rel: string, data: Json): Promise<string> {
     return rel;
   }
   const fs = await import("@tauri-apps/plugin-fs");
-  const root = await inAppDir("data");
-  const mkdir = (fs as any).createDir ?? (fs as any).mkdir;
-  await mkdir(root, { recursive: true });
+  const root = await getDataDir();
   const path = await join(root, rel);
   await fs.writeTextFile(path, JSON.stringify(data, null, 2));
   return path;
@@ -39,9 +36,6 @@ export async function writeJsonFile(rel: string, data: Json): Promise<string> {
 
 export async function ensureDataDir(): Promise<string> {
   if (!isTauri()) return "localStorage://" + BROWSER_NS;
-  const fs = await import("@tauri-apps/plugin-fs");
-  const root = await inAppDir("data");
-  const mkdir = (fs as any).createDir ?? (fs as any).mkdir;
-  await mkdir(root, { recursive: true });
-  return root;
+  // CODEREVIEW: rely on AppData helper to guarantee safe writable directory
+  return getDataDir();
 }

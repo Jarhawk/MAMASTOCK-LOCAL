@@ -1,6 +1,6 @@
 import { query } from '@/local/db';
-import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { loadXLSX } from "@/lib/lazy/vendors";
 
 
 // Colonnes exportées avec libellés lisibles
@@ -59,6 +59,7 @@ export async function exportExcelProduits(mama_id) {
     seuil_min: p.seuil_min ?? 0
   }));
 
+  const XLSX = await loadXLSX();
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.json_to_sheet(rows, {
     header: EXPORT_HEADERS.map((h) => h.key)
@@ -74,8 +75,9 @@ export async function exportExcelProduits(mama_id) {
   saveAs(new Blob([buf]), "produits_export_mamastock.xlsx");
 }
 
-export function downloadProduitsTemplate() {
+export async function downloadProduitsTemplate() {
   const example = Object.fromEntries(TEMPLATE_HEADERS.map((h) => [h, ""]));
+  const XLSX = await loadXLSX();
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.json_to_sheet([example], { header: TEMPLATE_HEADERS });
   XLSX.utils.book_append_sheet(wb, ws, "Template");

@@ -1,6 +1,8 @@
-import { ResponsiveContainer, LineChart, Line, Tooltip } from 'recharts';
+import { lazy, Suspense } from 'react';
 import useEvolutionAchats from '@/hooks/gadgets/useEvolutionAchats';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';import { isTauri } from "@/lib/tauriEnv";
+
+const RechartsWrapper = lazy(() => import('@/components/charts/RechartsWrapper'));
 
 export default function GadgetEvolutionAchats() {
   const { data, loading } = useEvolutionAchats();
@@ -16,12 +18,18 @@ export default function GadgetEvolutionAchats() {
   return (
     <div className="bg-white/10 border border-white/20 backdrop-blur-xl rounded-2xl shadow-md p-4 text-white">
       <h3 className="font-bold mb-2">Évolution des achats</h3>
-      <ResponsiveContainer width="100%" height={200}>
-        <LineChart data={data} margin={{ left: -10, right: 10 }}>
-          <Line type="monotone" dataKey="montant" stroke="#F6C343" />
-          <Tooltip />
-        </LineChart>
-      </ResponsiveContainer>
+      <Suspense fallback={null}>
+        <RechartsWrapper>
+          {({ ResponsiveContainer, LineChart, Line, Tooltip }) => (
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={data} margin={{ left: -10, right: 10 }}>
+                <Line type="monotone" dataKey="montant" stroke="#F6C343" />
+                <Tooltip />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
+        </RechartsWrapper>
+      </Suspense>
     </div>);
 
 }

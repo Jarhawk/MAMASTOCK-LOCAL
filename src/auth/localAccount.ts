@@ -1,7 +1,6 @@
 import { appDataDir, join } from "@tauri-apps/api/path";
+import { APP_DIR, getAppDir } from "@/lib/paths";
 import { isTauri } from "@/lib/tauriEnv";
-
-const APP_DIR = "MamaStock";
 export const USERS_FILE = "users.json";
 
 // Objet valide (méthode + getter) — évite la syntaxe invalide { isTauri() }
@@ -27,15 +26,14 @@ export type LocalUser = {
 async function usersPath() {
   if (!isTauri()) return "browser://users.json";
 
-  const { exists, mkdir, rename, readTextFile, writeTextFile } = await import("@tauri-apps/plugin-fs");
+  const { exists, rename, readTextFile, writeTextFile } = await import("@tauri-apps/plugin-fs");
 
-  const base = await appDataDir();
-  const dir = await join(base, APP_DIR);
-  if (!(await exists(dir))) await mkdir(dir, { recursive: true });
-
+  // CODEREVIEW: use centralized AppData helper to persist local accounts safely
+  const dir = await getAppDir();
   const target = await join(dir, USERS_FILE);
 
   // Migration éventuelle d'un ancien emplacement (roaming)
+  const base = await appDataDir();
   const roaming = base.replace(/\\com\.mamastock\.local\\?$/i, "");
   const legacy = await join(roaming, APP_DIR, USERS_FILE);
   if (!(await exists(target)) && (await exists(legacy))) {

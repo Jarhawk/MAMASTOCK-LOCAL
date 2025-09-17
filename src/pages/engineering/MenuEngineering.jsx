@@ -8,9 +8,7 @@ import { useMenuEngineering } from '@/hooks/useMenuEngineering';
 import EngineeringFilters from '@/components/engineering/EngineeringFilters';
 import EngineeringChart from '@/components/engineering/EngineeringChart';
 import ImportVentesExcel from '@/components/engineering/ImportVentesExcel';
-import html2canvas from 'html2canvas';
-import JSPDF from 'jspdf';
-import * as XLSX from 'xlsx';import { isTauri } from "@/lib/tauriEnv";
+import { loadHtml2Canvas, loadJsPDF, loadXLSX } from '@/lib/lazy/vendors';import { isTauri } from "@/lib/tauriEnv";
 
 export default function MenuEngineering() {
   const { mama_id, roles = [], loading: authLoading } = useAuth();
@@ -43,7 +41,8 @@ export default function MenuEngineering() {
     toast.success('Import réussi');
   };
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
+    const XLSX = await loadXLSX();
     const ws = XLSX.utils.json_to_sheet(rows);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'engineering');
@@ -53,6 +52,8 @@ export default function MenuEngineering() {
   const exportPdf = async () => {
     const el = document.getElementById('chart-container');
     if (!el) return;
+    const html2canvas = await loadHtml2Canvas();
+    const JSPDF = await loadJsPDF();
     const canvas = await html2canvas(el);
     const pdf = new JSPDF();
     const img = canvas.toDataURL('image/png');

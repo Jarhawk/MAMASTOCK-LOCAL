@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useMenuDuJour } from "@/hooks/useMenuDuJour";
 import { useFiches } from "@/hooks/useFiches";
 import { Button } from "@/components/ui/button";
-import * as XLSX from "xlsx";import { isTauri } from "@/lib/tauriEnv";
+import { loadXLSX } from "@/lib/lazy/vendors";import { isTauri } from "@/lib/tauriEnv";
 
 const CATEGORIES = ["entrée", "plat", "dessert"];
 const COST_THRESHOLD = 5;
@@ -63,7 +63,7 @@ export default function MenuDuJour() {
     setMenu(data || {});
   };
 
-  const exportExcel = () => {
+  const exportExcel = async () => {
     const rows = CATEGORIES.map((cat) => {
       const item = menu[cat] || {};
       const total = (item.portions || 0) * (item.cout_unitaire || 0);
@@ -75,6 +75,7 @@ export default function MenuDuJour() {
         total
       };
     });
+    const XLSX = await loadXLSX();
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(rows);
     XLSX.utils.book_append_sheet(wb, ws, "Menu");
