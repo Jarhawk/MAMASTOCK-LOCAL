@@ -1,3 +1,15 @@
+import {
+  getDb,
+  closeDb,
+  locateDb,
+  openDb,
+  ensureSeeds,
+  getMigrationsState,
+  isTauriRuntime,
+  type SqliteDatabase,
+  type SqlDatabase,
+} from "@/lib/db/sql";
+
 export {
   getDb,
   closeDb,
@@ -5,8 +17,10 @@ export {
   openDb,
   ensureSeeds,
   getMigrationsState,
-  isTauri
-} from "@/lib/db/sqlite";
+};
+
+export { isTauriRuntime as isTauri };
+export type { SqliteDatabase, SqlDatabase };
 
 export async function tableCount(table: string): Promise<number> {
   const db = await getDb();

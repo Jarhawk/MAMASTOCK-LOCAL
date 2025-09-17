@@ -171,7 +171,7 @@ export default function Onboarding() {
         );
         await db.execute("PRAGMA user_version=1");
         await db.execute(
-          "INSERT OR IGNORE INTO __migrations__(filename, applied_at) VALUES ('001_schema.sql', datetime('now'))"
+          "INSERT OR IGNORE INTO __migrations__(filename, applied_at) VALUES ('001_schema.sql', now())"
         );
       } else if (step === "seeds") {
         const r = await ensureSeeds();

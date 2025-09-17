@@ -1,48 +1,18 @@
-import { backupDb, restoreDb, maintenanceDb } from "@/lib/db";
 import { toast } from "sonner";
-import { getDb } from "@/lib/db/sql";import { isTauri } from "@/lib/tauriEnv";
+
+import { isTauri } from "@/lib/tauriEnv";
 
 export default function SystemTools() {
-  const backup = async () => {
-    if (!isTauri()) {
-      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
-    }
-    try {
-      const dest = await backupDb();
-      toast.success(`Sauvegarde effectuée : ${dest}`);
-    } catch (_) {
-      toast.error("Échec de la sauvegarde");
-    }
+  const backup = () => {
+    toast.error("Sauvegarde indisponible avec PostgreSQL");
   };
 
-  const restore = async () => {
-    if (!isTauri()) {
-      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
-    }
-    try {
-      const { open } = await import("@tauri-apps/plugin-dialog");
-      const { relaunch } = await import("@tauri-apps/plugin-process");
-      const file = await open({ filters: [{ name: "Base", extensions: ["db"] }] });
-      if (file && window.confirm("Restaurer cette sauvegarde ? L'application redémarrera.")) {
-        await restoreDb(String(file));
-        toast.success("Base restaurée. Redémarrage…");
-        await relaunch();
-      }
-    } catch (_) {
-      toast.error("Échec de la restauration");
-    }
+  const restore = () => {
+    toast.error("Restauration indisponible avec PostgreSQL");
   };
 
-  const maintain = async () => {
-    if (!isTauri()) {
-      return console.debug('Tauri indisponible (navigateur): ne pas appeler les plugins ici.');
-    }
-    try {
-      await maintenanceDb();
-      toast.success("Maintenance effectuée");
-    } catch (_) {
-      toast.error("Échec de la maintenance");
-    }
+  const maintain = () => {
+    toast.error("Maintenance indisponible avec PostgreSQL");
   };
 
   return (

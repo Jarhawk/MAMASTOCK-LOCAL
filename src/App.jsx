@@ -9,6 +9,8 @@ import ToastRoot from "@/components/ToastRoot";
 import { MultiMamaProvider } from "@/context/MultiMamaContext";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import { devFlags } from "@/lib/devFlags";
+import { loadConfig } from "@/local/config";
+import FirstRunDb from "@/pages/FirstRunDb";
 import Router from "@/router";
 import { testRandom } from "@/shims/selftest";
 
@@ -28,6 +30,7 @@ const queryClient = new QueryClient({
 
 export default function App() {
   const [devPanelOpen, setDevPanelOpen] = useState(false);
+  const [dbConfigStatus, setDbConfigStatus] = useState("checking");
 
   console.log("[debug] App mounted");
 
@@ -38,6 +41,28 @@ export default function App() {
     if (devFlags.isDev) {
       console.info("[dev] reasons", devFlags.reason);
     }
+  }, []);
+
+  useEffect(() => {
+    if (!devFlags.isTauri) {
+      setDbConfigStatus("ready");
+      return;
+    }
+    let cancelled = false;
+    loadConfig()
+      .then(({ dbUrl }) => {
+        if (cancelled) return;
+        setDbConfigStatus(dbUrl ? "ready" : "missing");
+      })
+      .catch((err) => {
+        console.error("[config] Impossible de charger config.json", err);
+        if (!cancelled) {
+          setDbConfigStatus("missing");
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -113,13 +138,27 @@ export default function App() {
   const devSnapshot =
     (typeof window !== "undefined" && window.__DEV_FLAGS__) || devFlags;
 
+  const loadingConfig = dbConfigStatus === "checking";
+  const needsSetup = dbConfigStatus === "missing";
+
+  let mainContent = <Router />;
+  if (loadingConfig) {
+    mainContent = (
+      <div style={{ padding: 24, fontSize: 14 }}>
+        Initialisation de la configuration…
+      </div>
+    );
+  } else if (needsSetup) {
+    mainContent = <FirstRunDb />;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <MultiMamaProvider>
         <ThemeProvider>
           <ToastRoot />
           <DebugRibbon />
-          <Router />
+          {mainContent}
           <CookieConsent />
           {devFlags.isDev && devPanelOpen && (
             <div className="fixed bottom-20 left-4 z-[2147483646] max-w-sm rounded-lg border border-white/20 bg-black/80 p-4 text-white shadow-xl">
