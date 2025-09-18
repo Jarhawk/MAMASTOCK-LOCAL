@@ -57,18 +57,15 @@
       <Publish Dialog="BrowseDlg"      Control="OK"   Event="DoAction"      Value="WixUIValidatePath">1</Publish>
       <Publish Dialog="BrowseDlg"      Control="Back" Event="NewDialog"     Value="InstallDirDlg">1</Publish>
 
-      <InstallUISequence>
-        <Show Dialog="WelcomeDlg_MAMA" Before="ProgressDlg">NOT Installed</Show>
-        <Show Dialog="ExitDlg_MAMA" OnExit="success" />
-        <Show Dialog="FatalError"  OnExit="error" />
-        <Show Dialog="UserExit"   OnExit="cancel" />
-      </InstallUISequence>
-      <AdminUISequence>
-        <Show Dialog="WelcomeDlg_MAMA" Before="ProgressDlg">NOT Installed</Show>
-        <Show Dialog="ExitDlg_MAMA" OnExit="success" />
-        <Show Dialog="FatalError"  OnExit="error" />
-        <Show Dialog="UserExit"   OnExit="cancel" />
-      </AdminUISequence>
+<InstallUISequence>
+  <Show Dialog="WelcomeDlg_MAMA" Before="ProgressDlg">NOT Installed</Show>
+  <Show Dialog="ProgressDlg"     Before="ExecuteAction">NOT Installed</Show>
+  <Show Dialog="ExitDlg_MAMA"    OnExit="success" />
+  <Show Dialog="FatalError"      OnExit="error" />
+  <Show Dialog="UserExit"        OnExit="cancel" />
+</InstallUISequence>
+
+
 
     </UI>
   </Fragment>
