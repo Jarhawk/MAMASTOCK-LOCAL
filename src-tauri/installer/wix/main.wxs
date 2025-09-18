@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <Product
@@ -38,9 +38,9 @@
       </Publish>
     </UI>
 
-    <WixVariable Id="WixUIBannerBmp" Value="!(loc.WixUIBannerBmp)" />
-    <WixVariable Id="WixUIDialogBmp" Value="!(loc.WixUIDialogBmp)" />
-    <WixVariable Id="WixUILicenseRtf" Value="!(loc.WixUILicenseRtf)" />
+    \ \ <WixVariable\ Id="WixUIBannerBmp"\ Value="banner\.bmp"\ />
+    \ \ <WixVariable\ Id="WixUIDialogBmp"\ Value="dialog\.bmp"\ />
+    \ \ <WixVariable\ Id="WixUILicenseRtf"\ Value="license-fr\.rtf"\ />
 
     <SummaryInformation Description="!(loc.ProductTagline)" Manufacturer="Quentin Vanel" />
 
@@ -68,3 +68,4 @@
     </ComponentGroup>
   </Fragment>
 </Wix>
+

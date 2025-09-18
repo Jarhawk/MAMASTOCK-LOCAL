@@ -23,7 +23,6 @@
     "bundle":  {
                    "active":  true,
                    "targets":  [
-                                   "nsis",
                                    "msi"
                                ],
                    "icon":  [
@@ -34,7 +33,6 @@
                             ],
                    "resources":  [
                                      "installer/config.json",
-                                     "installer/nsis/**/*",
                                      "installer/wix/**/*"
                                  ],
                    "windows":  {
@@ -42,13 +40,7 @@
                                                "bannerPath":  "installer/wix/banner.bmp",
                                                "dialogImagePath":  "installer/wix/dialog.bmp",
                                                "template":  "installer/wix/main.wxs"
-                                           },
-                                   "nsis":  {
-                                                "template":  "installer/nsis/tauri.nsis",
-                                                "headerImage":  "installer/nsis/header.bmp",
-                                                "sidebarImage":  "installer/nsis/sidebar.bmp",
-                                                "displayLanguageSelector":  true
-                                            }
+                                           }
                                }
                }
 }
