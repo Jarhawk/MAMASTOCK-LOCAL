@@ -1,4 +1,4 @@
-﻿{ static SET: ::phf::Set<&'static str> = ::phf::Set { map: ::phf::Map {
+{ static SET: ::phf::Set<&'static str> = ::phf::Set { map: ::phf::Map {
     key: 732231254413039614,
     disps: ::phf::Slice::Static(&[
         (2, 10),
