@@ -1,55 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="MAMASTOCK" Manufacturer="Quentin Vanel" Version="0.1.0" Language="1036" UpgradeCode="{B035F2E7-24E4-4486-A2EB-956DB8291C23}">
-    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
-    <MediaTemplate EmbedCab="yes" />
-    <MajorUpgrade AllowDowngrades="no" DowngradeErrorMessage="Une version plus récente de MAMASTOCK est déjà installée." />
-    <Icon Id="AppIcon" SourceFile="!(bindpath.Assets)\app.ico" />
-    <Property Id="ARPPRODUCTICON" Value="AppIcon" />
 
-    <!-- UI assets via bindpath -->
-    <WixVariable Id="WixUILicenseRtf" Value="!(bindpath.Assets)\license-fr.rtf" />
-    <WixVariable Id="WixUIBannerBmp"  Value="!(bindpath.Assets)\banner.bmp" />
-    <WixVariable Id="WixUIDialogBmp"  Value="!(bindpath.Assets)\dialog.bmp" />
 
-    <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFiles64Folder">
-        <Directory Id="INSTALLFOLDER" Name="MAMASTOCK">
-          <!-- Notre exe installé -->
-          <Component Id="C_MainExe" Guid="*" Win64="yes">
-            <File Id="F_MainExe" Source="!(bindpath.Bin)\mamastock.exe" KeyPath="yes"/>
-          </Component>
-        </Directory>
-      </Directory>
-
-      <!-- Dossiers pour raccourcis -->
-      <Directory Id="ProgramMenuFolder">
-        <Directory Id="ApplicationProgramsFolder" Name="MAMASTOCK"/>
-      </Directory>
-      <Directory Id="DesktopFolder"/>
-    </Directory>
-
-    <!-- Composant des raccourcis : il doit être rattaché à un répertoire -->
-    <Component Id="C_Shortcuts" Guid="*" Win64="yes" Directory="INSTALLFOLDER">
-      <Shortcut Id="StartMenuShortcut" Name="MAMASTOCK" Description="MAMASTOCK"
-                Target="[INSTALLFOLDER]mamastock.exe" Directory="ApplicationProgramsFolder"
-                WorkingDirectory="INSTALLFOLDER" Icon="AppIcon"/>
-      <Shortcut Id="DesktopShortcut"   Name="MAMASTOCK" Description="MAMASTOCK"
-                Target="[INSTALLFOLDER]mamastock.exe" Directory="DesktopFolder"
-                WorkingDirectory="INSTALLFOLDER" Icon="AppIcon"/>
-      <RemoveFolder Id="RemoveAppProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
-      <!-- KeyPath virtuel -->
-      <RegistryValue Root="HKCU" Key="Software\QuentinVanel\MAMASTOCK" Name="installed" Type="integer" Value="1" KeyPath="yes" />
-    </Component>
-
-    <Feature Id="MainFeature" Title="MAMASTOCK" Level="1">
-      <ComponentRef Id="C_MainExe" />
-      <ComponentRef Id="C_Shortcuts" />
-    </Feature>
-
-    <UIRef Id="WixUI_InstallDir" />
-    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
-  </Product>
 </Wix>
-
-

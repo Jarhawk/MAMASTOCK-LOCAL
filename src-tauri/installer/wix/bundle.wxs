@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+  <Bundle Name="MAMASTOCK Setup" Manufacturer="Quentin Vanel"
+          Version="0.1.0" UpgradeCode="{2A9E9B0E-9F0C-4C5A-9C2E-2F0B6E5D9E01}">
+    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
+    <Chain>
+      <MsiPackage SourceFile="!(bindpath.Msi)\MAMASTOCK_0.1.0_x64_manual.msi" />
+    </Chain>
+  </Bundle>
+</Wix>
