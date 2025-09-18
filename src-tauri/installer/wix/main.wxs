@@ -1,20 +1,31 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="MAMASTOCK" Language="1033" Version="0.1.0" Manufacturer="MAMASTOCK" UpgradeCode="{a2cdad1f-49f8-4199-bfb7-50edc246bfe6}">
-    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
-    <MediaTemplate />
-    <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+  <Product Id="*" Name="MAMASTOCK" Language="1033" Version="0.1.0"
+           Manufacturer="MAMASTOCK"
+           UpgradeCode="{<STABLE_UPGRADE_CODE_GUID>}">
 
+    <!-- Per-user, pas d'UAC -->
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perUser" InstallPrivileges="limited"/>
+    <MediaTemplate />
+    <MajorUpgrade Schedule="afterInstallInitialize"
+                  DowngradeErrorMessage="A newer version of [ProductName] is already installed."/>
+
+    <!-- UI & styles standards + notre UI additive -->
+    <UIRef Id="WixUI_Common"/>
+    <UIRef Id="WixUI_InstallDir"/>
+    <UIRef Id="WixUI_CustomWelcomeExit_MAMA"/>
+
+    <!-- Propriétés & variable d'image -->
     <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
     <WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />
-    <UIRef Id="WixUI_CustomWelcomeExit_MAMA" />
 
+    <!-- Dossiers per-user -->
     <Directory Id="TARGETDIR" Name="SourceDir">
-      <Directory Id="ProgramFilesFolder">
+      <Directory Id="LocalAppDataFolder">
         <Directory Id="INSTALLDIR" Name="MAMASTOCK">
-          <Component Id="MainExecutable" Guid="*">
-            <File Id="AppExe" Name="mamastock.exe" Source="C:\Users\dark_\Desktop\mamastock.com\MAMASTOCK-LOCAL\src-tauri\target\release\mamastock.exe" KeyPath="yes" />
+          <Component Id="MainExecutable" Guid="*" Win64="no">
+            <File Id="AppExe" Name="<EXE_NAME>" Source="<EXE_FULL_PATH>" KeyPath="yes" />
           </Component>
         </Directory>
       </Directory>
