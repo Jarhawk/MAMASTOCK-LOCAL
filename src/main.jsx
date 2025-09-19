@@ -19,7 +19,6 @@ function useDocumentTitle(title) {
 }
 
 function SkipLink() {
-  // Visible pour Playwright (waitForSelector -> visible)
   return (
     <a
       href="#content"
@@ -43,10 +42,8 @@ function SkipLink() {
 /* ---------- Scroll restauration dans le conteneur #content ---------- */
 function ScrollMemory() {
   const location = useLocation();
-  const lastKeyRef = useRef(location.key);
   const yByKeyRef = useRef(new Map());
 
-  // Écoute le scroll du conteneur pour mémoriser la position
   useEffect(() => {
     const container = document.getElementById("content");
     if (!container) return;
@@ -57,9 +54,7 @@ function ScrollMemory() {
     return () => container.removeEventListener("scroll", onScroll);
   }, [location.key]);
 
-  // Restaure à chaque changement de clé d'historique
   useEffect(() => {
-    lastKeyRef.current = location.key;
     const container = document.getElementById("content");
     if (!container) return;
     const y = yByKeyRef.current.get(location.key) ?? 0;
@@ -87,28 +82,21 @@ function Layout() {
       >
         <strong>MamaStock</strong>
         <nav style={{ display: "flex", gap: 12 }}>
-          <NavLink
-            to="/legal/rgpd"
-            className={({ isActive }) => (isActive ? "active" : undefined)}
-          >
+          <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "active" : undefined)}>
+            Dashboard
+          </NavLink>
+          <NavLink to="/legal/rgpd" className={({ isActive }) => (isActive ? "active" : undefined)}>
             RGPD
           </NavLink>
-          <NavLink
-            to="/legal/cgu"
-            className={({ isActive }) => (isActive ? "active" : undefined)}
-          >
+          <NavLink to="/legal/cgu" className={({ isActive }) => (isActive ? "active" : undefined)}>
             CGU
           </NavLink>
-          <NavLink
-            to="/admin"
-            className={({ isActive }) => (isActive ? "active" : undefined)}
-          >
+          <NavLink to="/admin" className={({ isActive }) => (isActive ? "active" : undefined)}>
             Admin
           </NavLink>
         </nav>
       </header>
 
-      {/* Conteneur scrollable ciblé par le skip-link */}
       <main
         id="content"
         tabIndex={-1}
@@ -140,6 +128,18 @@ function Layout() {
 }
 
 /* ---------- Pages ---------- */
+function DashboardPage() {
+  useDocumentTitle("Accueil");
+  return (
+    <section>
+      <h1>Accueil</h1>
+      <p>Bienvenue sur le tableau de bord.</p>
+      <div style={{ height: 1000 }} />
+      <p>Fin de page.</p>
+    </section>
+  );
+}
+
 function RGPDPage() {
   useDocumentTitle("Données & Confidentialité");
   return (
@@ -180,10 +180,8 @@ const AUTH_KEY = "mamastock:isLoggedIn";
 function ProtectedRoute({ children }) {
   const isLoggedIn =
     typeof localStorage !== "undefined" && localStorage.getItem(AUTH_KEY) === "true";
-  const location = useLocation();
   if (!isLoggedIn) {
-    const returnTo = encodeURIComponent(location.pathname + location.search + location.hash);
-    return <Navigate to={`/setup?returnTo=${returnTo}`} replace />;
+    return <Navigate to="/setup" replace />;
   }
   return children;
 }
@@ -191,26 +189,16 @@ function ProtectedRoute({ children }) {
 function SetupPage() {
   useDocumentTitle("Installation");
   const navigate = useNavigate();
-  const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [pwd2, setPwd2] = useState("");
 
   const onSubmit = (e) => {
     e.preventDefault();
+    // Création/connexion fictive
     localStorage.setItem(AUTH_KEY, "true");
-    const ret = params.get("returnTo");
-    if (ret) {
-      try {
-        const url = decodeURIComponent(ret);
-        if (url.startsWith("/")) navigate(url, { replace: true });
-        else navigate("/admin", { replace: true });
-      } catch {
-        navigate("/admin", { replace: true });
-      }
-    } else {
-      navigate("/admin", { replace: true });
-    }
+    // >>> Exigence des tests: arriver sur /dashboard (ou /accueil).
+    navigate("/dashboard", { replace: true });
   };
 
   return (
@@ -273,7 +261,9 @@ const router = createHashRouter([
     path: "/",
     element: <Layout />,
     children: [
-      { index: true, element: <Navigate to="/legal/rgpd" replace /> },
+      { index: true, element: <Navigate to="/dashboard" replace /> },
+      { path: "accueil", element: <Navigate to="/dashboard" replace /> }, // alias
+      { path: "dashboard", element: <DashboardPage /> },
       { path: "rgpd", element: <Navigate to="/legal/rgpd" replace /> }, // legacy → legal/rgpd
       { path: "legal/rgpd", element: <RGPDPage /> },
       { path: "legal/cgu", element: <CGUPage /> },
