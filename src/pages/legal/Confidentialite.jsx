@@ -7,8 +7,7 @@ import useMamaSettings from "@/hooks/useMamaSettings";
 export default function Confidentialite() {
   const { settings } = useMamaSettings();
   const [text, setText] = useState("");
-
-  useLegalMeta(
+  const legalMeta = useLegalMeta(
     "Politique de confidentialité",
     "Politique de confidentialité MamaStock"
   );
@@ -26,9 +25,12 @@ export default function Confidentialite() {
   }, [settings?.rgpd_text]);
 
   return (
-    <div
-      className="prose prose-invert mx-auto max-w-3xl whitespace-pre-wrap p-8"
-      dangerouslySetInnerHTML={{ __html: text }}
-    />
+    <>
+      {legalMeta}
+      <div
+        className="prose prose-invert mx-auto max-w-3xl whitespace-pre-wrap p-8"
+        dangerouslySetInnerHTML={{ __html: text }}
+      />
+    </>
   );
 }

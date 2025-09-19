@@ -5,8 +5,7 @@ import { useLegalMeta } from "@/layout/LegalLayout";
 
 export default function Cgv() {
   const [text, setText] = useState("");
-
-  useLegalMeta("Conditions de vente", "CGV MamaStock");
+  const legalMeta = useLegalMeta("Conditions de vente", "CGV MamaStock");
 
   useEffect(() => {
     fetch("/legal/CGV.md")
@@ -15,6 +14,9 @@ export default function Cgv() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-3xl whitespace-pre-wrap p-8">{text}</div>
+    <>
+      {legalMeta}
+      <div className="mx-auto max-w-3xl whitespace-pre-wrap p-8">{text}</div>
+    </>
   );
 }

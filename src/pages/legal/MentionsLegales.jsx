@@ -7,8 +7,7 @@ import useMamaSettings from "@/hooks/useMamaSettings";
 export default function MentionsLegales() {
   const { settings } = useMamaSettings();
   const [text, setText] = useState("");
-
-  useLegalMeta("Mentions légales", "Informations légales MamaStock");
+  const legalMeta = useLegalMeta("Mentions légales", "Informations légales MamaStock");
 
   useEffect(() => {
     async function fetchText() {
@@ -23,9 +22,12 @@ export default function MentionsLegales() {
   }, [settings?.mentions_legales]);
 
   return (
-    <div
-      className="prose prose-invert mx-auto max-w-3xl whitespace-pre-wrap p-8"
-      dangerouslySetInnerHTML={{ __html: text }}
-    />
+    <>
+      {legalMeta}
+      <div
+        className="prose prose-invert mx-auto max-w-3xl whitespace-pre-wrap p-8"
+        dangerouslySetInnerHTML={{ __html: text }}
+      />
+    </>
   );
 }

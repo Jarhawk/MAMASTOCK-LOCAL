@@ -41,7 +41,12 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="login-wrapper">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      role="main"
+      className="login-wrapper"
+    >
       <div className="login-card">
         <img
           src="/android-chrome-512x512.png"
@@ -95,6 +100,6 @@ export default function LoginPage() {
           </Link>
         ) : null}
       </div>
-    </div>
+    </main>
   );
 }
