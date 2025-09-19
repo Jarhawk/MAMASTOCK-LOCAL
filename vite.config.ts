@@ -16,7 +16,7 @@ export default defineConfig(() => {
   ].filter(Boolean);
 
   return {
-    base: isTauri ? "./" : "/",
+    base: "./",
     plugins,
     resolve: {
       // CODEREVIEW: normalize absolute imports with @/*
