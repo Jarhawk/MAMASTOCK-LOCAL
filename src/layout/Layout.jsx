@@ -12,8 +12,9 @@ import {
   LiquidBackground,
   WavesBackground,
   MouseLight,
-  TouchLight } from
-"@/components/LiquidBackground";import { isTauri } from "@/lib/tauriEnv";
+  TouchLight
+} from "@/components/LiquidBackground";
+import { isTauri } from "@/lib/tauriEnv";
 
 export default function Layout() {
   const { fetchUnreadCount, subscribeToNotifications } = useNotifications();
@@ -26,6 +27,7 @@ export default function Layout() {
     });
     return unsub;
   }, [fetchUnreadCount, subscribeToNotifications]);
+
   return (
     <div className="relative flex h-screen overflow-auto text-shadow">
       <LiquidBackground showParticles />
@@ -34,15 +36,21 @@ export default function Layout() {
       <TouchLight />
       <Sidebar />
       <div className="flex flex-col flex-1 relative z-10">
-        <main className="flex-1 p-4 overflow-auto">
+        <main
+          id="content"
+          tabIndex={-1}
+          role="main"
+          data-router-scroll-container
+          className="flex-1 p-4 overflow-auto focus:outline-none"
+        >
           <div className="flex justify-end items-center gap-2 mb-4">
             <Link to="/notifications" className="relative">
               <Bell size={20} />
-              {unread > 0 &&
-              <Badge color="red" className="absolute -top-1 -right-1">
+              {unread > 0 && (
+                <Badge color="red" className="absolute -top-1 -right-1">
                   {unread}
                 </Badge>
-              }
+              )}
             </Link>
             <AlertBadge />
           </div>
@@ -50,6 +58,6 @@ export default function Layout() {
         </main>
         <Footer />
       </div>
-    </div>);
-
+    </div>
+  );
 }

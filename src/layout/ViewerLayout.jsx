@@ -20,7 +20,13 @@ export default function ViewerLayout() {
       <MouseLight />
       <TouchLight />
       <Navbar />
-      <main className="relative z-10 flex flex-1 items-start justify-center overflow-y-auto px-4 py-6">
+      <main
+        id="content"
+        tabIndex={-1}
+        role="main"
+        data-router-scroll-container
+        className="relative z-10 flex flex-1 items-start justify-center overflow-y-auto px-4 py-6 focus:outline-none"
+      >
         <div className="w-full max-w-5xl rounded-xl border border-white/20 bg-white/10 p-6 text-white shadow-md backdrop-blur-xl">
           <Outlet />
         </div>

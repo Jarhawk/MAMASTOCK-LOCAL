@@ -42,6 +42,7 @@ export default function LegalLayout() {
         id="content"
         tabIndex={-1}
         role="main"
+        data-router-scroll-container
         className="relative z-10 flex flex-grow flex-col items-center px-4 py-16 focus:outline-none"
       >
         <Suspense fallback={<Spinner label="Chargement du contenu légal…" />}>

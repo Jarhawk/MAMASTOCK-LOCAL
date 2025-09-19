@@ -26,6 +26,7 @@ export default function AppLayout() {
           id="content"
           tabIndex={-1}
           role="main"
+          data-router-scroll-container
           className="flex-1 focus:outline-none"
         >
           <Suspense fallback={<Spinner label="Chargement de la page…" />}>

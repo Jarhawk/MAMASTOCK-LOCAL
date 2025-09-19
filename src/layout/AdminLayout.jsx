@@ -23,7 +23,13 @@ export default function AdminLayout() {
       <Sidebar />
       <div className="relative z-10 flex flex-1 flex-col">
         <Navbar />
-        <main className="flex-1 overflow-auto p-6">
+        <main
+          id="content"
+          tabIndex={-1}
+          role="main"
+          data-router-scroll-container
+          className="flex-1 overflow-auto p-6 focus:outline-none"
+        >
           <Outlet />
         </main>
       </div>
