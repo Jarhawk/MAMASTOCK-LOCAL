@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useMemo } from "react";
+import React, { forwardRef, useCallback, useEffect, useMemo, useRef } from "react";
 import { Link, useResolvedPath } from "react-router-dom";
 
 import { prefetchRoute } from "@/routerPrefetch";
@@ -19,19 +19,59 @@ function isExternalLink(to) {
   return /^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(href);
 }
 
+function shouldSkipPrefetch() {
+  if (typeof navigator === "undefined") return false;
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  if (!connection) return false;
+  if (connection.saveData === true) return true;
+  const type = typeof connection.effectiveType === "string"
+    ? connection.effectiveType.toLowerCase()
+    : "";
+  return type === "2g" || type === "slow-2g";
+}
+
 const LinkPrefetch = forwardRef(function LinkPrefetch(
-  { to, onMouseEnter, onFocus, ...rest },
+  { to, onMouseEnter, onMouseLeave, onFocus, onBlur, ...rest },
   ref
 ) {
   const external = useMemo(() => isExternalLink(to), [to]);
   const resolved = useResolvedPath(external ? "/" : to);
   const targetPath = external ? null : resolved.pathname;
+  const abortRef = useRef(null);
+
+  const cleanup = useCallback(() => {
+    if (abortRef.current) {
+      abortRef.current.abort();
+      abortRef.current = null;
+    }
+  }, []);
 
   const triggerPrefetch = useCallback(() => {
-    if (!targetPath || PREFETCHED.has(targetPath)) return;
-    PREFETCHED.add(targetPath);
-    prefetchRoute(targetPath);
-  }, [targetPath]);
+    if (!targetPath || PREFETCHED.has(targetPath) || shouldSkipPrefetch()) return;
+
+    cleanup();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    prefetchRoute(targetPath, { signal: controller.signal })
+      .then((completed) => {
+        if (!controller.signal.aborted && completed) {
+          PREFETCHED.add(targetPath);
+        }
+      })
+      .catch((error) => {
+        if (!controller.signal.aborted && import.meta.env?.DEV) {
+          console.warn("[router] Prefetch failed", targetPath, error);
+        }
+      })
+      .finally(() => {
+        if (abortRef.current === controller) {
+          abortRef.current = null;
+        }
+      });
+  }, [cleanup, targetPath]);
+
+  useEffect(() => cleanup, [cleanup]);
 
   const handleMouseEnter = useCallback(
     (event) => {
@@ -43,6 +83,18 @@ const LinkPrefetch = forwardRef(function LinkPrefetch(
       }
     },
     [onMouseEnter, triggerPrefetch]
+  );
+
+  const handleMouseLeave = useCallback(
+    (event) => {
+      if (typeof onMouseLeave === "function") {
+        onMouseLeave(event);
+      }
+      if (!event.defaultPrevented) {
+        cleanup();
+      }
+    },
+    [cleanup, onMouseLeave]
   );
 
   const handleFocus = useCallback(
@@ -57,12 +109,26 @@ const LinkPrefetch = forwardRef(function LinkPrefetch(
     [onFocus, triggerPrefetch]
   );
 
+  const handleBlur = useCallback(
+    (event) => {
+      if (typeof onBlur === "function") {
+        onBlur(event);
+      }
+      if (!event.defaultPrevented) {
+        cleanup();
+      }
+    },
+    [cleanup, onBlur]
+  );
+
   return (
     <Link
       ref={ref}
       to={to}
       onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onFocus={handleFocus}
+      onBlur={handleBlur}
       {...rest}
     />
   );

@@ -6,7 +6,7 @@ import Spinner from "@/components/ui/Spinner";
 export default function RequireAuth({ roles = [] }) {
   const { status, roles: userRoles } = useAuth();
   const location = useLocation();
-  const redirectTarget = `${location.pathname}${location.search}${location.hash}`;
+  const redirectTarget = `${location.pathname}${location.search}`;
   const loginPath = `/login?redirectTo=${encodeURIComponent(redirectTarget)}`;
 
   if (status === "loading") {

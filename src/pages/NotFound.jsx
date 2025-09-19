@@ -17,7 +17,7 @@ export default function NotFound() {
         <meta name="description" content="La page demandée est introuvable sur MamaStock" />
       </Helmet>
       <main
-        id="main-content"
+        id="content"
         tabIndex={-1}
         role="main"
         className="relative flex min-h-screen items-center justify-center overflow-hidden text-white focus:outline-none"

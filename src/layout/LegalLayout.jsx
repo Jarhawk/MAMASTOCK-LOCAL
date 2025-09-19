@@ -39,7 +39,7 @@ export default function LegalLayout() {
       <MouseLight />
       <TouchLight />
       <main
-        id="main-content"
+        id="content"
         tabIndex={-1}
         role="main"
         className="relative z-10 flex flex-grow flex-col items-center px-4 py-16 focus:outline-none"

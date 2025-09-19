@@ -46,7 +46,7 @@ export default function LoginPage() {
 
   return (
     <main
-      id="main-content"
+      id="content"
       tabIndex={-1}
       role="main"
       className="login-wrapper"
