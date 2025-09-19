@@ -23,7 +23,7 @@ export default function AppLayout() {
       <Sidebar />
       <div className="flex flex-1 flex-col">
         <main
-          id="main-content"
+          id="content"
           tabIndex={-1}
           role="main"
           className="flex-1 focus:outline-none"

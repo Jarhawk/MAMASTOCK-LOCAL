@@ -8,24 +8,41 @@ import {
 } from "react-router-dom";
 
 import Spinner from "@/components/ui/Spinner";
-import { trackPageView } from "@/services/analytics";
+
+const NAVIGATION_EVENT = "app:navigation-complete";
+
+function resolveLocationKey(location) {
+  const fallback = `${location.pathname}${location.search}${location.hash}`;
+  if (typeof window === "undefined") return location.key || fallback;
+  const state = window.history.state;
+  if (state && typeof state === "object" && typeof state.key === "string") {
+    return state.key;
+  }
+  return location.key || fallback;
+}
 
 function useScrollAndFocusRestore() {
   const location = useLocation();
   const navigationType = useNavigationType();
+  const navigation = useNavigation();
   const positionsRef = useRef(new Map());
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
-    const update = () => {
-      const key = location.key || `${location.pathname}${location.search}${location.hash}`;
-      positionsRef.current.set(key, window.scrollY);
+    const storePosition = () => {
+      const key = resolveLocationKey(location);
+      positionsRef.current.set(key, {
+        x: window.scrollX,
+        y: window.scrollY
+      });
     };
-    window.addEventListener("scroll", update, { passive: true });
-    update();
+    window.addEventListener("scroll", storePosition, { passive: true });
+    window.addEventListener("beforeunload", storePosition);
+    storePosition();
     return () => {
-      window.removeEventListener("scroll", update);
-      update();
+      window.removeEventListener("scroll", storePosition);
+      window.removeEventListener("beforeunload", storePosition);
+      storePosition();
     };
   }, [location.hash, location.key, location.pathname, location.search]);
 
@@ -42,11 +59,19 @@ function useScrollAndFocusRestore() {
 
   useLayoutEffect(() => {
     if (typeof window === "undefined") return undefined;
-    const key = location.key || `${location.pathname}${location.search}${location.hash}`;
+    const key = resolveLocationKey(location);
     if (navigationType === "POP") {
       const stored = positionsRef.current.get(key);
-      if (typeof stored === "number") {
-        window.scrollTo({ top: stored });
+      if (stored && typeof stored.y === "number") {
+        window.scrollTo({ left: stored.x ?? 0, top: stored.y });
+        return;
+      }
+    }
+    const hash = location.hash ? location.hash.slice(1) : "";
+    if (hash) {
+      const target = document.getElementById(hash);
+      if (target) {
+        target.scrollIntoView();
         return;
       }
     }
@@ -56,43 +81,58 @@ function useScrollAndFocusRestore() {
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
-    if (navigationType === "POP") return undefined;
+    const isSkipLink = location.hash === "#content";
+    const shouldFocus =
+      (navigationType !== "POP" && navigation.state === "idle") || isSkipLink;
+    if (!shouldFocus) return undefined;
     const frame = window.requestAnimationFrame(() => {
-      const mainContent = document.getElementById("main-content");
+      const mainContent = document.getElementById("content");
       if (mainContent) {
         mainContent.focus({ preventScroll: true });
       }
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [location.hash, location.key, location.pathname, location.search, navigationType]);
+  }, [
+    location.hash,
+    location.key,
+    location.pathname,
+    location.search,
+    navigation.state,
+    navigationType
+  ]);
 }
 
-function usePageViewAnalytics() {
+function useNavigationAnalyticsEvents() {
   const location = useLocation();
   const matches = useMatches();
   const navigation = useNavigation();
-  const lastReported = useRef(null);
+  const lastKey = useRef(null);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     if (navigation.state !== "idle") return;
-    const path = `${location.pathname}${location.search}${location.hash}`;
-    if (lastReported.current === path) return;
-    const isNotFound = matches.some((match) => match.handle?.isNotFound);
-    lastReported.current = path;
-    if (isNotFound) return;
-    trackPageView(path);
-  }, [location.hash, location.pathname, location.search, matches, navigation.state]);
+    const key = resolveLocationKey(location);
+    if (lastKey.current === key) return;
+    lastKey.current = key;
+    const detail = {
+      path: `${location.pathname}${location.search}${location.hash}`,
+      matches,
+      title: typeof document !== "undefined" ? document.title : "",
+      locationKey: key
+    };
+    window.dispatchEvent(new CustomEvent(NAVIGATION_EVENT, { detail }));
+  }, [location.hash, location.key, location.pathname, location.search, matches, navigation.state]);
 }
 
 export default function App() {
   useScrollAndFocusRestore();
-  usePageViewAnalytics();
+  useNavigationAnalyticsEvents();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <a
-        href="#main-content"
+        href="#content"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-neutral-900 focus:px-4 focus:py-2 focus:text-white"
       >
         Aller au contenu principal

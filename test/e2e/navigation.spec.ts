@@ -12,7 +12,7 @@ test("accès direct à /legal/rgpd", async ({ page }) => {
   await page.goto("/#/legal/rgpd");
   await expect(page.getByRole("heading", { name: "Données & Confidentialité" })).toBeVisible();
   await expect(page).toHaveTitle("Données & Confidentialité - MamaStock");
-  await expect(page.locator("main#main-content")).toBeVisible();
+  await expect(page.locator("main#content")).toBeVisible();
 });
 
 test("redirection legacy /rgpd", async ({ page }) => {
@@ -56,11 +56,11 @@ test("page inconnue affiche la 404", async ({ page }) => {
 
 test("le skip link focalise le contenu principal", async ({ page }) => {
   await page.goto("/#/legal/cgu");
-  await page.waitForSelector('a[href="#main-content"]');
+  await page.waitForSelector('a[href="#content"]');
   await page.keyboard.press("Tab");
   await page.keyboard.press("Enter");
   const focusedId = await page.evaluate(() => document.activeElement?.id || "");
-  expect(focusedId).toBe("main-content");
+  expect(focusedId).toBe("content");
 });
 
 test("back/forward conserve le scroll et l’état actif des liens", async ({ page }) => {
