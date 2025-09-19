@@ -1,26 +1,33 @@
-import { lazy, Suspense, useEffect } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Suspense, useEffect, useLayoutEffect, useRef } from "react";
+import {
+  Outlet,
+  useLocation,
+  useMatches,
+  useNavigation,
+  useNavigationType
+} from "react-router-dom";
 
-import RequireAuth from "@/auth/RequireAuth";
-import { AppLayoutBoundary } from "@/layout/AppLayout";
-import AppLayout from "@/layout/AppLayout";
-import LegalLayout, { LegalLayoutBoundary } from "@/layout/LegalLayout";
 import Spinner from "@/components/ui/Spinner";
-
-const DashboardPage = lazy(() => import("@/pages/Dashboard.jsx"));
-const LoginPage = lazy(() => import("@/pages/Login.jsx"));
-const NotFoundPage = lazy(() => import("@/pages/NotFound.jsx"));
-const SettingsPage = lazy(() => import("@/pages/Settings.jsx"));
-const CguPage = lazy(() => import("@/pages/legal/Cgu.jsx"));
-const CgvPage = lazy(() => import("@/pages/legal/Cgv.jsx"));
-const ConfidentialitePage = lazy(() => import("@/pages/legal/Confidentialite.jsx"));
-const ContactPage = lazy(() => import("@/pages/legal/Contact.jsx"));
-const LicencePage = lazy(() => import("@/pages/legal/Licence.jsx"));
-const MentionsLegalesPage = lazy(() => import("@/pages/legal/MentionsLegales.jsx"));
-const RgpdPage = lazy(() => import("@/pages/Rgpd.jsx"));
+import { trackPageView } from "@/services/analytics";
 
 function useScrollAndFocusRestore() {
   const location = useLocation();
+  const navigationType = useNavigationType();
+  const positionsRef = useRef(new Map());
+
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const update = () => {
+      const key = location.key || `${location.pathname}${location.search}${location.hash}`;
+      positionsRef.current.set(key, window.scrollY);
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+    return () => {
+      window.removeEventListener("scroll", update);
+      update();
+    };
+  }, [location.hash, location.key, location.pathname, location.search]);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -33,9 +40,24 @@ function useScrollAndFocusRestore() {
     return undefined;
   }, []);
 
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    const key = location.key || `${location.pathname}${location.search}${location.hash}`;
+    if (navigationType === "POP") {
+      const stored = positionsRef.current.get(key);
+      if (typeof stored === "number") {
+        window.scrollTo({ top: stored });
+        return;
+      }
+    }
+    window.scrollTo({ top: 0 });
+    return undefined;
+  }, [location.hash, location.key, location.pathname, location.search, navigationType]);
+
   useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+    if (navigationType === "POP") return undefined;
     const frame = window.requestAnimationFrame(() => {
-      window.scrollTo(0, 0);
       const mainContent = document.getElementById("main-content");
       if (mainContent) {
         mainContent.focus({ preventScroll: true });
@@ -43,11 +65,29 @@ function useScrollAndFocusRestore() {
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [location.pathname, location.search, location.hash]);
+  }, [location.hash, location.key, location.pathname, location.search, navigationType]);
+}
+
+function usePageViewAnalytics() {
+  const location = useLocation();
+  const matches = useMatches();
+  const navigation = useNavigation();
+  const lastReported = useRef(null);
+
+  useEffect(() => {
+    if (navigation.state !== "idle") return;
+    const path = `${location.pathname}${location.search}${location.hash}`;
+    if (lastReported.current === path) return;
+    const isNotFound = matches.some((match) => match.handle?.isNotFound);
+    lastReported.current = path;
+    if (isNotFound) return;
+    trackPageView(path);
+  }, [location.hash, location.pathname, location.search, matches, navigation.state]);
 }
 
 export default function App() {
   useScrollAndFocusRestore();
+  usePageViewAnalytics();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -58,50 +98,7 @@ export default function App() {
         Aller au contenu principal
       </a>
       <Suspense fallback={<Spinner label="Chargement de l’application…" />}>
-        <Routes>
-          <Route element={<RequireAuth />}>
-            <Route
-              element={
-                <AppLayoutBoundary>
-                  <AppLayout />
-                </AppLayoutBoundary>
-              }
-            >
-              <Route index element={<Navigate to="dashboard" replace />} />
-              <Route path="dashboard" element={<DashboardPage />} />
-              <Route path="settings" element={<SettingsPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Route>
-          </Route>
-
-          <Route path="login" element={<LoginPage />} />
-
-          <Route
-            element={
-              <LegalLayoutBoundary>
-                <LegalLayout />
-              </LegalLayoutBoundary>
-            }
-          >
-            <Route path="legal/cgu" element={<CguPage />} />
-            <Route path="legal/cgv" element={<CgvPage />} />
-            <Route path="legal/confidentialite" element={<ConfidentialitePage />} />
-            <Route path="legal/contact" element={<ContactPage />} />
-            <Route path="legal/licence" element={<LicencePage />} />
-            <Route path="legal/mentions-legales" element={<MentionsLegalesPage />} />
-            <Route path="legal/rgpd" element={<RgpdPage />} />
-          </Route>
-
-          <Route path="cgu" element={<Navigate to="/legal/cgu" replace />} />
-          <Route path="cgv" element={<Navigate to="/legal/cgv" replace />} />
-          <Route path="confidentialite" element={<Navigate to="/legal/confidentialite" replace />} />
-          <Route path="contact" element={<Navigate to="/legal/contact" replace />} />
-          <Route path="licence" element={<Navigate to="/legal/licence" replace />} />
-          <Route path="mentions-legales" element={<Navigate to="/legal/mentions-legales" replace />} />
-          <Route path="rgpd" element={<Navigate to="/legal/rgpd" replace />} />
-
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <Outlet />
       </Suspense>
     </div>
   );

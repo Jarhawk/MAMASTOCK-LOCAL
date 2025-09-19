@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Link } from "react-router-dom";
+import LinkPrefetch from "@/components/LinkPrefetch";
 
 import { useLegalMeta } from "@/layout/LegalLayout";
 
@@ -19,12 +19,12 @@ export default function Contact() {
           </a>
           . Nous répondons généralement sous 48&nbsp;heures ouvrées.
         </p>
-        <Link
+        <LinkPrefetch
           to="/"
           className="inline-block rounded-xl border border-white/20 bg-white/10 px-6 py-2 transition hover:bg-white/20 backdrop-blur-xl"
         >
           Retour à l'accueil
-        </Link>
+        </LinkPrefetch>
       </div>
     </>
   );

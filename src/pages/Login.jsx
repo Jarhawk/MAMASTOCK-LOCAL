@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { loginLocal, listLocalUsers } from "@/auth/localAccount";
 import "./login.css";
+import LinkPrefetch from "@/components/LinkPrefetch";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { signIn } = useAuth();
   const [email, setEmail] = useState("admin@mamastock.local");
   const [password, setPassword] = useState("Admin123!");
@@ -33,8 +35,10 @@ export default function LoginPage() {
     setError("");
     try {
       const user = await loginLocal(email, password);
-      signIn(user);
-      navigate("/dashboard");
+      await signIn(user);
+      const redirectTo = searchParams.get("redirectTo");
+      const target = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/";
+      navigate(target, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     }
@@ -95,9 +99,9 @@ export default function LoginPage() {
         </form>
 
         {canCreateAccount ? (
-          <Link to="/setup" className="login-link">
+          <LinkPrefetch to="/setup" className="login-link">
             Créer un compte
-          </Link>
+          </LinkPrefetch>
         ) : null}
       </div>
     </main>

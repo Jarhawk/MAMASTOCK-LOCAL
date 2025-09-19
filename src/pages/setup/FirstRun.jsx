@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { registerLocal, listLocalUsers } from "@/auth/localAccount";
 import { useAuth } from "@/context/AuthContext";
 import '@/pages/login.css';
+import LinkPrefetch from "@/components/LinkPrefetch";
 
 export default function FirstRun() {
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ export default function FirstRun() {
     try {
       const user = await registerLocal(normalizedEmail, password, "admin");
       await signIn(user);
-      navigate("/dashboard", { replace: true });
+      navigate("/", { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
       setLoading(false);
@@ -153,9 +154,9 @@ export default function FirstRun() {
           réinstallation.
         </p>
         {hasExistingUsers ? (
-          <Link to="/login" className="login-link">
+          <LinkPrefetch to="/login" className="login-link">
             Retour à la connexion
-          </Link>
+          </LinkPrefetch>
         ) : null}
       </div>
     </div>
