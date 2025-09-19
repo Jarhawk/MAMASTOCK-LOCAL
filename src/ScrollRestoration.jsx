@@ -1,120 +1,115 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 
-const STORAGE_PREFIX = "__mscroll:";
+/**
+ * Restaure le scroll du conteneur marqué [data-scroll-container]
+ * — ou du window s’il n’existe pas — pour HashRouter.
+ * - POP (back/forward) : on restaure la position sauvegardée
+ * - PUSH/REPLACE       : on va en haut, ou sur l’ancre si `#hash`
+ */
 
-/** Renvoie le conteneur scrollable s’il est marqué, sinon null (=> fallback fenêtre). */
-function getScroller() {
-  const el = document.querySelector("[data-router-scroll-container]");
-  return el || null;
+const STORAGE_PREFIX = "scroll:";
+
+function getScrollContainer() {
+  // Ton conteneur scrollable doit être marqué data-scroll-container
+  // sinon on tombe sur le document (window)
+  return (
+    document.querySelector("[data-scroll-container]") ||
+    document.scrollingElement ||
+    document.documentElement
+  );
 }
 
-function getPositions() {
-  const scroller = getScroller();
-  const windowY = Math.round(window.scrollY || 0);
-  const containerY = scroller ? Math.round(scroller.scrollTop || 0) : 0;
-  return { windowY, containerY, any: Math.max(windowY, containerY) };
+function readPos(el) {
+  const isWindow = el === document.scrollingElement || el === document.documentElement;
+  return isWindow
+    ? { x: window.scrollX || 0, y: window.scrollY || 0 }
+    : { x: el.scrollLeft || 0, y: el.scrollTop || 0 };
 }
 
-function applyPositions(pos) {
-  const scroller = getScroller();
-  if (scroller) {
-    scroller.scrollTop = pos?.containerY ?? 0;
-    // quand on scrolle le conteneur, on garde la fenêtre en haut
-    window.scrollTo(0, 0);
+function doScroll(el, x, y) {
+  const isWindow = el === document.scrollingElement || el === document.documentElement;
+  if (isWindow) {
+    window.scrollTo(x, y);
   } else {
-    window.scrollTo(0, pos?.windowY ?? 0);
+    el.scrollTo({ left: x, top: y, behavior: "auto" });
   }
 }
 
-/** Restaure avec retries jusqu’à stabilisation, puis résout avec la position finale. */
-function restoreWithRetry(target, maxAttempts = 8) {
-  return new Promise((resolve) => {
-    const step = (attempt) => {
-      applyPositions(target);
-      const now = getPositions();
-      const ok = Math.abs(now.any - (target?.any ?? 0)) < 2;
-      if (ok || attempt >= maxAttempts) {
-        resolve(now);
-      } else {
-        requestAnimationFrame(() => step(attempt + 1));
-      }
-    };
-    step(0);
-  });
+function keyFromLocation(loc) {
+  // location.key n’existe pas toujours avec HashRouter → fallback stable
+  return loc.key || `${loc.pathname}${loc.search}${loc.hash}`;
 }
 
-export default function ScrollRestorer() {
+export default function ScrollRestoration() {
   const location = useLocation();
   const navType = useNavigationType(); // "POP" | "PUSH" | "REPLACE"
-  const prevKeyRef = useRef(location.key);
+  const key = keyFromLocation(location);
+  const containerRef = useRef(null);
 
-  // Forcer le scrollRestoration natif en "manual"
-  useEffect(() => {
-    const prev = window.history.scrollRestoration;
-    try {
-      window.history.scrollRestoration = "manual";
-    } catch {}
+  // 1) Sauvegarde en continu la position de scroll pour la clé courante
+  useLayoutEffect(() => {
+    const el = getScrollContainer();
+    containerRef.current = el;
+
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const { x, y } = readPos(el);
+        sessionStorage.setItem(`${STORAGE_PREFIX}${key}`, JSON.stringify({ x, y }));
+        ticking = false;
+      });
+    };
+
+    const target = el === document.scrollingElement || el === document.documentElement ? window : el;
+    target.addEventListener("scroll", onScroll, { passive: true });
+
+    // sauve aussi quand on quitte la page (hard reload)
+    const onPageHide = () => {
+      const { x, y } = readPos(el);
+      sessionStorage.setItem(`${STORAGE_PREFIX}${key}`, JSON.stringify({ x, y }));
+    };
+    window.addEventListener("pagehide", onPageHide);
+
     return () => {
+      target.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pagehide", onPageHide);
+    };
+  }, [key]);
+
+  // 2) Sur changement d’emplacement : restaurer / aller à l’ancre / remonter en haut
+  useLayoutEffect(() => {
+    const el = getScrollContainer();
+    const stored = sessionStorage.getItem(`${STORAGE_PREFIX}${key}`);
+
+    // back/forward → restaurer si dispo
+    if (navType === "POP" && stored) {
       try {
-        window.history.scrollRestoration = prev || "auto";
-      } catch {}
-    };
-  }, []);
-
-  // Sauvegarde générique (quitte/reload)
-  useEffect(() => {
-    const save = () => {
-      const prevKey = prevKeyRef.current;
-      if (!prevKey) return;
-      const pos = getPositions();
-      sessionStorage.setItem(STORAGE_PREFIX + prevKey, JSON.stringify(pos));
-    };
-    const onBeforeUnload = () => save();
-    window.addEventListener("beforeunload", onBeforeUnload);
-    return () => {
-      save();
-      window.removeEventListener("beforeunload", onBeforeUnload);
-    };
-  }, []);
-
-  // Gestion à chaque navigation
-  useEffect(() => {
-    // sauvegarde l’ancienne position (page quittée)
-    const prevKey = prevKeyRef.current;
-    if (prevKey && prevKey !== location.key) {
-      const pos = getPositions();
-      sessionStorage.setItem(STORAGE_PREFIX + prevKey, JSON.stringify(pos));
+        const { x, y } = JSON.parse(stored);
+        doScroll(el, x ?? 0, y ?? 0);
+        return;
+      } catch {
+        // ignore JSON invalide
+      }
     }
-    prevKeyRef.current = location.key;
 
-    const raw = sessionStorage.getItem(STORAGE_PREFIX + location.key);
-    const saved = raw ? JSON.parse(raw) : null;
-
-    if (navType === "POP" && saved) {
-      // back/forward => restaurer
-      setTimeout(() => {
-        restoreWithRetry(saved).then((finalPos) => {
-          console.log(
-            "[NOTE] back/forward scroll restoration (final):",
-            `windowY=${finalPos.windowY}, containerY=${finalPos.containerY}`
-          );
-        });
-      }, 0);
-    } else {
-      // navigation "neuve" => top
-      setTimeout(() => {
-        const scroller = getScroller();
-        if (scroller) scroller.scrollTop = 0;
-        window.scrollTo(0, 0);
-        const cur = getPositions();
-        console.log(
-          "[NOTE] reset scroll on navigation:",
-          `windowY=${cur.windowY}, containerY=${cur.containerY}`
-        );
-      }, 0);
+    // s’il y a un hash → scroll sur l’ancre + focus accessible
+    if (location.hash) {
+      const id = decodeURIComponent(location.hash.slice(1));
+      const anchor = document.getElementById(id);
+      if (anchor) {
+        if (!anchor.hasAttribute("tabindex")) anchor.setAttribute("tabindex", "-1");
+        anchor.focus({ preventScroll: true });
+        anchor.scrollIntoView({ block: "start" });
+        return;
+      }
     }
-  }, [location.key, navType]);
+
+    // sinon top
+    doScroll(el, 0, 0);
+  }, [key, navType, location.hash]);
 
   return null;
 }
