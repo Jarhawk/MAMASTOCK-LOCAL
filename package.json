@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite --strictPort",
     "tauri:dev": "powershell -NoProfile -ExecutionPolicy Bypass -Command \\=http://localhost:5173/",
-    "build": "vite build",
+    "build": "vite build --logLevel silent",
     "lint:node": "node scripts/check-node-native.js",
     "preview": "vite preview",
     "db:align": "node scripts/move-db-once.js",
