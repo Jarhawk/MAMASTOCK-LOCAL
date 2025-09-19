@@ -1,46 +1,47 @@
 {
-    "$schema":  "https://schema.tauri.app/config/2",
-    "productName":  "MAMASTOCK",
-    "version":  "0.1.0",
-    "identifier":  "com.mamastock.local",
-    "build":  {
-                  "beforeBuildCommand":  "npm run build",
-                  "frontendDist":  "../dist"
-              },
-    "app":  {
-                "security":  {
-                                 "csp":  null
-                             },
-                "windows":  [
-                                {
-                                    "title":  "MAMASTOCK",
-                                    "width":  1280,
-                                    "height":  800,
-                                    "resizable":  true
-                                }
-                            ]
-            },
-    "bundle":  {
-                   "active":  true,
-                   "targets":  [
-                                   "msi"
-                               ],
-                   "icon":  [
-                                "icons/icon.ico",
-                                "icons/256x256.png",
-                                "icons/512x512.png",
-                                "icons/1024x1024.png"
-                            ],
-                   "resources":  [
-                                     "installer/config.json",
-                                     "installer/wix/**/*"
-                                 ],
-                   "windows":  {
-                                   "wix":  {
-                                               "bannerPath":  "installer/wix/banner.bmp",
-                                               "dialogImagePath":  "installer/wix/dialog.bmp",
-                                               "template":  "installer/wix/main.wxs"
-                                           }
-                               }
-               }
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "MAMASTOCK",
+  "version": "0.1.0",
+  "identifier": "com.mamastock.local",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "security": {
+      "csp": null
+    },
+    "windows": [
+      {
+        "title": "MAMASTOCK",
+        "width": 1280,
+        "height": 800,
+        "resizable": true,
+        "devtools": true
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "msi"
+    ],
+    "icon": [
+      "icons/icon.ico",
+      "icons/256x256.png",
+      "icons/512x512.png",
+      "icons/1024x1024.png"
+    ],
+    "resources": [
+      "installer/config.json",
+      "installer/wix/**/*"
+    ],
+    "windows": {
+      "wix": {
+        "bannerPath": "installer/wix/banner.bmp",
+        "dialogImagePath": "installer/wix/dialog.bmp",
+        "template": "installer/wix/main.wxs"
+      }
+    }
+  }
 }

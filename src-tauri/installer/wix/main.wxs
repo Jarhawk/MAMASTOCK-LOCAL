@@ -5,28 +5,28 @@
     <MediaTemplate />
     <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
-    <!-- Per-user install -->
-    <Property Id="ALLUSERS" Value="2" />
-    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
     <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+    <Property Id="ARPINSTALLLOCATION" Value="[INSTALLDIR]" />
+
     <WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />
 
-    <!-- Use our custom UI that imports WixUI_Common -->
     <UIRef Id="WixUI_CustomWelcomeExit_MAMA" />
 
-    <!-- Layout under %LOCALAPPDATA%\MAMASTOCK -->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="LocalAppDataFolder">
-        <Directory Id="INSTALLDIR" Name="MAMASTOCK">
-          <Component Id="MainExecutable" Guid="*">
-            <File Id="AppExe" Name="APP_EXE_NAME" Source="APP_EXE_ABS_PATH" KeyPath="yes" />
-          </Component>
-        </Directory>
+        <Directory Id="INSTALLDIR" Name="MAMASTOCK" />
       </Directory>
     </Directory>
 
+    <ComponentGroup Id="ProductComponents">
+      <Component Id="MainExecutable" Guid="*" Directory="INSTALLDIR">
+        <File Id="AppExe" Name="APP_EXE_NAME" Source="APP_EXE_ABS_PATH" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+
     <Feature Id="ProductFeature" Title="MAMASTOCK" Level="1">
-      <ComponentRef Id="MainExecutable" />
+      <ComponentGroupRef Id="ProductComponents" />
     </Feature>
   </Product>
 </Wix>

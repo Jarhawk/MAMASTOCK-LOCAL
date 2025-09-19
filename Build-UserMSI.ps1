@@ -3,40 +3,86 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$repo    = (Get-Location).Path
-$assets  = Join-Path $repo 'src-tauri\installer\wix'
-$mainWxs = Join-Path $assets 'main.wxs'
-$uiFile  = Join-Path $assets 'ui-custom.wxs'
-$wixDir  = Join-Path $repo 'src-tauri\target\release\wix\x64'
+
+$repo = (Get-Location).Path
+$assets = Join-Path $repo 'src-tauri\installer\wix'
+$mainTemplate = Join-Path $assets 'main.wxs'
+$uiTemplate = Join-Path $assets 'ui-custom.wxs'
 $release = (Resolve-Path '.\src-tauri\target\release').Path
+$bundleDir = Join-Path $release 'bundle\msi'
+$logDir = Join-Path $release 'bundle\logs'
+$wixDir = Join-Path $release 'wix'
 
-if (!(Test-Path (Join-Path $assets 'dialog.bmp'))) { throw "Missing dialog.bmp in $assets" }
+$dialogBmp = Join-Path $assets 'dialog.bmp'
+if (!(Test-Path $dialogBmp)) {
+  throw "Missing dialog.bmp in $assets"
+}
 
-# pick first .exe (excluding obvious installers)
-$exe = Get-ChildItem $release -Filter *.exe | ? { $_.Name -notmatch 'unins|setup|install' } | Select-Object -First 1
-if (-not $exe) { throw "No .exe in $release. Run 'tauri build' first." }
+$wixTools = @('candle.exe', 'light.exe') | ForEach-Object { Join-Path $WixRoot $_ }
+foreach ($tool in $wixTools) {
+  if (!(Test-Path $tool)) {
+    throw "WiX tool not found: $tool"
+  }
+}
+
+$exe = Get-ChildItem $release -Filter *.exe -Recurse |
+  Where-Object { $_.Name -notmatch 'unins|setup|install' } |
+  Sort-Object LastWriteTime -Descending |
+  Select-Object -First 1
+
+if (-not $exe) {
+  throw "No application executable found under $release. Run 'tauri build' first."
+}
+
 $exeName = $exe.Name
 $exePath = $exe.FullName
-$upgrade = ([guid]::NewGuid()).Guid  # replace by a stable one once you ship
+$escapedExePath = [System.Security.SecurityElement]::Escape($exePath)
 
-# inject placeholders
-$text = Get-Content $mainWxs -Raw
-$text = $text.Replace('APP_EXE_NAME', $exeName).Replace('APP_EXE_ABS_PATH', $exePath).Replace('UPGRADE_CODE_GUID', $upgrade)
-Set-Content $mainWxs $text -Encoding UTF8
+$upgradeCode = $env:MAMASTOCK_UPGRADE_CODE
+if ([string]::IsNullOrWhiteSpace($upgradeCode)) {
+  $upgradeCode = '5A27A3BF-8E49-4C25-BA28-0A5D710654C3'
+}
 
-New-Item -ItemType Directory -Force -Path $wixDir | Out-Null
-Get-ChildItem $wixDir -Include *.wixobj,*.wixpdb -EA SilentlyContinue | Remove-Item -Force -EA SilentlyContinue
-$custObj = Join-Path $wixDir 'custom_main.wixobj'
-$uiObj   = Join-Path $wixDir 'ui-custom.wixobj'
+New-Item -ItemType Directory -Force -Path $wixDir, $bundleDir, $logDir | Out-Null
+Get-ChildItem $wixDir -Include *.wixobj, *.wixpdb -Recurse -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
 
-& "$WixRoot\candle.exe" -nologo -arch x64 -ext WixUIExtension -ext WixUtilExtension -out $custObj (Resolve-Path $mainWxs)
-if ($LASTEXITCODE) { throw "Candle failed on main.wxs" }
+$generatedMain = Join-Path $wixDir 'main.generated.wxs'
+$templateContent = Get-Content $mainTemplate -Raw
+$templateContent = $templateContent.Replace('APP_EXE_NAME', $exeName)
+$templateContent = $templateContent.Replace('APP_EXE_ABS_PATH', $escapedExePath)
+$templateContent = $templateContent.Replace('UPGRADE_CODE_GUID', $upgradeCode.Trim('{}'))
+Set-Content -Path $generatedMain -Value $templateContent -Encoding UTF8
 
-& "$WixRoot\candle.exe" -nologo -arch x64 -ext WixUIExtension -ext WixUtilExtension -out $uiObj (Resolve-Path $uiFile)
-if ($LASTEXITCODE) { throw "Candle failed on ui-custom.wxs" }
+$candleLog = Join-Path $logDir 'candle.log'
+$lightLog = Join-Path $logDir 'light.log'
+if (Test-Path $candleLog) { Remove-Item $candleLog -Force }
+if (Test-Path $lightLog) { Remove-Item $lightLog -Force }
 
-$msiOut = Join-Path $release ("bundle\msi\MAMASTOCK_{0}_x64_user.msi" -f (Get-Date -Format 'yyyyMMdd-HHmmss'))
-& "$WixRoot\light.exe" -nologo -v -ext WixUIExtension -ext WixUtilExtension -b "$assets" -out "$msiOut" $custObj $uiObj
-if ($LASTEXITCODE) { throw "Light failed" }
+$mainObj = Join-Path $wixDir 'main.wixobj'
+$uiObj = Join-Path $wixDir 'ui-custom.wixobj'
+
+& (Join-Path $WixRoot 'candle.exe') -nologo -arch x64 -ext WixUIExtension -ext WixUtilExtension -out $mainObj $generatedMain 2>&1 |
+  Tee-Object -FilePath $candleLog | Out-Null
+if ($LASTEXITCODE) {
+  throw "candle.exe failed (see $candleLog)"
+}
+
+& (Join-Path $WixRoot 'candle.exe') -nologo -arch x64 -ext WixUIExtension -ext WixUtilExtension -out $uiObj $uiTemplate 2>&1 |
+  Tee-Object -FilePath $candleLog -Append | Out-Null
+if ($LASTEXITCODE) {
+  throw "candle.exe failed for ui-custom.wxs (see $candleLog)"
+}
+
+$timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+$msiOut = Join-Path $bundleDir ("MAMASTOCK_{0}_x64_user.msi" -f $timestamp)
+
+& (Join-Path $WixRoot 'light.exe') -nologo -ext WixUIExtension -ext WixUtilExtension -b $assets -out $msiOut $mainObj $uiObj 2>&1 |
+  Tee-Object -FilePath $lightLog | Out-Null
+if ($LASTEXITCODE) {
+  throw "light.exe failed (see $lightLog)"
+}
 
 Write-Host "`nMSI generated -> $msiOut" -ForegroundColor Green
+Write-Host "Logs:" -ForegroundColor DarkGray
+Write-Host "  candle: $candleLog" -ForegroundColor DarkGray
+Write-Host "  light : $lightLog" -ForegroundColor DarkGray
