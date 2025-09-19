@@ -14,22 +14,18 @@ import Spinner from "@/components/ui/Spinner";
 
 export function useLegalMeta(title = "", description = "") {
   const pageTitle = title ? `${title} - MamaStock` : "MamaStock";
+  const metaDescription = description
+    ? description
+    : "MamaStock - Informations légales et politiques de confidentialité";
 
   return useMemo(
     () => (
-      <Helmet>
-        <title>{pageTitle}</title>
-        {description ? (
-          <meta name="description" content={description} />
-        ) : (
-          <meta
-            name="description"
-            content="MamaStock - Informations légales et politiques de confidentialité"
-          />
-        )}
+      <Helmet prioritizeSeoTags>
+        <title key="title">{pageTitle}</title>
+        <meta key="description" name="description" content={metaDescription} />
       </Helmet>
     ),
-    [description, pageTitle]
+    [metaDescription, pageTitle]
   );
 }
 

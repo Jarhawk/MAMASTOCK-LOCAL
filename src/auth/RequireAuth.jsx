@@ -3,16 +3,25 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 import Spinner from "@/components/ui/Spinner";
 
-export default function RequireAuth() {
-  const { status } = useAuth();
+export default function RequireAuth({ roles = [] }) {
+  const { status, roles: userRoles } = useAuth();
   const location = useLocation();
+  const redirectTarget = `${location.pathname}${location.search}${location.hash}`;
+  const loginPath = `/login?redirectTo=${encodeURIComponent(redirectTarget)}`;
 
   if (status === "loading") {
     return <Spinner label="Chargement de votre session…" />;
   }
 
   if (status !== "authed") {
-    return <Navigate to="/login" replace state={{ from: location }} />;
+    return <Navigate to={loginPath} replace />;
+  }
+
+  if (Array.isArray(roles) && roles.length > 0) {
+    const hasRole = roles.some((role) => userRoles.includes(role));
+    if (!hasRole) {
+      return <Navigate to={loginPath} replace />;
+    }
   }
 
   return <Outlet />;

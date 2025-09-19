@@ -42,3 +42,7 @@ rustup default stable-x86_64-pc-windows-msvc
 ```
 
 Assurez-vous qu'aucun élément MSYS/MinGW (comme `git\usr\bin`) ne figure dans `PATH`.
+
+## Tests manuels web
+
+- Vérifier que `/#/__not-found` affiche bien la page 404 dédiée.

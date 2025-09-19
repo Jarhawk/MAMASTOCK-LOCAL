@@ -1,5 +1,5 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { Link } from "react-router-dom";
+import LinkPrefetch from "@/components/LinkPrefetch";
 import { motion as Motion } from "framer-motion";
 
 import DeleteAccountButton from "@/components/DeleteAccountButton";
@@ -87,12 +87,12 @@ export default function Rgpd() {
           </Motion.section>
           <div className="pt-2 text-center">
             <Motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
+              <LinkPrefetch
                 to="/"
                 className="inline-block rounded-xl border border-white/20 bg-white/10 px-6 py-2 transition hover:bg-white/20 backdrop-blur-xl"
               >
                 Retour à l’accueil
-              </Link>
+              </LinkPrefetch>
             </Motion.div>
           </div>
         </GlassCard>
