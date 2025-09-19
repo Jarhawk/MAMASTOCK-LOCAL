@@ -1,29 +1,32 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { Outlet } from "react-router-dom";
+
 import Sidebar from "@/components/sidebar.autogen";
 import Navbar from "@/layout/Navbar";
 import {
   LiquidBackground,
   WavesBackground,
   MouseLight,
-  TouchLight } from
-"@/components/LiquidBackground";
+  TouchLight
+} from "@/components/LiquidBackground";
 
 /**
  * Layout général pour les pages accessibles aux admins/managers.
  * Inclut la Sidebar à gauche, et la Navbar en haut.
- */import { isTauri } from "@/lib/tauriEnv";
-export default function AdminLayout({ children }) {
+ */
+export default function AdminLayout() {
   return (
-    <div className="relative flex min-h-screen text-white text-shadow overflow-hidden">
+    <div className="relative flex min-h-screen overflow-hidden text-white text-shadow">
       <LiquidBackground showParticles />
       <WavesBackground className="opacity-40" />
       <MouseLight />
       <TouchLight />
       <Sidebar />
-      <div className="flex flex-col flex-1 relative z-10">
+      <div className="relative z-10 flex flex-1 flex-col">
         <Navbar />
-        <main className="flex-1 p-6 overflow-auto">{children}</main>
+        <main className="flex-1 overflow-auto p-6">
+          <Outlet />
+        </main>
       </div>
-    </div>);
-
+    </div>
+  );
 }

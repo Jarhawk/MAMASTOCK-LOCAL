@@ -1,29 +1,30 @@
-// MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
+import { Outlet } from "react-router-dom";
+
 import Navbar from "@/layout/Navbar";
 import {
   LiquidBackground,
   WavesBackground,
   MouseLight,
-  TouchLight } from
-"@/components/LiquidBackground";
+  TouchLight
+} from "@/components/LiquidBackground";
 
 /**
  * Layout pour les utilisateurs en lecture seule (viewer).
  * Pas de sidebar, uniquement la navbar + contenu centré.
- */import { isTauri } from "@/lib/tauriEnv";
-export default function ViewerLayout({ children }) {
+ */
+export default function ViewerLayout() {
   return (
-    <div className="relative flex flex-col min-h-screen text-white text-shadow overflow-hidden">
+    <div className="relative flex min-h-screen flex-col overflow-hidden text-white text-shadow">
       <LiquidBackground showParticles />
       <WavesBackground className="opacity-40" />
       <MouseLight />
       <TouchLight />
       <Navbar />
-      <main className="flex-1 px-4 py-6 flex justify-center items-start overflow-y-auto relative z-10">
-        <div className="w-full max-w-5xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-md p-6 text-white">
-          {children}
+      <main className="relative z-10 flex flex-1 items-start justify-center overflow-y-auto px-4 py-6">
+        <div className="w-full max-w-5xl rounded-xl border border-white/20 bg-white/10 p-6 text-white shadow-md backdrop-blur-xl">
+          <Outlet />
         </div>
       </main>
-    </div>);
-
+    </div>
+  );
 }
