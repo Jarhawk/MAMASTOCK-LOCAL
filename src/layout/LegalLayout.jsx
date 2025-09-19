@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { Suspense, useMemo } from "react";
 import { Outlet } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 import Footer from "@/components/Footer";
 import {
@@ -8,19 +9,28 @@ import {
   MouseLight,
   TouchLight
 } from "@/components/LiquidBackground";
+import LayoutErrorBoundary from "@/components/LayoutErrorBoundary";
+import Spinner from "@/components/ui/Spinner";
 
 export function useLegalMeta(title = "", description = "") {
-  useEffect(() => {
-    if (title) {
-      document.title = `${title} - MamaStock`;
-    }
-    if (description) {
-      const meta = document.querySelector('meta[name="description"]');
-      if (meta) {
-        meta.setAttribute("content", description);
-      }
-    }
-  }, [title, description]);
+  const pageTitle = title ? `${title} - MamaStock` : "MamaStock";
+
+  return useMemo(
+    () => (
+      <Helmet>
+        <title>{pageTitle}</title>
+        {description ? (
+          <meta name="description" content={description} />
+        ) : (
+          <meta
+            name="description"
+            content="MamaStock - Informations légales et politiques de confidentialité"
+          />
+        )}
+      </Helmet>
+    ),
+    [description, pageTitle]
+  );
 }
 
 export default function LegalLayout() {
@@ -32,13 +42,31 @@ export default function LegalLayout() {
       <WavesBackground className="opacity-40" />
       <MouseLight />
       <TouchLight />
-      <main className="relative z-10 flex flex-grow flex-col items-center px-4 py-16">
-        <Outlet />
+      <main
+        id="main-content"
+        tabIndex={-1}
+        role="main"
+        className="relative z-10 flex flex-grow flex-col items-center px-4 py-16 focus:outline-none"
+      >
+        <Suspense fallback={<Spinner label="Chargement du contenu légal…" />}>
+          <Outlet />
+        </Suspense>
         <p className="mt-4 text-sm opacity-70">
           Dernière mise à jour : {updated}
         </p>
       </main>
       <Footer />
     </div>
+  );
+}
+
+export function LegalLayoutBoundary({ children }) {
+  return (
+    <LayoutErrorBoundary
+      title="Erreur sur la section légale"
+      message="La page légale demandée est momentanément indisponible. Merci de revenir en arrière ou de réessayer plus tard."
+    >
+      {children}
+    </LayoutErrorBoundary>
   );
 }

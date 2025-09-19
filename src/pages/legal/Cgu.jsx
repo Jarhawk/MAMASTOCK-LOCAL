@@ -5,8 +5,7 @@ import { useLegalMeta } from "@/layout/LegalLayout";
 
 export default function Cgu() {
   const [text, setText] = useState("");
-
-  useLegalMeta("Conditions d'utilisation", "CGU MamaStock");
+  const legalMeta = useLegalMeta("Conditions d'utilisation", "CGU MamaStock");
 
   useEffect(() => {
     fetch("/legal/CGU.md")
@@ -15,6 +14,9 @@ export default function Cgu() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-3xl whitespace-pre-wrap p-8">{text}</div>
+    <>
+      {legalMeta}
+      <div className="mx-auto max-w-3xl whitespace-pre-wrap p-8">{text}</div>
+    </>
   );
 }
