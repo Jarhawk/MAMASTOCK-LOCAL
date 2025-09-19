@@ -5,19 +5,16 @@
   "windows": ["main"],
   "permissions": [
     "core:default",
-    "core:event:default",
     "core:path:default",
     "core:window:default",
-    "core:resources:default",
+    "core:webview:allow-clear-all-browsing-data",
     "log:default",
-
     "fs:default",
     "fs:allow-open",
     "fs:allow-read",
     "fs:allow-mkdir",
     "fs:create-app-specific-dirs",
     "fs:allow-appdata-write",
-    "fs:allow-appdata-write-recursive",
-    "core:webview:allow-clear-all-browsing-data"
+    "fs:allow-appdata-write-recursive"
   ]
 }

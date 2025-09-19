@@ -1,16 +1,33 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: ["index.html", "src/**/*.{ts,tsx,js,jsx}"],
+  content: [
+    "index.html",
+    "src/**/*.{ts,tsx,js,jsx}",
+    "./Sidebar*.{ts,tsx,jsx}",
+    "./**/*.tsx",
+    "!./node_modules/**/*",
+  ],
   safelist: [
+    "w-64",
+    "shrink-0",
+    "border-r",
+    "bg-background",
+    "text-foreground",
+    "text-foreground/80",
+    "text-foreground/60",
+    "hover:bg-accent",
+    "hover:text-accent-foreground",
+    "data-[state=active]:bg-accent",
+    "data-[state=active]:text-accent-foreground",
+    "group",
+    "group-hover:opacity-100",
+    "opacity-60",
     "min-h-screen",
     "flex",
     "flex-1",
     "flex-col",
-    "w-64",
     "md:w-72",
-    "shrink-0",
-    "border-r",
     "border-white/10",
     "bg-white/10",
     "bg-gradient-to-b",
@@ -65,12 +82,6 @@ const config: Config = {
     "rounded-full",
     "max-w-sm",
     "max-w-md",
-    { pattern: /^md:(block|flex|inline-flex)$/ },
-    { pattern: /^(hover:)?text-mamastockGold$/ },
-    { pattern: /^(flex|items|justify)-(start|center|end|between)$/ },
-    { pattern: /^gap-[1-6]$/ },
-    { pattern: /^space-y-[1-6]$/ },
-    { pattern: /^(bg|text|border)-(mamastockGold|white(?:\/10|\/20)?|zinc-(400|500|600|900))$/ }
   ],
   theme: {
     extend: {}

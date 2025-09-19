@@ -7,7 +7,7 @@ export default function PrivateOutlet() {
 
   if (status === "loading") {
     return (
-      <div className="flex h-full items-center justify-center p-6 text-sm text-zinc-500">
+      <div className="flex h-full items-center justify-center p-6 text-sm text-foreground/60">
         Chargement de la session…
       </div>
     );
@@ -15,11 +15,10 @@ export default function PrivateOutlet() {
 
   if (status === "signedout") {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
-        <div className="text-lg font-semibold text-zinc-900">Connexion requise</div>
-        <p className="max-w-sm text-sm text-zinc-600">
-          Veuillez vous connecter pour accéder à cette section de MamaStock.
-        </p>
+      <div className="flex h-full items-center justify-center p-6">
+        <div className="text-center text-base font-medium text-foreground/80">
+          Veuillez vous connecter pour accéder à cette section.
+        </div>
       </div>
     );
   }
