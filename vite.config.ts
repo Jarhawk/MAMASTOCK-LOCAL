@@ -6,7 +6,8 @@ import { VitePWA as pwa } from "vite-plugin-pwa";
 
 const isTauri = !!process.env.TAURI_PLATFORM || process.env.VITE_TAURI === "1";
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
+  const isBuild = command === "build";
   const plugins = [
     react(),
     !isTauri &&
@@ -16,7 +17,7 @@ export default defineConfig(() => {
   ].filter(Boolean);
 
   return {
-    base: "./",
+    base: isBuild ? "./" : "/",
     plugins,
     resolve: {
       // CODEREVIEW: normalize absolute imports with @/*
