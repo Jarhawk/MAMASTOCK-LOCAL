@@ -1,7 +1,8 @@
 import { setupPwaGuard } from "@/pwa/guard";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App";
+import { RouterProvider } from "react-router-dom";
+import { appRouter } from "./router";
 import ErrorBoundary from "@/debug/ErrorBoundary";
 import "./globals.css";
 import "nprogress/nprogress.css";
@@ -81,7 +82,7 @@ const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
     <ErrorBoundary>
-      <App />
+      <RouterProvider router={appRouter} />
     </ErrorBoundary>
   </StrictMode>
 );

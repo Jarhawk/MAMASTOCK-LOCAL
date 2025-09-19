@@ -1,19 +1,23 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import nprogress from "nprogress";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import CookieConsent from "@/components/CookieConsent";
 import DebugRibbon from "@/components/DebugRibbon";
 import ToastRoot from "@/components/ToastRoot";
 import { MultiMamaProvider } from "@/context/MultiMamaContext";
 import { ThemeProvider } from "@/context/ThemeProvider";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { devFlags } from "@/lib/devFlags";
 import { getDbUrl } from "@/lib/appConfig";
 import { pingDb } from "@/lib/db/database";
 import DbSetup from "@/pages/DbSetup";
-import Router from "@/router";
+import Sidebar from "@/components/sidebar.autogen";
+import Footer from "@/components/Footer";
 import { testRandom } from "@/shims/selftest";
+import { listLocalUsers } from "@/auth/localAccount";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,6 +32,74 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+function AppShell({ loadingConfig, needsSetup, dbErrorMessage }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function ensureAdminAccount() {
+      try {
+        const users = await listLocalUsers();
+        if (cancelled) return;
+        if (users.length === 0 && !location.pathname.startsWith("/setup")) {
+          navigate("/setup", { replace: true });
+        }
+      } catch (error) {
+        console.warn("[setup] Impossible de lire les comptes locaux", error);
+        if (!cancelled && !location.pathname.startsWith("/setup")) {
+          navigate("/setup", { replace: true });
+        }
+      }
+    }
+
+    void ensureAdminAccount();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [location.pathname, navigate]);
+
+  let content = null;
+  if (loadingConfig) {
+    content = (
+      <div style={{ padding: 24, fontSize: 14 }}>
+        Initialisation de la configuration…
+      </div>
+    );
+  } else if (needsSetup) {
+    content = <DbSetup />;
+  } else if (dbErrorMessage) {
+    content = <DbSetup initialError={dbErrorMessage} />;
+  } else {
+    content = (
+      <Suspense fallback={<div style={{ padding: 16 }}>Chargement…</div>}>
+        <Outlet />
+      </Suspense>
+    );
+  }
+
+  if (authLoading) {
+    content = (
+      <div className="flex h-full items-center justify-center p-6 text-sm">
+        Vérification de la session…
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex min-h-screen overflow-hidden bg-[var(--mamastock-bg)] text-[var(--mamastock-text)]">
+      <Sidebar />
+      <div className="flex flex-1 flex-col">
+        <main className="flex-1 overflow-auto p-4">{content}</main>
+        <Footer />
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const [devPanelOpen, setDevPanelOpen] = useState(false);
@@ -173,28 +245,21 @@ export default function App() {
   const loadingConfig = dbConfigStatus === "checking";
   const needsSetup = dbConfigStatus === "missing";
   const hasDbError = Boolean(dbError);
-
-  let mainContent = <Router />;
-  if (loadingConfig) {
-    mainContent = (
-      <div style={{ padding: 24, fontSize: 14 }}>
-        Initialisation de la configuration…
-      </div>
-    );
-  } else if (needsSetup) {
-    mainContent = <DbSetup />;
-  } else if (hasDbError) {
-    mainContent = <DbSetup initialError={dbError ?? ""} />;
-  }
+  const dbErrorMessage = hasDbError ? dbError ?? "" : null;
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MultiMamaProvider>
-        <ThemeProvider>
-          <ToastRoot />
-          <DebugRibbon />
-          {mainContent}
-          <CookieConsent />
+      <AuthProvider>
+        <MultiMamaProvider>
+          <ThemeProvider>
+            <ToastRoot />
+            <DebugRibbon />
+            <AppShell
+              loadingConfig={loadingConfig}
+              needsSetup={needsSetup}
+              dbErrorMessage={dbErrorMessage}
+            />
+            <CookieConsent />
           {devFlags.isDev && devPanelOpen && (
             <div className="fixed bottom-20 left-4 z-[2147483646] max-w-sm rounded-lg border border-white/20 bg-black/80 p-4 text-white shadow-xl">
               <button
@@ -239,8 +304,9 @@ export default function App() {
               {`DEV • Sidebar: ${devFlags.reason.sidebar || "prod"} • Routes: ${devFlags.reason.routes || "prod"} • ${devFlags.isTauri ? "Tauri" : "Browser"}`}
             </div>
           )}
-        </ThemeProvider>
-      </MultiMamaProvider>
+          </ThemeProvider>
+        </MultiMamaProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
