@@ -1,11 +1,17 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
 import { useEffect, useState } from "react";
-import LegalLayout from "@/layout/LegalLayout";
-import useMamaSettings from "@/hooks/useMamaSettings";import { isTauri } from "@/lib/tauriEnv";
+
+import { useLegalMeta } from "@/layout/LegalLayout";
+import useMamaSettings from "@/hooks/useMamaSettings";
 
 export default function Confidentialite() {
   const { settings } = useMamaSettings();
   const [text, setText] = useState("");
+
+  useLegalMeta(
+    "Politique de confidentialité",
+    "Politique de confidentialité MamaStock"
+  );
 
   useEffect(() => {
     async function fetchText() {
@@ -20,8 +26,9 @@ export default function Confidentialite() {
   }, [settings?.rgpd_text]);
 
   return (
-    <LegalLayout title="Politique de confidentialité" description="Politique de confidentialité MamaStock">
-      <div className="p-8 max-w-3xl mx-auto prose prose-invert whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: text }} />
-    </LegalLayout>);
-
+    <div
+      className="prose prose-invert mx-auto max-w-3xl whitespace-pre-wrap p-8"
+      dangerouslySetInnerHTML={{ __html: text }}
+    />
+  );
 }

@@ -1,15 +1,20 @@
 // MamaStock © 2025 - Licence commerciale obligatoire - Toute reproduction interdite sans autorisation.
-import { useEffect, useState } from 'react';
-import LegalLayout from '@/layout/LegalLayout';import { isTauri } from "@/lib/tauriEnv";
+import { useEffect, useState } from "react";
+
+import { useLegalMeta } from "@/layout/LegalLayout";
 
 export default function Cgv() {
-  const [text, setText] = useState('');
-  useEffect(() => {
-    fetch('/legal/CGV.md').then((r) => r.text()).then(setText);
-  }, []);
-  return (
-    <LegalLayout title="Conditions de vente" description="CGV MamaStock">
-      <div className="p-8 max-w-3xl mx-auto whitespace-pre-wrap">{text}</div>
-    </LegalLayout>);
+  const [text, setText] = useState("");
 
+  useLegalMeta("Conditions de vente", "CGV MamaStock");
+
+  useEffect(() => {
+    fetch("/legal/CGV.md")
+      .then((r) => r.text())
+      .then(setText);
+  }, []);
+
+  return (
+    <div className="mx-auto max-w-3xl whitespace-pre-wrap p-8">{text}</div>
+  );
 }
