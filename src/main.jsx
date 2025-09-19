@@ -1,88 +1,24 @@
-import { setupPwaGuard } from "@/pwa/guard";
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
-import { appRouter } from "./router";
-import ErrorBoundary from "@/debug/ErrorBoundary";
-import "./globals.css";
-import "nprogress/nprogress.css";
-import { runSqlSelfTest } from "@/debug/sqlSelfTest";
-import { clearWebviewOnDev } from "@/debug/clearWebview";
-import { isTauri } from "@/lib/tauriEnv";
-import { initLog } from "@/tauriLog";
-import { testPg } from "@/lib/db/postgres";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
+import AppLayout from "./App.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Settings from "./pages/Settings.jsx";
+import { AuthProvider } from "./hooks/useAuth";
 
-clearWebviewOnDev();
-setupPwaGuard();
-
-initLog().catch((err) => {
-  console.warn("[log] Initialisation du plugin de log échouée", err);
-});
-
-// CODEREVIEW: warn when WebView2 runtime is missing to help support teams
-function setupWebviewDiagnostics() {
-  if (!isTauri()) return;
-  let warned = false;
-  const logHint = (source, detail) => {
-    if (warned) return;
-    warned = true;
-    console.error(
-      `[webview] ${source}: le runtime Microsoft Edge WebView2 semble manquant. ` +
-        "L'installateur est configuré pour télécharger automatiquement le bootstrapper (webviewInstallMode: \"downloadBootstrapper\").",
-      detail
-    );
-  };
-  const matches = (value) => {
-    if (!value) return false;
-    const text = String(value).toLowerCase();
-    return text.includes("webview2") || text.includes("createwebview");
-  };
-  window.addEventListener("error", (event) => {
-    if (matches(event?.message) || matches(event?.error)) {
-      logHint("error", event?.error ?? event?.message);
-    }
-  });
-  window.addEventListener("unhandledrejection", (event) => {
-    if (matches(event?.reason)) {
-      logHint("unhandledrejection", event?.reason);
-    }
-  });
-}
-
-setupWebviewDiagnostics();
-
-if (import.meta.env.DEV && isTauri()) {
-  import("@/debug/dbIntrospect");
-  import("@/debug/check-capabilities-runtime");
-}
-
-runSqlSelfTest().catch(() => {});
-
-if (isTauri()) {
-  testPg()
-    .then((ok) => {
-      console.log(ok ? "PG OK (Neon)" : "PG KO (voir config)");
-    })
-    .catch(() => {
-      console.log("PG KO (voir config)");
-    });
-}
-
-if (
-  typeof window !== "undefined" &&
-  window.location.hostname === "localhost" &&
-  !isTauri()
-) {
-  console.warn(
-    "Vous êtes dans le navigateur. Ouvrez l’app dans la fenêtre Tauri pour activer SQLite."
-  );
-}
-
-const root = createRoot(document.getElementById("root"));
-root.render(
-  <StrictMode>
-    <ErrorBoundary>
-      <RouterProvider router={appRouter} />
-    </ErrorBoundary>
-  </StrictMode>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <AuthProvider>
+      <HashRouter>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route index element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Route>
+        </Routes>
+      </HashRouter>
+    </AuthProvider>
+  </React.StrictMode>
 );

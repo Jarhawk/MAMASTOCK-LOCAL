@@ -3,19 +3,11 @@ import type { Config } from "tailwindcss";
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   safelist: [
-    "bg-zinc-900",
-    "text-zinc-100",
-    "hover:bg-zinc-800/50",
-    "hover:bg-muted",
-    "font-semibold",
-    "border-border",
-    "bg-background",
-    "text-foreground",
-    "shadow-lg",
-    "drop-shadow-[0_0_20px_rgba(255,210,0,0.8)]",
-    {
-      pattern: /(bg|text|border)-(muted|background|foreground)/
-    }
+    "fixed","md:relative","hidden","md:flex","w-64","md:w-64",
+    "z-50","h-screen","overflow-y-auto","flex","flex-col","space-y-1",
+    "px-2","px-3","py-2","rounded-md","items-center","justify-between","md:justify-start",
+    "bg-gray-900","text-white","text-gray-300","hover:bg-gray-700","hover:text-white",
+    "group","group-hover:text-white","group-hover:bg-gray-700"
   ],
   theme: {
     extend: {
