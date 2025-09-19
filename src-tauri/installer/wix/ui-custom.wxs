@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
+    <!-- Single UI that reuses WixUI_Common and adds two custom dialogs -->
     <UI Id="WixUI_CustomWelcomeExit_MAMA">
-      <!-- Styles/Dialogs standard -->
+      <!-- bring in all built-in styles, actions and dialogs -->
       <UIRef Id="WixUI_Common"/>
+
+      <!-- standard dialogs used by InstallDir flow -->
       <DialogRef Id="BrowseDlg"/>
       <DialogRef Id="DiskCostDlg"/>
       <DialogRef Id="ErrorDlg"/>
@@ -17,21 +20,20 @@
       <DialogRef Id="InstallDirDlg"/>
       <DialogRef Id="VerifyReadyDlg"/>
 
-      <!-- Welcome custom (fond = WixUIDialogBmp -> dialog.bmp) -->
+      <!-- Custom Welcome and Exit dialogs (use built-in text styles) -->
       <Dialog Id="WelcomeDlg_MAMA" Width="493" Height="312" Title="[ProductName] Setup" NoMinimize="yes">
         <Control Id="Bitmap" Type="Bitmap" X="0" Y="0" Width="493" Height="312" TabSkip="yes" Text="WixUI_Bmp_Dialog"/>
         <Control Id="Title" Type="Text" X="40" Y="150" Width="413" Height="30" Transparent="yes" NoPrefix="yes" Text="{\WixUI_Font_Title}!(loc.WelcomeDlgTitle)"/>
         <Control Id="Description" Type="Text" X="40" Y="190" Width="413" Height="60" Transparent="yes" NoPrefix="yes" Text="{\WixUI_Font_Normal}!(loc.WelcomeDlgDescription)"/>
-        <Control Id="Next" Type="PushButton" X="393" Y="276" Width="80" Height="17" Default="yes" Text="!(loc.WixUINext)">
+        <Control Id="Next"   Type="PushButton" X="393" Y="276" Width="80" Height="17" Default="yes" Text="!(loc.WixUINext)">
           <Publish Event="NewDialog" Value="InstallDirDlg">1</Publish>
         </Control>
         <Control Id="Cancel" Type="PushButton" X="309" Y="276" Width="80" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
           <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
         </Control>
-        <Control Id="Back" Type="PushButton" X="225" Y="276" Width="80" Height="17" Disabled="yes" Text="!(loc.WixUIBack)"/>
+        <Control Id="Back"   Type="PushButton" X="225" Y="276" Width="80" Height="17" Disabled="yes" Text="!(loc.WixUIBack)"/>
       </Dialog>
 
-      <!-- Exit custom -->
       <Dialog Id="ExitDlg_MAMA" Width="493" Height="312" Title="[ProductName] Setup" NoMinimize="yes">
         <Control Id="Bitmap" Type="Bitmap" X="0" Y="0" Width="493" Height="312" TabSkip="yes" Text="WixUI_Bmp_Dialog"/>
         <Control Id="Title" Type="Text" X="40" Y="150" Width="413" Height="30" Transparent="yes" NoPrefix="yes" Text="{\WixUI_Font_Title}!(loc.ExitDialogTitle)"/>
@@ -39,15 +41,17 @@
         <Control Id="Finish" Type="PushButton" X="393" Y="276" Width="80" Height="17" Default="yes" Text="!(loc.WixUIFinish)">
           <Publish Event="EndDialog" Value="Return">1</Publish>
         </Control>
-        <Control Id="Back" Type="PushButton" X="309" Y="276" Width="80" Height="17" Disabled="yes" Text="!(loc.WixUIBack)"/>
+        <Control Id="Back"   Type="PushButton" X="309" Y="276" Width="80" Height="17" Disabled="yes" Text="!(loc.WixUIBack)"/>
         <Control Id="Cancel" Type="PushButton" X="225" Y="276" Width="80" Height="17" Disabled="yes" Text="!(loc.WixUICancel)"/>
       </Dialog>
 
-      <!-- Branchement -->
+      <!-- Wiring identical to WixUI_InstallDir, but entry via WelcomeDlg_MAMA -->
       <Publish Dialog="InstallDirDlg"  Control="Back" Event="NewDialog"     Value="WelcomeDlg_MAMA">1</Publish>
       <Publish Dialog="InstallDirDlg"  Control="Next" Event="SetTargetPath" Value="[WIXUI_INSTALLDIR]">1</Publish>
       <Publish Dialog="InstallDirDlg"  Control="Next" Event="NewDialog"     Value="VerifyReadyDlg">1</Publish>
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog"     Value="InstallDirDlg">1</Publish>
+      <Publish Dialog="BrowseDlg"      Control="OK"   Event="DoAction"      Value="WixUIValidatePath">1</Publish>
+      <Publish Dialog="BrowseDlg"      Control="Back" Event="NewDialog"     Value="InstallDirDlg">1</Publish>
 
       <InstallUISequence>
         <Show Dialog="WelcomeDlg_MAMA" Before="ProgressDlg">NOT Installed</Show>
@@ -55,6 +59,12 @@
         <Show Dialog="FatalError"  OnExit="error" />
         <Show Dialog="UserExit"   OnExit="cancel" />
       </InstallUISequence>
+      <AdminUISequence>
+        <Show Dialog="WelcomeDlg_MAMA" Before="ProgressDlg">NOT Installed</Show>
+        <Show Dialog="ExitDlg_MAMA" OnExit="success" />
+        <Show Dialog="FatalError"  OnExit="error" />
+        <Show Dialog="UserExit"   OnExit="cancel" />
+      </AdminUISequence>
     </UI>
   </Fragment>
 </Wix>
