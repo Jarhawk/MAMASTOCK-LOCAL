@@ -1,28 +1,19 @@
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
-import ProtectedRoute from "./ProtectedRoute.jsx";
+import AppShell from "./AppShell";
 import PrivateOutlet from "./PrivateOutlet.jsx";
-import Sidebar from "./Sidebar";
+import ProtectedRoute from "./ProtectedRoute.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
-import Settings from "./pages/Settings.jsx";
+import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
-
-function AppShell() {
-  return (
-    <div className="flex min-h-screen w-full bg-slate-950 text-zinc-900">
-      <Sidebar />
-      <main className="flex-1 min-w-0 bg-white">
-        <Outlet />
-      </main>
-    </div>
-  );
-}
+import Settings from "./pages/Settings.jsx";
 
 export default function App() {
   return (
     <Routes>
-      <Route element={<AppShell />}>
+      <Route path="/" element={<AppShell />}>
         <Route index element={<Navigate to="/dashboard" replace />} />
+        <Route path="login" element={<Login />} />
         <Route
           path="dashboard"
           element={

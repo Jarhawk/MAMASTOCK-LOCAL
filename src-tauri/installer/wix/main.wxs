@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="MAMASTOCK" Language="1033" Version="0.1.0" Manufacturer="MAMASTOCK" UpgradeCode="{UPGRADE_CODE_GUID}">
-    <Package InstallerVersion="500" Compressed="yes" InstallScope="perUser" />
-    <MediaTemplate />
+  <Product
+    Id="*"
+    Name="MAMASTOCK"
+    Language="1033"
+    Version="0.1.0"
+    Manufacturer="MAMASTOCK"
+    UpgradeCode="{5A27A3BF-8E49-4C25-BA28-0A5D710654C3}"
+  >
+    <Package InstallScope="perUser" Compressed="yes" InstallerVersion="500" />
+    <MediaTemplate EmbedCab="yes" />
     <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
-    <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
-    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
     <Property Id="ARPINSTALLLOCATION" Value="[INSTALLDIR]" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+
+    <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_CustomWelcomeExit_MAMA" />
 
     <WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />
 
-    <UIRef Id="WixUI_CustomWelcomeExit_MAMA" />
-
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="LocalAppDataFolder">
-        <Directory Id="INSTALLDIR" Name="MAMASTOCK" />
+        <Directory Id="INSTALLDIR" Name="MAMASTOCK">
+          <Component Id="AppExecutable" Guid="*" Win64="no">
+            <File Id="MainExecutable" KeyPath="yes" Source="$(var.AppExePath)" />
+          </Component>
+        </Directory>
       </Directory>
     </Directory>
 
-    <ComponentGroup Id="ProductComponents">
-      <Component Id="MainExecutable" Guid="*" Directory="INSTALLDIR">
-        <File Id="AppExe" Name="APP_EXE_NAME" Source="APP_EXE_ABS_PATH" KeyPath="yes" />
-      </Component>
-    </ComponentGroup>
-
     <Feature Id="ProductFeature" Title="MAMASTOCK" Level="1">
-      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="AppExecutable" />
     </Feature>
   </Product>
 </Wix>

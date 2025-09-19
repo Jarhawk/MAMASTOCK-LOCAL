@@ -5,7 +5,7 @@ export default function ProtectedRoute({ children }) {
 
   if (status === "loading") {
     return (
-      <div className="flex min-h-[240px] items-center justify-center p-6 text-sm text-zinc-500">
+      <div className="flex min-h-[240px] items-center justify-center p-6 text-sm text-foreground/60">
         Chargement de votre session…
       </div>
     );
@@ -13,11 +13,10 @@ export default function ProtectedRoute({ children }) {
 
   if (status === "signedout") {
     return (
-      <div className="p-6">
-        <div className="text-lg font-semibold text-zinc-900">Connexion requise</div>
-        <p className="mt-3 max-w-md text-sm text-zinc-600">
-          Vous devez être connecté pour accéder à ce contenu MamaStock.
-        </p>
+      <div className="flex min-h-[240px] items-center justify-center p-6">
+        <div className="text-center text-base font-medium text-foreground/80">
+          Veuillez vous connecter pour accéder à ce contenu.
+        </div>
       </div>
     );
   }
