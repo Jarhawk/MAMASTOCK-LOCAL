@@ -2,30 +2,26 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="MAMASTOCK" Language="1033" Version="0.1.0"
            Manufacturer="MAMASTOCK"
-           UpgradeCode="{<STABLE_UPGRADE_CODE_GUID>}">
+           UpgradeCode="{95C4853D-66DF-4D4E-8E6F-9BAA918E2C98}">
 
-    <!-- Per-user, pas d'UAC -->
-    <Package InstallerVersion="500" Compressed="yes" InstallScope="perUser" InstallPrivileges="limited"/>
-    <MediaTemplate />
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perUser" InstallPrivileges="limited" />
+    <MediaTemplate EmbedCab="yes" />
+
     <MajorUpgrade Schedule="afterInstallInitialize"
-                  DowngradeErrorMessage="A newer version of [ProductName] is already installed."/>
+                  DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 
-    <!-- UI & styles standards + notre UI additive -->
-    <UIRef Id="WixUI_Common"/>
-    <UIRef Id="WixUI_InstallDir"/>
-    <UIRef Id="WixUI_CustomWelcomeExit_MAMA"/>
-
-    <!-- Propriétés & variable d'image -->
     <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
     <WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />
 
-    <!-- Dossiers per-user -->
+    <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_MAMA_Additions" />
+
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="LocalAppDataFolder">
         <Directory Id="INSTALLDIR" Name="MAMASTOCK">
-          <Component Id="MainExecutable" Guid="*" Win64="no">
-            <File Id="AppExe" Name="<EXE_NAME>" Source="<EXE_FULL_PATH>" KeyPath="yes" />
+          <Component Id="MainExecutable" Guid="*">
+            <File Id="AppExecutable" Source="$(var.MamaStockExecutable)" KeyPath="yes" />
           </Component>
         </Directory>
       </Directory>
