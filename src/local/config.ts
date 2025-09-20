@@ -1,4 +1,4 @@
-import { getDbUrl, savePostgresUrl } from "@/lib/appConfig";
+import { getDbUrl, saveDbUrl as persistDbUrl } from "@/lib/appConfig";
 
 export type AppConfig = { dbUrl: string | null };
 
@@ -8,5 +8,5 @@ export async function loadConfig(): Promise<AppConfig> {
 }
 
 export async function saveDbUrl(url: string) {
-  await savePostgresUrl(url);
+  await persistDbUrl(url);
 }

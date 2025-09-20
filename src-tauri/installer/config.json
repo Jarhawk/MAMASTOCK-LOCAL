@@ -1,5 +1,5 @@
 {
-  "pgUrl": "postgresql://neondb_owner:npg_bM8mxANEGzd7@ep-falling-field-a9ppe70d-pooler.gwc.azure.neon.tech/neondb?sslmode=require&channel_binding=require",
+  "pgUrl": "sqlite:mamastock.db",
   "appName": "MAMASTOCK",
   "configTarget": "%PROGRAMDATA%/MAMASTOCK/config.json"
 }

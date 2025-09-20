@@ -10,9 +10,6 @@ use tauri::Manager;
 use tauri_plugin_fs;
 use tauri_plugin_sql;
 
-const DEFAULT_PG_URL: &str =
-    "postgresql://neondb_owner:npg_bM8mxANEGzd7@ep-falling-field-a9ppe70d-pooler.gwc.azure.neon.tech/neondb?sslmode=require&channel_binding=require";
-
 #[allow(dead_code)]
 #[derive(Serialize)]
 struct DbCfg {
@@ -49,34 +46,99 @@ fn config_file_path() -> PathBuf {
     path
 }
 
-fn read_url_from_value(value: &Value) -> Option<String> {
-    if let Some(url) = value.get("pgUrl").and_then(|v| v.as_str()) {
-        let trimmed = url.trim();
-        if !trimmed.is_empty() {
-            return Some(trimmed.to_string());
-        }
-    }
-    if let Some(url) = value.get("dbUrl").and_then(|v| v.as_str()) {
-        let trimmed = url.trim();
-        if !trimmed.is_empty() {
-            return Some(trimmed.to_string());
-        }
-    }
-    if let Some(obj) = value.get("db").and_then(|v| v.as_object()) {
-        if let Some(url) = obj.get("url").and_then(|v| v.as_str()) {
-            let trimmed = url.trim();
-            if !trimmed.is_empty() {
-                return Some(trimmed.to_string());
-            }
-        }
-    }
-    None
-}
-
 fn read_config_url_from_path(path: &Path) -> Option<String> {
     let content = fs::read_to_string(path).ok()?;
     let parsed: Value = serde_json::from_str(&content).ok()?;
     read_url_from_value(&parsed)
+}
+
+fn is_supported_db_url(raw: &str) -> bool {
+    let trimmed = raw.trim();
+    if trimmed.is_empty() {
+        return false;
+    }
+    trimmed
+        .to_ascii_lowercase()
+        .starts_with("sqlite:")
+}
+
+fn normalize_config(value: &mut Value) -> bool {
+    if !value.is_object() {
+        *value = Value::Object(Map::new());
+    }
+
+    let obj = value.as_object_mut().expect("value coerced to object");
+    let mut changed = false;
+
+    for key in ["pgUrl", "dbUrl"] {
+        if let Some(url_value) = obj.get(key).and_then(|v| v.as_str()) {
+            if !is_supported_db_url(url_value) {
+                obj.remove(key);
+                changed = true;
+            }
+        }
+    }
+
+    match obj.get_mut("db") {
+        Some(Value::Object(db_obj)) => {
+            if let Some(url_value) = db_obj.get("url").and_then(|v| v.as_str()) {
+                if !is_supported_db_url(url_value) {
+                    db_obj.remove("url");
+                    changed = true;
+                }
+            }
+            if let Some(db_type) = db_obj.get("type").and_then(|v| v.as_str()) {
+                if !db_type.eq_ignore_ascii_case("sqlite") {
+                    db_obj.insert("type".into(), Value::String("sqlite".into()));
+                    changed = true;
+                }
+            } else {
+                db_obj.insert("type".into(), Value::String("sqlite".into()));
+                changed = true;
+            }
+        }
+        Some(_) => {
+            obj.insert("db".into(), Value::Object(Map::new()));
+            changed = true;
+        }
+        None => {
+            obj.insert("db".into(), Value::Object(Map::new()));
+            changed = true;
+        }
+    }
+
+    if let Some(db_obj) = obj.get_mut("db").and_then(|v| v.as_object_mut()) {
+        if !db_obj.contains_key("type") {
+            db_obj.insert("type".into(), Value::String("sqlite".into()));
+            changed = true;
+        }
+    }
+
+    changed
+}
+
+fn default_config_payload() -> Value {
+    json!({
+        "db": {
+            "type": "sqlite",
+        }
+    })
+}
+
+fn sanitize_existing_config(path: &Path) -> io::Result<()> {
+    let text = match fs::read_to_string(path) {
+        Ok(content) => content,
+        Err(_) => return Ok(()),
+    };
+    let mut parsed: Value = match serde_json::from_str(&text) {
+        Ok(value) => value,
+        Err(_) => Value::Object(Map::new()),
+    };
+    if normalize_config(&mut parsed) {
+        let formatted = serde_json::to_string_pretty(&parsed)?;
+        fs::write(path, formatted)?;
+    }
+    Ok(())
 }
 
 fn ensure_default_config() -> io::Result<()> {
@@ -86,17 +148,14 @@ fn ensure_default_config() -> io::Result<()> {
     }
 
     if !path.exists() {
-        let payload = json!({
-            "pgUrl": DEFAULT_PG_URL,
-            "dbUrl": DEFAULT_PG_URL,
-            "db": {
-                "type": "postgres",
-                "url": DEFAULT_PG_URL,
-            }
-        });
+        let mut payload = default_config_payload();
+        normalize_config(&mut payload);
         let formatted = serde_json::to_string_pretty(&payload)?;
         fs::write(&path, formatted)?;
+        return Ok(());
     }
+
+    sanitize_existing_config(&path)?;
 
     Ok(())
 }
@@ -105,19 +164,50 @@ fn ensure_default_config() -> io::Result<()> {
 fn get_db_url() -> Option<String> {
     let path = config_file_path();
     if let Some(url) = read_config_url_from_path(&path) {
-        return Some(url);
+        if is_supported_db_url(&url) {
+            return Some(url);
+        }
     }
 
-    let env_vars = ["MAMASTOCK_PGURL", "PGURL", "DATABASE_URL"];
+    let env_vars = ["MAMASTOCK_DB_URL", "DATABASE_URL", "MAMASTOCK_PGURL", "PGURL"];
     for key in env_vars {
         if let Ok(url) = std::env::var(key) {
-            let trimmed = url.trim();
-            if !trimmed.is_empty() {
-                return Some(trimmed.to_string());
+            if is_supported_db_url(&url) {
+                let trimmed = url.trim();
+                if !trimmed.is_empty() {
+                    return Some(trimmed.to_string());
+                }
             }
         }
     }
 
+    None
+}
+
+fn pick_supported_url(value: Option<&Value>) -> Option<String> {
+    let raw = value?.as_str()?;
+    let trimmed = raw.trim();
+    if trimmed.is_empty() {
+        return None;
+    }
+    if is_supported_db_url(trimmed) {
+        return Some(trimmed.to_string());
+    }
+    None
+}
+
+fn read_url_from_value(value: &Value) -> Option<String> {
+    if let Some(url) = pick_supported_url(value.get("dbUrl")) {
+        return Some(url);
+    }
+    if let Some(url) = pick_supported_url(value.get("pgUrl")) {
+        return Some(url);
+    }
+    if let Some(obj) = value.get("db").and_then(|v| v.as_object()) {
+        if let Some(url) = pick_supported_url(obj.get("url")) {
+            return Some(url);
+        }
+    }
     None
 }
 
@@ -130,7 +220,11 @@ fn get_db_config_path() -> String {
 fn set_db_url(url: String) -> Result<(), String> {
     let trimmed = url.trim();
     if trimmed.is_empty() {
-        return Err("URL PostgreSQL invalide".into());
+        return Err("URL SQLite invalide".into());
+    }
+
+    if !is_supported_db_url(trimmed) {
+        return Err("Seules les URL sqlite: sont prises en charge".into());
     }
 
     let path = config_file_path();
@@ -148,18 +242,18 @@ fn set_db_url(url: String) -> Result<(), String> {
     }
 
     let obj = root.as_object_mut().expect("root ensured to be object");
-    obj.insert("pgUrl".into(), Value::String(trimmed.to_string()));
+    obj.remove("pgUrl");
     obj.insert("dbUrl".into(), Value::String(trimmed.to_string()));
 
     let db_entry = obj
         .entry("db")
         .or_insert_with(|| Value::Object(Map::new()));
     if let Some(db_obj) = db_entry.as_object_mut() {
-        db_obj.insert("type".into(), Value::String("postgres".into()));
+        db_obj.insert("type".into(), Value::String("sqlite".into()));
         db_obj.insert("url".into(), Value::String(trimmed.to_string()));
     } else {
         let mut map = Map::new();
-        map.insert("type".into(), Value::String("postgres".into()));
+        map.insert("type".into(), Value::String("sqlite".into()));
         map.insert("url".into(), Value::String(trimmed.to_string()));
         obj.insert("db".into(), Value::Object(map));
     }

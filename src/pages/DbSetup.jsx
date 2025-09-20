@@ -2,24 +2,24 @@ import { useEffect, useState } from "react";
 import Database from "@tauri-apps/plugin-sql";
 
 import { devFlags } from "@/lib/devFlags";
-import { getConfigFilePath, getDbUrl, savePostgresUrl } from "@/lib/appConfig";
-import { normalizePgUrl } from "@/lib/db/pg";
+import { getConfigFilePath, getDbUrl, saveDbUrl } from "@/lib/appConfig";
+import { getDbPath } from "@/lib/paths";
 import { log } from "@/tauriLog";
 
 import "@/pages/login.css";
 
-const DEFAULT_HINT = "postgresql://user:pass@ep-neon.eu-west.neon.tech/neondb?sslmode=require";
+const DEFAULT_HINT = "sqlite:mamastock.db";
 
 export default function DbSetup({ initialError = "" } = {}) {
   const [url, setUrl] = useState("");
+  const [defaultSqliteUrl, setDefaultSqliteUrl] = useState("");
+  const [localPath, setLocalPath] = useState("");
   const [testing, setTesting] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(initialError);
   const [testMessage, setTestMessage] = useState("");
   const [infoMessage, setInfoMessage] = useState("");
   const [configPath, setConfigPath] = useState("");
-  const [hasSslRequire, setHasSslRequire] = useState(true);
-  const [removedChannelBinding, setRemovedChannelBinding] = useState(false);
 
   const isRecovery = Boolean(initialError);
 
@@ -29,55 +29,82 @@ export default function DbSetup({ initialError = "" } = {}) {
 
   useEffect(() => {
     let cancelled = false;
-    getDbUrl()
-      .then((value) => {
-        if (!cancelled && value) {
-          setUrl(value);
+
+    async function bootstrap() {
+      try {
+        const stored = await getDbUrl();
+        if (!cancelled && stored) {
+          setUrl(stored);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.warn("[setup] Impossible de lire la configuration", err);
-      });
-    if (devFlags.isTauri) {
-      getConfigFilePath()
-        .then((path) => {
-          if (!cancelled && path) setConfigPath(path);
-        })
-        .catch(() => {});
+      }
+
+      if (devFlags.isTauri) {
+        getConfigFilePath()
+          .then((path) => {
+            if (!cancelled && path) setConfigPath(path);
+          })
+          .catch(() => {});
+
+        try {
+          const path = await getDbPath();
+          if (cancelled) return;
+          setLocalPath(path);
+          const sqliteUrl = path?.trim() ? `sqlite:${path}` : "";
+          setDefaultSqliteUrl(sqliteUrl);
+          setUrl((prev) => {
+            if (prev && prev.trim()) return prev;
+            return sqliteUrl || prev;
+          });
+        } catch (err) {
+          if (!cancelled) {
+            console.warn("[setup] Impossible de récupérer le chemin SQLite local", err);
+          }
+        }
+      }
     }
+
+    bootstrap();
+
     return () => {
       cancelled = true;
     };
   }, []);
 
-  const normalizedPreview = url ? normalizePgUrl(url) : null;
+  const effectivePlaceholder = defaultSqliteUrl || DEFAULT_HINT;
 
-  useEffect(() => {
-    if (!normalizedPreview) {
-      setHasSslRequire(true);
-      setRemovedChannelBinding(false);
+  const resolveCandidate = () => {
+    const candidate = url.trim();
+    if (candidate) return candidate;
+    if (defaultSqliteUrl && defaultSqliteUrl.trim()) return defaultSqliteUrl.trim();
+    return "";
+  };
+
+  const updateInfoMessage = (candidate) => {
+    if (localPath && candidate === defaultSqliteUrl && localPath.trim()) {
+      setInfoMessage(`Base locale située dans ${localPath}.`);
       return;
     }
-    setHasSslRequire(normalizedPreview.hasSslRequire);
-    setRemovedChannelBinding(normalizedPreview.removedChannelBinding);
-  }, [normalizedPreview?.hasSslRequire, normalizedPreview?.removedChannelBinding]);
+    const path = candidate.replace(/^sqlite:/i, "");
+    if (path) {
+      setInfoMessage(`Chemin utilisé : ${path}`);
+    }
+  };
 
   const handleTest = async () => {
     if (testing) return;
-    const candidate = url.trim();
+    const candidate = resolveCandidate();
     setError("");
     setTestMessage("");
     setInfoMessage("");
-    if (!candidate || !candidate.toLowerCase().startsWith("postgres")) {
-      setError("Veuillez entrer une URL PostgreSQL valide (postgresql://…)");
+    if (!candidate || !candidate.toLowerCase().startsWith("sqlite:")) {
+      setError("Veuillez utiliser une URL SQLite valide (sqlite:…).");
       return;
     }
     setTesting(true);
     try {
-      const normalized = normalizePgUrl(candidate);
-      setHasSslRequire(normalized.hasSslRequire);
-      setRemovedChannelBinding(normalized.removedChannelBinding);
-      const db = await Database.load(normalized.url);
+      const db = await Database.load(candidate);
       try {
         await db.select("SELECT 1");
       } finally {
@@ -87,19 +114,12 @@ export default function DbSetup({ initialError = "" } = {}) {
           } catch {}
         }
       }
-      setTestMessage("Connexion PostgreSQL réussie.");
-      const infos = [];
-      if (normalized.removedChannelBinding) {
-        infos.push("Le paramètre channel_binding=require a été ignoré.");
-      }
-      if (!normalized.hasSslRequire) {
-        infos.push("Ajoutez sslmode=require pour Neon (obligatoire).");
-      }
-      setInfoMessage(infos.join(" "));
-      log.info("[setup] Test connexion PostgreSQL réussi");
+      setTestMessage("Connexion SQLite réussie.");
+      updateInfoMessage(candidate);
+      log.info("[setup] Test connexion SQLite réussi");
     } catch (err) {
       const message = err?.message ?? String(err);
-      log.error("[setup] Test connexion PostgreSQL échoué", err);
+      log.error("[setup] Test connexion SQLite échoué", err);
       setError(`Échec du test de connexion : ${message}`);
     } finally {
       setTesting(false);
@@ -109,25 +129,24 @@ export default function DbSetup({ initialError = "" } = {}) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (saving) return;
-    const candidate = url.trim();
+    const candidate = resolveCandidate();
     setError("");
     setTestMessage("");
     setInfoMessage("");
-    if (!candidate || !candidate.toLowerCase().startsWith("postgres")) {
-      setError("Veuillez entrer une URL PostgreSQL valide (postgresql://…)");
+    if (!candidate || !candidate.toLowerCase().startsWith("sqlite:")) {
+      setError("Veuillez utiliser une URL SQLite valide (sqlite:…).");
       return;
     }
     setSaving(true);
     try {
-      const normalized = normalizePgUrl(candidate);
-      await savePostgresUrl(normalized.url);
-      log.info("[setup] URL PostgreSQL enregistrée");
+      await saveDbUrl(candidate);
+      log.info("[setup] URL SQLite enregistrée");
       if (typeof window !== "undefined") {
         window.location.reload();
       }
     } catch (err) {
       const message = err?.message ?? String(err);
-      log.error("[setup] Impossible d'enregistrer l'URL PostgreSQL", err);
+      log.error("[setup] Impossible d'enregistrer l'URL SQLite", err);
       setError(`Impossible d'enregistrer cette URL : ${message}`);
       setSaving(false);
     }
@@ -144,12 +163,11 @@ export default function DbSetup({ initialError = "" } = {}) {
           height={72}
         />
         <h1 className="login-title">
-          {isRecovery
-            ? "Reconnexion à la base PostgreSQL"
-            : "Configuration PostgreSQL"}
+          {isRecovery ? "Reconnexion à la base locale" : "Configuration de la base locale"}
         </h1>
         <p className="login-subtitle">
-          Indiquez l'URL fournie par Neon (format postgresql://…)
+          MamaStock fonctionne désormais avec une base SQLite stockée sur cette machine.
+          Vérifiez ou ajustez le chemin ci-dessous.
         </p>
         {error ? <div className="login-error">{error}</div> : null}
         {testMessage ? (
@@ -164,34 +182,41 @@ export default function DbSetup({ initialError = "" } = {}) {
         ) : null}
         <form onSubmit={handleSubmit} className="login-form">
           <label className="login-label" htmlFor="db-url">
-            Chaîne de connexion
+            Chaîne de connexion SQLite
           </label>
           <input
             id="db-url"
             className="login-input"
             type="text"
-            placeholder={DEFAULT_HINT}
+            placeholder={effectivePlaceholder}
             value={url}
             onChange={(event) => setUrl(event.target.value)}
             autoComplete="off"
             autoFocus
           />
           <div className="login-hint">
-            {removedChannelBinding
-              ? "channel_binding=require a été retiré automatiquement."
-              : ""}
-            {!hasSslRequire
-              ? " Veillez à conserver sslmode=require pour sécuriser la connexion."
-              : ""}
+            {localPath
+              ? `Chemin détecté : ${localPath}`
+              : "Chemin local indisponible (ouvrir cette page dans Tauri)."}
           </div>
-          <button
-            type="button"
-            className="login-btn secondary"
-            onClick={handleTest}
-            disabled={testing || saving}
-          >
-            {testing ? "Test en cours…" : "Tester la connexion"}
-          </button>
+          <div className="login-actions">
+            <button
+              type="button"
+              className="login-btn secondary"
+              onClick={() => setUrl(defaultSqliteUrl)}
+              disabled={!defaultSqliteUrl || saving || testing}
+            >
+              Utiliser le chemin détecté
+            </button>
+            <button
+              type="button"
+              className="login-btn secondary"
+              onClick={handleTest}
+              disabled={testing || saving}
+            >
+              {testing ? "Test en cours…" : "Tester la connexion"}
+            </button>
+          </div>
           <button type="submit" className="login-btn" disabled={saving || testing}>
             {saving ? "Enregistrement…" : "Enregistrer et redémarrer"}
           </button>
