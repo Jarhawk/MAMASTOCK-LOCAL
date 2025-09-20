@@ -10,6 +10,7 @@ import {
   redirectHashToPath,
   setRedirectTo
 } from "@/auth/redirect";
+import { isFirstRunComplete } from "@/lib/auth/sessionState";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -18,7 +19,9 @@ export default function LoginPage() {
   const [email, setEmail] = useState("admin@mamastock.local");
   const [password, setPassword] = useState("Admin123!");
   const [error, setError] = useState("");
-  const [canCreateAccount, setCanCreateAccount] = useState(false);
+  const [canCreateAccount, setCanCreateAccount] = useState(() =>
+    isFirstRunComplete()
+  );
 
   useEffect(() => {
     const redirectParam = searchParams.get("redirectTo");
