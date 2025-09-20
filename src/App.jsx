@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import Spinner from "@/components/ui/Spinner";
+import { useAnalyticsNavigationListener } from "@/services/analytics";
 
 const NAVIGATION_EVENT = "app:navigation-complete";
 
@@ -128,6 +129,7 @@ function useNavigationAnalyticsEvents() {
 export default function App() {
   useScrollAndFocusRestore();
   useNavigationAnalyticsEvents();
+  useAnalyticsNavigationListener();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
