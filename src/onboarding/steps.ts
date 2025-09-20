@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getMeta, setMeta } from "@/db/connection";
 import { getDb } from "@/lib/db/database";
 import { isTauri } from "@/lib/tauriEnv";

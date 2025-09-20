@@ -1,7 +1,6 @@
-// src/auth/sqliteAuth.ts
 import bcrypt from "bcryptjs";
 
-import { getDb } from "@/lib/db/database";import { isTauri } from "@/lib/tauriEnv";
+import { getDb } from "@/lib/db/database";
 
 export type DbUser = {
   id: string;
@@ -15,7 +14,7 @@ export type DbUser = {
 export async function loginSqlite(email: string, password: string) {
   email = email.trim().toLowerCase();
   const db = await getDb();
-  const rows = await db.select<DbUser[]>(
+  const rows = await db.select<DbUser>(
     "SELECT id,email,mama_id,mot_de_passe_hash,salt,created_at FROM users WHERE email = ? LIMIT 1",
     [email]
   );
@@ -34,7 +33,7 @@ export async function loginSqlite(email: string, password: string) {
 export async function registerSqlite(email: string, password: string) {
   email = email.trim().toLowerCase();
   const db = await getDb();
-  const exists = await db.select<{cnt: number;}[]>(
+  const exists = await db.select<{ cnt: number }>(
     "SELECT COUNT(*) as cnt FROM users WHERE email = ?",
     [email]
   );

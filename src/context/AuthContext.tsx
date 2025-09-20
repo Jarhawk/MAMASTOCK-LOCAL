@@ -14,6 +14,35 @@ import { normalizeAccessKey } from "@/lib/access";
 import { devFlags } from "@/lib/devFlags";
 import { can } from "@/utils/permissions";
 
+const AUTH_SESSION_KEY = "auth.user";
+
+function readSessionUser(): NonNullable<User> | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.sessionStorage.getItem(AUTH_SESSION_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object") {
+      return parsed as NonNullable<User>;
+    }
+  } catch {}
+  return null;
+}
+
+function writeSessionUser(user: NonNullable<User>) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(user));
+  } catch {}
+}
+
+function clearSessionUser() {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.removeItem(AUTH_SESSION_KEY);
+  } catch {}
+}
+
 export type User = {
   id: string | null;
   email: string | null;
@@ -109,20 +138,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
     setUserData({ ...u, access_rights });
     setRoles(aliases.filter(Boolean));
-    try {
-      localStorage.setItem("auth.user", JSON.stringify(u));
-    } catch {}
+    const persistedUser: NonNullable<User> = {
+      id: u.id ?? null,
+      email: u.email ?? null,
+      mama_id: u.mama_id ?? null,
+      role: u.role ?? null
+    };
+    writeSessionUser(persistedUser);
   }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     (async () => {
       try {
-        const raw = localStorage.getItem("auth.user");
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          await loadUser(parsed);
-        }
+        const stored = readSessionUser();
+        if (stored) await loadUser(stored);
       } catch {}
       setLoading(false);
     })();
@@ -140,9 +170,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     setUserData(null);
     setRoles([]);
-    try {
-      localStorage.removeItem("auth.user");
-    } catch {}
+    clearSessionUser();
     setLoading(!devFlags.isDev);
   }, []);
 

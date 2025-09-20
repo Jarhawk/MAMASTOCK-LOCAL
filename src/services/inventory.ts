@@ -1,4 +1,4 @@
-import { openDb, sumStock } from "@/db/index";
+import { openDb } from "@/db/index";
 
 export type Item = {
   id: string;
@@ -37,14 +37,26 @@ export async function getItemBySku(sku: string): Promise<Item | null> {
   return rows.length ? (rows[0] as Item) : null;
 }
 
+type ItemWithStockRow = Item & { stock: number | string | null };
+
 export async function listItems(): Promise<Array<Item & { stock: number }>> {
   const db = await openDb();
-  const rows = await db.select("SELECT * FROM items ORDER BY created_at DESC");
-  const out: Array<Item & { stock: number }> = [];
-  for (const r of rows as Item[]) {
-    out.push({ ...r, stock: await sumStock(r.id) });
-  }
-  return out;
+  const rows = await db.select<ItemWithStockRow>(
+    `SELECT i.id, i.sku, i.name, i.category, i.created_at,
+            COALESCE(SUM(m.qty), 0) AS stock
+       FROM items i
+       LEFT JOIN stock_movements m ON m.item_id = i.id
+      GROUP BY i.id, i.sku, i.name, i.category, i.created_at
+      ORDER BY i.created_at DESC`
+  );
+  return rows.map((row) => ({
+    id: row.id,
+    sku: row.sku,
+    name: row.name,
+    category: row.category ?? null,
+    created_at: row.created_at,
+    stock: Number(row.stock ?? 0)
+  }));
 }
 
 export async function adjustStock(

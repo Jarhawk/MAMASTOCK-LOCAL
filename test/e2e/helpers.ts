@@ -25,13 +25,13 @@ export async function loginAs(page: Page, role: string) {
 
   await page.addInitScript(([user]) => {
     try {
-      window.localStorage.setItem("auth.user", JSON.stringify(user));
+      window.sessionStorage.setItem("auth.user", JSON.stringify(user));
     } catch {}
   }, [payload]);
 
   await page.evaluate(([user]) => {
     try {
-      localStorage.setItem("auth.user", JSON.stringify(user));
+      sessionStorage.setItem("auth.user", JSON.stringify(user));
     } catch {}
   }, [payload]);
 }

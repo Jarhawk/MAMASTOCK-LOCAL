@@ -6,7 +6,7 @@ import { devFlags } from "@/lib/devFlags";
 // Simple gate : en local, on autorise tout (fini les “Accès refusé”)
 export default function AccessGate({ children }: { children: React.ReactNode }) {
   const { user, access_rights } = useAuth();
-  if (devFlags.isDev || devFlags.isTauri) return <>{children}</>;
+  if (devFlags.isDev) return <>{children}</>;
 
   if (!user && !access_rights) {
     return (

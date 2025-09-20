@@ -121,7 +121,7 @@ test("route protégée redirige vers login puis revient après connexion", async
 
   // "Déconnexion"
   await page.evaluate(() => {
-    localStorage.removeItem("auth.user");
+    sessionStorage.removeItem("auth.user");
   });
   await page.close();
 

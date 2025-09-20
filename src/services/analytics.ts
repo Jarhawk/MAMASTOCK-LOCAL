@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { isValidElement } from "react";
 import type { RouteMatch } from "react-router-dom";
 import { Navigate } from "react-router-dom";

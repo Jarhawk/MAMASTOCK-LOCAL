@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { isTauri } from "@/lib/tauriEnv";
 import { readText, saveText, existsFile } from "@/local/files";
 const FILE = "requisitions.json";

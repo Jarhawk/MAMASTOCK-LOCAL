@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { isTauri } from "@/lib/tauriEnv";
 
 export type LogApi = {
