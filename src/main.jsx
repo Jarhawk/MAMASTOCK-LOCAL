@@ -82,8 +82,14 @@ function Layout() {
       >
         <strong>MamaStock</strong>
         <nav style={{ display: "flex", gap: 12 }}>
+          <NavLink to="/accueil" className={({ isActive }) => (isActive ? "active" : undefined)}>
+            Accueil
+          </NavLink>
           <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "active" : undefined)}>
             Dashboard
+          </NavLink>
+          <NavLink to="/alertes" className={({ isActive }) => (isActive ? "active" : undefined)}>
+            Alertes
           </NavLink>
           <NavLink to="/legal/rgpd" className={({ isActive }) => (isActive ? "active" : undefined)}>
             RGPD
@@ -175,14 +181,81 @@ function NotFoundPage() {
 }
 
 /* ---------- Auth minimal pour les tests ---------- */
-const AUTH_KEY = "mamastock:isLoggedIn";
+const AUTH_USER_KEY = "auth.user";
+const AUTH_ACCOUNTS_KEY = "auth.accounts";
+
+function readAccounts() {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(AUTH_ACCOUNTS_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object") {
+      return parsed;
+    }
+  } catch (error) {
+    console.warn("Unable to read accounts", error);
+  }
+  return {};
+}
+
+function saveAccount(email, account) {
+  if (typeof window === "undefined") return;
+  const next = readAccounts();
+  next[email] = account;
+  try {
+    window.localStorage.setItem(AUTH_ACCOUNTS_KEY, JSON.stringify(next));
+  } catch (error) {
+    console.warn("Unable to persist account", error);
+  }
+}
+
+function persistSessionUser(user) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+  } catch (error) {
+    console.warn("Unable to write session storage", error);
+  }
+  try {
+    window.localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+  } catch (error) {
+    console.warn("Unable to mirror auth user", error);
+  }
+}
+
+function readSessionUser() {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.sessionStorage.getItem(AUTH_USER_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (error) {
+    console.warn("Unable to parse session user", error);
+    return null;
+  }
+}
 
 function ProtectedRoute({ children }) {
-  const isLoggedIn =
-    typeof localStorage !== "undefined" && localStorage.getItem(AUTH_KEY) === "true";
-  if (!isLoggedIn) {
-    return <Navigate to="/setup" replace />;
+  const location = useLocation();
+  const sessionUser = readSessionUser();
+
+  if (!sessionUser) {
+    const search = location.search || "";
+    const currentPath = `${location.pathname}${search}` || "/dashboard";
+    try {
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem("redirectTo", currentPath);
+        window.localStorage.setItem("redirectTo", currentPath);
+      }
+    } catch (error) {
+      console.warn("Unable to persist redirect", error);
+    }
+    const params = new URLSearchParams();
+    params.set("redirectTo", currentPath);
+    return <Navigate to={`/login?${params.toString()}`} replace />;
   }
+
   return children;
 }
 
@@ -192,12 +265,36 @@ function SetupPage() {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [pwd2, setPwd2] = useState("");
+  const [error, setError] = useState("");
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // Création/connexion fictive
-    localStorage.setItem(AUTH_KEY, "true");
-    // >>> Exigence des tests: arriver sur /dashboard (ou /accueil).
+    if (pwd !== pwd2) {
+      setError("Les mots de passe ne correspondent pas.");
+      return;
+    }
+
+    const normalizedEmail = email.trim();
+    if (!normalizedEmail) {
+      setError("Email invalide.");
+      return;
+    }
+
+    const account = {
+      email: normalizedEmail,
+      password: pwd,
+      role: "admin",
+    };
+
+    saveAccount(normalizedEmail, account);
+    persistSessionUser({ email: normalizedEmail, role: account.role });
+
+    try {
+      window.sessionStorage.removeItem("redirectTo");
+      window.localStorage.removeItem("redirectTo");
+    } catch {}
+
+    setError("");
     navigate("/dashboard", { replace: true });
   };
 
@@ -239,6 +336,120 @@ function SetupPage() {
           />
         </label>
         <button type="submit">Valider</button>
+        {error ? (
+          <p style={{ color: "#b3261e", margin: 0 }}>{error}</p>
+        ) : null}
+      </form>
+    </section>
+  );
+}
+
+function LoginPage() {
+  useDocumentTitle("Connexion");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [email, setEmail] = useState("");
+  const [pwd, setPwd] = useState("");
+  const [error, setError] = useState("");
+
+  const redirectTo = useMemo(() => {
+    const extract = (value) => {
+      if (!value) return null;
+      return new URLSearchParams(value).get("redirectTo");
+    };
+
+    const direct = extract(location.search);
+    if (direct) return direct;
+
+    const hashIndex = location.hash?.indexOf("?") ?? -1;
+    if (hashIndex >= 0) {
+      const hashQuery = location.hash.slice(hashIndex);
+      const fromHash = extract(hashQuery);
+      if (fromHash) return fromHash;
+    }
+
+    if (typeof window !== "undefined") {
+      const fromSession = window.sessionStorage.getItem("redirectTo");
+      if (fromSession) return fromSession;
+      const fromLocal = window.localStorage.getItem("redirectTo");
+      if (fromLocal) return fromLocal;
+    }
+
+    return null;
+  }, [location.hash, location.search]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      if (redirectTo) {
+        window.sessionStorage.setItem("redirectTo", redirectTo);
+        window.localStorage.setItem("redirectTo", redirectTo);
+      } else {
+        window.sessionStorage.removeItem("redirectTo");
+        window.localStorage.removeItem("redirectTo");
+      }
+    } catch {}
+  }, [redirectTo]);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    const normalizedEmail = email.trim();
+    if (!normalizedEmail) {
+      setError("Email invalide.");
+      return;
+    }
+
+    const accounts = readAccounts();
+    const account = accounts[normalizedEmail];
+    if (!account || account.password !== pwd) {
+      setError("Identifiants incorrects.");
+      return;
+    }
+
+    const user = { email: normalizedEmail, role: account.role ?? "admin" };
+    persistSessionUser(user);
+
+    try {
+      window.sessionStorage.removeItem("redirectTo");
+      window.localStorage.removeItem("redirectTo");
+    } catch {}
+
+    setError("");
+    const target = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/dashboard";
+    navigate(target, { replace: true });
+  };
+
+  return (
+    <section>
+      <h1>Connexion</h1>
+      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, maxWidth: 420 }}>
+        <label>
+          Email
+          <input
+            id="login-email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ width: "100%" }}
+          />
+        </label>
+        <label>
+          Mot de passe
+          <input
+            id="login-password"
+            type="password"
+            value={pwd}
+            onChange={(e) => setPwd(e.target.value)}
+            required
+            style={{ width: "100%" }}
+          />
+        </label>
+        <button type="submit">Se connecter</button>
+        {error ? (
+          <p style={{ color: "#b3261e", margin: 0 }}>{error}</p>
+        ) : null}
       </form>
     </section>
   );
@@ -255,6 +466,17 @@ function AdminPage() {
   );
 }
 
+function AlertesPage() {
+  useDocumentTitle("Alertes");
+  return (
+    <section>
+      <h1>Alertes</h1>
+      <p>Liste des alertes en cours.</p>
+      <div style={{ height: 1000 }} />
+    </section>
+  );
+}
+
 /* ---------- Router ---------- */
 const router = createHashRouter([
   {
@@ -262,12 +484,35 @@ const router = createHashRouter([
     element: <Layout />,
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
-      { path: "accueil", element: <Navigate to="/dashboard" replace /> }, // alias
-      { path: "dashboard", element: <DashboardPage /> },
+      {
+        path: "accueil",
+        element: (
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "dashboard",
+        element: (
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        ),
+      },
       { path: "rgpd", element: <Navigate to="/legal/rgpd" replace /> }, // legacy → legal/rgpd
       { path: "legal/rgpd", element: <RGPDPage /> },
       { path: "legal/cgu", element: <CGUPage /> },
       { path: "setup", element: <SetupPage /> },
+      { path: "login", element: <LoginPage /> },
+      {
+        path: "alertes",
+        element: (
+          <ProtectedRoute>
+            <AlertesPage />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "admin",
         element: (
