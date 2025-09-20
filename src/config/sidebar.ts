@@ -8,6 +8,7 @@ export type NavItem = {
 };
 
 export const SIDEBAR: NavItem[] = [
+  { label: "Accueil", path: "/accueil", icon: "home" },
   { label: "Dashboard", path: "/dashboard", icon: "layout-dashboard" },
   {
     label: "Produits",
