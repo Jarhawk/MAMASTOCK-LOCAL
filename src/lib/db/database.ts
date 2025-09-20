@@ -1,7 +1,7 @@
 import Database from "@tauri-apps/plugin-sql";
 import { invoke } from "@tauri-apps/api/core";
 
-import { normalizePgUrl } from "@/lib/db/pg";
+import { getDbPath } from "@/lib/paths";
 import { isTauri } from "@/lib/tauriEnv";
 import { log } from "@/tauriLog";
 
@@ -28,48 +28,8 @@ function maskUrl(raw: string): string {
   }
 }
 
-type NormalizedInfo = {
-  url: string;
-  removedChannelBinding: boolean;
-  ensuredSsl: boolean;
-};
-
-function ensurePgUrl(raw: string): NormalizedInfo {
-  const trimmed = raw.trim();
-  if (!trimmed.toLowerCase().startsWith("postgres")) {
-    return { url: trimmed, removedChannelBinding: false, ensuredSsl: false };
-  }
-  const normalized = normalizePgUrl(trimmed);
-  let finalUrl = normalized.url;
-  let ensuredSsl = false;
-  if (!normalized.hasSslRequire) {
-    try {
-      const parsed = new URL(finalUrl);
-      const current = (parsed.searchParams.get("sslmode") ?? "").toLowerCase();
-      if (current !== "require") {
-        parsed.searchParams.set("sslmode", "require");
-        finalUrl = parsed.toString();
-        ensuredSsl = true;
-      }
-    } catch {
-      const hasQuery = finalUrl.includes("?");
-      const needsAmpersand = hasQuery && !finalUrl.endsWith("?") && !finalUrl.endsWith("&");
-      const separator = hasQuery ? (needsAmpersand ? "&" : "") : "?";
-      finalUrl = `${finalUrl}${separator}sslmode=require`;
-      ensuredSsl = true;
-    }
-  }
-  if (normalized.removedChannelBinding) {
-    log.warn(`[db] Paramètre channel_binding=require ignoré (${maskUrl(finalUrl)}).`);
-  }
-  if (ensuredSsl && !normalized.hasSslRequire) {
-    log.warn(`[db] sslmode=require ajouté automatiquement (${maskUrl(finalUrl)}).`);
-  }
-  return {
-    url: finalUrl,
-    removedChannelBinding: normalized.removedChannelBinding,
-    ensuredSsl,
-  };
+function isSqliteUrl(raw: string): boolean {
+  return raw.trim().toLowerCase().startsWith("sqlite:");
 }
 
 function ensureDevStub(): SqlDatabase {
@@ -99,7 +59,7 @@ function ensureDevStub(): SqlDatabase {
 
 type ResolvedDb = {
   url: string;
-  kind: "postgres" | "sqlite";
+  kind: "sqlite";
 };
 
 async function resolveDbUrl(opts: { silent?: boolean } = {}): Promise<ResolvedDb> {
@@ -110,17 +70,34 @@ async function resolveDbUrl(opts: { silent?: boolean } = {}): Promise<ResolvedDb
 
   const fromRust = await invoke<string | null>("get_db_url").catch(() => null);
   if (fromRust && fromRust.trim().length > 0) {
-    const normalized = ensurePgUrl(fromRust);
-    if (!silent) {
-      log.info(`[db] Utilisation de PostgreSQL (${maskUrl(normalized.url)}).`);
+    const trimmed = fromRust.trim();
+    if (isSqliteUrl(trimmed)) {
+      if (!silent) {
+        log.info(`[db] Utilisation de SQLite (${maskUrl(trimmed)}).`);
+      }
+      return { url: trimmed, kind: "sqlite" };
     }
-    return { url: normalized.url, kind: "postgres" };
+    if (!silent) {
+      log.warn(`[db] Chaîne non supportée ignorée (${maskUrl(trimmed)}).`);
+    }
   }
 
-  if (!silent) {
-    log.info("[db] Aucun DSN PostgreSQL détecté — bascule sur SQLite local.");
+  let fallback = "sqlite:mamastock.db";
+  try {
+    const path = await getDbPath();
+    const normalizedPath = path?.trim();
+    if (normalizedPath) {
+      fallback = `sqlite:${normalizedPath}`;
+    }
+  } catch (err) {
+    if (!silent) {
+      log.warn("[db] Impossible de déterminer le chemin SQLite local", err);
+    }
   }
-  return { url: "sqlite:mamastock.db", kind: "sqlite" };
+  if (!silent) {
+    log.info(`[db] SQLite local (${maskUrl(fallback)}).`);
+  }
+  return { url: fallback, kind: "sqlite" };
 }
 
 async function createTauriDb(url: string): Promise<SqlDatabase> {
@@ -184,15 +161,10 @@ export const isTauriRuntime = isTauri;
 export async function pingDb(): Promise<boolean> {
   const db = await getDb();
   try {
-    const rows = await db.select("SELECT NOW() as now");
+    const rows = await db.select("SELECT 1 as ok");
     return Array.isArray(rows);
   } catch {
-    try {
-      const rows = await db.select("SELECT datetime('now') as now");
-      return Array.isArray(rows);
-    } catch {
-      return false;
-    }
+    return false;
   }
 }
 

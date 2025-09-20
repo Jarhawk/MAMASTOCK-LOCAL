@@ -35,13 +35,16 @@ export async function getConfigFilePath(): Promise<string | null> {
   }
 }
 
-export async function savePostgresUrl(url: string): Promise<void> {
+export async function saveDbUrl(url: string): Promise<void> {
   if (!isTauri()) {
     throw new Error("Configuration disponible uniquement sous Tauri");
   }
   const trimmed = url?.trim();
   if (!trimmed) {
-    throw new Error("URL PostgreSQL invalide");
+    throw new Error("URL SQLite invalide");
+  }
+  if (!/^sqlite:/i.test(trimmed)) {
+    throw new Error("Seules les connexions sqlite:… sont supportées");
   }
   await invoke("set_db_url", { url: trimmed });
 }
