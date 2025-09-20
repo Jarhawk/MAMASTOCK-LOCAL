@@ -32,7 +32,8 @@
     "webview:reset": "powershell -ExecutionPolicy Bypass -File scripts/reset-webview-cache.ps1",
     "codemod:isTauri": "node scripts/codemod-unify-isTauri.cjs",
     "tauri:build": "npm run build && npx tauri build",
-    "icons:generate": "npx @tauri-apps/cli icon src-tauri/icons/icon.png --output src-tauri/icons"
+    "icons:generate": "npx @tauri-apps/cli icon src-tauri/icons/icon.png --output src-tauri/icons",
+    "notes:supabase-cleanup": "node -e \"console.log(\\\"1) exécuter 'npm install' pour régénérer package-lock.json\\\"); console.log('2) re-tester: build + tsc + E2E');\""
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
