@@ -1,7 +1,7 @@
 # MamaStock Cloud
 ⚠️ Ce logiciel est propriétaire. Toute utilisation, copie ou distribution sans licence commerciale valide est interdite.
 
-Documentation pour l'ancienne version connectée à Supabase/PostgreSQL.
+Documentation pour l'ancienne version connectée au backend cloud PostgreSQL.
 
 L’accès est maintenant géré localement via une table `utilisateurs` stockée dans `src/db/users.json`.
 Un script `npm run seed:admin` permet de créer l’utilisateur initial `admin@mamastock.local`.
@@ -81,42 +81,26 @@ particles and interactive lights.
 Le script `src/registerSW.js` enregistre automatiquement un service worker pour activer l'usage hors ligne. Lancez `npm run preview` ou servez le dossier `dist` pour vérifier que l'enregistrement fonctionne.
 ### Database
 
-SQL migrations are stored in [`db/Ajout.sql`](./db/Ajout.sql). To initialise a
-local Supabase instance:
+SQL migrations are stored in [`db/sqlite`](./db/sqlite). To initialise the local
+database used by MamaStock Local, run:
 
 ```bash
-supabase start
-supabase db reset --file db/Ajout.sql
+npm run db:apply
 ```
-This script adds any missing columns, views and policies so the schema matches
-the application. Adjust configuration in `supabase/config.toml` as required.
+
+This command applies every SQL script in `db/sqlite` to the database file
+defined by `MS_DB_PATH` (defaults to `var/mamastock.db`).
 
 The `zones_stock` table uses a `position` column to preserve the display order
 of zones. Ensure this column exists and is populated before running the app.
 
 ### Environment variables
 
-Copy `.env.example` to `.env` at the project root and adjust the Supabase
-credentials. Optionally create a `.env.local` file to override variables on your
-machine. For development this repository already includes default values:
+Copy `.env.example` to `.env` at the project root and adjust the database path or
+API endpoints to match your installation. For development this repository
+already includes defaults that rely solely on the local adapter:
 
 ```env
-PUBLIC_API_KEY=dev_key
-VITE_SUPABASE_URL=https://jhpfdeolleprmvtchoxt.supabase.co
-VITE_SUPABASE_ANON_KEY=<your-supabase-anon-key>
-MAMASTOCK_BASE_URL=https://api.example.com
-MAMASTOCK_API_KEY=public_key
-MAMASTOCK_TOKEN=supabase_jwt
-MAMASTOCK_MAMA_ID=m1
-MAMASTOCK_USER_AGENT=MyApp/1.0
-MAMASTOCK_RETRY_ATTEMPTS=3
-MAMASTOCK_RETRY_DELAY_MS=1000
-MAMASTOCK_TIMEOUT_MS=10000
-BACKUP_TABLES=produits,fournisseurs,factures,facture_lignes,\
-inventaires,produits_inventaire,fournisseur_produits,taches,\
-tache_instances,mouvements_stock
-BACKUP_DIR=backups
-BACKUP_GZIP=false
-BACKUP_PRETTY=false
-BACKUP_CONCURRENCY=5
+VITE_API_URL=http://127.0.0.1:8787
+DATABASE_URL=sqlite:./db/mamastock.dev.sqlite
 ```

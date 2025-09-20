@@ -83,8 +83,11 @@ export default function FirstRun() {
       await signIn(user);
       const storedRedirect = getRedirectTo();
       const targetPath = redirectHashToPath(storedRedirect);
+      const normalizedPath = targetPath.startsWith("/")
+        ? targetPath
+        : `/${targetPath}`;
       clearRedirectTo();
-      navigate(targetPath, { replace: true });
+      navigate(normalizedPath, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
       setLoading(false);

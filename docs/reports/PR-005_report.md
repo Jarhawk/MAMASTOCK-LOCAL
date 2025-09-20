@@ -1,7 +1,7 @@
 # PR-005 Report
 
 ## Résumé
-Implémentation d'un DAL SQLite pour les modules Produits, Fournisseurs et Factures et remplacement des appels Supabase.
+Implémentation d'un DAL SQLite pour les modules Produits, Fournisseurs et Factures et remplacement des appels vers le backend cloud.
 
 ## Fichiers ajoutés/modifiés/supprimés
 - src/lib/db.ts
@@ -28,4 +28,4 @@ npm run db:smoke
 - TBD
 
 ## Impact utilisateur
-- Gestion locale des produits, fournisseurs et factures sans dépendance Supabase.
+- Gestion locale des produits, fournisseurs et factures sans dépendance cloud.

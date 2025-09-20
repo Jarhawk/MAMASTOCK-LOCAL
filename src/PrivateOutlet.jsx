@@ -8,7 +8,13 @@ export default function PrivateOutlet() {
   const { status } = useAuth();
   const location = useLocation();
   const redirectHash = useMemo(() => buildRedirectHash(location), [location]);
-  const loginPath = `/login?redirectTo=${encodeURIComponent(redirectHash)}`;
+  const loginTarget = useMemo(
+    () => ({
+      pathname: "/login",
+      search: `?redirectTo=${encodeURIComponent(redirectHash)}`,
+    }),
+    [redirectHash]
+  );
 
   useEffect(() => {
     if (status !== "authenticated") {
@@ -25,7 +31,7 @@ export default function PrivateOutlet() {
   }
 
   if (status !== "authenticated") {
-    return <Navigate to={loginPath} replace />;
+    return <Navigate to={loginTarget} replace />;
   }
 
   return <Outlet />;

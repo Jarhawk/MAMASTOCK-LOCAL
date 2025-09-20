@@ -55,10 +55,13 @@ export default function LoginPage() {
       const user = await loginLocal(email, password);
       await signIn(user);
       const storedRedirect = getRedirectTo();
-      const redirectParam = storedRedirect ?? searchParams.get("redirectTo");
-      const targetPath = redirectHashToPath(redirectParam);
+      const redirectSource = storedRedirect ?? searchParams.get("redirectTo");
+      const targetPath = redirectHashToPath(redirectSource);
+      const normalizedPath = targetPath.startsWith("/")
+        ? targetPath
+        : `/${targetPath}`;
       clearRedirectTo();
-      navigate(targetPath, { replace: true });
+      navigate(normalizedPath, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     }

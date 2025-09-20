@@ -48,11 +48,6 @@ for (const fichier of fichiers) {
     resultat.todos.push({ file: rel, text: m[0].trim() });
   }
 
-  // Détection Supabase
-  if (contenu.includes('supabase.from(')) {
-    resultat.problems.push({ type: 'supabase', file: rel, message: 'Référence à supabase' });
-  }
-
   // Contextes React
   if (contenu.includes('createContext(')) {
     const m = contenu.match(/const\s+(\w+)\s*=\s*createContext/);

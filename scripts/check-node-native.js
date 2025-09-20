@@ -1,7 +1,7 @@
 import { spawnSync } from 'node:child_process';
 
 const modules = ['fs', 'path', 'crypto'];
-const ignore = ['-g', '!src/lib/patchSupabase.ts'];
+const ignore = ['-g', '!src/lib/patchRemoteBackend.ts'];
 let failed = false;
 
 for (const mod of modules) {

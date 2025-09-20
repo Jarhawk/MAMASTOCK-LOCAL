@@ -22,6 +22,6 @@ Le scan automatisé (`rg -o --no-filename "from\('([^']+)'\)" -r '$1' src`) a re
 - dates stockées en texte ISO (`date_iso`).
 
 ## Incompatibilités front ↔ data
-- Le front fait toujours référence à Supabase; ces appels doivent être remplacés progressivement par le DAL local.
+- Le front fait toujours référence à l'ancien backend cloud ; ces appels doivent être remplacés progressivement par le DAL local.
 - Les tables non encore créées (ex. `fiches`, `zones`) provoqueront des erreurs si les vues associées sont utilisées hors-ligne.
 

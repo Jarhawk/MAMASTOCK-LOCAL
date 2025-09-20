@@ -277,8 +277,6 @@
 ## Variables d'environnement
 - DEV
 - PROD
-- VITE_SUPABASE_ANON_KEY
-- VITE_SUPABASE_URL
 
 ## Contrats de données
 - facture : id, fournisseur_id, total, date, numero, date_facture, fournisseur, total_ttc, statut, actif
@@ -302,44 +300,6 @@
 - tache : utilisateurs_taches, titre, description, priorite, date_echeance, statut
 
 ## Erreurs potentielles
-- [supabase] src/hooks/useAuditLog.js - Référence à supabase
-- [supabase] src/hooks/useBonsLivraison.js - Référence à supabase
-- [supabase] src/hooks/useConsolidation.js - Référence à supabase
-- [supabase] src/hooks/useCostCenters.js - Référence à supabase
-- [supabase] src/hooks/useDashboard.js - Référence à supabase
-- [supabase] src/hooks/useFamilles.js - Référence à supabase
-- [supabase] src/hooks/useFiches.js - Référence à supabase
-- [supabase] src/hooks/useFournisseurAPI.js - Référence à supabase
-- [supabase] src/hooks/useGlobalSearch.js - Référence à supabase
-- [supabase] src/hooks/useInventaires.js - Référence à supabase
-- [supabase] src/hooks/useMamas.js - Référence à supabase
-- [supabase] src/hooks/useMenuDuJour.js - Référence à supabase
-- [supabase] src/hooks/useMenuGroupe.js - Référence à supabase
-- [supabase] src/hooks/useMenus.js - Référence à supabase
-- [supabase] src/hooks/useNotifications.js - Référence à supabase
-- [supabase] src/hooks/usePeriodes.js - Référence à supabase
-- [supabase] src/hooks/usePermissions.js - Référence à supabase
-- [supabase] src/hooks/usePlanning.js - Référence à supabase
-- [supabase] src/hooks/useRGPD.js - Référence à supabase
-- [supabase] src/hooks/useReporting.js - Référence à supabase
-- [supabase] src/hooks/useRequisitions.js - Référence à supabase
-- [supabase] src/hooks/useSousFamilles.js - Référence à supabase
-- [supabase] src/hooks/useStats.js - Référence à supabase
-- [supabase] src/hooks/useTacheAssignation.js - Référence à supabase
-- [supabase] src/hooks/useTaches.js - Référence à supabase
-- [supabase] src/hooks/useTwoFactorAuth.js - Référence à supabase
-- [supabase] src/hooks/useUtilisateurs.js - Référence à supabase
-- [supabase] src/utils/importExcelProduits.js - Référence à supabase
-- [supabase] src/api/public/stock.js - Référence à supabase
-- [supabase] src/pages/costboisson/CostBoisson.jsx - Référence à supabase
-- [supabase] src/pages/parametrage/InviteUser.jsx - Référence à supabase
-- [supabase] src/pages/parametrage/Mamas.jsx - Référence à supabase
-- [supabase] src/pages/parametrage/PermissionsAdmin.jsx - Référence à supabase
-- [supabase] src/pages/parametrage/PermissionsForm.jsx - Référence à supabase
-- [supabase] src/pages/parametrage/RGPDConsentForm.jsx - Référence à supabase
-- [supabase] src/pages/stats/StatsFiches.jsx - Référence à supabase
-- [supabase] src/pages/supervision/GroupeParamForm.jsx - Référence à supabase
-- [supabase] src/pages/supervision/Rapports.jsx - Référence à supabase
 
 ## TODOs
 - src/hooks/useInvoiceOcr.js - TODO: brancher un vrai moteur OCR plus tard

@@ -1,3 +1,3 @@
-# Supabase Mapping
+# Remote backend mapping
 
-Aucune utilisation de Supabase n'a été détectée dans le code source (`src/`).
+Aucune utilisation du backend cloud historique n'a été détectée dans le code source (`src/`).

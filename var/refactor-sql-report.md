@@ -10,7 +10,7 @@
 - `src/debug/dbSmoke.ts` – smoke test for database
 
 ## Replacements
-- Supabase usages replaced: **0** (no occurrences under `src/`)
+- Remote backend usages replaced: **0** (no occurrences under `src/`)
 - Legacy `@/lib/db` functions replaced with DAL: **2** imports
 
 ## TODO

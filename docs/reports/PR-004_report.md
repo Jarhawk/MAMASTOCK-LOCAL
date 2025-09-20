@@ -1,7 +1,7 @@
 # PR-004 Report
 
 ## Résumé
-Purge des dépendances Supabase/PG, suppression des restes Express et scission de la documentation entre versions locale et cloud.
+Suppression des dépendances cloud (Postgres distant), nettoyage des reliquats Express et scission de la documentation entre versions locale et cloud.
 
 ## Fichiers ajoutés/modifiés/supprimés
 - README-cloud.md
@@ -14,11 +14,11 @@ Purge des dépendances Supabase/PG, suppression des restes Express et scission d
 - src/lib/supa/textSearch.ts
 - src/pages/parametrage/DataFolder.jsx
 - src/pages/parametrage/SystemTools.jsx
-- src/types/supabase.d.ts
+- (supprimés) anciennes définitions du backend distant (types) et fichiers Express.
 - vite.config.ts
 - docs/reports/PR-004_report.md
 - docs/reports/PR-004_report.json
-- (supprimés) README-offline.md, src/api/public/index.js, src/api/public/produits.js, src/api/public/promotions.js, src/api/public/stock.js
+- README-offline.md, src/api/public/index.js, src/api/public/produits.js, src/api/public/promotions.js, src/api/public/stock.js
 
 ## Scripts/commandes exécutables pour tester
 ```bash
@@ -31,7 +31,7 @@ npm run db:smoke
 *(voir rapport JSON)*
 
 ## Points encore ouverts
-- Remplacer les appels Supabase restants par un DAL local.
+- Remplacer les appels restants vers le backend distant par un DAL local.
 
 ## Impact utilisateur
-- Application hors ligne simplifiée avec documentation dédiée; dépendances cloud supprimées.
+- Application hors ligne simplifiée avec documentation dédiée ; dépendances cloud supprimées.

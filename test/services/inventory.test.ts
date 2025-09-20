@@ -9,7 +9,41 @@ describe("inventory service", () => {
     vi.resetModules();
   });
 
-  it("fetches aggregated stock with a single query for all items", async () => {
+  it("aggregates stock for a large batch of items with a single query", async () => {
+    const itemCount = 75;
+    const items = Array.from({ length: itemCount }, (_, index) => ({
+      id: `item-${index + 1}`,
+      sku: `SKU-${index + 1}`,
+      name: `Item ${index + 1}`,
+      category: null,
+      created_at: new Date(2024, 0, index + 1).toISOString(),
+    }));
+
+    const aggregatedRows = items.slice(0, 10).map((item, index) => ({
+      item_id: item.id,
+      s: index + 1,
+    }));
+    const stockQuerySpy = vi.fn();
+
+    selectMock.mockImplementation(async (sql: string, params?: unknown[]) => {
+      const normalized = sql.toLowerCase();
+      if (normalized.includes("from items")) {
+        return items;
+      }
+
+      if (normalized.includes("from stock_movements")) {
+        stockQuerySpy();
+        expect(sql).toContain("GROUP BY item_id");
+        expect(Array.isArray(params)).toBe(true);
+        const provided = params as string[];
+        expect(provided).toHaveLength(items.length);
+        expect(new Set(provided).size).toBe(items.length);
+        return aggregatedRows;
+      }
+
+      throw new Error(`Unexpected SQL: ${sql}`);
+    });
+
     vi.doMock("@/lib/db/database", () => ({
       getDb: vi.fn(async () => ({
         select: selectMock,
@@ -18,45 +52,12 @@ describe("inventory service", () => {
       isMemoryDriver: vi.fn(() => false),
     }));
 
-    const items = [
-      {
-        id: "item-1",
-        sku: "SKU-1",
-        name: "Item 1",
-        category: null,
-        created_at: "2024-01-01T00:00:00.000Z",
-      },
-      {
-        id: "item-2",
-        sku: "SKU-2",
-        name: "Item 2",
-        category: null,
-        created_at: "2024-01-02T00:00:00.000Z",
-      },
-      {
-        id: "item-3",
-        sku: "SKU-3",
-        name: "Item 3",
-        category: null,
-        created_at: "2024-01-03T00:00:00.000Z",
-      },
-    ];
-
-    selectMock.mockImplementationOnce(async () => items);
-    selectMock.mockImplementationOnce(async (sql, params) => {
-      expect(sql).toContain("GROUP BY item_id");
-      expect(params).toEqual(["item-1", "item-2", "item-3"]);
-      return [
-        { item_id: "item-1", s: "5" },
-        { item_id: "item-2", s: 3 },
-      ];
-    });
-
     const { listItems } = await import("@/services/inventory");
     const result = await listItems();
 
-    expect(selectMock).toHaveBeenCalledTimes(2);
-    expect(result).toHaveLength(3);
-    expect(result.map((item) => item.stock)).toEqual([5, 3, 0]);
+    expect(stockQuerySpy).toHaveBeenCalledTimes(1);
+    expect(result).toHaveLength(itemCount);
+    expect(result.slice(0, 5).map((item) => item.stock)).toEqual([1, 2, 3, 4, 5]);
+    expect(result[result.length - 1]!.stock).toBe(0);
   });
 });

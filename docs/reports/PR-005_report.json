@@ -1,7 +1,7 @@
 {
   "pr_number": "005",
   "title": "DAL SQLite produits/fournisseurs/factures",
-  "summary": "add SQLite DAL and replace Supabase calls for products, suppliers and invoices",
+  "summary": "add SQLite DAL and replace remote calls for products, suppliers and invoices",
   "files": {
     "added": [
       "docs/reports/PR-005_report.md",
