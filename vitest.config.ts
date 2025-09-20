@@ -24,6 +24,6 @@ export default defineConfig({
         new URL("./test/stubs/tauri-dialog.ts", import.meta.url),
       ),
     },
-    extensions: [".js", ".ts", ".tsx"],
+    extensions: [".js", ".ts", ".tsx", ".jsx"],
   },
 });
