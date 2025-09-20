@@ -1,5 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
 import appRouter from "@/router";
@@ -13,12 +13,10 @@ if (!container) {
   throw new Error("Impossible de trouver l’élément #root");
 }
 
-const root = ReactDOM.createRoot(container);
-
-root.render(
-  <React.StrictMode>
+createRoot(container).render(
+  <StrictMode>
     <AuthProvider>
       <RouterProvider router={appRouter} />
     </AuthProvider>
-  </React.StrictMode>
+  </StrictMode>
 );
