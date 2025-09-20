@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { isValidElement } from "react";
+import { isValidElement, useEffect } from "react";
 import type { RouteMatch } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
@@ -36,9 +36,9 @@ type NavigationCompleteDetail = {
   locationKey?: string;
 };
 
-let navigationListenerAttached = false;
 let lastProcessedKey: string | null = null;
 let lastPageViewPath: string | null = null;
+let navigationListenerCount = 0;
 
 function matchIsNavigate(match: RouteMatch) {
   const element = match.route?.element;
@@ -97,7 +97,36 @@ function handleNavigationComplete(event: Event) {
   lastProcessedKey = signature;
 }
 
-if (typeof window !== "undefined" && !navigationListenerAttached) {
-  window.addEventListener(NAVIGATION_EVENT, handleNavigationComplete as EventListener);
-  navigationListenerAttached = true;
+const navigationEventListener = handleNavigationComplete as EventListener;
+
+export function addNavigationAnalyticsListener() {
+  if (typeof window === "undefined") {
+    return () => {};
+  }
+
+  if (navigationListenerCount === 0) {
+    window.addEventListener(NAVIGATION_EVENT, navigationEventListener);
+  }
+
+  navigationListenerCount += 1;
+
+  return () => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (navigationListenerCount > 0) {
+      navigationListenerCount -= 1;
+    }
+
+    if (navigationListenerCount === 0) {
+      window.removeEventListener(NAVIGATION_EVENT, navigationEventListener);
+      lastProcessedKey = null;
+      lastPageViewPath = null;
+    }
+  };
+}
+
+export function useAnalyticsNavigationListener() {
+  useEffect(() => addNavigationAnalyticsListener(), []);
 }
