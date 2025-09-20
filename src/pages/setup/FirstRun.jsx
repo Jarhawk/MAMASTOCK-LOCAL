@@ -5,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import '@/pages/login.css';
 import LinkPrefetch from "@/components/LinkPrefetch";
 import { clearRedirectTo, getRedirectTo, redirectHashToPath } from "@/auth/redirect";
+import { isFirstRunComplete } from "@/lib/auth/sessionState";
 
 export default function FirstRun() {
   const navigate = useNavigate();
@@ -14,7 +15,9 @@ export default function FirstRun() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [existingUsers, setExistingUsers] = useState(null);
+  const [existingUsers, setExistingUsers] = useState(() =>
+    isFirstRunComplete() ? 1 : null
+  );
 
   useEffect(() => {
     let mounted = true;

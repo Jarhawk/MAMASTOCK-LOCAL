@@ -2,6 +2,7 @@ import { appDataDir, join } from "@tauri-apps/api/path";
 
 import { APP_DIR, getAppDir } from "@/lib/paths";
 import { isTauri } from "@/lib/tauriEnv";
+import { setFirstRunComplete } from "@/lib/auth/sessionState";
 export const USERS_FILE = "users.json";
 
 // Objet valide (méthode + getter) — évite la syntaxe invalide { isTauri() }
@@ -103,7 +104,9 @@ async function writeUsers(list: LocalUser[]) {
 }
 
 export async function listLocalUsers() {
-  return await readUsers();
+  const users = await readUsers();
+  setFirstRunComplete(users.length > 0);
+  return users;
 }
 
 export async function registerLocal(
@@ -127,6 +130,7 @@ export async function registerLocal(
   };
   users.push(user);
   await writeUsers(users);
+  setFirstRunComplete(true);
   return user;
 }
 
@@ -176,4 +180,5 @@ export async function deleteUserLocal(id: string) {
   const users = await readUsers();
   const filtered = users.filter((u) => u.id !== id);
   await writeUsers(filtered);
+  setFirstRunComplete(filtered.length > 0);
 }

@@ -11,35 +11,30 @@ import React, {
 import { readConfig, writeConfig } from "@/appFs";
 import { DEFAULT_ROLES } from "@/constants/roles";
 import { normalizeAccessKey } from "@/lib/access";
+import {
+  clearStoredUser,
+  readStoredUser,
+  writeStoredUser
+} from "@/lib/auth/sessionState";
 import { can } from "@/utils/permissions";
 
-const AUTH_SESSION_KEY = "auth.user";
-
 function readSessionUser(): NonNullable<User> | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.sessionStorage.getItem(AUTH_SESSION_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (parsed && typeof parsed === "object") {
-      return parsed as NonNullable<User>;
-    }
-  } catch {}
-  return null;
+  const stored = readStoredUser<Partial<NonNullable<User>>>();
+  if (!stored || typeof stored !== "object") return null;
+  return {
+    id: (stored.id ?? null) as string | null,
+    email: (stored.email ?? null) as string | null,
+    mama_id: (stored.mama_id ?? null) as string | null,
+    role: (stored.role ?? null) as string | null
+  };
 }
 
 function writeSessionUser(user: NonNullable<User>) {
-  if (typeof window === "undefined") return;
-  try {
-    window.sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(user));
-  } catch {}
+  writeStoredUser(user);
 }
 
 function clearSessionUser() {
-  if (typeof window === "undefined") return;
-  try {
-    window.sessionStorage.removeItem(AUTH_SESSION_KEY);
-  } catch {}
+  clearStoredUser();
 }
 
 export type User = {
@@ -121,7 +116,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") {
+      setLoading(false);
+      return;
+    }
     (async () => {
       try {
         const stored = readSessionUser();

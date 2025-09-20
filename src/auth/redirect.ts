@@ -1,19 +1,12 @@
 import type { Location } from "react-router-dom";
 
-const REDIRECT_KEY = "redirectTo";
+import {
+  clearStoredRedirect,
+  readStoredRedirect,
+  writeStoredRedirect
+} from "@/lib/auth/sessionState";
 const DEFAULT_REDIRECT_HASH = "#/dashboard";
 const DEFAULT_REDIRECT_PATH = "/dashboard";
-
-function getSessionStorage(): Storage | null {
-  if (typeof window === "undefined" || !window.sessionStorage) {
-    return null;
-  }
-  try {
-    return window.sessionStorage;
-  } catch {
-    return null;
-  }
-}
 
 function normalizeRedirectHash(input?: string | null): string {
   if (!input) return DEFAULT_REDIRECT_HASH;
@@ -59,10 +52,8 @@ export function buildRedirectHash(location?: Location | null): string {
 }
 
 export function getRedirectTo(): string | null {
-  const storage = getSessionStorage();
-  if (!storage) return null;
   try {
-    const raw = storage.getItem(REDIRECT_KEY);
+    const raw = readStoredRedirect();
     if (!raw) return null;
     return normalizeRedirectHash(raw);
   } catch {
@@ -71,22 +62,20 @@ export function getRedirectTo(): string | null {
 }
 
 export function setRedirectTo(target: string | null | undefined): void {
-  const storage = getSessionStorage();
-  if (!storage) return;
   try {
     if (!target) {
-      storage.removeItem(REDIRECT_KEY);
+      clearStoredRedirect();
       return;
     }
     const normalized = normalizeRedirectHash(target);
-    storage.setItem(REDIRECT_KEY, normalized);
+    writeStoredRedirect(normalized);
   } catch {
     // ignore storage errors
   }
 }
 
 export function clearRedirectTo(): void {
-  setRedirectTo(null);
+  clearStoredRedirect();
 }
 
 export function redirectHashToPath(hash: string | null | undefined): string {
