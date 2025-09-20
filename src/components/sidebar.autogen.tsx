@@ -41,11 +41,6 @@ export default function SidebarAutogen() {
             Alertes
           </NavLink>
         </li>
-        <li key="/taches/alertes">
-          <NavLink to="/taches/alertes" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Alertes
-          </NavLink>
-        </li>
         <li key="/stock/alertesrupture">
           <NavLink to="/stock/alertesrupture" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
             Alertes Rupture
@@ -208,11 +203,6 @@ export default function SidebarAutogen() {
         </li>
         <li key="/cuisine/menudujour">
           <NavLink to="/cuisine/menudujour" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Menu Du Jour
-          </NavLink>
-        </li>
-        <li key="/menu/menudujour">
-          <NavLink to="/menu/menudujour" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
             Menu Du Jour
           </NavLink>
         </li>
