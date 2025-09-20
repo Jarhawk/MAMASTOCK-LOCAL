@@ -11,10 +11,16 @@ export type SqlDatabase = {
   close?: () => Promise<void>;
 };
 
+const MEMORY_DRIVER_SYMBOL = Symbol.for("mamastock.db.memoryDriver");
+
+type MemoryDriverDatabase = SqlDatabase & {
+  [MEMORY_DRIVER_SYMBOL]?: true;
+};
+
 export type SqliteDatabase = SqlDatabase;
 
 let tauriDb: SqlDatabase | null = null;
-let devStub: SqlDatabase | null = null;
+let devStub: MemoryDriverDatabase | null = null;
 
 function maskUrl(raw: string): string {
   try {
@@ -53,8 +59,17 @@ function ensureDevStub(): SqlDatabase {
     async close() {
       notify();
     },
+    [MEMORY_DRIVER_SYMBOL]: true,
   };
   return devStub;
+}
+
+export function isMemoryDriver(db: SqlDatabase | null | undefined): db is MemoryDriverDatabase {
+  return Boolean((db as MemoryDriverDatabase)?.[MEMORY_DRIVER_SYMBOL]);
+}
+
+export function isMemoryDriverActive(): boolean {
+  return isMemoryDriver(devStub);
 }
 
 type ResolvedDb = {
