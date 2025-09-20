@@ -1,6 +1,6 @@
 // src/auth/authAdapter.ts
 import { loginLocal, registerLocal } from "@/auth/localAccount";
-import { useAuth } from "@/context/AuthContext";import { isTauri } from "@/lib/tauriEnv";
+import { useAuth } from "@/context/AuthContext";
 
 export function useAuthAdapter() {
   const { signIn, signOut, user } = useAuth();

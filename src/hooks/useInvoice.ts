@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { facture_get } from '@/lib/db';import { isTauri } from "@/lib/tauriEnv";

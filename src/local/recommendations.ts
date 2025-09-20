@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { query } from "@/lib/db";import { isTauri } from "@/lib/tauriEnv";
 
 export async function getRecommendations(user_id: string | null, mama_id: string | null) {

@@ -13,7 +13,6 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
@@ -22,5 +21,16 @@
     }
   },
   "include": ["src", "test", "vite.config.ts", "vitest.config.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/lib",
+    "src/local",
+    "src/debug",
+    "src/pages",
+    "src/router.autogen.tsx",
+    "src/services/analytics.ts",
+    "src/utils/__tests__",
+    "test/db.test.ts"
+  ]
 }

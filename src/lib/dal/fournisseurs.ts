@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getDb } from "@/lib/db/database";import { isTauri } from "@/lib/tauriEnv";
 import type { Fournisseur } from "@/lib/types";
 

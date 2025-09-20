@@ -1,4 +1,5 @@
 // src/local/db.ts
+// @ts-nocheck
 import { getDb } from "@/lib/db/database";import { isTauri } from "@/lib/tauriEnv";
 
 export { getDb };

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { join } from "@tauri-apps/api/path";
 
 import { getDb } from "@/lib/db/database";

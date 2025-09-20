@@ -37,7 +37,7 @@ export default function LoginPage() {
       const user = await loginLocal(email, password);
       await signIn(user);
       const redirectTo = searchParams.get("redirectTo");
-      const target = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/";
+      const target = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/dashboard";
       navigate(target, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
