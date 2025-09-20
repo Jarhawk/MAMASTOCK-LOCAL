@@ -4,6 +4,7 @@ import { registerLocal, listLocalUsers } from "@/auth/localAccount";
 import { useAuth } from "@/context/AuthContext";
 import '@/pages/login.css';
 import LinkPrefetch from "@/components/LinkPrefetch";
+import { clearRedirectTo, getRedirectTo, redirectHashToPath } from "@/auth/redirect";
 
 export default function FirstRun() {
   const navigate = useNavigate();
@@ -77,7 +78,10 @@ export default function FirstRun() {
     try {
       const user = await registerLocal(normalizedEmail, password, "admin");
       await signIn(user);
-      navigate("/", { replace: true });
+      const storedRedirect = getRedirectTo();
+      const targetPath = redirectHashToPath(storedRedirect);
+      clearRedirectTo();
+      navigate(targetPath, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
       setLoading(false);

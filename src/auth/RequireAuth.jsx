@@ -1,20 +1,27 @@
+import { useEffect, useMemo } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 import useAuth from "@/hooks/useAuth";
 import Spinner from "@/components/ui/Spinner";
+import { buildRedirectHash, setRedirectTo } from "@/auth/redirect";
 
 export default function RequireAuth({ roles = [] }) {
   const { status, roles: userRoles } = useAuth();
   const location = useLocation();
-  const rawTarget = `${location.pathname}${location.search}` || "/dashboard";
-  const redirectTarget = rawTarget === "/" ? "/dashboard" : rawTarget;
-  const loginPath = `/login?redirectTo=${encodeURIComponent(redirectTarget)}`;
+  const redirectHash = useMemo(() => buildRedirectHash(location), [location]);
+  const loginPath = `/login?redirectTo=${encodeURIComponent(redirectHash)}`;
+
+  useEffect(() => {
+    if (status !== "authenticated") {
+      setRedirectTo(redirectHash);
+    }
+  }, [redirectHash, status]);
 
   if (status === "loading") {
     return <Spinner label="Chargement de votre session…" />;
   }
 
-  if (status !== "authed") {
+  if (status !== "authenticated") {
     return <Navigate to={loginPath} replace />;
   }
 

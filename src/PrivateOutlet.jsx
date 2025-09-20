@@ -1,9 +1,20 @@
-import { Outlet } from "react-router-dom";
+import { useEffect, useMemo } from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-import useAuth from "./hooks/useAuth";
+import { buildRedirectHash, setRedirectTo } from "@/auth/redirect";
+import useAuth from "@/hooks/useAuth";
 
 export default function PrivateOutlet() {
   const { status } = useAuth();
+  const location = useLocation();
+  const redirectHash = useMemo(() => buildRedirectHash(location), [location]);
+  const loginPath = `/login?redirectTo=${encodeURIComponent(redirectHash)}`;
+
+  useEffect(() => {
+    if (status !== "authenticated") {
+      setRedirectTo(redirectHash);
+    }
+  }, [redirectHash, status]);
 
   if (status === "loading") {
     return (
@@ -13,14 +24,8 @@ export default function PrivateOutlet() {
     );
   }
 
-  if (status === "signedout") {
-    return (
-      <div className="flex h-full items-center justify-center p-6">
-        <div className="text-center text-base font-medium text-foreground/80">
-          Veuillez vous connecter pour accéder à cette section.
-        </div>
-      </div>
-    );
+  if (status !== "authenticated") {
+    return <Navigate to={loginPath} replace />;
   }
 
   return <Outlet />;

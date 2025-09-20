@@ -4,6 +4,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { loginLocal, listLocalUsers } from "@/auth/localAccount";
 import "./login.css";
 import LinkPrefetch from "@/components/LinkPrefetch";
+import {
+  clearRedirectTo,
+  getRedirectTo,
+  redirectHashToPath,
+  setRedirectTo
+} from "@/auth/redirect";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -13,6 +19,15 @@ export default function LoginPage() {
   const [password, setPassword] = useState("Admin123!");
   const [error, setError] = useState("");
   const [canCreateAccount, setCanCreateAccount] = useState(false);
+
+  useEffect(() => {
+    const redirectParam = searchParams.get("redirectTo");
+    if (redirectParam) {
+      setRedirectTo(redirectParam);
+    } else {
+      clearRedirectTo();
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     let mounted = true;
@@ -36,9 +51,11 @@ export default function LoginPage() {
     try {
       const user = await loginLocal(email, password);
       await signIn(user);
-      const redirectTo = searchParams.get("redirectTo");
-      const target = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/dashboard";
-      navigate(target, { replace: true });
+      const storedRedirect = getRedirectTo();
+      const redirectParam = storedRedirect ?? searchParams.get("redirectTo");
+      const targetPath = redirectHashToPath(redirectParam);
+      clearRedirectTo();
+      navigate(targetPath, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     }
