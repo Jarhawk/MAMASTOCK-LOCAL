@@ -1,7 +1,20 @@
-import useAuth from "./hooks/useAuth";
+import { useEffect, useMemo } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+
+import { buildRedirectHash, setRedirectTo } from "@/auth/redirect";
+import useAuth from "@/hooks/useAuth";
 
 export default function ProtectedRoute({ children }) {
   const { status } = useAuth();
+  const location = useLocation();
+  const redirectHash = useMemo(() => buildRedirectHash(location), [location]);
+  const loginPath = `/login?redirectTo=${encodeURIComponent(redirectHash)}`;
+
+  useEffect(() => {
+    if (status !== "authenticated") {
+      setRedirectTo(redirectHash);
+    }
+  }, [redirectHash, status]);
 
   if (status === "loading") {
     return (
@@ -11,14 +24,8 @@ export default function ProtectedRoute({ children }) {
     );
   }
 
-  if (status === "signedout") {
-    return (
-      <div className="flex min-h-[240px] items-center justify-center p-6">
-        <div className="text-center text-base font-medium text-foreground/80">
-          Veuillez vous connecter pour accéder à ce contenu.
-        </div>
-      </div>
-    );
+  if (status !== "authenticated") {
+    return <Navigate to={loginPath} replace />;
   }
 
   return <>{children}</>;
