@@ -9,7 +9,13 @@ export default function RequireAuth({ roles = [] }) {
   const { status, roles: userRoles } = useAuth();
   const location = useLocation();
   const redirectHash = useMemo(() => buildRedirectHash(location), [location]);
-  const loginPath = `/login?redirectTo=${encodeURIComponent(redirectHash)}`;
+  const loginTarget = useMemo(
+    () => ({
+      pathname: "/login",
+      search: `?redirectTo=${encodeURIComponent(redirectHash)}`,
+    }),
+    [redirectHash]
+  );
 
   useEffect(() => {
     if (status !== "authenticated") {
@@ -22,13 +28,13 @@ export default function RequireAuth({ roles = [] }) {
   }
 
   if (status !== "authenticated") {
-    return <Navigate to={loginPath} replace />;
+    return <Navigate to={loginTarget} replace />;
   }
 
   if (Array.isArray(roles) && roles.length > 0) {
     const hasRole = roles.some((role) => userRoles.includes(role));
     if (!hasRole) {
-      return <Navigate to={loginPath} replace />;
+      return <Navigate to={loginTarget} replace />;
     }
   }
 

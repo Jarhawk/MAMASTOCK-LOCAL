@@ -21,6 +21,11 @@ export type SqliteDatabase = SqlDatabase;
 
 let tauriDb: SqlDatabase | null = null;
 let devStub: MemoryDriverDatabase | null = null;
+let memoryDb: MemoryDriverDatabase | null = null;
+
+type MemoryDriverFactory = () => Promise<SqlDatabase> | SqlDatabase;
+
+let memoryDriverFactory: MemoryDriverFactory | null = null;
 
 function maskUrl(raw: string): string {
   try {
@@ -38,7 +43,7 @@ function isSqliteUrl(raw: string): boolean {
   return raw.trim().toLowerCase().startsWith("sqlite:");
 }
 
-function ensureDevStub(): SqlDatabase {
+function ensureDevStub(): MemoryDriverDatabase {
   if (devStub) return devStub;
   let notified = false;
   const notify = () => {
@@ -69,7 +74,31 @@ export function isMemoryDriver(db: SqlDatabase | null | undefined): db is Memory
 }
 
 export function isMemoryDriverActive(): boolean {
-  return isMemoryDriver(devStub);
+  return isMemoryDriver(memoryDb) || isMemoryDriver(devStub);
+}
+
+function markMemoryDriver<T extends SqlDatabase>(db: T): T & MemoryDriverDatabase {
+  (db as MemoryDriverDatabase)[MEMORY_DRIVER_SYMBOL] = true;
+  return db as T & MemoryDriverDatabase;
+}
+
+async function ensureMemoryDb(): Promise<MemoryDriverDatabase> {
+  if (memoryDb) {
+    return memoryDb;
+  }
+  if (memoryDriverFactory) {
+    const provided = await memoryDriverFactory();
+    memoryDb = markMemoryDriver(provided);
+    return memoryDb;
+  }
+  memoryDb = ensureDevStub();
+  return memoryDb;
+}
+
+export function installMemoryDriver(factory: MemoryDriverFactory | null) {
+  memoryDriverFactory = factory;
+  memoryDb = null;
+  devStub = null;
 }
 
 type ResolvedDb = {
@@ -125,7 +154,7 @@ async function createTauriDb(url: string): Promise<SqlDatabase> {
 
 export async function getDb(): Promise<SqlDatabase> {
   if (!isTauri()) {
-    return ensureDevStub();
+    return ensureMemoryDb();
   }
   if (tauriDb) {
     return tauriDb;
@@ -144,11 +173,15 @@ export async function closeDb() {
     if (tauriDb && typeof tauriDb.close === "function") {
       await tauriDb.close();
     }
+    if (memoryDb && typeof memoryDb.close === "function") {
+      await memoryDb.close();
+    }
   } catch (err) {
     console.warn("[sql] Fermeture ignorée:", err);
   } finally {
     tauriDb = null;
     devStub = null;
+    memoryDb = null;
   }
 }
 

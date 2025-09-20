@@ -31,7 +31,9 @@ export async function sumStockForItems(
 
   const uniqueIds = Array.from(
     new Set(
-      itemIds.filter((id): id is string => typeof id === "string" && id.length),
+      itemIds.filter(
+        (id): id is string => typeof id === "string" && id.length > 0,
+      ),
     ),
   );
 
@@ -40,20 +42,10 @@ export async function sumStockForItems(
   }
 
   const db = await openDb();
-
-  if (isMemoryDriver(db)) {
-    const fallback: Record<string, number> = {};
-    for (const id of uniqueIds) {
-      const rows = await db.select<{ s: number | string | null }>(
-        SUM_STOCK_SQL,
-        [id],
-      );
-      fallback[id] = Number(rows?.[0]?.s ?? 0);
-    }
-    return fallback;
-  }
-
-  const placeholders = uniqueIds.map((_, index) => `$${index + 1}`).join(",");
+  const useQuestionMarks = isMemoryDriver(db);
+  const placeholders = uniqueIds
+    .map((_, index) => (useQuestionMarks ? "?" : `$${index + 1}`))
+    .join(",");
   const rows = await db.select<{ item_id: string; s: number | string | null }>(
     `SELECT item_id, COALESCE(SUM(qty), 0) AS s
        FROM stock_movements

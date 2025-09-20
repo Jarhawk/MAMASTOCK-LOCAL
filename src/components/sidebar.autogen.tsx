@@ -4,315 +4,97 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import { isTauri } from "@/lib/tauriEnv";
+const RAW_LINKS = [
+  { to: "/debug/accessexample", label: "Access Example" },
+  { to: "/consolidation/accessmultisites", label: "Access Multi Sites" },
+  { to: "/parametrage/accessrights", label: "Access Rights" },
+  { to: "/accueil", label: "Accueil" },
+  { to: "/achats/achatdetail", label: "Achat Detail" },
+  { to: "/alertes", label: "Alertes" },
+  { to: "/stock/alertesrupture", label: "Alertes Rupture" },
+  { to: "/analyse/analyse", label: "Analyse" },
+  { to: "/analytique/analytiquedashboard", label: "Analytique Dashboard" },
+  { to: "/fournisseurs/apifournisseurform", label: "Api Fournisseur Form" },
+  { to: "/barmanager", label: "Bar Manager" },
+  { to: "/bons_livraison/blcreate", label: "BLCreate" },
+  { to: "/auth/blocked", label: "Blocked" },
+  { to: "/carte/carte", label: "Carte" },
+  { to: "/carteplats", label: "Carte Plats" },
+  { to: "/catalogue/cataloguesyncviewer", label: "Catalogue Sync Viewer" },
+  { to: "/legal/cgu", label: "Cgu" },
+  { to: "/commandes/commandedetail", label: "Commande Detail" },
+  { to: "/supervision/comparateurfiches", label: "Comparateur Fiches" },
+  { to: "/consentements", label: "Consentements" },
+  { to: "/costboisson/costboisson", label: "Cost Boisson" },
+  { to: "/costing/costingcarte", label: "Costing Carte" },
+  { to: "/dashboard/dashboardbuilder", label: "Dashboard Builder" },
+  { to: "/documents/documentform", label: "Document Form" },
+  { to: "/dossierdonnees", label: "Dossier Donnees" },
+  { to: "/inventaire/ecartinventaire", label: "Ecart Inventaire" },
+  { to: "/ecarts/ecarts", label: "Ecarts" },
+  { to: "/emails/emailsenvoyes", label: "Emails Envoyes" },
+  { to: "/engineeringmenu", label: "Engineering Menu" },
+  { to: "/factures/facturecreate", label: "Facture Create" },
+  { to: "/parametres/familles", label: "Familles" },
+  { to: "/feedback", label: "Feedback" },
+  { to: "/fiches/fichedetail", label: "Fiche Detail" },
+  { to: "/reporting/graphcost", label: "Graph Cost" },
+  { to: "/journal", label: "Journal" },
+  { to: "/public/landingpage", label: "Landing Page" },
+  { to: "/login", label: "Login" },
+  { to: "/menus/menudetail", label: "Menu Detail" },
+  { to: "/cuisine/menudujour", label: "Menu Du Jour" },
+  { to: "/engineering/menuengineering", label: "Menu Engineering" },
+  { to: "/mobile/mobileaccueil", label: "Mobile Accueil" },
+  { to: "/notfound", label: "Not Found" },
+  { to: "/notifications/notificationsettingsform", label: "Notification Settings Form" },
+  { to: "/pertes", label: "Pertes" },
+  { to: "/planningdetail", label: "Planning Detail" },
+  { to: "/planningform", label: "Planning Form" },
+  { to: "/planningmodule", label: "Planning Module" },
+  { to: "/produits/produitdetail", label: "Produit Detail" },
+  { to: "/promotions/promotionform", label: "Promotion Form" },
+  { to: "/receptions/receptions", label: "Receptions" },
+  { to: "/recettes/recettes", label: "Recettes" },
+  { to: "/requisitions/requisitiondetail", label: "Requisition Detail" },
+  { to: "/rgpd", label: "Rgpd" },
+  { to: "/signalements/signalementdetail", label: "Signalement Detail" },
+  { to: "/simulation/simulation", label: "Simulation" },
+  { to: "/planning/simulationplanner", label: "Simulation Planner" },
+  { to: "/stats/stats", label: "Stats" },
+  { to: "/surcouts/surcouts", label: "Surcouts" },
+  { to: "/utilisateurs", label: "Utilisateurs" },
+  { to: "/validations", label: "Validations" },
+];
+
+const SIDEBAR_LINKS = (() => {
+  const seen = new Set();
+  const deduped = [];
+  for (const link of RAW_LINKS) {
+    if (seen.has(link.to)) continue;
+    seen.add(link.to);
+    deduped.push(link);
+  }
+  return deduped;
+})();
+
+const navLinkClassName = ({ isActive }: { isActive: boolean }) =>
+  "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "");
 
 export default function SidebarAutogen() {
   return (
     <aside className="w-64 p-3 border-r border-border bg-background">
       <nav>
         <ul className="space-y-1">
-        <li key="/debug/accessexample">
-          <NavLink to="/debug/accessexample" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Access Example
-          </NavLink>
-        </li>
-        <li key="/consolidation/accessmultisites">
-          <NavLink to="/consolidation/accessmultisites" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Access Multi Sites
-          </NavLink>
-        </li>
-        <li key="/parametrage/accessrights">
-          <NavLink to="/parametrage/accessrights" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Access Rights
-          </NavLink>
-        </li>
-        <li key="/accueil">
-          <NavLink to="/accueil" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Accueil
-          </NavLink>
-        </li>
-        <li key="/achats/achatdetail">
-          <NavLink to="/achats/achatdetail" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Achat Detail
-          </NavLink>
-        </li>
-        <li key="/alertes">
-          <NavLink to="/alertes" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Alertes
-          </NavLink>
-        </li>
-        <li key="/stock/alertesrupture">
-          <NavLink to="/stock/alertesrupture" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Alertes Rupture
-          </NavLink>
-        </li>
-        <li key="/analyse/analyse">
-          <NavLink to="/analyse/analyse" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Analyse
-          </NavLink>
-        </li>
-        <li key="/analytique/analytiquedashboard">
-          <NavLink to="/analytique/analytiquedashboard" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Analytique Dashboard
-          </NavLink>
-        </li>
-        <li key="/fournisseurs/apifournisseurform">
-          <NavLink to="/fournisseurs/apifournisseurform" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Api Fournisseur Form
-          </NavLink>
-        </li>
-        <li key="/barmanager">
-          <NavLink to="/barmanager" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Bar Manager
-          </NavLink>
-        </li>
-        <li key="/bons_livraison/blcreate">
-          <NavLink to="/bons_livraison/blcreate" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            BLCreate
-          </NavLink>
-        </li>
-        <li key="/auth/blocked">
-          <NavLink to="/auth/blocked" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Blocked
-          </NavLink>
-        </li>
-        <li key="/carte/carte">
-          <NavLink to="/carte/carte" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Carte
-          </NavLink>
-        </li>
-        <li key="/carteplats">
-          <NavLink to="/carteplats" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Carte Plats
-          </NavLink>
-        </li>
-        <li key="/catalogue/cataloguesyncviewer">
-          <NavLink to="/catalogue/cataloguesyncviewer" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Catalogue Sync Viewer
-          </NavLink>
-        </li>
-        <li key="/legal/cgu">
-          <NavLink to="/legal/cgu" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Cgu
-          </NavLink>
-        </li>
-        <li key="/commandes/commandedetail">
-          <NavLink to="/commandes/commandedetail" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Commande Detail
-          </NavLink>
-        </li>
-        <li key="/supervision/comparateurfiches">
-          <NavLink to="/supervision/comparateurfiches" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Comparateur Fiches
-          </NavLink>
-        </li>
-        <li key="/consentements">
-          <NavLink to="/consentements" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Consentements
-          </NavLink>
-        </li>
-        <li key="/costboisson/costboisson">
-          <NavLink to="/costboisson/costboisson" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Cost Boisson
-          </NavLink>
-        </li>
-        <li key="/costing/costingcarte">
-          <NavLink to="/costing/costingcarte" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Costing Carte
-          </NavLink>
-        </li>
-        <li key="/dashboard/dashboardbuilder">
-          <NavLink to="/dashboard/dashboardbuilder" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Dashboard Builder
-          </NavLink>
-        </li>
-        <li key="/documents/documentform">
-          <NavLink to="/documents/documentform" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Document Form
-          </NavLink>
-        </li>
-        <li key="/dossierdonnees">
-          <NavLink to="/dossierdonnees" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Dossier Donnees
-          </NavLink>
-        </li>
-        <li key="/inventaire/ecartinventaire">
-          <NavLink to="/inventaire/ecartinventaire" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Ecart Inventaire
-          </NavLink>
-        </li>
-        <li key="/ecarts/ecarts">
-          <NavLink to="/ecarts/ecarts" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Ecarts
-          </NavLink>
-        </li>
-        <li key="/emails/emailsenvoyes">
-          <NavLink to="/emails/emailsenvoyes" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Emails Envoyes
-          </NavLink>
-        </li>
-        <li key="/engineeringmenu">
-          <NavLink to="/engineeringmenu" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Engineering Menu
-          </NavLink>
-        </li>
-        <li key="/factures/facturecreate">
-          <NavLink to="/factures/facturecreate" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Facture Create
-          </NavLink>
-        </li>
-        <li key="/parametres/familles">
-          <NavLink to="/parametres/familles" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Familles
-          </NavLink>
-        </li>
-        <li key="/feedback">
-          <NavLink to="/feedback" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Feedback
-          </NavLink>
-        </li>
-        <li key="/fiches/fichedetail">
-          <NavLink to="/fiches/fichedetail" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Fiche Detail
-          </NavLink>
-        </li>
-        <li key="/reporting/graphcost">
-          <NavLink to="/reporting/graphcost" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Graph Cost
-          </NavLink>
-        </li>
-        <li key="/journal">
-          <NavLink to="/journal" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Journal
-          </NavLink>
-        </li>
-        <li key="/public/landingpage">
-          <NavLink to="/public/landingpage" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Landing Page
-          </NavLink>
-        </li>
-        <li key="/login">
-          <NavLink to="/login" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Login
-          </NavLink>
-        </li>
-        <li key="/menus/menudetail">
-          <NavLink to="/menus/menudetail" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Menu Detail
-          </NavLink>
-        </li>
-        <li key="/cuisine/menudujour">
-          <NavLink to="/cuisine/menudujour" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Menu Du Jour
-          </NavLink>
-        </li>
-        <li key="/engineering/menuengineering">
-          <NavLink to="/engineering/menuengineering" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Menu Engineering
-          </NavLink>
-        </li>
-        <li key="/mobile/mobileaccueil">
-          <NavLink to="/mobile/mobileaccueil" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Mobile Accueil
-          </NavLink>
-        </li>
-        <li key="/notfound">
-          <NavLink to="/notfound" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Not Found
-          </NavLink>
-        </li>
-        <li key="/notifications/notificationsettingsform">
-          <NavLink to="/notifications/notificationsettingsform" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Notification Settings Form
-          </NavLink>
-        </li>
-        <li key="/pertes">
-          <NavLink to="/pertes" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Pertes
-          </NavLink>
-        </li>
-        <li key="/planningdetail">
-          <NavLink to="/planningdetail" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Planning Detail
-          </NavLink>
-        </li>
-        <li key="/planningform">
-          <NavLink to="/planningform" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Planning Form
-          </NavLink>
-        </li>
-        <li key="/planningmodule">
-          <NavLink to="/planningmodule" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Planning Module
-          </NavLink>
-        </li>
-        <li key="/produits/produitdetail">
-          <NavLink to="/produits/produitdetail" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Produit Detail
-          </NavLink>
-        </li>
-        <li key="/promotions/promotionform">
-          <NavLink to="/promotions/promotionform" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Promotion Form
-          </NavLink>
-        </li>
-        <li key="/receptions/receptions">
-          <NavLink to="/receptions/receptions" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Receptions
-          </NavLink>
-        </li>
-        <li key="/recettes/recettes">
-          <NavLink to="/recettes/recettes" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Recettes
-          </NavLink>
-        </li>
-        <li key="/requisitions/requisitiondetail">
-          <NavLink to="/requisitions/requisitiondetail" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Requisition Detail
-          </NavLink>
-        </li>
-        <li key="/rgpd">
-          <NavLink to="/rgpd" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Rgpd
-          </NavLink>
-        </li>
-        <li key="/signalements/signalementdetail">
-          <NavLink to="/signalements/signalementdetail" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Signalement Detail
-          </NavLink>
-        </li>
-        <li key="/simulation/simulation">
-          <NavLink to="/simulation/simulation" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Simulation
-          </NavLink>
-        </li>
-        <li key="/planning/simulationplanner">
-          <NavLink to="/planning/simulationplanner" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Simulation Planner
-          </NavLink>
-        </li>
-        <li key="/stats/stats">
-          <NavLink to="/stats/stats" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Stats
-          </NavLink>
-        </li>
-        <li key="/surcouts/surcouts">
-          <NavLink to="/surcouts/surcouts" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Surcouts
-          </NavLink>
-        </li>
-        <li key="/utilisateurs">
-          <NavLink to="/utilisateurs" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Utilisateurs
-          </NavLink>
-        </li>
-        <li key="/validations">
-          <NavLink to="/validations" className={({ isActive }) => "block px-3 py-2 rounded hover:bg-muted " + (isActive ? "font-semibold" : "")}>
-            Validations
-          </NavLink>
-        </li>
+          {SIDEBAR_LINKS.map(({ to, label }) => (
+            <li key={to}>
+              <NavLink to={to} className={navLinkClassName}>
+                {label}
+              </NavLink>
+            </li>
+          ))}
         </ul>
       </nav>
-    </aside>);
-
+    </aside>
+  );
 }

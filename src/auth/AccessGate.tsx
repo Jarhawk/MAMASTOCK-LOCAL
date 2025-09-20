@@ -1,9 +1,36 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-import { useAuth } from "@/context/AuthContext";
+import { buildRedirectHash, setRedirectTo } from "@/auth/redirect";
+import useAuth from "@/hooks/useAuth";
 
 export default function AccessGate({ children }: { children: React.ReactNode }) {
-  const { user, access_rights } = useAuth();
+  const { status, user, access_rights } = useAuth();
+  const location = useLocation();
+  const redirectHash = useMemo(() => buildRedirectHash(location), [location]);
+  const loginTarget = useMemo(
+    () => ({
+      pathname: "/login",
+      search: `?redirectTo=${encodeURIComponent(redirectHash)}`,
+    }),
+    [redirectHash]
+  );
+
+  useEffect(() => {
+    if (status !== "authenticated") {
+      setRedirectTo(redirectHash);
+    }
+  }, [redirectHash, status]);
+
+  if (status === "loading") {
+    return (
+      <div className="p-8 text-sm text-foreground/60">Chargement de la session…</div>
+    );
+  }
+
+  if (status !== "authenticated") {
+    return <Navigate to={loginTarget} replace />;
+  }
 
   if (!user && !access_rights) {
     return (
@@ -13,5 +40,10 @@ export default function AccessGate({ children }: { children: React.ReactNode }) 
       </div>
     );
   }
-  return <>{children}</>;
+
+  if (children) {
+    return <>{children}</>;
+  }
+
+  return <Outlet />;
 }

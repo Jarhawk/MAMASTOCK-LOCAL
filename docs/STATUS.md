@@ -7,7 +7,7 @@ This document tracks the global progress of the project.
 ### Fait
 - Initial setup
 - SQLite migrations (valeur_stock + triggers) et scripts db:apply/db:smoke
-- Migration vers Tauri v2 + purge Supabase/PG
+- Migration vers Tauri v2 + purge backend cloud/PG
 - Authentification locale (bcrypt) avec page Login et script seed-admin
 - DAL SQLite pour Produits/Fournisseurs/Factures
 - Paramétrage du dossier de données avec verrou distribué et auto‑fermeture

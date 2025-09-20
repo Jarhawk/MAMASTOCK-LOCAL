@@ -8,7 +8,13 @@ export default function AppShell() {
       <aside className="w-64 shrink-0 border-r border-border bg-background">
         <Sidebar />
       </aside>
-      <main className="flex-1 bg-background text-foreground">
+      <main
+        id="content"
+        tabIndex={-1}
+        role="main"
+        data-router-scroll-container
+        className="flex-1 bg-background text-foreground focus:outline-none"
+      >
         <Outlet />
       </main>
       {import.meta.env.PROD && import.meta.env.VITE_SHOW_SIDEBAR_DEBUG === "1" && (

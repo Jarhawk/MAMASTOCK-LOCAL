@@ -3,6 +3,7 @@ import { appDataDir, join } from "@tauri-apps/api/path";
 import { APP_DIR, getAppDir } from "@/lib/paths";
 import { isTauri } from "@/lib/tauriEnv";
 import { setFirstRunComplete } from "@/lib/auth/sessionState";
+import { sessionStore } from "@/lib/auth/sessionStore";
 export const USERS_FILE = "users.json";
 
 // Objet valide (méthode + getter) — évite la syntaxe invalide { isTauri() }
@@ -72,10 +73,12 @@ async function sha256Hex(input: string) {
     .join("");
 }
 
+const BROWSER_USERS_KEY = "mama.users.json";
+
 async function readUsers(): Promise<LocalUser[]> {
   const path = await usersPath();
   if (path.startsWith("browser://")) {
-    const txt = localStorage.getItem("mama.users.json");
+    const txt = sessionStore.get(BROWSER_USERS_KEY);
     if (!txt) return [];
     try {
       return JSON.parse(txt) as LocalUser[];
@@ -96,7 +99,7 @@ async function readUsers(): Promise<LocalUser[]> {
 async function writeUsers(list: LocalUser[]) {
   const path = await usersPath();
   if (path.startsWith("browser://")) {
-    localStorage.setItem("mama.users.json", JSON.stringify(list, null, 2));
+    sessionStore.set(BROWSER_USERS_KEY, JSON.stringify(list, null, 2));
     return;
   }
   const { writeTextFile } = await import("@tauri-apps/plugin-fs");

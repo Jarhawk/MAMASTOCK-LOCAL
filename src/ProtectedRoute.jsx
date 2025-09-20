@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 import { buildRedirectHash, setRedirectTo } from "@/auth/redirect";
 import useAuth from "@/hooks/useAuth";
@@ -8,7 +8,13 @@ export default function ProtectedRoute({ children }) {
   const { status } = useAuth();
   const location = useLocation();
   const redirectHash = useMemo(() => buildRedirectHash(location), [location]);
-  const loginPath = `/login?redirectTo=${encodeURIComponent(redirectHash)}`;
+  const loginTarget = useMemo(
+    () => ({
+      pathname: "/login",
+      search: `?redirectTo=${encodeURIComponent(redirectHash)}`,
+    }),
+    [redirectHash]
+  );
 
   useEffect(() => {
     if (status !== "authenticated") {
@@ -25,8 +31,12 @@ export default function ProtectedRoute({ children }) {
   }
 
   if (status !== "authenticated") {
-    return <Navigate to={loginPath} replace />;
+    return <Navigate to={loginTarget} replace />;
   }
 
-  return <>{children}</>;
+  if (children) {
+    return <>{children}</>;
+  }
+
+  return <Outlet />;
 }

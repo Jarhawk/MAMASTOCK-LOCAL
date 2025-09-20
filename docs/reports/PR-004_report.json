@@ -1,7 +1,7 @@
 {
   "pr_number": "004",
-  "title": "purge Supabase/PG + README split",
-  "summary": "remove supabase and pg dependencies, split README for offline vs cloud",
+  "title": "purge remote PG + README split",
+  "summary": "remove remote pg dependencies, split README for offline vs cloud",
   "files": {
     "added": [
       "README-cloud.md",
@@ -18,7 +18,7 @@
       "src/lib/supa/textSearch.ts",
       "src/pages/parametrage/DataFolder.jsx",
       "src/pages/parametrage/SystemTools.jsx",
-      "src/types/supabase.d.ts",
+      "src/types/remote-backend.d.ts",
       "vite.config.ts"
     ],
     "removed": [
@@ -49,6 +49,6 @@
       "stdout": "migration smoke ok insert stock=10 valeur=25 pmp=2.5 update stock=20 valeur=60 pmp=3 delete stock=0 valeur=0 pmp=0"
     }
   ],
-  "todos": ["replace remaining Supabase calls with local DAL"],
+  "todos": ["replace remaining remote backend calls with local DAL"],
   "risks": []
 }
