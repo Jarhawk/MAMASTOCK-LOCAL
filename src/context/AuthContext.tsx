@@ -12,36 +12,22 @@ import { readConfig, writeConfig } from "@/appFs";
 import { DEFAULT_ROLES } from "@/constants/roles";
 import { normalizeAccessKey } from "@/lib/access";
 import { devFlags } from "@/lib/devFlags";
+import {
+  clearAuthSessionStorage,
+  readStoredFirstRun,
+  readStoredRedirectTo,
+  readStoredSessionFlags,
+  readStoredToken,
+  readStoredUser,
+  SessionFlags,
+  writeStoredFirstRun,
+  writeStoredRedirectTo,
+  writeStoredSessionFlags,
+  writeStoredToken,
+  writeStoredUser,
+  normalizeRedirectTarget
+} from "@/lib/auth/sessionState";
 import { can } from "@/utils/permissions";
-
-const AUTH_SESSION_KEY = "auth.user";
-
-function readSessionUser(): NonNullable<User> | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.sessionStorage.getItem(AUTH_SESSION_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (parsed && typeof parsed === "object") {
-      return parsed as NonNullable<User>;
-    }
-  } catch {}
-  return null;
-}
-
-function writeSessionUser(user: NonNullable<User>) {
-  if (typeof window === "undefined") return;
-  try {
-    window.sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(user));
-  } catch {}
-}
-
-function clearSessionUser() {
-  if (typeof window === "undefined") return;
-  try {
-    window.sessionStorage.removeItem(AUTH_SESSION_KEY);
-  } catch {}
-}
 
 export type User = {
   id: string | null;
@@ -51,6 +37,21 @@ export type User = {
 } | null;
 
 type AccessRights = Record<string, any> | null;
+
+export type AuthSession = {
+  user: NonNullable<User>;
+  token: string | null;
+  flags: SessionFlags;
+  redirectTo: string | null;
+  firstRun: boolean | null;
+};
+
+type SignInOptions = {
+  token?: string | null;
+  flags?: SessionFlags | null;
+  redirectTo?: string | null;
+  firstRun?: boolean | null;
+};
 
 type Ctx = {
   id: string | null;
@@ -63,8 +64,18 @@ type Ctx = {
   access_rights: AccessRights;
   devFakeAuth: boolean;
   loading: boolean;
-  signIn: (u: NonNullable<User>) => Promise<void> | void;
+  token: string | null;
+  setToken: (value: string | null) => void;
+  sessionFlags: SessionFlags;
+  setSessionFlags: (value: SessionFlags | ((prev: SessionFlags) => SessionFlags)) => void;
+  redirectTo: string | null;
+  setRedirectTo: (value: string | null) => void;
+  firstRun: boolean | null;
+  setFirstRun: (value: boolean | null) => void;
+  session: AuthSession | null;
+  signIn: (u: NonNullable<User>, options?: SignInOptions) => Promise<void> | void;
   signOut: () => void;
+  logout: () => void;
   hasAccess: (k: string, action?: string) => boolean;
 };
 
@@ -103,8 +114,18 @@ const defaultCtx: Ctx = {
   access_rights: null,
   devFakeAuth: devFlags.isDev,
   loading: devFlags.isDev ? false : true,
+  token: null,
+  setToken: () => {},
+  sessionFlags: {},
+  setSessionFlags: () => {},
+  redirectTo: null,
+  setRedirectTo: () => {},
+  firstRun: null,
+  setFirstRun: () => {},
+  session: null,
   signIn: () => {},
   signOut: () => {},
+  logout: () => {},
   hasAccess: () => devFlags.isDev
 };
 
@@ -115,10 +136,68 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userData, setUserData] = useState<any>(null);
   const [roles, setRoles] = useState<string[]>([]);
   const [loading, setLoading] = useState(!devFlags.isDev);
+  const [token, setTokenState] = useState<string | null>(() => readStoredToken());
+  const [sessionFlags, setSessionFlagsState] = useState<SessionFlags>(() => readStoredSessionFlags());
+  const [redirectTo, setRedirectToState] = useState<string | null>(() => readStoredRedirectTo());
+  const [firstRun, setFirstRunState] = useState<boolean | null>(() => readStoredFirstRun());
 
   const devBypass = devFlags.isDev;
 
-  const loadUser = useCallback(async (u: NonNullable<User>) => {
+  const applyToken = useCallback((value: string | null | undefined) => {
+    setTokenState(value && value.trim() ? value : null);
+  }, []);
+
+  const applySessionFlags = useCallback((value: SessionFlags | null | undefined) => {
+    if (typeof value === "function") {
+      // Should not happen but keeps type safety.
+      setSessionFlagsState((prev) => value(prev));
+      return;
+    }
+    const normalized: SessionFlags = {};
+    if (value && typeof value === "object") {
+      for (const [key, flag] of Object.entries(value)) {
+        if (!key) continue;
+        normalized[key] = !!flag;
+      }
+    }
+    setSessionFlagsState(normalized);
+  }, []);
+
+  const applyRedirectTo = useCallback((value: string | null | undefined) => {
+    const normalized = normalizeRedirectTarget(value ?? null);
+    setRedirectToState(normalized);
+  }, []);
+
+  const applyFirstRun = useCallback((value: boolean | null | undefined) => {
+    if (value === undefined || value === null) {
+      setFirstRunState(null);
+    } else {
+      setFirstRunState(value ? true : false);
+    }
+  }, []);
+
+  const updateSessionFlags = useCallback(
+    (value: SessionFlags | ((prev: SessionFlags) => SessionFlags)) => {
+      if (typeof value === "function") {
+        setSessionFlagsState((prev) => {
+          const next = value(prev);
+          const normalized: SessionFlags = {};
+          if (next && typeof next === "object") {
+            for (const [key, flag] of Object.entries(next)) {
+              if (!key) continue;
+              normalized[key] = !!flag;
+            }
+          }
+          return normalized;
+        });
+        return;
+      }
+      applySessionFlags(value);
+    },
+    [applySessionFlags]
+  );
+
+  const loadUser = useCallback(async (u: NonNullable<User>, options?: SignInOptions) => {
     const cfg = (await readConfig()) || {};
     if (!cfg.roles || !Array.isArray(cfg.roles) || cfg.roles.length === 0) {
       cfg.roles = DEFAULT_ROLES;
@@ -144,23 +223,53 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       mama_id: u.mama_id ?? null,
       role: u.role ?? null
     };
-    writeSessionUser(persistedUser);
-  }, []);
+    writeStoredUser(persistedUser);
+    if (options) {
+      if (Object.prototype.hasOwnProperty.call(options, "token")) {
+        applyToken(options.token ?? null);
+      }
+      if (Object.prototype.hasOwnProperty.call(options, "flags")) {
+        applySessionFlags(options.flags ?? null);
+      }
+      if (Object.prototype.hasOwnProperty.call(options, "redirectTo")) {
+        applyRedirectTo(options.redirectTo ?? null);
+      }
+      if (Object.prototype.hasOwnProperty.call(options, "firstRun")) {
+        applyFirstRun(options.firstRun ?? null);
+      }
+    }
+  }, [applyFirstRun, applyRedirectTo, applySessionFlags, applyToken]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     (async () => {
       try {
-        const stored = readSessionUser();
+        const stored = readStoredUser();
         if (stored) await loadUser(stored);
       } catch {}
       setLoading(false);
     })();
   }, [loadUser]);
 
+  useEffect(() => {
+    writeStoredToken(token);
+  }, [token]);
+
+  useEffect(() => {
+    writeStoredSessionFlags(sessionFlags);
+  }, [sessionFlags]);
+
+  useEffect(() => {
+    writeStoredRedirectTo(redirectTo);
+  }, [redirectTo]);
+
+  useEffect(() => {
+    writeStoredFirstRun(firstRun);
+  }, [firstRun]);
+
   const signIn = useCallback(
-    async (u: NonNullable<User>) => {
-      await loadUser(u);
+    async (u: NonNullable<User>, options?: SignInOptions) => {
+      await loadUser(u, options);
       setLoading(false);
     },
     [loadUser]
@@ -170,7 +279,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     setUserData(null);
     setRoles([]);
-    clearSessionUser();
+    clearAuthSessionStorage();
+    setTokenState(null);
+    setSessionFlagsState({});
+    setRedirectToState(null);
+    setFirstRunState(null);
     setLoading(!devFlags.isDev);
   }, []);
 
@@ -248,11 +361,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       access_rights: resolvedAccessRights,
       devFakeAuth: devBypass,
       loading: devBypass ? false : loading,
+      token,
+      setToken: applyToken,
+      sessionFlags,
+      setSessionFlags: updateSessionFlags,
+      redirectTo,
+      setRedirectTo: applyRedirectTo,
+      firstRun,
+      setFirstRun: applyFirstRun,
+      session: resolvedUser
+        ? {
+            user: resolvedUser as NonNullable<User>,
+            token,
+            flags: sessionFlags,
+            redirectTo,
+            firstRun
+          }
+        : null,
       signIn,
       signOut,
+      logout: signOut,
       hasAccess
     }),
     [
+      applyFirstRun,
+      applyRedirectTo,
+      applyToken,
       devBypass,
       hasAccess,
       loading,
@@ -260,6 +394,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       resolvedRole,
       resolvedRoles,
       resolvedUser,
+      sessionFlags,
+      redirectTo,
+      firstRun,
+      token,
+      updateSessionFlags,
       safeUserData,
       signIn,
       signOut

@@ -1,34 +1,59 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { loginLocal, listLocalUsers } from "@/auth/localAccount";
 import "./login.css";
 import LinkPrefetch from "@/components/LinkPrefetch";
+import useAuth from "@/hooks/useAuth";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { signIn } = useAuth();
+  const { signIn, redirectTo: storedRedirectTo, setRedirectTo, setFirstRun } = useAuth();
   const [email, setEmail] = useState("admin@mamastock.local");
   const [password, setPassword] = useState("Admin123!");
   const [error, setError] = useState("");
   const [canCreateAccount, setCanCreateAccount] = useState(false);
+  const [redirectTarget, setRedirectTarget] = useState(() =>
+    storedRedirectTo && storedRedirectTo.startsWith("/")
+      ? storedRedirectTo
+      : "/dashboard"
+  );
+
+  useEffect(() => {
+    const param = searchParams.get("redirectTo");
+    if (param) {
+      setRedirectTo(param);
+    }
+  }, [searchParams, setRedirectTo]);
+
+  useEffect(() => {
+    if (storedRedirectTo && storedRedirectTo.startsWith("/")) {
+      setRedirectTarget(storedRedirectTo);
+    } else {
+      setRedirectTarget("/dashboard");
+    }
+  }, [storedRedirectTo]);
 
   useEffect(() => {
     let mounted = true;
 
     listLocalUsers()
       .then((users) => {
-        if (mounted) setCanCreateAccount(users.length > 0);
+        if (!mounted) return;
+        const hasAccounts = users.length > 0;
+        setCanCreateAccount(hasAccounts);
+        setFirstRun(hasAccounts ? false : true);
       })
       .catch(() => {
-        if (mounted) setCanCreateAccount(false);
+        if (!mounted) return;
+        setCanCreateAccount(false);
+        setFirstRun(null);
       });
 
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [setFirstRun]);
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -36,9 +61,8 @@ export default function LoginPage() {
     try {
       const user = await loginLocal(email, password);
       await signIn(user);
-      const redirectTo = searchParams.get("redirectTo");
-      const target = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/dashboard";
-      navigate(target, { replace: true });
+      navigate(redirectTarget || "/dashboard", { replace: true });
+      setRedirectTo(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     }

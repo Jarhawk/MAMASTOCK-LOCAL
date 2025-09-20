@@ -1,7 +1,11 @@
 import { AuthProvider, useAuth as useAuthContext } from "@/context/AuthContext";
 
 type AuthStatus = "loading" | "authed" | "signedout";
-type UseAuthReturn = ReturnType<typeof useAuthContext> & { status: AuthStatus };
+type BaseAuthContext = ReturnType<typeof useAuthContext>;
+type UseAuthReturn = BaseAuthContext & {
+  status: AuthStatus;
+  login: BaseAuthContext["signIn"];
+};
 
 export function useAuth(): UseAuthReturn {
   const ctx = useAuthContext();
@@ -11,7 +15,7 @@ export function useAuth(): UseAuthReturn {
       ? "authed"
       : "signedout";
 
-  const result: UseAuthReturn = { ...ctx, status };
+  const result: UseAuthReturn = { ...ctx, status, login: ctx.signIn };
   return result;
 }
 

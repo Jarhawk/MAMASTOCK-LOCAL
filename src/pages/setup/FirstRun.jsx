@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerLocal, listLocalUsers } from "@/auth/localAccount";
-import { useAuth } from "@/context/AuthContext";
 import '@/pages/login.css';
 import LinkPrefetch from "@/components/LinkPrefetch";
+import useAuth from "@/hooks/useAuth";
 
 export default function FirstRun() {
   const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { signIn, setFirstRun, setRedirectTo } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -16,21 +16,29 @@ export default function FirstRun() {
   const [existingUsers, setExistingUsers] = useState(null);
 
   useEffect(() => {
+    setRedirectTo(null);
+  }, [setRedirectTo]);
+
+  useEffect(() => {
     let mounted = true;
 
     listLocalUsers()
       .then((users) => {
-        if (mounted) setExistingUsers(users.length);
+        if (!mounted) return;
+        setExistingUsers(users.length);
+        setFirstRun(users.length === 0);
       })
       .catch((err) => {
         console.warn("[setup] Impossible de lire les comptes locaux", err);
-        if (mounted) setExistingUsers(0);
+        if (!mounted) return;
+        setExistingUsers(0);
+        setFirstRun(true);
       });
 
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [setFirstRun]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -77,6 +85,8 @@ export default function FirstRun() {
     try {
       const user = await registerLocal(normalizedEmail, password, "admin");
       await signIn(user);
+      setFirstRun(false);
+      setRedirectTo(null);
       navigate("/", { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
